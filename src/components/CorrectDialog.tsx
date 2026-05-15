@@ -1,0 +1,835 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, no-console */
+
+'use client';
+
+import { Search, X } from 'lucide-react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+
+import { getTMDBImageUrl } from '@/lib/tmdb.search';
+import { processImageUrl } from '@/lib/utils';
+
+interface TMDBResult {
+  id: number;
+  title?: string;
+  name?: string;
+  poster_path: string | null;
+  release_date?: string;
+  first_air_date?: string;
+  overview: string;
+  vote_average: number;
+  media_type: 'movie' | 'tv';
+}
+
+interface TMDBSeason {
+  id: number;
+  name: string;
+  season_number: number;
+  episode_count: number;
+  air_date: string | null;
+  poster_path: string | null;
+  overview: string;
+}
+
+interface CorrectDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  videoKey: string;
+  currentTitle: string;
+  currentVideo?: {
+    tmdbId?: number;
+    doubanId?: string;
+    poster?: string;
+    releaseDate?: string;
+    overview?: string;
+    voteAverage?: number;
+    mediaType?: 'movie' | 'tv';
+    seasonNumber?: number;
+    seasonName?: string;
+  };
+  onCorrect: () => void;
+  source?: string;
+  useDrawer?: boolean;
+  drawerWidth?: string;
+}
+
+export default function CorrectDialog({
+  isOpen,
+  onClose,
+  videoKey,
+  currentTitle,
+  currentVideo,
+  onCorrect,
+  source = 'openlist',
+  useDrawer = false,
+  drawerWidth = 'w-full md:w-[25%]',
+}: CorrectDialogProps) {
+  const [searchQuery, setSearchQuery] = useState(currentTitle);
+  const [searching, setSearching] = useState(false);
+  const [results, setResults] = useState<TMDBResult[]>([]);
+  const [error, setError] = useState('');
+  const [correcting, setCorrecting] = useState(false);
+
+  // 季度選擇相關狀態
+  const [selectedResult, setSelectedResult] = useState<TMDBResult | null>(null);
+  const [seasons, setSeasons] = useState<TMDBSeason[]>([]);
+  const [loadingSeasons, setLoadingSeasons] = useState(false);
+  const [showSeasonSelection, setShowSeasonSelection] = useState(false);
+
+  // 手動輸入相關狀態
+  const [showManualInput, setShowManualInput] = useState(false);
+  const [manualData, setManualData] = useState({
+    title: '',
+    tmdbId: '',
+    doubanId: '',
+    posterPath: '',
+    releaseDate: '',
+    overview: '',
+    voteAverage: '',
+    mediaType: 'movie' as 'movie' | 'tv',
+    seasonNumber: '',
+    seasonName: '',
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      setSearchQuery(currentTitle);
+      setResults([]);
+      setError('');
+      setSelectedResult(null);
+      setSeasons([]);
+      setShowSeasonSelection(false);
+      setShowManualInput(false);
+      // 不要在這裡重置 manualData，因為它會在 handleShowManualInput 中被設置
+    }
+  }, [isOpen, currentTitle]);
+
+  // 當切換到手動輸入模式時,自動填充數據
+  useEffect(() => {
+    if (showManualInput && isOpen) {
+      const newManualData = {
+        title: currentTitle,
+        tmdbId: currentVideo?.tmdbId ? String(currentVideo.tmdbId) : '',
+        doubanId: currentVideo?.doubanId || '',
+        posterPath: currentVideo?.poster || '',
+        releaseDate: currentVideo?.releaseDate || '',
+        overview: currentVideo?.overview || '',
+        voteAverage: currentVideo?.voteAverage ? String(currentVideo.voteAverage) : '',
+        mediaType: currentVideo?.mediaType || 'movie',
+        seasonNumber: currentVideo?.seasonNumber ? String(currentVideo.seasonNumber) : '',
+        seasonName: currentVideo?.seasonName || '',
+      };
+
+      setManualData(newManualData);
+    }
+  }, [showManualInput, isOpen, currentVideo, currentTitle]);
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      setError('請輸入搜索關鍵詞');
+      return;
+    }
+
+    setSearching(true);
+    setError('');
+    setResults([]);
+    setShowSeasonSelection(false);
+    setSelectedResult(null);
+
+    try {
+      const response = await fetch(
+        `/api/tmdb/search?query=${encodeURIComponent(searchQuery)}`
+      );
+
+      if (!response.ok) {
+        throw new Error('搜索失敗');
+      }
+
+      const data = await response.json();
+
+      if (data.success && data.results) {
+        setResults(data.results);
+        if (data.results.length === 0) {
+          setError('未找到匹配的結果');
+        }
+      } else {
+        setError('搜索失敗');
+      }
+    } catch (err) {
+      console.error('搜索失敗:', err);
+      setError('搜索失敗，請重試');
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  // 獲取電視劇的季度列表
+  const fetchSeasons = async (tvId: number) => {
+    setLoadingSeasons(true);
+    setError('');
+    try {
+      const response = await fetch(`/api/tmdb/seasons?tvId=${tvId}`);
+
+      if (!response.ok) {
+        throw new Error('獲取季度列表失敗');
+      }
+
+      const data = await response.json();
+
+      if (data.success && data.seasons) {
+        return data.seasons as TMDBSeason[];
+      } else {
+        setError('獲取季度列表失敗');
+        return [];
+      }
+    } catch (err) {
+      console.error('獲取季度列表失敗:', err);
+      setError('獲取季度列表失敗，請重試');
+      return [];
+    } finally {
+      setLoadingSeasons(false);
+    }
+  };
+
+  // 處理選擇結果（電影直接糾錯，電視劇顯示季度選擇）
+  const handleSelectResult = async (result: TMDBResult) => {
+    if (result.media_type === 'tv') {
+      // 電視劇：先獲取季度列表
+      setSelectedResult(result);
+      const seasonsList = await fetchSeasons(result.id);
+
+      if (seasonsList.length === 1) {
+        // 只有一季，直接使用該季度進行糾錯
+        await handleCorrect(result, seasonsList[0]);
+      } else if (seasonsList.length > 1) {
+        // 多季，顯示選擇界面
+        setSeasons(seasonsList);
+        setShowSeasonSelection(true);
+      } else {
+        // 沒有季度信息，直接使用劇集信息
+        await handleCorrect(result);
+      }
+    } else {
+      // 電影：直接糾錯
+      await handleCorrect(result);
+    }
+  };
+
+  // 處理選擇季度
+  const handleSelectSeason = async (season: TMDBSeason) => {
+    if (!selectedResult) return;
+
+    await handleCorrect(selectedResult, season);
+  };
+
+  // 執行糾錯
+  const handleCorrect = async (result: TMDBResult, season?: TMDBSeason) => {
+    setCorrecting(true);
+    try {
+      // 構建標題和ID：如果是第二季及以後，在標題後加上季度名稱，並使用季度ID
+      let finalTitle = result.title || result.name;
+      const finalTmdbId = result.id;
+
+      if (season && season.season_number > 1) {
+        finalTitle = `${finalTitle} ${season.name}`;
+      }
+
+      const correctionData: any = {
+        tmdbId: finalTmdbId,
+        title: finalTitle,
+        posterPath: season?.poster_path || result.poster_path,
+        releaseDate: season?.air_date || result.release_date || result.first_air_date,
+        overview: season?.overview || result.overview,
+        voteAverage: result.vote_average,
+        mediaType: result.media_type,
+      };
+
+      // 如果有季度信息，添加到數據中
+      if (season) {
+        correctionData.seasonNumber = season.season_number;
+        correctionData.seasonName = season.name;
+      }
+
+      // 根據源類型選擇不同的存儲方式
+      if (source === 'xiaoya') {
+        // 小雅源：存儲到 localStorage
+        const storageKey = `xiaoya_correction_${videoKey}`;
+        const correctionInfo = {
+          ...correctionData,
+          correctedAt: Date.now(),
+        };
+        localStorage.setItem(storageKey, JSON.stringify(correctionInfo));
+        console.log('小雅源糾錯信息已存儲到 localStorage:', storageKey, correctionInfo);
+      } else {
+        // openlist 等其他源：調用 API
+        const body: any = {
+          key: videoKey,
+          ...correctionData,
+        };
+
+        const response = await fetch('/api/openlist/correct', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          throw new Error('糾錯失敗');
+        }
+      }
+
+      onCorrect();
+      onClose();
+    } catch (err) {
+      console.error('糾錯失敗:', err);
+      setError('糾錯失敗，請重試');
+    } finally {
+      setCorrecting(false);
+    }
+  };
+
+  // 返回搜索結果列表
+  const handleBackToResults = () => {
+    setShowSeasonSelection(false);
+    setSelectedResult(null);
+    setSeasons([]);
+  };
+
+  // 切換到手動輸入模式
+  const handleShowManualInput = () => {
+    setShowManualInput(true);
+    setShowSeasonSelection(false);
+    setResults([]);
+  };
+
+  // 返回搜索模式
+  const handleBackToSearch = () => {
+    setShowManualInput(false);
+  };
+
+  // 處理手動提交
+  const handleManualSubmit = async () => {
+    // 驗證必填字段
+    if (!manualData.title.trim()) {
+      setError('請輸入影片標題');
+      return;
+    }
+
+    // 如果提供了 TMDB ID，驗證其格式
+    if (manualData.tmdbId.trim() && isNaN(Number(manualData.tmdbId))) {
+      setError('TMDB ID 必須是數字');
+      return;
+    }
+
+    if (manualData.voteAverage && (isNaN(Number(manualData.voteAverage)) || Number(manualData.voteAverage) < 0 || Number(manualData.voteAverage) > 10)) {
+      setError('評分必須是 0-10 之間的數字');
+      return;
+    }
+
+    if (manualData.mediaType === 'tv' && manualData.seasonNumber && isNaN(Number(manualData.seasonNumber))) {
+      setError('季數必須是數字');
+      return;
+    }
+
+    setCorrecting(true);
+    setError('');
+
+    try {
+      const correctionData: any = {
+        title: manualData.title.trim(),
+        posterPath: manualData.posterPath.trim() || null,
+        releaseDate: manualData.releaseDate.trim() || '',
+        overview: manualData.overview.trim() || '',
+        voteAverage: manualData.voteAverage ? Number(manualData.voteAverage) : 0,
+        mediaType: manualData.mediaType,
+      };
+
+      // 添加 TMDB ID（如果提供）
+      if (manualData.tmdbId.trim()) {
+        correctionData.tmdbId = Number(manualData.tmdbId);
+      }
+
+      // 添加豆瓣 ID（如果提供）
+      if (manualData.doubanId.trim()) {
+        correctionData.doubanId = manualData.doubanId.trim();
+      }
+
+      // 如果是電視劇且有季度信息
+      if (manualData.mediaType === 'tv' && manualData.seasonNumber) {
+        correctionData.seasonNumber = Number(manualData.seasonNumber);
+        correctionData.seasonName = manualData.seasonName.trim() || `第 ${manualData.seasonNumber} 季`;
+      }
+
+      // 根據源類型選擇不同的存儲方式
+      if (source === 'xiaoya') {
+        // 小雅源：存儲到 localStorage
+        const storageKey = `xiaoya_correction_${videoKey}`;
+        const correctionInfo = {
+          ...correctionData,
+          correctedAt: Date.now(),
+        };
+        localStorage.setItem(storageKey, JSON.stringify(correctionInfo));
+        console.log('小雅源糾錯信息已存儲到 localStorage:', storageKey, correctionInfo);
+      } else {
+        // openlist 等其他源：調用 API
+        const body: any = {
+          key: videoKey,
+          ...correctionData,
+        };
+
+        const response = await fetch('/api/openlist/correct', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          throw new Error('糾錯失敗');
+        }
+      }
+
+      onCorrect();
+      onClose();
+    } catch (err) {
+      console.error('糾錯失敗:', err);
+      setError('糾錯失敗，請重試');
+    } finally {
+      setCorrecting(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  const dialogContent = (
+    <>
+      {/* 頭部 */}
+      <div className='flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700'>
+        <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+          糾錯：{currentTitle}
+        </h2>
+        <button
+          onClick={onClose}
+          className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+        >
+          <X size={24} />
+        </button>
+      </div>
+
+        {/* 搜索框 */}
+        {!showManualInput && (
+          <div className='p-4 border-b border-gray-200 dark:border-gray-700'>
+            <div className='flex gap-2'>
+              <input
+                type='text'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearch();
+                  }
+                }}
+                placeholder='輸入搜索關鍵詞'
+                className='flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              />
+              <button
+                onClick={handleSearch}
+                disabled={searching}
+                className='px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2'
+              >
+                <Search size={20} />
+                <span className='hidden sm:inline'>{searching ? '搜索中...' : '搜索'}</span>
+              </button>
+            </div>
+            {error && (
+              <p className='mt-2 text-sm text-red-600 dark:text-red-400'>{error}</p>
+            )}
+          </div>
+        )}
+
+        {/* 結果列表 */}
+        <div className='flex-1 overflow-y-auto p-4'>
+          {showManualInput ? (
+            // 手動輸入界面
+            <div>
+              <div className='mb-4 flex items-center gap-2'>
+                <button
+                  onClick={handleBackToSearch}
+                  className='text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1'
+                >
+                  <span>←</span>
+                  <span>返回搜索</span>
+                </button>
+              </div>
+
+              <div className='space-y-4'>
+                {/* 標題 - 必填 */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    影片標題 <span className='text-red-500'>*</span>
+                  </label>
+                  <input
+                    type='text'
+                    value={manualData.title}
+                    onChange={(e) => setManualData({ ...manualData, title: e.target.value })}
+                    placeholder='請輸入影片標題'
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  />
+                </div>
+
+                {/* TMDB ID - 可選 */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    TMDB ID（可選）
+                  </label>
+                  <input
+                    type='text'
+                    value={manualData.tmdbId}
+                    onChange={(e) => setManualData({ ...manualData, tmdbId: e.target.value })}
+                    placeholder='例如：550'
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  />
+                  <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
+                    可在 TMDB 網站查找影片對應的 ID
+                  </p>
+                </div>
+
+                {/* 豆瓣 ID - 可選 */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    豆瓣 ID（可選）
+                  </label>
+                  <input
+                    type='text'
+                    value={manualData.doubanId}
+                    onChange={(e) => setManualData({ ...manualData, doubanId: e.target.value })}
+                    placeholder='例如：1292052'
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  />
+                  <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
+                    可在豆瓣網站查找影片對應的 ID
+                  </p>
+                </div>
+
+                {/* 媒體類型 */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    類型
+                  </label>
+                  <div className='flex gap-4'>
+                    <label className='flex items-center'>
+                      <input
+                        type='radio'
+                        value='movie'
+                        checked={manualData.mediaType === 'movie'}
+                        onChange={(e) => setManualData({ ...manualData, mediaType: e.target.value as 'movie' | 'tv' })}
+                        className='mr-2'
+                      />
+                      <span className='text-gray-900 dark:text-gray-100'>電影</span>
+                    </label>
+                    <label className='flex items-center'>
+                      <input
+                        type='radio'
+                        value='tv'
+                        checked={manualData.mediaType === 'tv'}
+                        onChange={(e) => setManualData({ ...manualData, mediaType: e.target.value as 'movie' | 'tv' })}
+                        className='mr-2'
+                      />
+                      <span className='text-gray-900 dark:text-gray-100'>電視劇</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* 如果是電視劇，顯示季度信息 */}
+                {manualData.mediaType === 'tv' && (
+                  <>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                        季數（可選）
+                      </label>
+                      <input
+                        type='text'
+                        value={manualData.seasonNumber}
+                        onChange={(e) => setManualData({ ...manualData, seasonNumber: e.target.value })}
+                        placeholder='例如：1'
+                        className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                        季名稱（可選）
+                      </label>
+                      <input
+                        type='text'
+                        value={manualData.seasonName}
+                        onChange={(e) => setManualData({ ...manualData, seasonName: e.target.value })}
+                        placeholder='例如：第 1 季'
+                        className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* 封面圖鏈接 */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    封面圖鏈接（可選）
+                  </label>
+                  <input
+                    type='text'
+                    value={manualData.posterPath}
+                    onChange={(e) => setManualData({ ...manualData, posterPath: e.target.value })}
+                    placeholder='請輸入圖片鏈接'
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  />
+                </div>
+
+                {/* 上映日期 */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    上映日期（可選）
+                  </label>
+                  <input
+                    type='date'
+                    value={manualData.releaseDate}
+                    onChange={(e) => setManualData({ ...manualData, releaseDate: e.target.value })}
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  />
+                </div>
+
+                {/* 評分 */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    評分（可選，0-10）
+                  </label>
+                  <input
+                    type='text'
+                    value={manualData.voteAverage}
+                    onChange={(e) => setManualData({ ...manualData, voteAverage: e.target.value })}
+                    placeholder='例如：8.5'
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  />
+                </div>
+
+                {/* 簡介 */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    簡介（可選）
+                  </label>
+                  <textarea
+                    value={manualData.overview}
+                    onChange={(e) => setManualData({ ...manualData, overview: e.target.value })}
+                    placeholder='請輸入影片簡介'
+                    rows={3}
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  />
+                </div>
+
+                {/* 錯誤提示 */}
+                {error && (
+                  <p className='text-sm text-red-600 dark:text-red-400'>{error}</p>
+                )}
+
+                {/* 提交按鈕 */}
+                <button
+                  onClick={handleManualSubmit}
+                  disabled={correcting}
+                  className='w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed'
+                >
+                  {correcting ? '提交中...' : '提交糾錯'}
+                </button>
+              </div>
+            </div>
+          ) : showSeasonSelection ? (
+            // 季度選擇界面
+            <div>
+              <div className='mb-4 flex items-center gap-2'>
+                <button
+                  onClick={handleBackToResults}
+                  className='text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1'
+                >
+                  <span>←</span>
+                  <span>返回搜索結果</span>
+                </button>
+              </div>
+
+              {selectedResult && (
+                <div className='mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg'>
+                  <h3 className='font-semibold text-gray-900 dark:text-gray-100'>
+                    {selectedResult.title || selectedResult.name}
+                  </h3>
+                  <p className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
+                    請選擇季度：
+                  </p>
+                </div>
+              )}
+
+              {loadingSeasons ? (
+                <div className='text-center py-12 text-gray-500 dark:text-gray-400'>
+                  加載季度列表中...
+                </div>
+              ) : seasons.length === 0 ? (
+                <div className='text-center py-12 text-gray-500 dark:text-gray-400'>
+                  未找到季度信息
+                </div>
+              ) : (
+                <div className='space-y-3'>
+                  {seasons.map((season) => (
+                    <div
+                      key={season.id}
+                      className='flex gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'
+                    >
+                      {/* 海報 */}
+                      <div className='flex-shrink-0 w-16 h-24 relative rounded overflow-hidden bg-gray-200 dark:bg-gray-700'>
+                        {season.poster_path ? (
+                          <Image
+                            src={processImageUrl(getTMDBImageUrl(season.poster_path))}
+                            alt={season.name}
+                            fill
+                            className='object-cover'
+                            referrerPolicy='no-referrer'
+                          />
+                        ) : (
+                          <div className='w-full h-full flex items-center justify-center text-gray-400 text-xs'>
+                            無海報
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 信息 */}
+                      <div className='flex-1 min-w-0'>
+                        <h3 className='font-semibold text-gray-900 dark:text-gray-100'>
+                          {season.name}
+                        </h3>
+                        <p className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
+                          {season.episode_count} 集
+                          {season.air_date && ` • ${season.air_date.split('-')[0]}`}
+                        </p>
+                        <p className='text-xs text-gray-500 dark:text-gray-500 mt-1 line-clamp-2'>
+                          {season.overview || '暫無簡介'}
+                        </p>
+                      </div>
+
+                      {/* 選擇按鈕 */}
+                      <div className='flex-shrink-0 flex items-center'>
+                        <button
+                          onClick={() => handleSelectSeason(season)}
+                          disabled={correcting}
+                          className='px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed'
+                        >
+                          {correcting ? '處理中...' : '選擇'}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : results.length === 0 ? (
+            // 空狀態
+            <>
+              <div className='text-center py-12 text-gray-500 dark:text-gray-400'>
+                {searching ? '搜索中...' : '請輸入關鍵詞搜索'}
+              </div>
+
+              {/* 手動糾錯入口 */}
+              {!searching && (
+                <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-center'>
+                  <button
+                    onClick={handleShowManualInput}
+                    className='text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
+                  >
+                    搜不到影片？手動糾錯
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            // 搜索結果列表
+            <>
+              <div className='space-y-3'>
+                {results.map((result) => (
+                  <div
+                    key={result.id}
+                    className='flex gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'
+                  >
+                    {/* 海報 */}
+                    <div className='flex-shrink-0 w-16 h-24 relative rounded overflow-hidden bg-gray-200 dark:bg-gray-700'>
+                      {result.poster_path ? (
+                        <Image
+                          src={processImageUrl(getTMDBImageUrl(result.poster_path))}
+                          alt={result.title || result.name || ''}
+                          fill
+                          className='object-cover'
+                          referrerPolicy='no-referrer'
+                        />
+                      ) : (
+                        <div className='w-full h-full flex items-center justify-center text-gray-400 text-xs'>
+                          無海報
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 信息 */}
+                    <div className='flex-1 min-w-0'>
+                      <h3 className='font-semibold text-gray-900 dark:text-gray-100 truncate'>
+                        {result.title || result.name}
+                      </h3>
+                      <p className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
+                        {result.media_type === 'movie' ? '電影' : '電視劇'} •{' '}
+                        {result.release_date?.split('-')[0] ||
+                          result.first_air_date?.split('-')[0] ||
+                          '未知'}{' '}
+                        • 評分: {result.vote_average.toFixed(1)}
+                      </p>
+                      <p className='text-xs text-gray-500 dark:text-gray-500 mt-1 line-clamp-2'>
+                        {result.overview || '暫無簡介'}
+                      </p>
+                    </div>
+
+                    {/* 選擇按鈕 */}
+                    <div className='flex-shrink-0 flex items-center'>
+                      <button
+                        onClick={() => handleSelectResult(result)}
+                        disabled={correcting || loadingSeasons}
+                        className='px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed'
+                      >
+                        {correcting || loadingSeasons ? '處理中...' : '選擇'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* 手動糾錯入口 */}
+              <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-center'>
+                <button
+                  onClick={handleShowManualInput}
+                  className='text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
+                >
+                  搜不到影片？手動糾錯
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </>
+    );
+
+  return createPortal(
+    useDrawer ? (
+      <div className='fixed inset-0 z-[9999] flex items-center justify-end pointer-events-none'>
+        <div className={`relative ${drawerWidth} h-full bg-white dark:bg-gray-800 shadow-2xl flex flex-col pointer-events-auto`}>
+          {dialogContent}
+        </div>
+      </div>
+    ) : (
+      <div className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm'>
+        <div className='bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col m-4'>
+          {dialogContent}
+        </div>
+      </div>
+    ),
+    document.body
+  );
+}
