@@ -270,3 +270,83 @@ div[data-media-provider] video {
 .dark .reader-book-loader {
   color: #38bdf8;
 }
+
+/* ========================================================
+   Netflix Player Style Overrides (Artplayer)
+   ======================================================== */
+.art-video-player {
+  --art-theme: #E50914 !important;
+}
+
+/* Control bar gradient & animation */
+.art-video-player .art-bottom {
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 60%, transparent 100%) !important;
+  padding-bottom: 10px;
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out !important;
+}
+
+/* Hide controls smoothly */
+.art-video-player.art-hide-cursor .art-bottom {
+  opacity: 0 !important;
+  transform: translateY(10px) !important;
+  pointer-events: none;
+}
+
+/* Progress bar thickness & color */
+.art-video-player .art-progress {
+  height: 4px !important;
+  transition: height 0.2s ease, transform 0.2s ease !important;
+  bottom: 0px !important;
+}
+
+.art-video-player .art-progress:hover {
+  height: 8px !important;
+}
+
+.art-video-player .art-progress-played {
+  background-color: #E50914 !important;
+}
+
+/* Progress thumb (circle) */
+.art-video-player .art-progress-indicator {
+  background-color: #E50914 !important;
+  transform: scale(0);
+  transition: transform 0.2s ease !important;
+  width: 16px !important;
+  height: 16px !important;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.art-video-player .art-progress:hover .art-progress-indicator {
+  transform: scale(1) !important;
+}
+
+/* Icons styling */
+.art-video-player .art-icon svg {
+  fill: #fff !important;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.art-video-player .art-control:hover .art-icon svg {
+  transform: scale(1.15);
+}
+
+/* Big center play button */
+.art-video-player .art-state {
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+.art-video-player.art-playing .art-state {
+  transform: scale(1.5) !important;
+  opacity: 0 !important;
+}
+.art-video-player.art-paused .art-state {
+  transform: scale(1) !important;
+  opacity: 1 !important;
+}
+.art-video-player .art-state .art-icon-play {
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  padding: 15px;
+  border: 2px solid rgba(255,255,255,0.8);
+}

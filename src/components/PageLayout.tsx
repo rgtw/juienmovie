@@ -100,7 +100,9 @@ const PageLayout = ({ children, activePath = '/', hideNavigation = false }: Page
 
             {/* 主内容 */}
             <main
-              className='flex-1 md:min-h-0 mb-14 md:mb-0 md:mt-0 mt-12 w-full max-w-full overflow-hidden'
+              className={`flex-1 md:min-h-0 mb-14 md:mb-0 mt-12 w-full max-w-full overflow-hidden ${
+                !hideNavigation && activePath !== '/' ? 'md:pt-[68px]' : 'md:mt-0'
+              }`}
               style={{
                 paddingBottom: 'calc(2rem + env(safe-area-inset-bottom))',
               }}
