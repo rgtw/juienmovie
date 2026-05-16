@@ -6415,53 +6415,8 @@ function PlayPageClient() {
               });
             },
           },
-          // 弹幕插件
-          plugins: [
-            artplayerPluginDanmuku({
-              danmuku: [],
-              speed: danmakuSettingsRef.current.speed,
-              opacity: danmakuSettingsRef.current.opacity,
-              fontSize: danmakuSettingsRef.current.fontSize,
-              color: '#FFFFFF',
-              mode: 0,
-              margin: [danmakuSettingsRef.current.marginTop, danmakuSettingsRef.current.marginBottom],
-              antiOverlap: true,
-              synchronousPlayback: danmakuSettingsRef.current.synchronousPlayback,
-              emitter: false,
-              heatmap: false, // 禁用 artplayer 自带热力图，使用自定义热力图
-              // 主题
-              theme: 'dark',
-              // 根据保存的显示状态设置初始可见性
-              visible: danmakuDisplayStateRef.current,
-              filter: (danmu: any) => {
-                // 应用过滤规则
-                const filterConfig = danmakuFilterConfigRef.current;
-                if (filterConfig && filterConfig.rules.length > 0) {
-                  for (const rule of filterConfig.rules) {
-                    // 跳过未启用的规则
-                    if (!rule.enabled) continue;
-
-                    try {
-                      if (rule.type === 'normal') {
-                        // 普通模式：字符串包含匹配
-                        if (danmu.text.includes(rule.keyword)) {
-                          return false;
-                        }
-                      } else if (rule.type === 'regex') {
-                        // 正则模式：正则表达式匹配
-                        if (new RegExp(rule.keyword).test(danmu.text)) {
-                          return false;
-                        }
-                      }
-                    } catch (e) {
-                      console.error('彈幕過濾規則錯誤:', e);
-                    }
-                  }
-                }
-                return true;
-              },
-            }),
-          ],
+          // 移除彈幕插件以符合 Netflix 風格
+          plugins: [],
           icons: {
             loading:
               '<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDUwIDUwIj48cGF0aCBkPSJNMjUuMjUxIDYuNDYxYy0xMC4zMTggMC0xOC42ODMgOC4zNjUtMTguNjgzIDE4LjY4M2g0LjA2OGMwLTguMDcgNi41NDUtMTQuNjE1IDE0LjYxNS0xNC42MTVWNi40NjF6IiBmaWxsPSIjMDA5Njg4Ij48YW5pbWF0ZVRyYW5zZm9ybSBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iIGF0dHJpYnV0ZVR5cGU9IlhNTCIgZHVyPSIxcyIgZnJvbT0iMCAyNSAyNSIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiIHRvPSIzNjAgMjUgMjUiIHR5cGU9InJvdGF0ZSIvPjwvcGF0aD48L3N2Zz4=">',
@@ -6493,42 +6448,7 @@ function PlayPageClient() {
                 return newVal ? '當前開啟' : '當前關閉';
               },
             },
-            {
-              html: '彈幕過濾',
-              icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="#ffffff"/><path d="M8 12h8" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/></svg>',
-              tooltip: '配置彈幕過濾規則',
-              onClick() {
-                // 如果播放器处于全屏状态，先退出全屏
-                if (artPlayerRef.current && artPlayerRef.current.fullscreen) {
-                  artPlayerRef.current.fullscreen = false;
-                  // 延迟一下再显示弹窗，确保全屏退出动画完成
-                  setTimeout(() => {
-                    setShowDanmakuFilterSettings(true);
-                  }, 300);
-                } else {
-                  setShowDanmakuFilterSettings(true);
-                }
-                return '打開設置';
-              },
-            },
-            // 热力图开关（仅在未禁用时显示）
-            ...(!danmakuHeatmapDisabledRef.current ? [{
-              name: '彈幕熱力',
-              html: '彈幕熱力',
-              icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" fill="#ffffff"/></svg>',
-              switch: danmakuHeatmapEnabledRef.current,
-              onSwitch: function (item: any) {
-                const newVal = !item.switch;
-                try {
-                  localStorage.setItem('danmaku_heatmap_enabled', String(newVal));
-                  setDanmakuHeatmapEnabled(newVal);
-                  console.log('彈幕熱力已', newVal ? '開啟' : '關閉');
-                } catch (err) {
-                  console.error('切換彈幕熱力失敗:', err);
-                }
-                return newVal;
-              },
-            }] : []),
+            // 已移除彈幕過濾與熱力圖選項以符合 Netflix 風格
             ...(webGPUSupported ? [
               {
                 name: 'Anime4K超分',
@@ -8790,142 +8710,6 @@ function PlayPageClient() {
           }}
         />
       )}
-      {/* 弹幕源选择对话框 */}
-      {showDanmakuSourceSelector && danmakuMatches.length > 0 && (
-        <div className='fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-sm'>
-          <div className='relative w-full max-w-2xl max-h-[80vh] mx-4 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden'>
-            {/* 标题栏 */}
-            <div className='sticky top-0 z-10 bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4'>
-              <h3 className='text-xl font-bold text-white flex items-center gap-2'>
-                <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z' />
-                </svg>
-                选择弹幕源
-              </h3>
-              <p className='text-sm text-white/90 mt-1'>
-                找到 {danmakuMatches.length} 个匹配的弹幕源，请选择一个
-              </p>
-            </div>
-
-            {/* 列表区域 */}
-            <div className='overflow-y-auto max-h-[60vh] p-4'>
-              <div className='space-y-4'>
-                {danmakuMatches.map((anime, index) => (
-                  <button
-                    key={anime.animeId}
-                    onClick={() => handleDanmakuSourceSelect(anime, index)}
-                    className='w-full flex flex-col p-5 bg-gray-50 dark:bg-gray-700/50
-                             hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all
-                             duration-200 text-left group border-2 border-transparent
-                             hover:border-primary-500 hover:shadow-lg'
-                  >
-                    {/* 顶部：序号和标题 */}
-                    <div className='flex items-start gap-3 mb-3'>
-                      {/* 序号 */}
-                      <div className='flex-shrink-0 w-8 h-8 rounded-full bg-primary-500 text-white
-                                    flex items-center justify-center font-bold text-sm
-                                    group-hover:bg-green-600 transition-colors duration-200'>
-                        {index + 1}
-                      </div>
-
-                      {/* 标题 */}
-                      <h4 className='flex-1 text-lg font-bold text-gray-900 dark:text-white
-                                   group-hover:text-primary-600 dark:group-hover:text-green-400
-                                   transition-colors duration-200 leading-tight'>
-                        {anime.animeTitle}
-                      </h4>
-
-                      {/* 选择图标 */}
-                      <div className='flex-shrink-0'>
-                        <svg className='w-6 h-6 text-gray-400 group-hover:text-primary-500
-                                      transition-colors duration-200'
-                          fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2}
-                            d='M9 5l7 7-7 7' />
-                        </svg>
-                      </div>
-                    </div>
-
-                    {/* 主体内容 */}
-                    <div className='flex gap-4'>
-                      {/* 封面 */}
-                      {anime.imageUrl && (
-                        <div className='flex-shrink-0 w-20 h-28 rounded-lg overflow-hidden shadow-md
-                                      group-hover:shadow-xl transition-shadow duration-200'>
-                          <img
-                            src={anime.imageUrl}
-                            alt={anime.animeTitle}
-                            className='w-full h-full object-cover'
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                            }}
-                          />
-                        </div>
-                      )}
-
-                      {/* 详细信息 */}
-                      <div className='flex-1 space-y-2'>
-                        {/* 基本信息标签 */}
-                        <div className='flex flex-wrap gap-2'>
-                          {anime.typeDescription && (
-                            <span className='inline-flex items-center px-2.5 py-1 rounded-md
-                                           bg-blue-100 dark:bg-blue-900/30 text-blue-700
-                                           dark:text-blue-300 text-sm font-medium'>
-                              📺 {anime.typeDescription}
-                            </span>
-                          )}
-                          {anime.episodeCount && (
-                            <span className='inline-flex items-center px-2.5 py-1 rounded-md
-                                           bg-purple-100 dark:bg-purple-900/30 text-purple-700
-                                           dark:text-purple-300 text-sm font-medium'>
-                              🎬 {anime.episodeCount} 集
-                            </span>
-                          )}
-                          {anime.startDate && (
-                            <span className='inline-flex items-center px-2.5 py-1 rounded-md
-                                           bg-gray-100 dark:bg-gray-600 text-gray-700
-                                           dark:text-gray-300 text-sm font-medium'>
-                              📅 {anime.startDate}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* 动漫ID */}
-                        <div className='text-xs text-gray-500 dark:text-gray-400'>
-                          弹幕库 ID: {anime.animeId}
-                        </div>
-
-                        {/* 提示信息 */}
-                        <div className='text-sm text-gray-600 dark:text-gray-300 pt-1
-                                      opacity-0 group-hover:opacity-100 transition-opacity duration-200'>
-                          点击选择此弹幕源
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 底部操作栏 */}
-            <div className='sticky bottom-0 z-10 bg-white dark:bg-gray-800 border-t
-                          border-gray-200 dark:border-gray-700 px-6 py-4'>
-              <button
-                onClick={() => {
-                  setShowDanmakuSourceSelector(false);
-                  setDanmakuMatches([]);
-                }}
-                className='w-full px-4 py-2.5 bg-gray-100 dark:bg-gray-700
-                         hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700
-                         dark:text-gray-300 rounded-lg font-medium transition-colors
-                         duration-200'
-              >
-                取消
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className='relative z-10 flex flex-col gap-3 py-4 px-5 lg:px-[3rem] 2xl:px-20'>
         {/* 第一行：影片标题 */}
@@ -9126,43 +8910,6 @@ function PlayPageClient() {
                     </div>
                   </div>
                 )}
-
-                {/* 弹幕加载蒙层 */}
-                {danmakuLoading && (
-                  <div className='absolute top-0 right-0 m-4 bg-black/80 backdrop-blur-sm rounded-lg px-4 py-2 z-[600] flex items-center gap-2 border border-primary-500/30'>
-                    {danmakuCount > 0 ? (
-                      <>
-                        <svg
-                          className='w-4 h-4 text-primary-500'
-                          fill='none'
-                          stroke='currentColor'
-                          viewBox='0 0 24 24'
-                        >
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            strokeWidth={2}
-                            d='M5 13l4 4L19 7'
-                          />
-                        </svg>
-                        <span className='text-sm font-medium text-green-400'>
-                          {danmakuOriginalCount > 0
-                            ? `已加載 ${danmakuCount} 條彈幕（原始 ${danmakuOriginalCount} 條）`
-                            : `已加載 ${danmakuCount} 條彈幕`
-                          }
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <div className='w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full animate-spin'></div>
-                        <span className='text-sm font-medium text-green-400'>
-                          加载弹幕中...
-                        </span>
-                      </>
-                    )}
-                  </div>
-                )}
-
               </div>
 
               {/* 第三方应用打开按钮 - 观影室同步状态下隐藏 */}
