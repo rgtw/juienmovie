@@ -1221,7 +1221,7 @@ function PlayPageClient() {
       // 检查是否禁用背景图
       if (typeof window !== 'undefined') {
         const disabled = localStorage.getItem('tmdb_backdrop_disabled');
-        if (disabled === 'true') {
+        if (disabled !== 'false') {
           setTmdbBackdrop(null);
           return;
         }

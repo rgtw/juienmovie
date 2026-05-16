@@ -1101,7 +1101,7 @@ function SearchPageClient() {
         'searchTraditionalToSimplified'
       );
 
-      if (searchTraditionalToSimplified === 'true' && converterRef.current) {
+      if (searchTraditionalToSimplified !== 'false' && converterRef.current) {
         try {
           const originalQuery = query;
           query = converterRef.current(query);
@@ -1408,7 +1408,7 @@ function SearchPageClient() {
       const searchTraditionalToSimplified = localStorage.getItem(
         'searchTraditionalToSimplified'
       );
-      if (searchTraditionalToSimplified === 'true' && converterRef.current) {
+      if (searchTraditionalToSimplified !== 'false' && converterRef.current) {
         try {
           trimmed = converterRef.current(trimmed);
         } catch (error) {
@@ -1448,7 +1448,7 @@ function SearchPageClient() {
       const searchTraditionalToSimplified = localStorage.getItem(
         'searchTraditionalToSimplified'
       );
-      if (searchTraditionalToSimplified === 'true' && converterRef.current) {
+      if (searchTraditionalToSimplified !== 'false' && converterRef.current) {
         try {
           processedSuggestion = converterRef.current(suggestion);
         } catch (error) {

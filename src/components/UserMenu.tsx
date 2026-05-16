@@ -119,8 +119,8 @@ export const UserMenu: React.FC = () => {
   const [preferStrategy, setPreferStrategy] = useState<'fast' | 'full'>('fast');
   const [speedTestTimeout, setSpeedTestTimeout] = useState(4000); // 测速超时时间（毫秒）
   const [fluidSearch, setFluidSearch] = useState(true);
-  const [tmdbBackdropDisabled, setTmdbBackdropDisabled] = useState(false);
-  const [enableTrailers, setEnableTrailers] = useState(false);
+  const [tmdbBackdropDisabled, setTmdbBackdropDisabled] = useState(true);
+  const [enableTrailers, setEnableTrailers] = useState(true);
   const [doubanDataSource, setDoubanDataSource] = useState('cmliussss-cdn-tencent');
   const [doubanDataSourceBackup, setDoubanDataSourceBackup] = useState('direct');
   const [doubanImageProxyType, setDoubanImageProxyType] = useState('cmliussss-cdn-tencent');
@@ -140,7 +140,7 @@ export const UserMenu: React.FC = () => {
   const [disableAutoLoadDanmaku, setDisableAutoLoadDanmaku] = useState(false);
   const [danmakuMaxCount, setDanmakuMaxCount] = useState(0);
   const [danmakuHeatmapDisabled, setDanmakuHeatmapDisabled] = useState(false);
-  const [searchTraditionalToSimplified, setSearchTraditionalToSimplified] = useState(false);
+  const [searchTraditionalToSimplified, setSearchTraditionalToSimplified] = useState(true);
   const [exactSearch, setExactSearch] = useState(true);
   const [maxConcurrentDownloads, setMaxConcurrentDownloads] = useState(6);
   const [downloadThreadsPerTask, setDownloadThreadsPerTask] = useState(6);
@@ -555,12 +555,12 @@ export const UserMenu: React.FC = () => {
 
       const savedTmdbBackdropDisabled = localStorage.getItem('tmdb_backdrop_disabled');
       if (savedTmdbBackdropDisabled !== null) {
-        setTmdbBackdropDisabled(savedTmdbBackdropDisabled === 'true');
+        setTmdbBackdropDisabled(savedTmdbBackdropDisabled !== 'false');
       }
 
       const savedEnableTrailers = localStorage.getItem('enableTrailers');
       if (savedEnableTrailers !== null) {
-        setEnableTrailers(savedEnableTrailers === 'true');
+        setEnableTrailers(savedEnableTrailers !== 'false');
       }
 
       const savedBufferStrategy = localStorage.getItem('bufferStrategy');
@@ -620,7 +620,7 @@ export const UserMenu: React.FC = () => {
       // 加载搜索繁体转简体设置
       const savedSearchTraditionalToSimplified = localStorage.getItem('searchTraditionalToSimplified');
       if (savedSearchTraditionalToSimplified !== null) {
-        setSearchTraditionalToSimplified(savedSearchTraditionalToSimplified === 'true');
+        setSearchTraditionalToSimplified(savedSearchTraditionalToSimplified !== 'false');
       }
 
       // 加载精确搜索设置
@@ -1423,7 +1423,7 @@ export const UserMenu: React.FC = () => {
       localStorage.setItem('homeBannerEnabled', 'true');
       localStorage.setItem('homeContinueWatchingEnabled', 'true');
       localStorage.setItem('homeModules', JSON.stringify(defaultHomeModules));
-      localStorage.setItem('searchTraditionalToSimplified', 'false');
+      localStorage.setItem('searchTraditionalToSimplified', 'true');
       window.dispatchEvent(new CustomEvent('homeModulesUpdated'));
     }
   };
