@@ -6,7 +6,7 @@ import { BackButton } from './BackButton';
 import MobileBottomNav from './MobileBottomNav';
 import MobileHeader from './MobileHeader';
 import Sidebar from './Sidebar';
-import { ThemeToggle } from './ThemeToggle';
+
 import { UpdateNotification } from './UpdateNotification';
 import { UserMenu } from './UserMenu';
 import { VersionCheckProvider } from './VersionCheckProvider';
@@ -92,7 +92,7 @@ const PageLayout = ({ children, activePath = '/', hideNavigation = false }: Page
             {/* 桌面端顶部按钮 */}
             {!hideNavigation && (
               <div className='absolute top-2 right-4 z-20 hidden md:flex items-center gap-2'>
-                <ThemeToggle />
+
                 <UserMenu />
                 <UpdateNotification />
               </div>
