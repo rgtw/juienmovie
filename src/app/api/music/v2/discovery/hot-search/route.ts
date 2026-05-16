@@ -25,6 +25,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    return internalError('獲取熱搜失敗', (error as Error).message);
+    return internalError('获取热搜失败', (error as Error).message);
   }
 }

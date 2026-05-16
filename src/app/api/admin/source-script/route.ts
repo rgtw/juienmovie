@@ -19,7 +19,7 @@ export const runtime = 'nodejs';
 async function assertAdmin(request: NextRequest) {
   const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
   if (storageType === 'localstorage') {
-    throw new Error('不支持本地存儲進行管理員配置');
+    throw new Error('不支持本地存储进行管理员配置');
   }
 
   const authInfo = getAuthInfoFromCookie(request);
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
     );
   } catch (error) {
     return NextResponse.json(
-      { error: (error as Error).message || '獲取腳本列表失敗' },
+      { error: (error as Error).message || '获取脚本列表失败' },
       { status: 500 }
     );
   }
@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       {
-        error: (error as Error).message || '腳本操作失敗',
+        error: (error as Error).message || '脚本操作失败',
       },
       { status: 500 }
     );

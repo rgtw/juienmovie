@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     if ((db as any).storage.cleanupOldMangaReadRecords) {
       (db as any).storage.cleanupOldMangaReadRecords(username).catch((err: Error) => {
-        console.error('異步清理漫畫閱讀歷史失敗:', err);
+        console.error('异步清理漫画阅读历史失败:', err);
       });
     }
 

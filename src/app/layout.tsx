@@ -27,7 +27,7 @@ import { DownloadProvider } from '../contexts/DownloadContext';
 const inter = Inter({ subsets: ['latin'] });
 export const dynamic = 'force-dynamic';
 
-// 動態生成 metadata，支持配置更新後的標題變化
+// 动态生成 metadata，支持配置更新后的标题变化
 export async function generateMetadata(): Promise<Metadata> {
   const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
   const config = await getConfig();
@@ -163,20 +163,20 @@ export default async function RootLayout({
     aiDefaultMessageWithVideo = config.AIConfig?.DefaultMessageWithVideo || '';
     // 求片功能配置
     enableMovieRequest = config.SiteConfig.EnableMovieRequest ?? true;
-    // 網絡直播功能配置
+    // 网络直播功能配置
     liveEnabled = (config.LiveConfig || []).some((source) => !source.disabled);
     webLiveEnabled = config.WebLiveEnabled ?? false;
-    // 自定義去廣告代碼版本號
+    // 自定义去广告代码版本号
     customAdFilterVersion = config.SiteConfig?.CustomAdFilterVersion || 0;
-    // 音樂功能配置
+    // 音乐功能配置
     musicFeatureEnabled = config.MusicConfig?.Enabled || false;
     musicProxyEnabled = config.MusicConfig?.ProxyEnabled ?? true;
-    // 漫畫功能配置
+    // 漫画功能配置
     suwayomiEnabled = !!(
       config.SuwayomiConfig?.Enabled &&
       config.SuwayomiConfig?.ServerURL
     );
-    // 電子書功能配置
+    // 电子书功能配置
     const opdsConfig = config.OPDSConfig;
     const rawOpdsSources = opdsConfig?.Sources;
     const opdsSources = Array.isArray(rawOpdsSources) ? rawOpdsSources : [];
@@ -184,30 +184,30 @@ export default async function RootLayout({
       opdsConfig?.Enabled &&
       opdsSources.some((source) => source?.enabled !== false && !!source?.url)
     );
-    // 高級推薦功能配置：存在已啟用視頻源腳本時顯示
+    // 高级推荐功能配置：存在已启用视频源脚本时显示
     advancedRecommendationEnabled =
       (await listEnabledSourceScripts()).length > 0;
-    // 檢查是否啟用了 OpenList 功能
+    // 检查是否启用了 OpenList 功能
     openListEnabled = !!(
       config.OpenListConfig?.Enabled &&
       config.OpenListConfig?.URL &&
       config.OpenListConfig?.Username &&
       config.OpenListConfig?.Password
     );
-    // 檢查是否啟用了 Emby 功能（支持多源）
+    // 检查是否启用了 Emby 功能（支持多源）
     embyEnabled = !!(
       config.EmbyConfig?.Sources &&
       config.EmbyConfig.Sources.length > 0 &&
       config.EmbyConfig.Sources.some(s => s.enabled && s.ServerURL)
     );
-    // 檢查是否啟用了小雅功能
+    // 检查是否启用了小雅功能
     xiaoyaEnabled = !!(
       config.XiaoyaConfig?.Enabled &&
       config.XiaoyaConfig?.ServerURL
     );
   }
 
-  // 將運行時配置注入到全局 window 對象，供客戶端在運行時讀取
+  // 将运行时配置注入到全局 window 对象，供客户端在运行时读取
   const runtimeStorageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
   const isCloudflare = process.env.CF_PAGES === '1' || process.env.BUILD_TARGET === 'cloudflare';
   const displayStorageType = runtimeStorageType === 'd1' && !isCloudflare ? 'sqlite' : runtimeStorageType;
@@ -278,16 +278,16 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang='zh-TW' suppressHydrationWarning>
+    <html lang='zh-CN' suppressHydrationWarning>
       <head>
         <meta
           name='viewport'
           content='width=device-width, initial-scale=1.0, viewport-fit=cover'
         />
         <link rel='apple-touch-icon' href='/icons/icon-192x192.png' />
-        {/* 主題CSS */}
+        {/* 主题CSS */}
         <link rel='stylesheet' href='/api/theme/css' />
-        {/* 將配置序列化後直接寫入腳本，瀏覽器端可通過 window.RUNTIME_CONFIG 獲取 */}
+        {/* 将配置序列化后直接写入脚本，浏览器端可通过 window.RUNTIME_CONFIG 获取 */}
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script
           dangerouslySetInnerHTML={{
@@ -296,11 +296,12 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${inter.className} min-h-screen bg-[#141414] text-gray-100`}
+        className={`${inter.className} min-h-screen bg-white text-gray-900 dark:bg-black dark:text-gray-200`}
       >
         <ThemeProvider
           attribute='class'
-          defaultTheme='dark'
+          defaultTheme='system'
+          enableSystem
           disableTransitionOnChange
         >
           <TopProgressBar />

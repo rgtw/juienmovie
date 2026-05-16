@@ -10,7 +10,7 @@ interface DoubanComment {
   userName: string;
   userAvatar: string;
   userUrl: string;
-  rating: number | null; // 1-5 星，null 表示未評分
+  rating: number | null; // 1-5 星，null 表示未评分
   content: string;
   time: string;
   votes: number;
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // 請求豆瓣短評頁面（使用反爬驗證）
+    // 请求豆瓣短评页面（使用反爬验证）
     const url = `https://movie.douban.com/subject/${doubanId}/comments?start=${start}&limit=${limit}&status=P&sort=new_score`;
 
     const response = await fetchDoubanWithVerification(url);
@@ -44,22 +44,22 @@ export async function GET(request: NextRequest) {
 
     const comments: DoubanComment[] = [];
 
-    console.log('開始解析豆瓣評論，start:', start, 'limit:', limit);
+    console.log('开始解析豆瓣评论，start:', start, 'limit:', limit);
 
-    // 解析每條短評
+    // 解析每条短评
     $('.comment-item').each((index, element) => {
       const $comment = $(element);
 
-      // 提取評論 ID
+      // 提取评论 ID
       const commentId = $comment.attr('data-cid') || '';
 
-      // 提取用戶信息
+      // 提取用户信息
       const $avatar = $comment.find('.avatar');
       const userUrl = $avatar.find('a').attr('href') || '';
       const userAvatar = $avatar.find('img').attr('src') || '';
       const userName = $avatar.find('a').attr('title') || '';
 
-      // 提取評分（星級）
+      // 提取评分（星级）
       const ratingClass = $comment.find('.rating').attr('class') || '';
       let rating: number | null = null;
       const ratingMatch = ratingClass.match(/allstar(\d)0/);
@@ -67,15 +67,15 @@ export async function GET(request: NextRequest) {
         rating = parseInt(ratingMatch[1]);
       }
 
-      // 提取短評內容
+      // 提取短评内容
       const $content = $comment.find('.short');
       const content = $content.text().trim();
 
-      // 提取時間
+      // 提取时间
       const $commentInfo = $comment.find('.comment-info');
       const time = $commentInfo.find('.comment-time').attr('title') || '';
 
-      // 提取有用數
+      // 提取有用数
       const votesText = $comment.find('.votes.vote-count').text().trim();
       const votes = parseInt(votesText) || 0;
 
@@ -93,46 +93,46 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    console.log('解析到評論數:', comments.length);
+    console.log('解析到评论数:', comments.length);
 
-    // 獲取總評論數 - 嘗試多種方式
+    // 获取总评论数 - 尝试多种方式
     let total = 0;
 
-    // 方式1: 從標題獲取 "全部 XXX 條"
+    // 方式1: 从标题获取 "全部 XXX 条"
     const titleText = $('.mod-hd h2, h2, .section-title').text();
-    const titleMatch = titleText.match(/全部\s*(\d+)\s*條/);
+    const titleMatch = titleText.match(/全部\s*(\d+)\s*条/);
     if (titleMatch) {
       total = parseInt(titleMatch[1]);
     }
 
-    // 方式2: 從導航標籤獲取 "看過(XXX)"
+    // 方式2: 从导航标签获取 "看过(XXX)"
     if (total === 0) {
       const navText = $('.tabs, .nav-tabs, a').text();
-      const navMatch = navText.match(/看過\s*\((\d+)\)/);
+      const navMatch = navText.match(/看过\s*\((\d+)\)/);
       if (navMatch) {
         total = parseInt(navMatch[1]);
       }
     }
 
-    // 方式3: 從頁面所有文本查找
+    // 方式3: 从页面所有文本查找
     if (total === 0) {
       const bodyText = $('body').text();
-      const bodyMatch = bodyText.match(/全部\s*(\d+)\s*條|看過\s*\((\d+)\)/);
+      const bodyMatch = bodyText.match(/全部\s*(\d+)\s*条|看过\s*\((\d+)\)/);
       if (bodyMatch) {
         total = parseInt(bodyMatch[1] || bodyMatch[2]);
       }
     }
 
-    // 方式4: 如果有評論但 total 為 0，至少設置為當前評論數，並假設有更多
+    // 方式4: 如果有评论但 total 为 0，至少设置为当前评论数，并假设有更多
     if (total === 0 && comments.length > 0) {
       total = parseInt(start) + comments.length;
-      // 如果本次獲取了完整的 limit 數量，可能還有更多
+      // 如果本次获取了完整的 limit 数量，可能还有更多
       if (comments.length >= parseInt(limit)) {
-        total += 1; // 暫定有更多
+        total += 1; // 暂定有更多
       }
     }
 
-    console.log('豆瓣評論統計:', {
+    console.log('豆瓣评论统计:', {
       total,
       commentsCount: comments.length,
       start,
@@ -146,7 +146,7 @@ export async function GET(request: NextRequest) {
         total,
         start: parseInt(start),
         limit: parseInt(limit),
-        // 如果知道總數，就用總數判斷；否則如果獲取了完整頁，假設還有更多
+        // 如果知道总数，就用总数判断；否则如果获取了完整页，假设还有更多
         hasMore: total > 0
           ? parseInt(start) + comments.length < total
           : comments.length >= parseInt(limit),

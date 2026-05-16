@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   if (storageType === 'localstorage') {
     return NextResponse.json(
       {
-        error: '不支持本地存儲進行管理員配置',
+        error: '不支持本地存储进行管理员配置',
       },
       { status: 400 }
     );
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     if (username === process.env.USERNAME) {
       result.Role = 'owner';
     } else {
-      // 從新版數據庫獲取用戶信息
+      // 从新版数据库获取用户信息
       const { db } = await import('@/lib/db');
       const userInfoV2 = await db.getUserInfoV2(username);
 
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
         result.Role = 'admin';
       } else {
         return NextResponse.json(
-          { error: '你是管理員嗎你就訪問？' },
+          { error: '你是管理员吗你就访问？' },
           { status: 401 }
         );
       }
@@ -50,14 +50,14 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(result, {
       headers: {
-        'Cache-Control': 'no-store', // 管理員配置不緩存
+        'Cache-Control': 'no-store', // 管理员配置不缓存
       },
     });
   } catch (error) {
-    console.error('獲取管理員配置失敗:', error);
+    console.error('获取管理员配置失败:', error);
     return NextResponse.json(
       {
-        error: '獲取管理員配置失敗',
+        error: '获取管理员配置失败',
         details: (error as Error).message,
       },
       { status: 500 }
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
   const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
   if (storageType === 'localstorage') {
     return NextResponse.json(
-      { error: '不支持本地存儲進行管理員配置' },
+      { error: '不支持本地存储进行管理员配置' },
       { status: 400 }
     );
   }
@@ -83,13 +83,13 @@ export async function POST(request: NextRequest) {
   try {
     const newConfig = await request.json();
 
-    // 權限檢查
+    // 权限检查
     if (username !== process.env.USERNAME) {
       const { db } = await import('@/lib/db');
       const userInfoV2 = await db.getUserInfoV2(username);
 
       if (!userInfoV2 || (userInfoV2.role !== 'admin' && userInfoV2.role !== 'owner') || userInfoV2.banned) {
-        return NextResponse.json({ error: '權限不足' }, { status: 401 });
+        return NextResponse.json({ error: '权限不足' }, { status: 401 });
       }
     }
 
@@ -97,20 +97,20 @@ export async function POST(request: NextRequest) {
     const { db } = await import('@/lib/db');
     const { configSelfCheck, setCachedConfig } = await import('@/lib/config');
 
-    // 自檢配置
+    // 自检配置
     const checkedConfig = configSelfCheck(newConfig);
 
-    // 保存到數據庫
+    // 保存到数据库
     await db.saveAdminConfig(checkedConfig);
 
-    // 更新緩存
+    // 更新缓存
     await setCachedConfig(checkedConfig);
 
     return NextResponse.json({ success: true, message: '配置已保存' });
   } catch (error) {
-    console.error('保存配置失敗:', error);
+    console.error('保存配置失败:', error);
     return NextResponse.json(
-      { error: '保存配置失敗: ' + (error as Error).message },
+      { error: '保存配置失败: ' + (error as Error).message },
       { status: 500 }
     );
   }

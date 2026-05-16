@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   if (storageType === 'localstorage') {
     return NextResponse.json(
       {
-        error: '不支持本地存儲進行管理員配置',
+        error: '不支持本地存储进行管理员配置',
       },
       { status: 400 }
     );
@@ -26,34 +26,34 @@ export async function POST(request: NextRequest) {
   const username = authInfo.username;
 
   try {
-    // 檢查用戶權限
+    // 检查用户权限
     let adminConfig = await getConfig();
 
-    // 僅站長可以修改配置文件
+    // 仅站长可以修改配置文件
     if (username !== process.env.USERNAME) {
       return NextResponse.json(
-        { error: '權限不足，只有站長可以修改配置文件' },
+        { error: '权限不足，只有站长可以修改配置文件' },
         { status: 401 }
       );
     }
 
-    // 獲取請求體
+    // 获取请求体
     const body = await request.json();
     const { configFile, subscriptionUrl, autoUpdate, lastCheckTime } = body;
 
     if (!configFile || typeof configFile !== 'string') {
       return NextResponse.json(
-        { error: '配置文件內容不能為空' },
+        { error: '配置文件内容不能为空' },
         { status: 400 }
       );
     }
 
-    // 驗證 JSON 格式
+    // 验证 JSON 格式
     try {
       JSON.parse(configFile);
     } catch (e) {
       return NextResponse.json(
-        { error: '配置文件格式錯誤，請檢查 JSON 語法' },
+        { error: '配置文件格式错误，请检查 JSON 语法' },
         { status: 400 }
       );
     }
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    // 更新訂閱配置
+    // 更新订阅配置
     if (subscriptionUrl !== undefined) {
       adminConfig.ConfigSubscribtion.URL = subscriptionUrl;
     }
@@ -80,13 +80,13 @@ export async function POST(request: NextRequest) {
     // 更新配置文件
     await db.saveAdminConfig(adminConfig);
 
-    // 清除短劇視頻源緩存（因為配置文件可能包含新的視頻源）
+    // 清除短剧视频源缓存（因为配置文件可能包含新的视频源）
     try {
       await db.deleteGlobalValue('duanju');
-      console.log('已清除短劇視頻源緩存');
+      console.log('已清除短剧视频源缓存');
     } catch (error) {
-      console.error('清除短劇視頻源緩存失敗:', error);
-      // 不影響主流程，繼續執行
+      console.error('清除短剧视频源缓存失败:', error);
+      // 不影响主流程，继续执行
     }
 
     return NextResponse.json({
@@ -94,10 +94,10 @@ export async function POST(request: NextRequest) {
       message: '配置文件更新成功',
     });
   } catch (error) {
-    console.error('更新配置文件失敗:', error);
+    console.error('更新配置文件失败:', error);
     return NextResponse.json(
       {
-        error: '更新配置文件失敗',
+        error: '更新配置文件失败',
         details: (error as Error).message,
       },
       { status: 500 }

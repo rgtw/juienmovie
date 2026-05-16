@@ -27,17 +27,17 @@ export default function DanmakuFilterSettings({
   const [saving, setSaving] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [inputKey, setInputKey] = useState(0); // 用於強制重新渲染輸入框
-  const inputRef = useRef<HTMLInputElement>(null); // 用於直接操作輸入框 DOM
+  const [inputKey, setInputKey] = useState(0); // 用于强制重新渲染输入框
+  const inputRef = useRef<HTMLInputElement>(null); // 用于直接操作输入框 DOM
 
-  // 控制動畫狀態
+  // 控制动画状态
   useEffect(() => {
     let animationId: number;
     let timer: NodeJS.Timeout;
 
     if (isOpen) {
       setIsVisible(true);
-      // 使用雙重 requestAnimationFrame 確保DOM完全渲染
+      // 使用双重 requestAnimationFrame 确保DOM完全渲染
       animationId = requestAnimationFrame(() => {
         animationId = requestAnimationFrame(() => {
           setIsAnimating(true);
@@ -45,7 +45,7 @@ export default function DanmakuFilterSettings({
       });
     } else {
       setIsAnimating(false);
-      // 等待動畫完成後隱藏組件
+      // 等待动画完成后隐藏组件
       timer = setTimeout(() => {
         setIsVisible(false);
       }, 300);
@@ -61,19 +61,19 @@ export default function DanmakuFilterSettings({
     };
   }, [isOpen]);
 
-  // 阻止背景滾動
+  // 阻止背景滚动
   useEffect(() => {
     if (isVisible) {
-      // 保存當前滾動位置
+      // 保存当前滚动位置
       const scrollY = window.scrollY;
       const scrollX = window.scrollX;
       const body = document.body;
       const html = document.documentElement;
 
-      // 獲取滾動條寬度
+      // 获取滚动条宽度
       const scrollBarWidth = window.innerWidth - html.clientWidth;
 
-      // 保存原始樣式
+      // 保存原始样式
       const originalBodyStyle = {
         position: body.style.position,
         top: body.style.top,
@@ -84,7 +84,7 @@ export default function DanmakuFilterSettings({
         overflow: body.style.overflow,
       };
 
-      // 設置body樣式來阻止滾動，但保持原位置
+      // 设置body样式来阻止滚动，但保持原位置
       body.style.position = 'fixed';
       body.style.top = `-${scrollY}px`;
       body.style.left = `-${scrollX}px`;
@@ -94,7 +94,7 @@ export default function DanmakuFilterSettings({
       body.style.paddingRight = `${scrollBarWidth}px`;
 
       return () => {
-        // 恢復所有原始樣式
+        // 恢复所有原始样式
         body.style.position = originalBodyStyle.position;
         body.style.top = originalBodyStyle.top;
         body.style.left = originalBodyStyle.left;
@@ -103,7 +103,7 @@ export default function DanmakuFilterSettings({
         body.style.paddingRight = originalBodyStyle.paddingRight;
         body.style.overflow = originalBodyStyle.overflow;
 
-        // 使用 requestAnimationFrame 確保樣式恢復後再滾動
+        // 使用 requestAnimationFrame 确保样式恢复后再滚动
         requestAnimationFrame(() => {
           window.scrollTo(scrollX, scrollY);
         });
@@ -111,7 +111,7 @@ export default function DanmakuFilterSettings({
     }
   }, [isVisible]);
 
-  // 加載配置
+  // 加载配置
   useEffect(() => {
     if (isOpen) {
       loadConfig();
@@ -145,7 +145,7 @@ export default function DanmakuFilterSettings({
       if (onShowToast) {
         onShowToast('保存成功！', 'success');
       }
-      // 延遲關閉面板，讓用戶看到toast
+      // 延迟关闭面板，让用户看到toast
       setTimeout(() => {
         onClose();
       }, 300);
@@ -159,7 +159,7 @@ export default function DanmakuFilterSettings({
     }
   };
 
-  // 添加規則
+  // 添加规则
   const handleAddRule = () => {
     if (!newKeyword.trim()) {
       if (onShowToast) {
@@ -179,20 +179,20 @@ export default function DanmakuFilterSettings({
       rules: [...prev.rules, newRule],
     }));
 
-    // 清空輸入框並強制重新渲染
+    // 清空输入框并强制重新渲染
     setNewKeyword('');
 
-    // 使用 setTimeout 確保在狀態更新後操作 DOM
+    // 使用 setTimeout 确保在状态更新后操作 DOM
     setTimeout(() => {
       if (inputRef.current) {
         inputRef.current.value = ''; // 直接清空 DOM 值
-        inputRef.current.blur(); // 失去焦點，阻止自動填充
+        inputRef.current.blur(); // 失去焦点，阻止自动填充
       }
-      setInputKey(prev => prev + 1); // 強制重新渲染輸入框
+      setInputKey(prev => prev + 1); // 强制重新渲染输入框
     }, 0);
   };
 
-  // 刪除規則
+  // 删除规则
   const handleDeleteRule = (id: string | undefined) => {
     if (!id) return;
     setConfig((prev) => ({
@@ -200,7 +200,7 @@ export default function DanmakuFilterSettings({
     }));
   };
 
-  // 切換規則啟用狀態
+  // 切换规则启用状态
   const handleToggleRule = (id: string | undefined) => {
     if (!id) return;
     setConfig((prev) => ({
@@ -216,12 +216,12 @@ export default function DanmakuFilterSettings({
     <div
       className="fixed inset-0 z-[2000] flex items-end justify-center"
       onTouchMove={(e) => {
-        // 阻止最外層容器的觸摸移動，防止背景滾動
+        // 阻止最外层容器的触摸移动，防止背景滚动
         e.preventDefault();
         e.stopPropagation();
       }}
       style={{
-        touchAction: 'none', // 禁用所有觸摸操作
+        touchAction: 'none', // 禁用所有触摸操作
       }}
     >
       {/* 背景遮罩 */}
@@ -231,49 +231,49 @@ export default function DanmakuFilterSettings({
         }`}
         onClick={onClose}
         onTouchMove={(e) => {
-          // 只阻止滾動，允許其他觸摸事件（包括點擊）
+          // 只阻止滚动，允许其他触摸事件（包括点击）
           e.preventDefault();
         }}
         onWheel={(e) => {
-          // 阻止滾輪滾動
+          // 阻止滚轮滚动
           e.preventDefault();
         }}
         style={{
           backdropFilter: 'blur(4px)',
           willChange: 'opacity',
-          touchAction: 'none', // 禁用所有觸摸操作
+          touchAction: 'none', // 禁用所有触摸操作
         }}
       />
 
-      {/* 彈窗主體 */}
+      {/* 弹窗主体 */}
       <div
         className="relative w-full bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl transition-all duration-300 ease-out max-h-[85vh]"
         onTouchMove={(e) => {
-          // 允許彈窗內部滾動，阻止事件冒泡到外層
+          // 允许弹窗内部滚动，阻止事件冒泡到外层
           e.stopPropagation();
         }}
         style={{
           marginBottom: 'calc(0rem + env(safe-area-inset-bottom))',
           willChange: 'transform, opacity',
-          backfaceVisibility: 'hidden', // 避免閃爍
+          backfaceVisibility: 'hidden', // 避免闪烁
           transform: isAnimating
             ? 'translateY(0) translateZ(0)'
-            : 'translateY(100%) translateZ(0)', // 組合變換保持滑入效果和硬件加速
+            : 'translateY(100%) translateZ(0)', // 组合变换保持滑入效果和硬件加速
           opacity: isAnimating ? 1 : 0,
-          touchAction: 'auto', // 允許彈窗內的正常觸摸操作
+          touchAction: 'auto', // 允许弹窗内的正常触摸操作
         }}
       >
-        {/* 頂部拖拽指示器 */}
+        {/* 顶部拖拽指示器 */}
         <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 pt-3 pb-2">
           <div className="flex justify-center">
             <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
           </div>
         </div>
 
-        {/* 頭部 */}
+        {/* 头部 */}
         <div className="flex items-center justify-between px-4 pb-3 border-b border-gray-100 dark:border-gray-800">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            彈幕關鍵字屏蔽設置
+            弹幕关键字屏蔽设置
           </h2>
           <button
             onClick={onClose}
@@ -283,12 +283,12 @@ export default function DanmakuFilterSettings({
           </button>
         </div>
 
-        {/* 內容區域 */}
+        {/* 内容区域 */}
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-          {/* 添加規則 */}
+          {/* 添加规则 */}
           <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 space-y-3">
             <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              添加屏蔽規則
+              添加屏蔽规则
             </h3>
             <div className="space-y-3">
               <input
@@ -326,16 +326,16 @@ export default function DanmakuFilterSettings({
               </div>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-              💡 普通模式：包含關鍵字即屏蔽<br/>
-              🔧 正則模式：支持正則表達式匹配
+              💡 普通模式：包含关键字即屏蔽<br/>
+              🔧 正则模式：支持正则表达式匹配
             </p>
           </div>
 
-          {/* 規則列表 */}
+          {/* 规则列表 */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                當前規則
+                当前规则
               </h3>
               <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">
                 {config.rules.length}
@@ -368,7 +368,7 @@ export default function DanmakuFilterSettings({
                     key={rule.id}
                     className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 flex items-center gap-3 active:bg-gray-100 dark:active:bg-gray-750 transition-colors duration-150"
                   >
-                    {/* 啟用/禁用按鈕 */}
+                    {/* 启用/禁用按钮 */}
                     <button
                       onClick={() => handleToggleRule(rule.id)}
                       className="flex-shrink-0 active:scale-95 transition-transform duration-150"
@@ -386,7 +386,7 @@ export default function DanmakuFilterSettings({
                       )}
                     </button>
 
-                    {/* 關鍵字 */}
+                    {/* 关键字 */}
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-col gap-1.5">
                         <span
@@ -408,7 +408,7 @@ export default function DanmakuFilterSettings({
                       </div>
                     </div>
 
-                    {/* 刪除按鈕 */}
+                    {/* 删除按钮 */}
                     <button
                       onClick={() => handleDeleteRule(rule.id)}
                       className="flex-shrink-0 p-2 text-red-500 hover:text-red-600 active:text-red-700 active:scale-90 transition-all duration-150"
@@ -422,7 +422,7 @@ export default function DanmakuFilterSettings({
           </div>
         </div>
 
-        {/* 底部按鈕 */}
+        {/* 底部按钮 */}
         <div className="sticky bottom-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 px-4 py-4">
           <div className="flex gap-3">
             <button

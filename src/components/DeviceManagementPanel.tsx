@@ -55,7 +55,7 @@ export function DeviceManagementPanel({
         >
           <div className='flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700'>
             <h3 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-              設備管理
+              设备管理
             </h3>
             <button
               onClick={onClose}
@@ -75,7 +75,7 @@ export function DeviceManagementPanel({
                   </div>
                 ))}
                 <div className='text-center text-sm text-gray-500 dark:text-gray-400 mt-4'>
-                  加載中...
+                  加载中...
                 </div>
               </div>
             ) : devices.length === 0 ? (
@@ -112,7 +112,7 @@ export function DeviceManagementPanel({
                               </span>
                               {device.isCurrent && (
                                 <span className='px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 rounded-full'>
-                                  當前設備
+                                  当前设备
                                 </span>
                               )}
                             </div>
@@ -144,10 +144,10 @@ export function DeviceManagementPanel({
               disabled={devices.length === 0}
               className='w-full px-4 py-2.5 bg-red-500 hover:bg-red-600 disabled:bg-red-400 dark:bg-red-600 dark:hover:bg-red-700 dark:disabled:bg-red-500 text-white text-sm font-medium rounded-lg transition-colors disabled:cursor-not-allowed'
             >
-              登出所有設備
+              登出所有设备
             </button>
             <p className='text-xs text-gray-500 dark:text-gray-400 text-center'>
-              登出所有設備後需要重新登錄
+              登出所有设备后需要重新登录
             </p>
           </div>
         </div>

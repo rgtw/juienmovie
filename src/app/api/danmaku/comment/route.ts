@@ -1,4 +1,4 @@
-// 獲取彈幕 API 路由
+// 获取弹幕 API 路由
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getConfig } from '@/lib/config';
@@ -6,11 +6,11 @@ import { getDanmakuApiBaseUrl } from '@/lib/danmaku/config';
 
 export const runtime = 'nodejs';
 
-// 解析彈幕 XML 為 JSON
+// 解析弹幕 XML 为 JSON
 function parseXmlDanmaku(xmlText: string): Array<{ p: string; m: string; cid: number }> {
   const comments: Array<{ p: string; m: string; cid: number }> = [];
 
-  // 使用正則表達式提取所有 <d> 標籤
+  // 使用正则表达式提取所有 <d> 标签
   const dTagRegex = /<d\s+p="([^"]+)"[^>]*>([^<]*)<\/d>/g;
   let match;
 
@@ -18,7 +18,7 @@ function parseXmlDanmaku(xmlText: string): Array<{ p: string; m: string; cid: nu
     const p = match[1];
     const m = match[2];
 
-    // 從 p 屬性中提取 cid（彈幕ID）
+    // 从 p 属性中提取 cid（弹幕ID）
     const pParts = p.split(',');
     const cid = pParts[7] ? parseInt(pParts[7]) : 0;
 
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     const episodeId = searchParams.get('episodeId');
     const url = searchParams.get('url');
 
-    // 至少需要一個參數
+    // 至少需要一个参数
     if (!episodeId && !url) {
       return NextResponse.json(
         {
@@ -49,23 +49,23 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // 從數據庫讀取彈幕配置
+    // 从数据库读取弹幕配置
     const config = await getConfig();
     const baseUrl = getDanmakuApiBaseUrl(config.SiteConfig);
 
     let apiUrl: string;
 
     if (episodeId) {
-      // 通過劇集 ID 獲取彈幕 - 使用 XML 格式
+      // 通过剧集 ID 获取弹幕 - 使用 XML 格式
       apiUrl = `${baseUrl}/api/v2/comment/${episodeId}?format=xml`;
     } else {
-      // 通過視頻 URL 獲取彈幕 - 使用 XML 格式
+      // 通过视频 URL 获取弹幕 - 使用 XML 格式
       apiUrl = `${baseUrl}/api/v2/comment?url=${encodeURIComponent(url!)}&format=xml`;
     }
 
-    // 添加超時控制
+    // 添加超时控制
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 120000); // 2分鐘超時
+    const timeoutId = setTimeout(() => controller.abort(), 120000); // 2分钟超时
 
     try {
       const response = await fetch(apiUrl, {
@@ -83,10 +83,10 @@ export async function GET(request: NextRequest) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // 獲取 XML 文本
+      // 获取 XML 文本
       const xmlText = await response.text();
 
-      // 解析 XML 為 JSON
+      // 解析 XML 为 JSON
       const comments = parseXmlDanmaku(xmlText);
 
       return NextResponse.json({
@@ -96,15 +96,15 @@ export async function GET(request: NextRequest) {
     } catch (fetchError) {
       clearTimeout(timeoutId);
 
-      // 如果是超時錯誤，返回更友好的錯誤信息
+      // 如果是超时错误，返回更友好的错误信息
       if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-        throw new Error('彈幕服務器請求超時，請稍後重試');
+        throw new Error('弹幕服务器请求超时，请稍后重试');
       }
 
       throw fetchError;
     }
   } catch (error) {
-    console.error('獲取彈幕代理錯誤:', error);
+    console.error('获取弹幕代理错误:', error);
     return NextResponse.json(
       {
         count: 0,

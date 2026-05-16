@@ -110,7 +110,7 @@ export default function ContinueWatching({ className }: ContinueWatchingProps) {
       <section className={`mb-8 ${className || ''}`}>
         <div className='mb-4 flex items-center justify-between'>
           <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-            繼續觀看
+            继续观看
           </h2>
           {!loading && playRecords.length > 0 && (
             <div className='flex items-center gap-1'>
@@ -258,10 +258,10 @@ export default function ContinueWatching({ className }: ContinueWatchingProps) {
                   </div>
                   <div className='flex-1'>
                     <h3 className='mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100'>
-                      清空播放記錄
+                      清空播放记录
                     </h3>
                     <p className='text-sm text-gray-600 dark:text-gray-400'>
-                      確定要清空所有播放記錄嗎？此操作不可恢復。
+                      确定要清空所有播放记录吗？此操作不可恢复。
                     </p>
                   </div>
                 </div>
@@ -277,7 +277,7 @@ export default function ContinueWatching({ className }: ContinueWatchingProps) {
                     onClick={handleClearConfirm}
                     className='flex-1 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700'
                   >
-                    確定清空
+                    确定清空
                   </button>
                 </div>
               </div>

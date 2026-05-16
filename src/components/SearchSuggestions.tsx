@@ -7,7 +7,7 @@ interface SearchSuggestionsProps {
   isVisible: boolean;
   onSelect: (suggestion: string) => void;
   onClose: () => void;
-  onEnterKey: () => void; // 新增：處理回車鍵的回調
+  onEnterKey: () => void; // 新增：处理回车键的回调
 }
 
 interface SuggestionItem {
@@ -26,14 +26,14 @@ export default function SearchSuggestions({
   const [suggestions, setSuggestions] = useState<SuggestionItem[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 防抖定時器
+  // 防抖定时器
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // 用於中止舊請求
+  // 用于中止旧请求
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const fetchSuggestionsFromAPI = useCallback(async (searchQuery: string) => {
-    // 每次請求前取消上一次的請求
+    // 每次请求前取消上一次的请求
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -58,20 +58,20 @@ export default function SearchSuggestions({
         setSuggestions(apiSuggestions);
       }
     } catch (err: unknown) {
-      // 類型保護判斷 err 是否是 Error 類型
+      // 类型保护判断 err 是否是 Error 类型
       if (err instanceof Error) {
         if (err.name !== 'AbortError') {
-          // 不是取消請求導致的錯誤才清空
+          // 不是取消请求导致的错误才清空
           setSuggestions([]);
         }
       } else {
-        // 如果 err 不是 Error 類型，也清空提示
+        // 如果 err 不是 Error 类型，也清空提示
         setSuggestions([]);
       }
     }
   }, []);
 
-  // 防抖觸發
+  // 防抖触发
   const debouncedFetchSuggestions = useCallback(
     (searchQuery: string) => {
       if (debounceTimer.current) {
@@ -95,7 +95,7 @@ export default function SearchSuggestions({
     }
     debouncedFetchSuggestions(query);
 
-    // 清理定時器
+    // 清理定时器
     return () => {
       if (debounceTimer.current) {
         clearTimeout(debounceTimer.current);
@@ -103,7 +103,7 @@ export default function SearchSuggestions({
     };
   }, [query, isVisible, debouncedFetchSuggestions]);
 
-  // 點擊外部關閉
+  // 点击外部关闭
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -121,14 +121,14 @@ export default function SearchSuggestions({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isVisible, onClose]);
 
-  // 處理鍵盤事件，特別是回車鍵
+  // 处理键盘事件，特别是回车键
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter' && isVisible) {
-        // 阻止默認行為，避免瀏覽器自動選擇建議
+        // 阻止默认行为，避免浏览器自动选择建议
         e.preventDefault();
         e.stopPropagation();
-        // 關閉搜索建議並觸發搜索
+        // 关闭搜索建议并触发搜索
         onClose();
         onEnterKey();
       }

@@ -7,7 +7,7 @@ import { MovieRequest } from '@/lib/types';
 
 export const runtime = 'nodejs';
 
-// GET: 獲取求片列表
+// GET: 获取求片列表
 export async function GET(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
   if (!authInfo || !authInfo.username) {
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const storage = getStorage();
 
     if (myRequests) {
-      // 獲取用戶自己的求片
+      // 获取用户自己的求片
       const requestIds = await storage.getUserMovieRequests(authInfo.username);
       const requests = await Promise.all(
         requestIds.map(id => storage.getMovieRequest(id))
@@ -32,20 +32,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ requests: filtered });
     }
 
-    // 獲取所有求片
+    // 获取所有求片
     let requests = await storage.getAllMovieRequests();
 
-    // 按狀態篩選
+    // 按状态筛选
     if (status) {
       requests = requests.filter(r => r.status === status);
     }
 
-    // 列表頁不返回 requestedBy
+    // 列表页不返回 requestedBy
     if (!detail) {
       requests = requests.map(r => ({ ...r, requestedBy: [] }));
     }
 
-    // 按求片人數和時間排序
+    // 按求片人数和时间排序
     requests.sort((a, b) => {
       if (b.requestCount !== a.requestCount) {
         return b.requestCount - a.requestCount;
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ requests });
   } catch (error) {
-    console.error('獲取求片列表失敗:', error);
+    console.error('获取求片列表失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST: 創建或加入求片
+// POST: 创建或加入求片
 export async function POST(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
   if (!authInfo || !authInfo.username) {
@@ -71,24 +71,24 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // 檢查求片功能是否啟用並獲取冷卻時間
+    // 检查求片功能是否启用并获取冷却时间
     const { getConfig } = await import('@/lib/config');
     const config = await getConfig();
 
     if (config.SiteConfig.EnableMovieRequest === false) {
-      return NextResponse.json({ error: '求片功能已關閉' }, { status: 403 });
+      return NextResponse.json({ error: '求片功能已关闭' }, { status: 403 });
     }
 
     const body = await request.json();
     const { tmdbId, title, year, mediaType, season, poster, overview } = body;
 
     if (!title || !mediaType) {
-      return NextResponse.json({ error: '缺少必要參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少必要参数' }, { status: 400 });
     }
 
     const storage = getStorage();
 
-    // 檢查頻率限制 - 使用配置中的冷卻時間
+    // 检查频率限制 - 使用配置中的冷却时间
     const cooldownSeconds = config.SiteConfig.MovieRequestCooldown ?? 3600;
     const rateLimit = cooldownSeconds * 1000;
 
@@ -99,14 +99,14 @@ export async function POST(request: NextRequest) {
         if (elapsed < rateLimit) {
           const remaining = Math.ceil((rateLimit - elapsed) / 60000);
           return NextResponse.json(
-            { error: `操作太頻繁，請${remaining}分鐘後再試` },
+            { error: `操作太频繁，请${remaining}分钟后再试` },
             { status: 429 }
           );
         }
       }
     }
 
-    // 查重（劇集需要匹配季度）
+    // 查重（剧集需要匹配季度）
     const allRequests = await storage.getAllMovieRequests();
     const existing = allRequests.find(r =>
       (tmdbId && r.tmdbId === tmdbId && r.season === season) ||
@@ -114,14 +114,14 @@ export async function POST(request: NextRequest) {
     );
 
     if (existing) {
-      // 如果已上架，不允許再求
+      // 如果已上架，不允许再求
       if (existing.status === 'fulfilled') {
-        return NextResponse.json({ error: '該影片已上架' }, { status: 400 });
+        return NextResponse.json({ error: '该影片已上架' }, { status: 400 });
       }
 
-      // 檢查用戶是否已經求過
+      // 检查用户是否已经求过
       if (existing.requestedBy.includes(authInfo.username)) {
-        return NextResponse.json({ error: '您已經求過這部影片了' }, { status: 400 });
+        return NextResponse.json({ error: '您已经求过这部影片了' }, { status: 400 });
       }
 
       // 加入求片
@@ -131,13 +131,13 @@ export async function POST(request: NextRequest) {
       await storage.updateMovieRequest(existing.id, existing);
       await storage.addUserMovieRequest(authInfo.username, existing.id);
 
-      // 給站長髮送通知
+      // 给站长发送通知
       const ownerUsername = process.env.USERNAME;
       if (ownerUsername) {
         await storage.addNotification(ownerUsername, {
           id: `movie_request_join_${existing.id}_${Date.now()}`,
           type: 'movie_request',
-          title: '求片人數增加',
+          title: '求片人数增加',
           message: `${authInfo.username} 也想看：${existing.title}${existing.season ? ` 第${existing.season}季` : ''} (${existing.requestCount}人)`,
           timestamp: Date.now(),
           read: false,
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // 創建新求片
+    // 创建新求片
     const newRequest: MovieRequest = {
       id: nanoid(),
       tmdbId,
@@ -174,22 +174,22 @@ export async function POST(request: NextRequest) {
     await storage.createMovieRequest(newRequest);
     await storage.addUserMovieRequest(authInfo.username, newRequest.id);
 
-    // 更新頻率限制 - 使用抽象方法兼容所有存儲類型
+    // 更新频率限制 - 使用抽象方法兼容所有存储类型
     if (storage.updateLastMovieRequestTime) {
       await storage.updateLastMovieRequestTime(authInfo.username, Date.now());
 
-      // 清除用戶信息緩存，確保下次讀取到最新數據
+      // 清除用户信息缓存，确保下次读取到最新数据
       const { userInfoCache } = await import('@/lib/user-cache');
       userInfoCache?.delete(authInfo.username);
     }
 
-    // 給站長髮送通知
+    // 给站长发送通知
     const ownerUsername = process.env.USERNAME;
     if (ownerUsername) {
       await storage.addNotification(ownerUsername, {
         id: `movie_request_${newRequest.id}_${Date.now()}`,
         type: 'movie_request',
-        title: '新求片請求',
+        title: '新求片请求',
         message: `${authInfo.username} 求片：${title}${season ? ` 第${season}季` : ''}`,
         timestamp: Date.now(),
         read: false,
@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
       request: newRequest
     });
   } catch (error) {
-    console.error('創建求片失敗:', error);
+    console.error('创建求片失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }

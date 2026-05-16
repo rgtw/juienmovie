@@ -12,36 +12,36 @@ export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'music', '無權限訪問音樂功能');
+    const authResult = await requireFeaturePermission(request, 'music', '无权限访问音乐功能');
     if (authResult instanceof NextResponse) return authResult;
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 檢查用戶狀態
+    // 检查用户状态
     if (authInfo.username !== process.env.USERNAME) {
-      // 非站長，檢查用戶存在或被封禁
+      // 非站长，检查用户存在或被封禁
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
     const records = await db.getAllMusicPlayRecords(authInfo.username);
 
-    // 從緩存中獲取歌曲信息並填充到記錄中
+    // 从缓存中获取歌曲信息并填充到记录中
     const keys = Object.keys(records).map(key => {
       const [platform, id] = key.split('+');
       return { platform, id };
     });
     const cachedSongs = getCachedSongs(keys);
 
-    // 將緩存的歌曲信息合併到記錄中
+    // 将缓存的歌曲信息合并到记录中
     const enrichedRecords: Record<string, MusicPlayRecord> = {};
     for (const [key, record] of Object.entries(records)) {
       const cachedSong = cachedSongs.get(key);
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(enrichedRecords, { status: 200 });
   } catch (err) {
-    console.error('獲取音樂播放記錄失敗', err);
+    console.error('获取音乐播放记录失败', err);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
@@ -66,28 +66,28 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'music', '無權限訪問音樂功能');
+    const authResult = await requireFeaturePermission(request, 'music', '无权限访问音乐功能');
     if (authResult instanceof NextResponse) return authResult;
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     if (authInfo.username !== process.env.USERNAME) {
-      // 非站長，檢查用戶存在或被封禁
+      // 非站长，检查用户存在或被封禁
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
     const body = await request.json();
 
-    // 檢查是否是批量添加
+    // 检查是否是批量添加
     if (Array.isArray(body.records)) {
       // 批量添加
       const records: Array<{ platform: string; id: string; record: MusicPlayRecord }> = [];
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        // 驗證音樂播放記錄數據
+        // 验证音乐播放记录数据
         if (!record.platform || !record.id || !record.name || !record.artist) {
           return NextResponse.json(
             { error: 'Invalid record data in batch item' },
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        // 從key中解析platform和id
+        // 从key中解析platform和id
         const [platform, id] = key.split('+');
         if (!platform || !id) {
           return NextResponse.json(
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
 
         records.push({ platform, id, record });
 
-        // 緩存歌曲信息到服務器內存
+        // 缓存歌曲信息到服务器内存
         setCachedSong(platform, id, {
           id: record.id,
           name: record.name,
@@ -130,12 +130,12 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      // 批量保存到數據庫
+      // 批量保存到数据库
       await db.batchSaveMusicPlayRecords(authInfo.username, records);
 
       return NextResponse.json({ success: true, count: records.length }, { status: 200 });
     } else {
-      // 單個添加（保持向後兼容）
+      // 单个添加（保持向后兼容）
       const { key, record }: { key: string; record: MusicPlayRecord } = body;
 
       if (!key || !record) {
@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // 驗證音樂播放記錄數據
+      // 验证音乐播放记录数据
       if (!record.platform || !record.id || !record.name || !record.artist) {
         return NextResponse.json(
           { error: 'Invalid record data' },
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // 從key中解析platform和id
+      // 从key中解析platform和id
       const [platform, id] = key.split('+');
       if (!platform || !id) {
         return NextResponse.json(
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
 
       await db.saveMusicPlayRecord(authInfo.username, platform, id, record);
 
-      // 緩存歌曲信息到服務器內存
+      // 缓存歌曲信息到服务器内存
       setCachedSong(platform, id, {
         id: record.id,
         name: record.name,
@@ -176,7 +176,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true }, { status: 200 });
     }
   } catch (err) {
-    console.error('保存音樂播放記錄失敗', err);
+    console.error('保存音乐播放记录失败', err);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
@@ -186,22 +186,22 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'music', '無權限訪問音樂功能');
+    const authResult = await requireFeaturePermission(request, 'music', '无权限访问音乐功能');
     if (authResult instanceof NextResponse) return authResult;
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     if (authInfo.username !== process.env.USERNAME) {
-      // 非站長，檢查用戶存在或被封禁
+      // 非站长，检查用户存在或被封禁
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
@@ -209,7 +209,7 @@ export async function DELETE(request: NextRequest) {
     const key = searchParams.get('key');
 
     if (key) {
-      // 刪除單條記錄
+      // 删除单条记录
       const [platform, id] = key.split('+');
       if (!platform || !id) {
         return NextResponse.json(
@@ -219,13 +219,13 @@ export async function DELETE(request: NextRequest) {
       }
       await db.deleteMusicPlayRecord(authInfo.username, platform, id);
     } else {
-      // 清空所有記錄
+      // 清空所有记录
       await db.clearAllMusicPlayRecords(authInfo.username);
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
-    console.error('刪除音樂播放記錄失敗', err);
+    console.error('删除音乐播放记录失败', err);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }

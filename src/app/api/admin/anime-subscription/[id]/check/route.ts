@@ -10,17 +10,17 @@ export const runtime = 'nodejs';
 
 /**
  * POST /api/admin/anime-subscription/[id]/check
- * 手動觸發檢查單個訂閱
+ * 手动触发检查单个订阅
  */
 export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    // 權限檢查
+    // 权限检查
     const authInfo = getAuthInfoFromCookie(req);
     if (!authInfo || (authInfo.role !== 'admin' && authInfo.role !== 'owner')) {
-      return NextResponse.json({ error: '無權限訪問' }, { status: 403 });
+      return NextResponse.json({ error: '无权限访问' }, { status: 403 });
     }
 
     const config = await getConfig();
@@ -28,10 +28,10 @@ export async function POST(
 
     const subscription = subscriptions.find((sub) => sub.id === params.id);
     if (!subscription) {
-      return NextResponse.json({ error: '訂閱不存在' }, { status: 404 });
+      return NextResponse.json({ error: '订阅不存在' }, { status: 404 });
     }
 
-    // 執行檢查邏輯（忽略時間間隔限制）
+    // 执行检查逻辑（忽略时间间隔限制）
     const result = await checkSubscription(subscription);
 
     // 保存配置
@@ -42,9 +42,9 @@ export async function POST(
       ...result,
     });
   } catch (error: any) {
-    console.error('檢查追番訂閱失敗:', error);
+    console.error('检查追番订阅失败:', error);
     return NextResponse.json(
-      { error: error.message || '檢查失敗' },
+      { error: error.message || '检查失败' },
       { status: 500 }
     );
   }

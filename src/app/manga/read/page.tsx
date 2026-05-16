@@ -857,7 +857,7 @@ export default function MangaReadPage() {
                     href={`/manga/read?mangaId=${mangaId}&sourceId=${sourceId}&chapterId=${nextChapter.id}&title=${encodeURIComponent(title)}&cover=${encodeURIComponent(cover)}&sourceName=${encodeURIComponent(sourceName)}&chapterName=${encodeURIComponent(nextChapter.name)}&returnTo=${encodeURIComponent(returnTo)}`}
                     className='rounded-2xl bg-sky-600 px-4 py-3 text-sm font-medium text-white transition hover:bg-sky-700'
                   >
-                    下一話：{nextChapter.name}
+                    下一话：{nextChapter.name}
                   </Link>
                 ) : null}
                 <button
@@ -865,7 +865,7 @@ export default function MangaReadPage() {
                   className='rounded-2xl border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-900'
                   onClick={() => setShowChapterComplete(false)}
                 >
-                  關閉
+                  关闭
                 </button>
               </div>
             </div>
@@ -961,7 +961,7 @@ export default function MangaReadPage() {
         href={`/manga/detail?mangaId=${mangaId}&sourceId=${sourceId}&title=${encodeURIComponent(title)}&cover=${encodeURIComponent(cover)}&sourceName=${encodeURIComponent(sourceName)}&returnTo=${encodeURIComponent(returnTo)}`}
         className='sr-only'
       >
-        返回詳情
+        返回详情
       </Link>
     </div>
   );

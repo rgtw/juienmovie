@@ -9,21 +9,21 @@ export const runtime = 'nodejs';
 
 /**
  * PUT /api/admin/anime-subscription/toggle
- * 切換追番功能啟用狀態
+ * 切换追番功能启用状态
  */
 export async function PUT(req: NextRequest) {
   try {
-    // 權限檢查
+    // 权限检查
     const authInfo = getAuthInfoFromCookie(req);
     if (!authInfo || (authInfo.role !== 'admin' && authInfo.role !== 'owner')) {
-      return NextResponse.json({ error: '無權限訪問' }, { status: 403 });
+      return NextResponse.json({ error: '无权限访问' }, { status: 403 });
     }
 
     const { enabled } = await req.json();
 
     if (typeof enabled !== 'boolean') {
       return NextResponse.json(
-        { error: 'enabled 必須是布爾值' },
+        { error: 'enabled 必须是布尔值' },
         { status: 400 }
       );
     }
@@ -38,9 +38,9 @@ export async function PUT(req: NextRequest) {
 
     return NextResponse.json({ success: true, enabled });
   } catch (error: any) {
-    console.error('切換追番功能狀態失敗:', error);
+    console.error('切换追番功能状态失败:', error);
     return NextResponse.json(
-      { error: error.message || '切換狀態失敗' },
+      { error: error.message || '切换状态失败' },
       { status: 500 }
     );
   }

@@ -25,7 +25,7 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
   onPrimaryChange,
   onSecondaryChange,
 }) => {
-  // 為不同的選擇器創建獨立的refs和狀態
+  // 为不同的选择器创建独立的refs和状态
   const primaryContainerRef = useRef<HTMLDivElement>(null);
   const primaryButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [primaryIndicatorStyle, setPrimaryIndicatorStyle] = useState<{
@@ -40,13 +40,13 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
     width: number;
   }>({ left: 0, width: 0 });
 
-  // 二級選擇器滾動容器的ref
+  // 二级选择器滚动容器的ref
   const secondaryScrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // 根據 customCategories 生成一級選擇器選項（按 type 分組，電影優先）
+  // 根据 customCategories 生成一级选择器选项（按 type 分组，电影优先）
   const primaryOptions = React.useMemo(() => {
     const types = Array.from(new Set(customCategories.map((cat) => cat.type)));
-    // 確保電影類型排在前面
+    // 确保电影类型排在前面
     const sortedTypes = types.sort((a, b) => {
       if (a === 'movie' && b !== 'movie') return -1;
       if (a !== 'movie' && b === 'movie') return 1;
@@ -58,7 +58,7 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
     }));
   }, [customCategories]);
 
-  // 根據選中的一級選項生成二級選擇器選項
+  // 根据选中的一级选项生成二级选择器选项
   const secondaryOptions = React.useMemo(() => {
     if (!primarySelection) return [];
     return customCategories
@@ -69,7 +69,7 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
       }));
   }, [customCategories, primarySelection]);
 
-  // 處理二級選擇器的鼠標滾輪事件（原生 DOM 事件）
+  // 处理二级选择器的鼠标滚轮事件（原生 DOM 事件）
   const handleSecondaryWheel = React.useCallback((e: WheelEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -80,13 +80,13 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
     }
   }, []);
 
-  // 添加二級選擇器的鼠標滾輪事件監聽器
+  // 添加二级选择器的鼠标滚轮事件监听器
   useEffect(() => {
     const scrollContainer = secondaryScrollContainerRef.current;
     const capsuleContainer = secondaryContainerRef.current;
 
     if (scrollContainer && capsuleContainer) {
-      // 同時監聽滾動容器和膠囊容器的滾輪事件
+      // 同时监听滚动容器和胶囊容器的滚轮事件
       scrollContainer.addEventListener('wheel', handleSecondaryWheel, {
         passive: false,
       });
@@ -101,13 +101,13 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
     }
   }, [handleSecondaryWheel]);
 
-  // 當二級選項變化時重新添加事件監聽器
+  // 当二级选项变化时重新添加事件监听器
   useEffect(() => {
     const scrollContainer = secondaryScrollContainerRef.current;
     const capsuleContainer = secondaryContainerRef.current;
 
     if (scrollContainer && capsuleContainer && secondaryOptions.length > 0) {
-      // 重新添加事件監聽器
+      // 重新添加事件监听器
       scrollContainer.addEventListener('wheel', handleSecondaryWheel, {
         passive: false,
       });
@@ -122,7 +122,7 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
     }
   }, [handleSecondaryWheel, secondaryOptions]);
 
-  // 更新指示器位置的通用函數
+  // 更新指示器位置的通用函数
   const updateIndicatorPosition = (
     activeIndex: number,
     containerRef: React.RefObject<HTMLDivElement>,
@@ -155,9 +155,9 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
     }
   };
 
-  // 組件掛載時立即計算初始位置
+  // 组件挂载时立即计算初始位置
   useEffect(() => {
-    // 主選擇器初始位置
+    // 主选择器初始位置
     if (primaryOptions.length > 0) {
       const activeIndex = primaryOptions.findIndex(
         (opt) => opt.value === (primarySelection || primaryOptions[0].value)
@@ -170,7 +170,7 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
       );
     }
 
-    // 副選擇器初始位置
+    // 副选择器初始位置
     if (secondaryOptions.length > 0) {
       const activeIndex = secondaryOptions.findIndex(
         (opt) => opt.value === (secondarySelection || secondaryOptions[0].value)
@@ -182,9 +182,9 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
         setSecondaryIndicatorStyle
       );
     }
-  }, [primaryOptions, secondaryOptions]); // 當選項變化時重新計算
+  }, [primaryOptions, secondaryOptions]); // 当选项变化时重新计算
 
-  // 監聽主選擇器變化
+  // 监听主选择器变化
   useEffect(() => {
     if (primaryOptions.length > 0) {
       const activeIndex = primaryOptions.findIndex(
@@ -200,7 +200,7 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
     }
   }, [primarySelection, primaryOptions]);
 
-  // 監聽副選擇器變化
+  // 监听副选择器变化
   useEffect(() => {
     if (secondaryOptions.length > 0) {
       const activeIndex = secondaryOptions.findIndex(
@@ -216,7 +216,7 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
     }
   }, [secondarySelection, secondaryOptions]);
 
-  // 渲染膠囊式選擇器
+  // 渲染胶囊式选择器
   const renderCapsuleSelector = (
     options: { label: string; value: string }[],
     activeValue: string | undefined,
@@ -236,7 +236,7 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
         ref={containerRef}
         className='relative inline-flex bg-gray-200/60 rounded-full p-0.5 sm:p-1 dark:bg-gray-700/60 backdrop-blur-sm'
       >
-        {/* 滑動的白色背景指示器 */}
+        {/* 滑动的白色背景指示器 */}
         {indicatorStyle.width > 0 && (
           <div
             className='absolute top-0.5 bottom-0.5 sm:top-1 sm:bottom-1 bg-white dark:bg-gray-500 rounded-full shadow-sm transition-all duration-300 ease-out'
@@ -270,19 +270,19 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
     );
   };
 
-  // 如果沒有自定義分類，則不渲染任何內容
+  // 如果没有自定义分类，则不渲染任何内容
   if (!customCategories || customCategories.length === 0) {
     return null;
   }
 
   return (
     <div className='space-y-4 sm:space-y-6'>
-      {/* 兩級選擇器包裝 */}
+      {/* 两级选择器包装 */}
       <div className='space-y-3 sm:space-y-4'>
-        {/* 一級選擇器 */}
+        {/* 一级选择器 */}
         <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
           <span className='text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 min-w-[48px]'>
-            類型
+            类型
           </span>
           <div className='overflow-x-auto'>
             {renderCapsuleSelector(
@@ -294,11 +294,11 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
           </div>
         </div>
 
-        {/* 二級選擇器 */}
+        {/* 二级选择器 */}
         {secondaryOptions.length > 0 && (
           <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
             <span className='text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 min-w-[48px]'>
-              片單
+              片单
             </span>
             <div ref={secondaryScrollContainerRef} className='overflow-x-auto'>
               {renderCapsuleSelector(

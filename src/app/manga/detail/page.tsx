@@ -147,7 +147,7 @@ export default function MangaDetailPage() {
       unreadChapterCount: 0,
     };
 
-    // 只後臺清零，當前頁保留進入時看到的更新提示，刷新後再消失。
+    // 只后台清零，当前页保留进入时看到的更新提示，刷新后再消失。
     saveMangaShelf(sourceId, mangaId, nextItem).catch(() => undefined);
   }, [chronologicalChapters.length, detail, key, latestChapter, mangaId, shelf, sourceId]);
 
@@ -215,7 +215,7 @@ export default function MangaDetailPage() {
           <div className='flex flex-wrap gap-3'>
             {chapters[0] && (
               <Link href={chapterHref(chapters[0])} className='rounded-2xl bg-sky-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-sky-700'>
-                <BookOpen className='mr-2 inline h-4 w-4' />開始閱讀
+                <BookOpen className='mr-2 inline h-4 w-4' />开始阅读
               </Link>
             )}
             {currentRecord && (
@@ -223,7 +223,7 @@ export default function MangaDetailPage() {
                 href={`/manga/read?mangaId=${mangaId}&sourceId=${sourceId}&chapterId=${currentRecord.chapterId}&title=${encodeURIComponent(detail.title)}&cover=${encodeURIComponent(detail.cover)}&sourceName=${encodeURIComponent(detail.sourceName)}&chapterName=${encodeURIComponent(currentRecord.chapterName)}&returnTo=${encodeURIComponent(returnTo)}`}
                 className='rounded-2xl border border-sky-300 px-5 py-3 text-sm font-medium text-sky-700 transition hover:bg-sky-50 dark:text-sky-300 dark:hover:bg-sky-950/30'
               >
-                <Clock3 className='mr-2 inline h-4 w-4' />繼續閱讀 第 {currentRecord.pageIndex + 1}/{currentRecord.pageCount} 頁
+                <Clock3 className='mr-2 inline h-4 w-4' />继续阅读 第 {currentRecord.pageIndex + 1}/{currentRecord.pageCount} 页
               </Link>
             )}
             <button onClick={toggleShelf} className='rounded-2xl border border-gray-200 px-5 py-3 text-sm font-medium text-gray-700 transition hover:border-sky-300 hover:text-sky-600 dark:border-gray-700 dark:text-gray-200'>
@@ -242,7 +242,7 @@ export default function MangaDetailPage() {
         </div>
         {unreadChapterCount > 0 && latestChapter && (
           <div className='mb-4 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-700 dark:border-sky-900/50 dark:bg-sky-950/30 dark:text-sky-300'>
-            已更新 {unreadChapterCount} 話，最新章節：{latestChapter.name}
+            已更新 {unreadChapterCount} 话，最新章节：{latestChapter.name}
           </div>
         )}
         <div className='grid gap-3'>

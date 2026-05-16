@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   if (storageType === 'localstorage') {
     return NextResponse.json(
       {
-        error: '不支持本地存儲進行管理員配置',
+        error: '不支持本地存储进行管理员配置',
       },
       { status: 400 }
     );
@@ -40,27 +40,27 @@ export async function POST(request: NextRequest) {
       ProxyEnabled?: boolean;
     };
 
-    // 參數校驗
+    // 参数校验
     if (
       (Enabled !== undefined && typeof Enabled !== 'boolean') ||
       (BaseUrl !== undefined && typeof BaseUrl !== 'string') ||
       (Token !== undefined && typeof Token !== 'string') ||
       (ProxyEnabled !== undefined && typeof ProxyEnabled !== 'boolean')
     ) {
-      return NextResponse.json({ error: '參數格式錯誤' }, { status: 400 });
+      return NextResponse.json({ error: '参数格式错误' }, { status: 400 });
     }
 
     const adminConfig = await getConfig();
 
-    // 權限校驗 - 使用v2用戶系統
+    // 权限校验 - 使用v2用户系统
     if (username !== process.env.USERNAME) {
       const userInfo = await db.getUserInfoV2(username);
       if (!userInfo || userInfo.role !== 'admin' || userInfo.banned) {
-        return NextResponse.json({ error: '權限不足' }, { status: 401 });
+        return NextResponse.json({ error: '权限不足' }, { status: 401 });
       }
     }
 
-    // 更新緩存中的音樂配置
+    // 更新缓存中的音乐配置
     adminConfig.MusicConfig = {
       Enabled,
       BaseUrl,
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       ProxyEnabled: ProxyEnabled ?? true,
     };
 
-    // 寫入數據庫
+    // 写入数据库
     await db.saveAdminConfig(adminConfig);
     await setCachedConfig(adminConfig);
 
@@ -76,15 +76,15 @@ export async function POST(request: NextRequest) {
       { ok: true },
       {
         headers: {
-          'Cache-Control': 'no-store', // 不緩存結果
+          'Cache-Control': 'no-store', // 不缓存结果
         },
       }
     );
   } catch (error) {
-    console.error('更新音樂配置失敗:', error);
+    console.error('更新音乐配置失败:', error);
     return NextResponse.json(
       {
-        error: '更新音樂配置失敗',
+        error: '更新音乐配置失败',
         details: (error as Error).message,
       },
       { status: 500 }

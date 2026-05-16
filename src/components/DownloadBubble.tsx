@@ -7,7 +7,7 @@ import { useDownload } from '@/contexts/DownloadContext';
 export function DownloadBubble() {
   const { tasks, downloadingCount, setShowDownloadPanel } = useDownload();
 
-  // 拖動狀態
+  // 拖动状态
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -26,7 +26,7 @@ export function DownloadBubble() {
     return () => window.removeEventListener('resize', initPosition);
   }, []);
 
-  // 處理拖動
+  // 处理拖动
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
@@ -34,7 +34,7 @@ export function DownloadBubble() {
       const newX = e.clientX - dragOffset.x;
       const newY = e.clientY - dragOffset.y;
 
-      // 限制在視口範圍內
+      // 限制在视口范围内
       const maxX = window.innerWidth - 64;
       const maxY = window.innerHeight - 64;
 
@@ -52,7 +52,7 @@ export function DownloadBubble() {
       const newX = touch.clientX - dragOffset.x;
       const newY = touch.clientY - dragOffset.y;
 
-      // 限制在視口範圍內
+      // 限制在视口范围内
       const maxX = window.innerWidth - 64;
       const maxY = window.innerHeight - 64;
 
@@ -128,7 +128,7 @@ export function DownloadBubble() {
         }}
         className='relative group bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110'
       >
-        {/* 下載圖標 */}
+        {/* 下载图标 */}
         <svg
           className='w-6 h-6'
           fill='none'
@@ -143,14 +143,14 @@ export function DownloadBubble() {
           />
         </svg>
 
-        {/* 下載中數量徽章 */}
+        {/* 下载中数量徽章 */}
         {downloadingCount > 0 && (
           <div className='absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center animate-pulse'>
             {downloadingCount}
           </div>
         )}
 
-        {/* 懸停提示 */}
+        {/* 悬停提示 */}
         <div className='absolute bottom-full right-0 mb-2 hidden group-hover:block'>
           <div className='bg-gray-900 text-white text-sm rounded-lg py-2 px-3 whitespace-nowrap'>
             {downloadingCount > 0 ? `${downloadingCount} 個任務下載中` : '查看下載任務'}

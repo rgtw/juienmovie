@@ -14,25 +14,25 @@ export async function GET(request: NextRequest) {
   const embyKey = searchParams.get('embyKey') || undefined;
 
   if (!itemId) {
-    return NextResponse.json({ error: '缺少媒體ID' }, { status: 400 });
+    return NextResponse.json({ error: '缺少媒体ID' }, { status: 400 });
   }
 
   try {
-    const authResult = await requireFeaturePermission(request, 'emby', '無權限訪問 Emby');
+    const authResult = await requireFeaturePermission(request, 'emby', '无权限访问 Emby');
     if (authResult instanceof NextResponse) return authResult;
-    // 獲取Emby客戶端
+    // 获取Emby客户端
     const client = await embyManager.getClient(embyKey);
 
-    // 獲取代理 token（如果啟用了代理）
+    // 获取代理 token（如果启用了代理）
     const proxyToken = client.isProxyEnabled() ? await getProxyToken(request) : null;
 
-    // 獲取媒體詳情
+    // 获取媒体详情
     const item = await client.getItem(itemId);
 
     let episodes: any[] = [];
 
     if (item.Type === 'Series') {
-      // 獲取所有劇集
+      // 获取所有剧集
       const allEpisodes = await client.getEpisodes(itemId);
 
       episodes = await Promise.all(
@@ -69,9 +69,9 @@ export async function GET(request: NextRequest) {
       episodes: item.Type === 'Series' ? episodes : [],
     });
   } catch (error) {
-    console.error('獲取 Emby 詳情失敗:', error);
+    console.error('获取 Emby 详情失败:', error);
     return NextResponse.json(
-      { error: '獲取 Emby 詳情失敗: ' + (error as Error).message },
+      { error: '获取 Emby 详情失败: ' + (error as Error).message },
       { status: 500 }
     );
   }

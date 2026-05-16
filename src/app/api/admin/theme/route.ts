@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   if (storageType === 'localstorage') {
     return NextResponse.json(
       {
-        error: '不支持本地存儲進行管理員配置',
+        error: '不支持本地存储进行管理员配置',
       },
       { status: 400 }
     );
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       progressThumbCustomUrl?: string;
     };
 
-    // 參數校驗
+    // 参数校验
     if (
       typeof enableBuiltInTheme !== 'boolean' ||
       typeof builtInTheme !== 'string' ||
@@ -62,10 +62,10 @@ export async function POST(request: NextRequest) {
       typeof enableCache !== 'boolean' ||
       typeof cacheMinutes !== 'number'
     ) {
-      return NextResponse.json({ error: '參數格式錯誤' }, { status: 400 });
+      return NextResponse.json({ error: '参数格式错误' }, { status: 400 });
     }
 
-    // 驗證背景圖URL格式（支持多行，每行一個URL）
+    // 验证背景图URL格式（支持多行，每行一个URL）
     if (loginBackgroundImage && loginBackgroundImage.trim() !== '') {
       const urls = loginBackgroundImage
         .split('\n')
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       for (const url of urls) {
         if (!url.startsWith('http://') && !url.startsWith('https://')) {
           return NextResponse.json(
-            { error: `登錄界面背景圖URL格式錯誤：${url}，每個URL必須以http://或https://開頭` },
+            { error: `登录界面背景图URL格式错误：${url}，每个URL必须以http://或https://开头` },
             { status: 400 }
           );
         }
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       for (const url of urls) {
         if (!url.startsWith('http://') && !url.startsWith('https://')) {
           return NextResponse.json(
-            { error: `註冊界面背景圖URL格式錯誤：${url}，每個URL必須以http://或https://開頭` },
+            { error: `注册界面背景图URL格式错误：${url}，每个URL必须以http://或https://开头` },
             { status: 400 }
           );
         }
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
       for (const url of urls) {
         if (!url.startsWith('http://') && !url.startsWith('https://')) {
           return NextResponse.json(
-            { error: `首頁背景圖URL格式錯誤：${url}，每個URL必須以http://或https://開頭` },
+            { error: `首页背景图URL格式错误：${url}，每个URL必须以http://或https://开头` },
             { status: 400 }
           );
         }
@@ -116,15 +116,15 @@ export async function POST(request: NextRequest) {
 
     const adminConfig = await getConfig();
 
-    // 權限校驗 - 使用v2用戶系統
+    // 权限校验 - 使用v2用户系统
     if (username !== process.env.USERNAME) {
       const userInfo = await db.getUserInfoV2(username);
       if (!userInfo || userInfo.role !== 'admin' || userInfo.banned) {
-        return NextResponse.json({ error: '權限不足' }, { status: 401 });
+        return NextResponse.json({ error: '权限不足' }, { status: 401 });
       }
     }
 
-    // 獲取當前版本號，如果CSS有變化則遞增
+    // 获取当前版本号，如果CSS有变化则递增
     const currentVersion = adminConfig.ThemeConfig?.cacheVersion || 0;
     const currentCSS = enableBuiltInTheme
       ? adminConfig.ThemeConfig?.builtInTheme
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
     const newCSS = enableBuiltInTheme ? builtInTheme : customCSS;
     const cssChanged = currentCSS !== newCSS;
 
-    // 更新主題配置
+    // 更新主题配置
     adminConfig.ThemeConfig = {
       enableBuiltInTheme,
       builtInTheme,
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
       progressThumbCustomUrl: progressThumbCustomUrl?.trim() || undefined,
     };
 
-    // 寫入數據庫
+    // 写入数据库
     await db.saveAdminConfig(adminConfig);
 
     return NextResponse.json(
@@ -163,10 +163,10 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('更新主題配置失敗:', error);
+    console.error('更新主题配置失败:', error);
     return NextResponse.json(
       {
-        error: '更新主題配置失敗',
+        error: '更新主题配置失败',
         details: (error as Error).message,
       },
       { status: 500 }

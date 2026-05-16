@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
   if (!query) {
     return new Response(
-      JSON.stringify({ error: '搜索關鍵詞不能為空' }),
+      JSON.stringify({ error: '搜索关键词不能为空' }),
       {
         status: 400,
         headers: {
@@ -45,20 +45,20 @@ export async function GET(request: NextRequest) {
     hasFeaturePermission(authInfo.username, 'emby'),
   ]);
 
-  // 創建權重映射表
+  // 创建权重映射表
   const weightMap = new Map<string, number>();
   config.SourceConfig.forEach(source => {
     weightMap.set(source.key, source.weight ?? 0);
   });
 
-  // 按權重降序排序 apiSites
+  // 按权重降序排序 apiSites
   const sortedApiSites = [...apiSites].sort((a, b) => {
     const weightA = weightMap.get(a.key) ?? 0;
     const weightB = weightMap.get(b.key) ?? 0;
     return weightB - weightA;
   });
 
-  // 檢查是否配置了 OpenList
+  // 检查是否配置了 OpenList
   const hasOpenList = !!(
     canAccessOpenList &&
     config.OpenListConfig?.Enabled &&
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
     config.OpenListConfig?.Password
   );
 
-  // 檢查是否配置了 Emby（支持多源）
+  // 检查是否配置了 Emby（支持多源）
   const hasEmby = !!(
     canAccessEmby &&
     config.EmbyConfig?.Sources &&
@@ -76,32 +76,32 @@ export async function GET(request: NextRequest) {
   );
   const enabledScripts = await listEnabledSourceScripts();
 
-  // 共享狀態
+  // 共享状态
   let streamClosed = false;
 
-  // 創建可讀流
+  // 创建可读流
   const stream = new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
 
-      // 輔助函數：安全地向控制器寫入數據
+      // 辅助函数：安全地向控制器写入数据
       const safeEnqueue = (data: Uint8Array) => {
         try {
           if (streamClosed || (!controller.desiredSize && controller.desiredSize !== 0)) {
-            // 流已標記為關閉或控制器已關閉
+            // 流已标记为关闭或控制器已关闭
             return false;
           }
           controller.enqueue(data);
           return true;
         } catch (error) {
-          // 控制器已關閉或出現其他錯誤
+          // 控制器已关闭或出现其他错误
           console.warn('Failed to enqueue data:', error);
           streamClosed = true;
           return false;
         }
       };
 
-      // 獲取 Emby 源數量
+      // 获取 Emby 源数量
       let embySourcesCount = 0;
       if (hasEmby) {
         try {
@@ -109,11 +109,11 @@ export async function GET(request: NextRequest) {
           const embySourcesMap = await embyManager.getAllClients();
           embySourcesCount = embySourcesMap.size;
         } catch (error) {
-          console.error('[Search WS] 獲取 Emby 源數量失敗:', error);
+          console.error('[Search WS] 获取 Emby 源数量失败:', error);
         }
       }
 
-      // 發送開始事件
+      // 发送开始事件
       const startEvent = `data: ${JSON.stringify({
         type: 'start',
         query,
@@ -122,14 +122,14 @@ export async function GET(request: NextRequest) {
       })}\n\n`;
 
       if (!safeEnqueue(encoder.encode(startEvent))) {
-        return; // 連接已關閉，提前退出
+        return; // 连接已关闭，提前退出
       }
 
-      // 記錄已完成的源數量
+      // 记录已完成的源数量
       let completedSources = 0;
       const allResults: any[] = [];
 
-      // 搜索 Emby（如果配置了）- 異步帶超時，支持多源
+      // 搜索 Emby（如果配置了）- 异步带超时，支持多源
       if (hasEmby) {
         (async () => {
           let embyCompletedCount = 0;
@@ -138,10 +138,10 @@ export async function GET(request: NextRequest) {
             const embySourcesMap = await embyManager.getAllClients();
             const embySources = Array.from(embySourcesMap.values());
 
-            // 獲取代理 token（用於圖片代理）
+            // 获取代理 token（用于图片代理）
             const proxyToken = await getProxyToken(request);
 
-            // 為每個 Emby 源併發搜索，並單獨發送結果
+            // 为每个 Emby 源并发搜索，并单独发送结果
             const embySearchPromises = embySources.map(async ({ client, config: embyConfig }) => {
               try {
                 const searchResult = await client.getItems({
@@ -155,7 +155,7 @@ export async function GET(request: NextRequest) {
                 const sourceValue = embySources.length === 1 ? 'emby' : `emby_${embyConfig.key}`;
                 const sourceName = embySources.length === 1 ? 'Emby' : embyConfig.name;
 
-                // 添加安全檢查，確保 Items 存在且是數組
+                // 添加安全检查，确保 Items 存在且是数组
                 const items = Array.isArray(searchResult?.Items) ? searchResult.Items : [];
                 const results = items.map((item) => ({
                   id: item.Id,
@@ -168,11 +168,11 @@ export async function GET(request: NextRequest) {
                   episodes_titles: [],
                   year: item.ProductionYear?.toString() || '',
                   desc: item.Overview || '',
-                  type_name: item.Type === 'Movie' ? '電影' : '電視劇',
+                  type_name: item.Type === 'Movie' ? '电影' : '电视剧',
                   douban_id: 0,
                 }));
 
-                // 單獨發送每個源的結果
+                // 单独发送每个源的结果
                 embyCompletedCount++;
                 completedSources++;
                 if (!streamClosed) {
@@ -194,10 +194,10 @@ export async function GET(request: NextRequest) {
 
                 return results;
               } catch (error) {
-                console.error(`[Search WS] 搜索 ${embyConfig.name} 失敗:`, error);
+                console.error(`[Search WS] 搜索 ${embyConfig.name} 失败:`, error);
                 embyCompletedCount++;
                 completedSources++;
-                // 發送空結果
+                // 发送空结果
                 if (!streamClosed) {
                   const sourceValue = embySources.length === 1 ? 'emby' : `emby_${embyConfig.key}`;
                   const sourceName = embySources.length === 1 ? 'Emby' : embyConfig.name;
@@ -216,8 +216,8 @@ export async function GET(request: NextRequest) {
 
             await Promise.all(embySearchPromises);
           } catch (error) {
-            console.error('[Search WS] 搜索 Emby 整體失敗:', error);
-            // 如果整個 emby 搜索失敗，需要補齊未完成的源
+            console.error('[Search WS] 搜索 Emby 整体失败:', error);
+            // 如果整个 emby 搜索失败，需要补齐未完成的源
             const remainingSources = embySourcesCount - embyCompletedCount;
             for (let i = 0; i < remainingSources; i++) {
               completedSources++;
@@ -236,7 +236,7 @@ export async function GET(request: NextRequest) {
         })();
       }
 
-      // 搜索 OpenList（如果配置了）- 異步帶超時
+      // 搜索 OpenList（如果配置了）- 异步带超时
       if (hasOpenList) {
         Promise.race([
           (async () => {
@@ -267,7 +267,7 @@ export async function GET(request: NextRequest) {
                   .map(([key, info]: [string, any]) => ({
                     id: key,
                     source: 'openlist',
-                    source_name: '私人影庫',
+                    source_name: '私人影库',
                     weight: weightMap.get('openlist') ?? 0,
                     title: info.title,
                     poster: getTMDBImageUrl(info.poster_path),
@@ -275,13 +275,13 @@ export async function GET(request: NextRequest) {
                     episodes_titles: [],
                     year: info.release_date.split('-')[0] || '',
                     desc: info.overview,
-                    type_name: info.media_type === 'movie' ? '電影' : '電視劇',
+                    type_name: info.media_type === 'movie' ? '电影' : '电视剧',
                     douban_id: 0,
                   }));
               }
               return [];
             } catch (error) {
-              console.error('[Search WS] 搜索 OpenList 失敗:', error);
+              console.error('[Search WS] 搜索 OpenList 失败:', error);
               return [];
             }
           })(),
@@ -292,12 +292,12 @@ export async function GET(request: NextRequest) {
           .then((openlistResults: any) => {
             completedSources++;
             if (!streamClosed) {
-              // 添加安全檢查，確保結果是數組
+              // 添加安全检查，确保结果是数组
               const safeResults = Array.isArray(openlistResults) ? openlistResults : [];
               const sourceEvent = `data: ${JSON.stringify({
                 type: 'source_result',
                 source: 'openlist',
-                sourceName: '私人影庫',
+                sourceName: '私人影库',
                 results: safeResults,
                 timestamp: Date.now()
               })}\n\n`;
@@ -311,13 +311,13 @@ export async function GET(request: NextRequest) {
             }
           })
           .catch((error) => {
-            console.error('[Search WS] 搜索 OpenList 超時:', error);
+            console.error('[Search WS] 搜索 OpenList 超时:', error);
             completedSources++;
             if (!streamClosed) {
               const sourceEvent = `data: ${JSON.stringify({
                 type: 'source_result',
                 source: 'openlist',
-                sourceName: '私人影庫',
+                sourceName: '私人影库',
                 results: [],
                 timestamp: Date.now()
               })}\n\n`;
@@ -326,10 +326,10 @@ export async function GET(request: NextRequest) {
           });
       }
 
-      // 為每個源創建搜索 Promise
+      // 为每个源创建搜索 Promise
       const searchPromises = sortedApiSites.map(async (site) => {
         try {
-          // 添加超時控制
+          // 添加超时控制
           const searchPromise = Promise.race([
             searchFromApi(site, query),
             new Promise((_, reject) =>
@@ -339,10 +339,10 @@ export async function GET(request: NextRequest) {
 
           const results = await searchPromise as any[];
 
-          // 添加安全檢查，確保結果是數組
+          // 添加安全检查，确保结果是数组
           const safeResults = Array.isArray(results) ? results : [];
 
-          // 過濾黃色內容
+          // 过滤黄色内容
           let filteredResults = safeResults;
           if (!config.SiteConfig.DisableYellowFilter) {
             filteredResults = safeResults.filter((result) => {
@@ -356,7 +356,7 @@ export async function GET(request: NextRequest) {
             weight: result.weight ?? (weightMap.get(result.source) ?? 0),
           }));
 
-          // 發送該源的搜索結果
+          // 发送该源的搜索结果
           completedSources++;
 
           if (!streamClosed) {
@@ -370,7 +370,7 @@ export async function GET(request: NextRequest) {
 
             if (!safeEnqueue(encoder.encode(sourceEvent))) {
               streamClosed = true;
-              return; // 連接已關閉，停止處理
+              return; // 连接已关闭，停止处理
             }
           }
 
@@ -379,9 +379,9 @@ export async function GET(request: NextRequest) {
           }
 
         } catch (error) {
-          console.warn(`搜索失敗 ${site.name}:`, error);
+          console.warn(`搜索失败 ${site.name}:`, error);
 
-          // 發送源錯誤事件
+          // 发送源错误事件
           completedSources++;
 
           if (!streamClosed) {
@@ -389,21 +389,21 @@ export async function GET(request: NextRequest) {
               type: 'source_error',
               source: site.key,
               sourceName: site.name,
-              error: error instanceof Error ? error.message : '搜索失敗',
+              error: error instanceof Error ? error.message : '搜索失败',
               timestamp: Date.now()
             })}\n\n`;
 
             if (!safeEnqueue(encoder.encode(errorEvent))) {
               streamClosed = true;
-              return; // 連接已關閉，停止處理
+              return; // 连接已关闭，停止处理
             }
           }
         }
 
-        // 檢查是否所有源都已完成
+        // 检查是否所有源都已完成
         if (completedSources === sortedApiSites.length + (hasOpenList ? 1 : 0) + embySourcesCount + enabledScripts.length) {
           if (!streamClosed) {
-            // 發送最終完成事件
+            // 发送最终完成事件
             const completeEvent = `data: ${JSON.stringify({
               type: 'complete',
               totalResults: allResults.length,
@@ -412,7 +412,7 @@ export async function GET(request: NextRequest) {
             })}\n\n`;
 
             if (safeEnqueue(encoder.encode(completeEvent))) {
-              // 只有在成功發送完成事件後才關閉流
+              // 只有在成功发送完成事件后才关闭流
               try {
                 controller.close();
               } catch (error) {
@@ -493,7 +493,7 @@ export async function GET(request: NextRequest) {
             allResults.push(...filteredResults);
           }
         } catch (error) {
-          console.warn(`搜索腳本失敗 ${script.name}:`, error);
+          console.warn(`搜索脚本失败 ${script.name}:`, error);
 
           completedSources++;
 
@@ -502,7 +502,7 @@ export async function GET(request: NextRequest) {
               type: 'source_error',
               source: `script:${script.key}`,
               sourceName: script.name,
-              error: error instanceof Error ? error.message : '搜索失敗',
+              error: error instanceof Error ? error.message : '搜索失败',
               timestamp: Date.now()
             })}\n\n`;
 
@@ -538,13 +538,13 @@ export async function GET(request: NextRequest) {
     },
 
     cancel() {
-      // 客戶端斷開連接時，標記流已關閉
+      // 客户端断开连接时，标记流已关闭
       streamClosed = true;
       console.log('Client disconnected, cancelling search stream');
     },
   });
 
-  // 返回流式響應
+  // 返回流式响应
   return new Response(stream, {
     headers: {
       'Content-Type': 'text/event-stream',

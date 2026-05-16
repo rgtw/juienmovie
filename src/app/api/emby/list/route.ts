@@ -19,12 +19,12 @@ export async function GET(request: NextRequest) {
   const sortOrder = searchParams.get('sortOrder') || 'Ascending';
 
   try {
-    const authResult = await requireFeaturePermission(request, 'emby', '無權限訪問 Emby');
+    const authResult = await requireFeaturePermission(request, 'emby', '无权限访问 Emby');
     if (authResult instanceof NextResponse) return authResult;
-    // 判斷是否是默認排序（只有默認排序才使用緩存）
+    // 判断是否是默认排序（只有默认排序才使用缓存）
     const isDefaultSort = sortBy === 'SortName' && sortOrder === 'Ascending';
 
-    // 只有默認排序才檢查緩存
+    // 只有默认排序才检查缓存
     if (isDefaultSort) {
       const cached = getCachedEmbyList(page, pageSize, parentId, embyKey);
       if (cached) {
@@ -32,13 +32,13 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // 獲取Emby客戶端
+    // 获取Emby客户端
     const client = await embyManager.getClient(embyKey);
 
-    // 獲取代理 token（如果啟用了代理）
+    // 获取代理 token（如果启用了代理）
     const proxyToken = client.isProxyEnabled() ? await getProxyToken(request) : null;
 
-    // 獲取媒體列表
+    // 获取媒体列表
     const result = await client.getItems({
       ParentId: parentId,
       IncludeItemTypes: 'Movie,Series',
@@ -69,16 +69,16 @@ export async function GET(request: NextRequest) {
       total: result.TotalRecordCount,
     };
 
-    // 只有默認排序才緩存結果
+    // 只有默认排序才缓存结果
     if (isDefaultSort) {
       setCachedEmbyList(page, pageSize, response, parentId, embyKey);
     }
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('獲取 Emby 列表失敗:', error);
+    console.error('获取 Emby 列表失败:', error);
     return NextResponse.json({
-      error: '獲取 Emby 列表失敗: ' + (error as Error).message,
+      error: '获取 Emby 列表失败: ' + (error as Error).message,
       list: [],
       totalPages: 0,
       currentPage: page,

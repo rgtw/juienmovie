@@ -8,25 +8,25 @@ import { requireFeaturePermission } from '@/lib/permissions';
 
 export const runtime = 'nodejs';
 
-// GET - 獲取歌單中的所有歌曲
+// GET - 获取歌单中的所有歌曲
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'music', '無權限訪問音樂功能');
+    const authResult = await requireFeaturePermission(request, 'music', '无权限访问音乐功能');
     if (authResult instanceof NextResponse) return authResult;
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 檢查用戶狀態
+    // 检查用户状态
     if (authInfo.username !== process.env.USERNAME) {
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
@@ -35,18 +35,18 @@ export async function GET(request: NextRequest) {
 
     if (!playlistId) {
       return NextResponse.json(
-        { error: '歌單ID不能為空' },
+        { error: '歌单ID不能为空' },
         { status: 400 }
       );
     }
 
-    // 檢查歌單是否存在且屬於當前用戶
+    // 检查歌单是否存在且属于当前用户
     const playlist = await db.getMusicPlaylist(playlistId);
     if (!playlist) {
-      return NextResponse.json({ error: '歌單不存在' }, { status: 404 });
+      return NextResponse.json({ error: '歌单不存在' }, { status: 404 });
     }
     if (playlist.username !== authInfo.username) {
-      return NextResponse.json({ error: '無權限訪問此歌單' }, { status: 403 });
+      return NextResponse.json({ error: '无权限访问此歌单' }, { status: 403 });
     }
 
     const songs = await db.getPlaylistSongs(playlistId);
@@ -61,25 +61,25 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - 添加歌曲到歌單
+// POST - 添加歌曲到歌单
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'music', '無權限訪問音樂功能');
+    const authResult = await requireFeaturePermission(request, 'music', '无权限访问音乐功能');
     if (authResult instanceof NextResponse) return authResult;
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 檢查用戶狀態
+    // 检查用户状态
     if (authInfo.username !== process.env.USERNAME) {
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 
     if (!playlistId) {
       return NextResponse.json(
-        { error: '歌單ID不能為空' },
+        { error: '歌单ID不能为空' },
         { status: 400 }
       );
     }
@@ -100,20 +100,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 檢查歌單是否存在且屬於當前用戶
+    // 检查歌单是否存在且属于当前用户
     const playlist = await db.getMusicPlaylist(playlistId);
     if (!playlist) {
-      return NextResponse.json({ error: '歌單不存在' }, { status: 404 });
+      return NextResponse.json({ error: '歌单不存在' }, { status: 404 });
     }
     if (playlist.username !== authInfo.username) {
-      return NextResponse.json({ error: '無權限操作此歌單' }, { status: 403 });
+      return NextResponse.json({ error: '无权限操作此歌单' }, { status: 403 });
     }
 
-    // 檢查歌曲是否已在歌單中
+    // 检查歌曲是否已在歌单中
     const exists = await db.isSongInPlaylist(playlistId, song.platform, song.id);
     if (exists) {
       return NextResponse.json(
-        { error: '歌曲已在歌單中' },
+        { error: '歌曲已在歌单中' },
         { status: 400 }
       );
     }
@@ -138,25 +138,25 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// DELETE - 從歌單中移除歌曲
+// DELETE - 从歌单中移除歌曲
 export async function DELETE(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'music', '無權限訪問音樂功能');
+    const authResult = await requireFeaturePermission(request, 'music', '无权限访问音乐功能');
     if (authResult instanceof NextResponse) return authResult;
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 檢查用戶狀態
+    // 检查用户状态
     if (authInfo.username !== process.env.USERNAME) {
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
@@ -167,18 +167,18 @@ export async function DELETE(request: NextRequest) {
 
     if (!playlistId || !platform || !songId) {
       return NextResponse.json(
-        { error: '參數不完整' },
+        { error: '参数不完整' },
         { status: 400 }
       );
     }
 
-    // 檢查歌單是否存在且屬於當前用戶
+    // 检查歌单是否存在且属于当前用户
     const playlist = await db.getMusicPlaylist(playlistId);
     if (!playlist) {
-      return NextResponse.json({ error: '歌單不存在' }, { status: 404 });
+      return NextResponse.json({ error: '歌单不存在' }, { status: 404 });
     }
     if (playlist.username !== authInfo.username) {
-      return NextResponse.json({ error: '無權限操作此歌單' }, { status: 403 });
+      return NextResponse.json({ error: '无权限操作此歌单' }, { status: 403 });
     }
 
     await db.removeSongFromPlaylist(playlistId, platform, songId);

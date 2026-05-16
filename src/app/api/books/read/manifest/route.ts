@@ -39,7 +39,7 @@ async function resolveManifest(username: string, payload: ManifestPayload) {
     const resolvedFormat = format || existingRecord?.format || shelfItem?.format || 'epub';
 
     if (!resolvedHref && !resolvedAcquisitionHref) {
-      return NextResponse.json({ error: '缺少 href / acquisitionHref，且歷史記錄中也沒有可恢復的下載鏈接' }, { status: 400 });
+      return NextResponse.json({ error: '缺少 href / acquisitionHref，且历史记录中也没有可恢复的下载链接' }, { status: 400 });
     }
 
     const fallbackAcquisitionLinks: BookAcquisitionLink[] = resolvedAcquisitionHref

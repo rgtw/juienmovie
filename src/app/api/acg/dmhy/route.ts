@@ -11,16 +11,16 @@ export const runtime = 'nodejs';
 
 /**
  * POST /api/acg/dmhy
- * 搜索 動漫花園 (share.dmhy.org) RSS（僅管理員和站長可用）
+ * 搜索 动漫花园 (share.dmhy.org) RSS（仅管理员和站长可用）
  * - http://share.dmhy.org/topics/rss/rss.xml?keyword=xxx
- * - RSS 不支持分頁（page>1 返回空 items）
+ * - RSS 不支持分页（page>1 返回空 items）
  */
 export async function POST(req: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(req);
     if (!authInfo?.username || !(await hasFeaturePermission(authInfo.username, 'magnet_search'))) {
       return NextResponse.json(
-        { error: '無權限訪問' },
+        { error: '无权限访问' },
         { status: 403 }
       );
     }
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     if (!keyword || typeof keyword !== 'string') {
       return NextResponse.json(
-        { error: '搜索關鍵詞不能為空' },
+        { error: '搜索关键词不能为空' },
         { status: 400 }
       );
     }
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     const trimmedKeyword = keyword.trim();
     if (!trimmedKeyword) {
       return NextResponse.json(
-        { error: '搜索關鍵詞不能為空' },
+        { error: '搜索关键词不能为空' },
         { status: 400 }
       );
     }
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     const pageNum = parseInt(String(page), 10);
     if (isNaN(pageNum) || pageNum < 1) {
       return NextResponse.json(
-        { error: '頁碼必須是大於0的整數' },
+        { error: '页码必须是大于0的整数' },
         { status: 400 }
       );
     }
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new Error(`DMHY API 請求失敗: ${response.status}`);
+      throw new Error(`DMHY API 请求失败: ${response.status}`);
     }
 
     const xmlData = await response.text();
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
       const description = item.description?.[0] || '';
       const torrentUrl = item.enclosure?.[0]?.$?.url || '';
 
-      // 提取描述中的圖片（如果有）
+      // 提取描述中的图片（如果有）
       let images: string[] = [];
       if (description) {
         const imgMatches = description.match(/src="([^"]+)"/g);
@@ -132,9 +132,9 @@ export async function POST(req: NextRequest) {
       items: results,
     });
   } catch (error: any) {
-    console.error('DMHY 搜索失敗:', error);
+    console.error('DMHY 搜索失败:', error);
     return NextResponse.json(
-      { error: error.message || '搜索失敗' },
+      { error: error.message || '搜索失败' },
       { status: 500 }
     );
   }

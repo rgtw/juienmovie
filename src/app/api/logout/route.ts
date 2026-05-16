@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 export async function POST(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
 
-  // 撤銷當前設備的 Refresh Token
+  // 撤销当前设备的 Refresh Token
   if (authInfo && authInfo.username && authInfo.tokenId) {
     try {
       await revokeRefreshToken(authInfo.username, authInfo.tokenId);
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
   const response = NextResponse.json({ ok: true });
 
-  // 清除認證cookie
+  // 清除认证cookie
   response.cookies.set('auth', '', {
     path: '/',
     expires: new Date(0),

@@ -1,4 +1,4 @@
-// WatchRoom 全局狀態管理 Provider
+// WatchRoom 全局状态管理 Provider
 'use client';
 
 import React, { createContext, useCallback,useContext, useEffect, useState } from 'react';
@@ -27,7 +27,7 @@ interface WatchRoomContextType {
   isEnabled: boolean;
   config: WatchRoomConfig | null;
 
-  // 房間操作
+  // 房间操作
   createRoom: (data: {
     name: string;
     description: string;
@@ -48,7 +48,7 @@ interface WatchRoomContextType {
   // 聊天
   sendChatMessage: (content: string, type?: 'text' | 'emoji') => void;
 
-  // 播放控制（供 play/live 頁面使用）
+  // 播放控制（供 play/live 页面使用）
   updatePlayState: (state: any) => void;
   seekPlayback: (currentTime: number) => void;
   play: () => void;
@@ -59,7 +59,7 @@ interface WatchRoomContextType {
   stopScreenShare: () => void;
   clearRoomState: () => void;
 
-  // 重連
+  // 重连
   manualReconnect: () => Promise<void>;
 }
 
@@ -73,7 +73,7 @@ export const useWatchRoomContext = () => {
   return context;
 };
 
-// 安全版本，可以在非 Provider 內使用
+// 安全版本，可以在非 Provider 内使用
 export const useWatchRoomContextSafe = () => {
   return useContext(WatchRoomContext);
 };
@@ -90,11 +90,11 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [shouldDisableWatchRoomConnection, setShouldDisableWatchRoomConnection] = useState<boolean | null>(null);
 
-  // 處理房間刪除的回調
+  // 处理房间删除的回调
   const handleRoomDeleted = useCallback((data?: { reason?: string }) => {
     console.log('[WatchRoomProvider] Room deleted:', data);
 
-    // 顯示Toast提示
+    // 显示Toast提示
     if (data?.reason === 'owner_left') {
       setToast({
         message: '房主已解散房間',
@@ -112,7 +112,7 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
     }
   }, []);
 
-  // 處理房間狀態清除的回調（房主離開超過30秒）
+  // 处理房间状态清除的回调（房主离开超过30秒）
   const handleStateCleared = useCallback(() => {
     console.log('[WatchRoomProvider] Room state cleared');
 
@@ -135,7 +135,7 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
     );
   }, []);
 
-  // 檢查登錄狀態
+  // 检查登录状态
   useEffect(() => {
     const checkLoginStatus = () => {
       const authInfo = getAuthInfoFromBrowserCookie();
@@ -143,16 +143,16 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
       setIsLoggedIn(loggedIn);
     };
 
-    // 初始檢查
+    // 初始检查
     checkLoginStatus();
 
-    // 定期檢查登錄狀態（每秒檢查一次）
+    // 定期检查登录状态（每秒检查一次）
     const interval = setInterval(checkLoginStatus, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
-  // 手動重連
+  // 手动重连
   const manualReconnect = useCallback(async () => {
     console.log('[WatchRoomProvider] Manual reconnect initiated');
     setReconnectFailed(false);
@@ -162,7 +162,7 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
 
     if (success) {
       console.log('[WatchRoomProvider] Manual reconnect succeeded');
-      // 嘗試重新加入房間
+      // 尝试重新加入房间
       const storedInfo = localStorage.getItem('watch_room_info');
       if (storedInfo && watchRoom.socket) {
         try {
@@ -184,7 +184,7 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
     }
   }, [watchRoom]);
 
-  // 加載配置
+  // 加载配置
   useEffect(() => {
     if (shouldDisableWatchRoomConnection === null) {
       return;
@@ -201,23 +201,23 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
 
     const loadConfig = async () => {
       try {
-        // 使用公共 API 獲取觀影室配置（不需要管理員權限）
+        // 使用公共 API 获取观影室配置（不需要管理员权限）
         const response = await fetch('/api/server-config');
         if (response.ok) {
           const data = await response.json();
           // API 返回格式: { SiteName, StorageType, Version, WatchRoom }
           const watchRoomConfig: WatchRoomConfig = {
-            enabled: data.WatchRoom?.enabled ?? false, // 默認不啟用
+            enabled: data.WatchRoom?.enabled ?? false, // 默认不启用
             serverType: data.WatchRoom?.serverType ?? 'internal',
             externalServerUrl: data.WatchRoom?.externalServerUrl,
           };
 
-          // 如果使用外部服務器，需要獲取認證信息（需要登錄）
+          // 如果使用外部服务器，需要获取认证信息（需要登录）
           if (watchRoomConfig.serverType === 'external' && watchRoomConfig.enabled) {
-            // 檢查用戶是否已登錄
+            // 检查用户是否已登录
             if (!isLoggedIn) {
               console.log('[WatchRoom] User not logged in, skipping auth info request');
-              // 用戶未登錄，不調用認證接口
+              // 用户未登录，不调用认证接口
             } else {
               try {
                 const authResponse = await fetch('/api/watch-room-auth');
@@ -226,12 +226,12 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
                   watchRoomConfig.externalServerAuth = authData.externalServerAuth;
                 } else {
                   console.error('[WatchRoom] Failed to load auth info:', authResponse.status);
-                  // 如果無法獲取認證信息，禁用觀影室
+                  // 如果无法获取认证信息，禁用观影室
                   watchRoomConfig.enabled = false;
                 }
               } catch (error) {
                 console.error('[WatchRoom] Error loading auth info:', error);
-                // 如果無法獲取認證信息，禁用觀影室
+                // 如果无法获取认证信息，禁用观影室
                 watchRoomConfig.enabled = false;
               }
             }
@@ -240,11 +240,11 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
           setConfig(watchRoomConfig);
           setIsEnabled(watchRoomConfig.enabled);
 
-          // 只在啟用了觀影室時才連接
+          // 只在启用了观影室时才连接
           if (watchRoomConfig.enabled) {
             console.log('[WatchRoom] Connecting with config:', watchRoomConfig);
 
-            // 設置重連回調
+            // 设置重连回调
             const { watchRoomSocketManager } = await import('@/lib/watch-room-socket');
             watchRoomSocketManager.setReconnectFailedCallback(() => {
               console.log('[WatchRoomProvider] Reconnect failed callback triggered');
@@ -262,7 +262,7 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
           }
         } else {
           console.error('[WatchRoom] Failed to load config:', response.status);
-          // 加載配置失敗時，不連接，保持禁用狀態
+          // 加载配置失败时，不连接，保持禁用状态
           const defaultConfig: WatchRoomConfig = {
             enabled: false,
             serverType: 'internal',
@@ -272,7 +272,7 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
         }
       } catch (error) {
         console.error('[WatchRoom] Error loading config:', error);
-        // 加載配置失敗時，不連接，保持禁用狀態
+        // 加载配置失败时，不连接，保持禁用状态
         const defaultConfig: WatchRoomConfig = {
           enabled: false,
           serverType: 'internal',
@@ -283,9 +283,9 @@ export function WatchRoomProvider({ children }: WatchRoomProviderProps) {
     };
 
     loadConfig();
-  }, [isLoggedIn, shouldDisableWatchRoomConnection]); // 添加 isLoggedIn 作為依賴
+  }, [isLoggedIn, shouldDisableWatchRoomConnection]); // 添加 isLoggedIn 作为依赖
 
-  // 僅在 Provider 卸載時斷開，避免路由切換時誤斷開房間連接
+  // 仅在 Provider 卸载时断开，避免路由切换时误断开房间连接
   useEffect(() => {
     return () => {
       watchRoom.disconnect();

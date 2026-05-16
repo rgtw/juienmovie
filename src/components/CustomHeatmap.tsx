@@ -31,17 +31,17 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
   const [isHovering, setIsHovering] = useState(false);
   const [hoverTime, setHoverTime] = useState(0);
 
-  // 計算熱力圖數據
+  // 计算热力图数据
   const calculateHeatmapData = useCallback(() => {
     if (!duration || duration <= 0 || danmakuList.length === 0) {
       return [];
     }
 
-    // 將視頻時長分成若干個時間段（每秒一個）
+    // 将视频时长分成若干个时间段（每秒一个）
     const segments = Math.ceil(duration);
     const heatData = new Array(segments).fill(0);
 
-    // 統計每個時間段的彈幕數量
+    // 统计每个时间段的弹幕数量
     danmakuList.forEach((danmaku) => {
       const segmentIndex = Math.floor(danmaku.time);
       if (segmentIndex >= 0 && segmentIndex < segments) {
@@ -49,18 +49,18 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
       }
     });
 
-    // 歸一化數據到 0-1 範圍
+    // 归一化数据到 0-1 范围
     const maxCount = Math.max(...heatData, 1);
     return heatData.map((count) => count / maxCount);
   }, [danmakuList, duration]);
 
-  // 當彈幕列表或時長變化時重新計算熱力圖數據
+  // 当弹幕列表或时长变化时重新计算热力图数据
   useEffect(() => {
     const data = calculateHeatmapData();
     setHeatmapData(data);
   }, [calculateHeatmapData]);
 
-  // 繪製熱力圖
+  // 绘制热力图
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || heatmapData.length === 0) return;
@@ -71,23 +71,23 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
     const width = canvas.width;
     const height = canvas.height;
 
-    // 清空畫布
+    // 清空画布
     ctx.clearRect(0, 0, width, height);
 
-    // 計算每個柱子的寬度
+    // 计算每个柱子的宽度
     const barWidth = width / heatmapData.length;
     const progressRatio = duration > 0 ? currentTime / duration : 0;
 
-    // 繪製熱力圖柱狀圖
+    // 绘制热力图柱状图
     heatmapData.forEach((value, index) => {
       const x = index * barWidth;
       const barHeight = value * height;
       const y = height - barHeight;
 
-      // 判斷是否已播放
+      // 判断是否已播放
       const isPlayed = (index / heatmapData.length) <= progressRatio;
 
-      // 使用灰色透明，已播放的部分深色一點
+      // 使用灰色透明，已播放的部分深色一点
       const opacity = isPlayed ? 0.5 + value * 0.3 : 0.2 + value * 0.3;
       const color = `rgba(128, 128, 128, ${opacity})`;
 
@@ -95,7 +95,7 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
       ctx.fillRect(x, y, Math.ceil(barWidth) + 1, barHeight);
     });
 
-    // 繪製當前播放位置指示器
+    // 绘制当前播放位置指示器
     if (duration > 0) {
       const progressX = (currentTime / duration) * width;
       ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
@@ -103,7 +103,7 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
     }
   }, [heatmapData, currentTime, duration]);
 
-  // 處理鼠標移動
+  // 处理鼠标移动
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const container = containerRef.current;
     if (!container || !duration) return;
@@ -117,12 +117,12 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
     setIsHovering(true);
   };
 
-  // 處理鼠標離開
+  // 处理鼠标离开
   const handleMouseLeave = () => {
     setIsHovering(false);
   };
 
-  // 處理點擊跳轉
+  // 处理点击跳转
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const container = containerRef.current;
     if (!container || !duration || !onSeek) return;
@@ -135,7 +135,7 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
     onSeek(time);
   };
 
-  // 格式化時間顯示
+  // 格式化时间显示
   const formatTime = (seconds: number): string => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -147,7 +147,7 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
-  // 獲取懸停位置的彈幕密度
+  // 获取悬停位置的弹幕密度
   const getHoverDensity = (): string => {
     if (!isHovering || heatmapData.length === 0) return '';
 
@@ -191,7 +191,7 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
         }}
       />
 
-      {/* 懸停提示 */}
+      {/* 悬停提示 */}
       {isHovering && (
         <div
           style={{
@@ -210,7 +210,7 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
             zIndex: 10,
           }}
         >
-          {formatTime(hoverTime)} - 彈幕密度: {getHoverDensity()}
+          {formatTime(hoverTime)} - 弹幕密度: {getHoverDensity()}
         </div>
       )}
     </div>

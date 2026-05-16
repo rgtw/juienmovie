@@ -51,7 +51,7 @@ const SearchResultFilter: React.FC<SearchResultFilterProps> = ({ categories, val
       const isMobile = viewportWidth < 768;
 
       let x = rect.left;
-      // 為標題篩選設置更大的最小寬度，其他保持原來的最小寬度
+      // 为标题筛选设置更大的最小宽度，其他保持原来的最小宽度
       const minWidth = categoryKey === 'title' ? 400 : 240;
       let dropdownWidth = Math.max(rect.width, minWidth);
       let useFixedWidth = false;
@@ -113,7 +113,7 @@ const SearchResultFilter: React.FC<SearchResultFilterProps> = ({ categories, val
 
   useEffect(() => {
     const handleScroll = () => {
-      // 滾動時直接關閉面板，而不是重新計算位置
+      // 滚动时直接关闭面板，而不是重新计算位置
       if (activeCategory) {
         setActiveCategory(null);
       }
@@ -121,7 +121,7 @@ const SearchResultFilter: React.FC<SearchResultFilterProps> = ({ categories, val
     const handleResize = () => {
       if (activeCategory) calculateDropdownPosition(activeCategory);
     };
-    // 監聽 body 滾動事件，因為該項目的滾動容器是 document.body
+    // 监听 body 滚动事件，因为该项目的滚动容器是 document.body
     document.body.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize);
     return () => {
@@ -167,7 +167,7 @@ const SearchResultFilter: React.FC<SearchResultFilterProps> = ({ categories, val
             </button>
           </div>
         ))}
-        {/* 通用年份排序切換按鈕 */}
+        {/* 通用年份排序切换按钮 */}
         <div className='relative'>
           <button
             onClick={() => {

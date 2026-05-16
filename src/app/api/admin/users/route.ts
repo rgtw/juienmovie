@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   if (storageType === 'localstorage') {
     return NextResponse.json(
       {
-        error: '不支持本地存儲進行用戶列表查詢',
+        error: '不支持本地存储进行用户列表查询',
       },
       { status: 400 }
     );
@@ -28,29 +28,29 @@ export async function GET(request: NextRequest) {
     if (authInfo.username === process.env.USERNAME) {
       operatorRole = 'owner';
     } else {
-      // 優先從新版本獲取用戶信息
+      // 优先从新版本获取用户信息
       const operatorInfo = await db.getUserInfoV2(authInfo.username);
       if (operatorInfo) {
         operatorRole = operatorInfo.role;
       }
     }
 
-    // 只有站長和管理員可以查看用戶列表
+    // 只有站长和管理员可以查看用户列表
     if (operatorRole !== 'owner' && operatorRole !== 'admin') {
-      return NextResponse.json({ error: '權限不足' }, { status: 401 });
+      return NextResponse.json({ error: '权限不足' }, { status: 401 });
     }
 
-    // 獲取分頁參數
+    // 获取分页参数
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '10', 10);
     const offset = (page - 1) * limit;
 
-    // 獲取用戶列表（優先使用新版本）
+    // 获取用户列表（优先使用新版本）
     const result = await db.getUserListV2(offset, limit, process.env.USERNAME);
 
     if (result.users.length > 0) {
-      // 使用新版本數據
+      // 使用新版本数据
       return NextResponse.json(
         {
           users: result.users,
@@ -82,10 +82,10 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('獲取用戶列表失敗:', error);
+    console.error('获取用户列表失败:', error);
     return NextResponse.json(
       {
-        error: '獲取用戶列表失敗',
+        error: '获取用户列表失败',
         details: (error as Error).message,
       },
       { status: 500 }

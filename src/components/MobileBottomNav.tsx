@@ -11,7 +11,8 @@ import { useWatchRoomContextSafe } from './WatchRoomProvider';
 
 interface MobileBottomNavProps {
   /**
-   * 主動?��?當�?激活�?路�??��??��?供時，自?�使??usePathname() ?��??�路徑�?   */
+   * 主动指定当前激活的路径。当未提供时，自动使用 usePathname() 获取的路径。
+   */
   activePath?: string;
 }
 
@@ -20,7 +21,7 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
   const searchParams = useSearchParams();
   const watchRoomContext = useWatchRoomContextSafe();
 
-  // ?�接使用當�?路由?�態�?確�?立即?��?路由?��?
+  // 直接使用当前路由状态，确保立即响应路由变化
   const getCurrentFullPath = () => {
     const queryString = searchParams.toString();
     return queryString ? `${pathname}?${queryString}` : pathname;
@@ -35,17 +36,17 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
     { icon: Home, label: '首頁', href: '/' },
     {
       icon: Film,
-      label: '?�影',
+      label: '電影',
       href: '/douban?type=movie',
     },
     {
       icon: Tv,
-      label: '?��?',
+      label: '劇集',
       href: '/douban?type=tv',
     },
     {
       icon: Cat,
-      label: '?�漫',
+      label: '動漫',
       href: '/douban?type=anime',
     },
     {
@@ -55,7 +56,7 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
     },
       {
         icon: TvMinimalPlay,
-        label: '?��??�播',
+        label: '電視直播',
         href: '/live',
       },
   ]);
@@ -63,21 +64,22 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
   useEffect(() => {
     const runtimeConfig = (window as any).RUNTIME_CONFIG;
 
-    // ?��?導航項�?不�??��?影室�?    const items = [
+    // 基础导航项（不包括观影室）
+    const items = [
       { icon: Home, label: '首頁', href: '/' },
       {
         icon: Film,
-        label: '?�影',
+        label: '電影',
         href: '/douban?type=movie',
       },
       {
         icon: Tv,
-        label: '?��?',
+        label: '劇集',
         href: '/douban?type=tv',
       },
       {
         icon: Cat,
-        label: '?�漫',
+        label: '動漫',
         href: '/douban?type=anime',
       },
       {
@@ -89,25 +91,27 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
         ? [
             {
               icon: TvMinimalPlay,
-              label: '?��??�播',
+              label: '電視直播',
               href: '/live',
             },
           ]
         : []),
     ];
 
-    // 如�??�用網�??�播，添?��?絡直?�入??    if (runtimeConfig?.WEB_LIVE_ENABLED) {
+    // 如果启用网络直播，添加网络直播入口
+    if (runtimeConfig?.WEB_LIVE_ENABLED) {
       items.push({
         icon: Globe,
-        label: '網�??�播',
+        label: '網絡直播',
         href: '/web-live',
       });
     }
 
-    // 如�??�置�?OpenList ??Emby，添?��?人影庫入??    if (runtimeConfig?.PRIVATE_LIBRARY_ENABLED) {
+    // 如果配置了 OpenList 或 Emby，添加私人影库入口
+    if (runtimeConfig?.PRIVATE_LIBRARY_ENABLED) {
       items.push({
         icon: Container,
-        label: '私人影�?',
+        label: '私人影庫',
         href: '/private-library',
       });
     }
@@ -115,24 +119,25 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
     if (runtimeConfig?.ADVANCED_RECOMMENDATION_ENABLED) {
       items.push({
         icon: Blend,
-        label: '高級?��?',
+        label: '高級推薦',
         href: '/advanced-recommendation',
       });
     }
 
-    // 如�??�用觀影室�?添�?觀影室入??    if (watchRoomContext?.isEnabled) {
+    // 如果启用观影室，添加观影室入口
+    if (watchRoomContext?.isEnabled) {
       items.push({
         icon: Users,
-        label: '觀影�?,
+        label: '觀影室',
         href: '/watch-room',
       });
     }
 
-    // 添�??��?義�?類�?如�??��?
+    // 添加自定义分类（如果有）
     if (runtimeConfig?.CUSTOM_CATEGORIES?.length > 0) {
       items.push({
         icon: Star,
-        label: '?��?�?,
+        label: '自定義',
         href: '/douban?type=custom',
       });
     }
@@ -143,7 +148,7 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
   const isActive = (href: string) => {
     const typeMatch = href.match(/type=([^&]+)/)?.[1];
 
-    // �??URL以�?行正確�?比�?
+    // 解码URL以进行正确的比较
     const decodedActive = decodeURIComponent(currentActive);
     const decodedItemHref = decodeURIComponent(href);
 
@@ -158,7 +163,7 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
     <nav
       className='md:hidden fixed left-0 right-0 z-[600] bg-white/90 backdrop-blur-xl border-t border-gray-200/50 overflow-hidden dark:bg-gray-900/80 dark:border-gray-700/50'
       style={{
-        /* 緊貼視口底部，�??�在?�部?�出安全?��?�?*/
+        /* 紧贴视口底部，同时在内部留出安全区高度 */
         bottom: 0,
         paddingBottom: 'env(safe-area-inset-bottom)',
         minHeight: 'calc(3.5rem + env(safe-area-inset-bottom))',
@@ -180,14 +185,14 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
               >
                 <item.icon
                   className={`h-6 w-6 ${active
-                    ? 'text-primary-500 dark:text-primary-500'
+                    ? 'text-green-600 dark:text-green-400'
                     : 'text-gray-500 dark:text-gray-400'
                     }`}
                 />
                 <span
                   className={
                     active
-                      ? 'text-primary-500 dark:text-primary-500'
+                      ? 'text-green-600 dark:text-green-400'
                       : 'text-gray-600 dark:text-gray-300'
                   }
                 >

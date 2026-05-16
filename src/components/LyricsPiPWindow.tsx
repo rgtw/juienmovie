@@ -43,7 +43,7 @@ interface PiPLyricsContentProps {
   onClose: () => void;
 }
 
-// PiP 窗口內容組件
+// PiP 窗口内容组件
 const PiPLyricsContent = ({
   currentSong,
   lyrics,
@@ -56,7 +56,7 @@ const PiPLyricsContent = ({
 }: PiPLyricsContentProps) => {
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
 
-  // 自動滾動到當前歌詞
+  // 自动滚动到当前歌词
   useEffect(() => {
     if (lyricsContainerRef.current && currentLyricIndex >= 0 && !minimized) {
       const container = lyricsContainerRef.current;
@@ -84,7 +84,7 @@ const PiPLyricsContent = ({
         fontFamily: 'system-ui, -apple-system, sans-serif',
       }}
     >
-      {/* 頭部：歌曲信息 + 控制按鈕 */}
+      {/* 头部：歌曲信息 + 控制按钮 */}
       <div
         className="pip-header"
         style={{
@@ -110,7 +110,7 @@ const PiPLyricsContent = ({
           {currentSong ? `${currentSong.name} - ${currentSong.artist}` : '暫無播放'}
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
-          {/* 透明度滑塊 */}
+          {/* 透明度滑块 */}
           <input
             type="range"
             min="0.3"
@@ -121,7 +121,7 @@ const PiPLyricsContent = ({
             style={{ width: '60px', cursor: 'pointer' }}
             title={`透明度: ${Math.round(opacity * 100)}%`}
           />
-          {/* 最小化按鈕 */}
+          {/* 最小化按钮 */}
           <button
             onClick={() => onMinimizedChange(!minimized)}
             style={{
@@ -144,7 +144,7 @@ const PiPLyricsContent = ({
           >
             {minimized ? '展開' : '最小化'}
           </button>
-          {/* 關閉按鈕 */}
+          {/* 关闭按钮 */}
           <button
             onClick={onClose}
             style={{
@@ -172,9 +172,9 @@ const PiPLyricsContent = ({
         </div>
       </div>
 
-      {/* 歌詞內容 */}
+      {/* 歌词内容 */}
       {minimized ? (
-        // 最小化模式：僅顯示當前歌詞
+        // 最小化模式：仅显示当前歌词
         <div
           style={{
             flex: 1,
@@ -198,7 +198,7 @@ const PiPLyricsContent = ({
             : '請播放歌曲'}
         </div>
       ) : (
-        // 完整模式：顯示所有歌詞
+        // 完整模式：显示所有歌词
         <div
           ref={lyricsContainerRef}
           style={{
@@ -260,7 +260,7 @@ const PiPLyricsContent = ({
   );
 };
 
-// 複製樣式表到 PiP 窗口
+// 复制样式表到 PiP 窗口
 const copyStylesToPiPWindow = (pipWin: Window) => {
   const styleSheets = Array.from(document.styleSheets);
   styleSheets.forEach((styleSheet) => {
@@ -272,7 +272,7 @@ const copyStylesToPiPWindow = (pipWin: Window) => {
       style.textContent = cssRules;
       pipWin.document.head.appendChild(style);
     } catch (e) {
-      // 跨域樣式表使用 link 標籤
+      // 跨域样式表使用 link 标签
       if ((styleSheet as any).href) {
         const link = pipWin.document.createElement('link');
         link.rel = 'stylesheet';
@@ -283,7 +283,7 @@ const copyStylesToPiPWindow = (pipWin: Window) => {
   });
 };
 
-// 主組件：管理 PiP 窗口
+// 主组件：管理 PiP 窗口
 export default function LyricsPiPWindow({
   currentSong,
   lyrics,
@@ -299,18 +299,18 @@ export default function LyricsPiPWindow({
   const pipWindowRef = useRef<Window | null>(null);
   const rootRef = useRef<ReactDOM.Root | null>(null);
 
-  // 渲染 PiP 內容
+  // 渲染 PiP 内容
   const renderPiPContent = (pipWin: Window) => {
     const container = pipWin.document.createElement('div');
     container.id = 'pip-lyrics-root';
     pipWin.document.body.appendChild(container);
 
-    // 設置 body 樣式
+    // 设置 body 样式
     pipWin.document.body.style.margin = '0';
     pipWin.document.body.style.padding = '0';
     pipWin.document.body.style.overflow = 'hidden';
 
-    // 使用 ReactDOM 渲染組件到 PiP 窗口
+    // 使用 ReactDOM 渲染组件到 PiP 窗口
     const root = ReactDOM.createRoot(container);
     rootRef.current = root;
 
@@ -334,7 +334,7 @@ export default function LyricsPiPWindow({
     );
   };
 
-  // 更新 PiP 內容
+  // 更新 PiP 内容
   useEffect(() => {
     if (pipWindowRef.current && !pipWindowRef.current.closed && rootRef.current) {
       rootRef.current.render(
@@ -358,7 +358,7 @@ export default function LyricsPiPWindow({
     }
   }, [currentSong, lyrics, currentLyricIndex, opacity, minimized]);
 
-  // 打開 PiP 窗口
+  // 打开 PiP 窗口
   useEffect(() => {
     const openPiPWindow = async () => {
       if (!('documentPictureInPicture' in window)) {
@@ -374,10 +374,10 @@ export default function LyricsPiPWindow({
 
         pipWindowRef.current = pipWin;
 
-        // 複製樣式表到 PiP 窗口
+        // 复制样式表到 PiP 窗口
         copyStylesToPiPWindow(pipWin);
 
-        // 監聽窗口關閉
+        // 监听窗口关闭
         pipWin.addEventListener('pagehide', () => {
           if (rootRef.current) {
             rootRef.current.unmount();
@@ -387,7 +387,7 @@ export default function LyricsPiPWindow({
           onClose();
         });
 
-        // 渲染內容
+        // 渲染内容
         renderPiPContent(pipWin);
       } catch (error) {
         console.error('打開畫中畫窗口失敗:', error);
@@ -397,7 +397,7 @@ export default function LyricsPiPWindow({
 
     openPiPWindow();
 
-    // 清理函數
+    // 清理函数
     return () => {
       if (pipWindowRef.current && !pipWindowRef.current.closed) {
         pipWindowRef.current.close();
@@ -407,7 +407,7 @@ export default function LyricsPiPWindow({
         rootRef.current = null;
       }
     };
-  }, []); // 只在組件掛載時執行一次
+  }, []); // 只在组件挂载时执行一次
 
-  return null; // 此組件不渲染任何內容到主窗口
+  return null; // 此组件不渲染任何内容到主窗口
 }

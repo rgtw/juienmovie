@@ -39,7 +39,7 @@ export default function AcgSearch({
 }: AcgSearchProps) {
   const [source, setSource] = useState<AcgSearchSource>('acgrip');
   const [loading, setLoading] = useState(false);
-  const [allItems, setAllItems] = useState<AcgSearchItem[]>([]); // 所有加載的項目
+  const [allItems, setAllItems] = useState<AcgSearchItem[]>([]); // 所有加载的项目
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -52,7 +52,7 @@ export default function AcgSearch({
   const isLoadingMoreRef = useRef(false);
   const didInitSourceRef = useRef(false);
 
-  // 執行搜索
+  // 执行搜索
   const performSearch = async (page: number, isLoadMore = false) => {
     if (isLoadingMoreRef.current) return;
     if (source === 'mikan' && page > 1) return;
@@ -88,14 +88,14 @@ export default function AcgSearch({
       const data: AcgSearchResult = await response.json();
 
       if (isLoadMore) {
-        // 追加新數據
+        // 追加新数据
         setAllItems(prev => [...prev, ...data.items]);
-        // 如果當前頁沒有結果，說明沒有更多了
+        // 如果当前页没有结果，说明没有更多了
         setHasMore(source !== 'mikan' && source !== 'dmhy' && data.items.length > 0);
       } else {
-        // 新搜索，重置數據
+        // 新搜索，重置数据
         setAllItems(data.items);
-        // 如果第一頁有結果，假設可能還有更多
+        // 如果第一页有结果，假设可能还有更多
         setHasMore(source !== 'mikan' && source !== 'dmhy' && data.items.length > 0);
       }
 
@@ -111,7 +111,7 @@ export default function AcgSearch({
   };
 
   useEffect(() => {
-    // triggerSearch 變化時觸發搜索（無論是 true 還是 false）
+    // triggerSearch 变化时触发搜索（无论是 true 还是 false）
     if (triggerSearch === undefined) {
       return;
     }
@@ -121,14 +121,14 @@ export default function AcgSearch({
       return;
     }
 
-    // 重置狀態並開始新搜索
+    // 重置状态并开始新搜索
     setAllItems([]);
     setCurrentPage(1);
     setHasMore(true);
     performSearch(1, false);
   }, [triggerSearch]);
 
-  // 切換搜索源時，自動重新搜索（避免組件初次掛載時重複觸發）
+  // 切换搜索源时，自动重新搜索（避免组件初次挂载时重复触发）
   useEffect(() => {
     if (!didInitSourceRef.current) {
       didInitSourceRef.current = true;
@@ -144,7 +144,7 @@ export default function AcgSearch({
     performSearch(1, false);
   }, [source]);
 
-  // 加載更多數據
+  // 加载更多数据
   const loadMore = useCallback(() => {
     if (source === 'mikan') return;
     if (source === 'dmhy') return;
@@ -153,7 +153,7 @@ export default function AcgSearch({
     }
   }, [loading, hasMore, currentPage, source]);
 
-  // 使用 Intersection Observer 監聽滾動到底部
+  // 使用 Intersection Observer 监听滚动到底部
   useEffect(() => {
     const element = loadMoreRef.current;
     if (!element) return;
@@ -179,14 +179,14 @@ export default function AcgSearch({
     };
   }, [loadMore]);
 
-  // 打開命名彈窗
+  // 打开命名弹窗
   const handleOpenDownloadDialog = (item: AcgSearchItem) => {
     setSelectedItem(item);
     setCustomName(keyword.trim());
     setShowNameDialog(true);
   };
 
-  // 確認下載
+  // 确认下载
   const handleConfirmDownload = async () => {
     if (!selectedItem || !customName.trim()) {
       return;
@@ -238,7 +238,7 @@ export default function AcgSearch({
           <div className='text-center'>
             <Loader2 className='mx-auto h-8 w-8 animate-spin text-green-600 dark:text-green-400' />
             <p className='mt-4 text-sm text-gray-600 dark:text-gray-400'>
-              正在搜索動漫資源...
+              正在搜索动漫资源...
             </p>
           </div>
         </div>
@@ -262,7 +262,7 @@ export default function AcgSearch({
           <div className='text-center'>
             <AlertCircle className='mx-auto h-12 w-12 text-gray-400 dark:text-gray-600' />
             <p className='mt-4 text-sm text-gray-600 dark:text-gray-400'>
-              未找到相關資源
+              未找到相关资源
             </p>
           </div>
         </div>
@@ -271,24 +271,24 @@ export default function AcgSearch({
 
     return (
       <>
-        {/* 結果列表 */}
+        {/* 结果列表 */}
         <div className='space-y-3'>
           {allItems.map((item) => (
             <div
               key={item.guid}
               className='p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors'
             >
-              {/* 標題 */}
+              {/* 标题 */}
               <div className='mb-2 font-medium text-gray-900 dark:text-gray-100'>
                 {item.title}
               </div>
 
-              {/* 發佈時間 */}
+              {/* 发布时间 */}
               <div className='mb-2 text-xs text-gray-500 dark:text-gray-400'>
                 {new Date(item.pubDate).toLocaleString('zh-CN')}
               </div>
 
-              {/* 圖片預覽 */}
+              {/* 图片预览 */}
               {item.images && item.images.length > 0 && (
                 <div className='mb-3 flex gap-2 overflow-x-auto'>
                   {item.images.slice(0, 3).map((img, imgIndex) => (
@@ -303,7 +303,7 @@ export default function AcgSearch({
                 </div>
               )}
 
-              {/* 操作按鈕 */}
+              {/* 操作按钮 */}
               <div className='flex items-center gap-2'>
                 <button
                   onClick={() => handleOpenDownloadDialog(item)}
@@ -338,24 +338,24 @@ export default function AcgSearch({
           ))}
         </div>
 
-        {/* 加載更多指示器 */}
+        {/* 加载更多指示器 */}
         {source !== 'mikan' && source !== 'dmhy' && hasMore && (
           <div ref={loadMoreRef} className='flex items-center justify-center py-8'>
             <div className='text-center'>
               <Loader2 className='mx-auto h-6 w-6 animate-spin text-green-600 dark:text-green-400' />
               <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
-                加載更多...
+                加载更多...
               </p>
             </div>
           </div>
         )}
 
-        {/* 命名彈窗 */}
+        {/* 命名弹窗 */}
         {showNameDialog && (
           <div className='fixed inset-0 z-[1000] flex items-center justify-center bg-black/50'>
             <div className='bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 shadow-xl'>
               <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4'>
-                設置資源名稱
+                设置资源名称
               </h3>
               <input
                 type='text'
@@ -381,7 +381,7 @@ export default function AcgSearch({
                   disabled={!customName.trim()}
                   className='px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
                 >
-                  確定
+                  确定
                 </button>
               </div>
             </div>
@@ -393,7 +393,7 @@ export default function AcgSearch({
 
   return (
     <div className='space-y-6'>
-      {/* 搜索源切換 */}
+      {/* 搜索源切换 */}
       <div className='flex justify-center'>
         <CapsuleSwitch
           options={[

@@ -8,11 +8,11 @@ import {
   searchTMDBMulti,
 } from '@/lib/tmdb.client';
 
-// 服務器端緩存（1天）
+// 服务器端缓存（1天）
 const searchCache = new Map<string, { data: any; timestamp: number }>();
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 1天
 
-// 移除季度信息的輔助函數
+// 移除季度信息的辅助函数
 function removeSeasonInfo(title: string): string {
   // 移除 "第一季"、"第1季"、"第一（1）季" 等格式
   return title
@@ -24,16 +24,16 @@ function removeSeasonInfo(title: string): string {
     .trim();
 }
 
-// 精確匹配標題
+// 精确匹配标题
 function findExactMatch(results: any[], originalTitle: string): any | null {
   if (!results || results.length === 0) return null;
 
-  // 如果只有一個結果，直接返回
+  // 如果只有一个结果，直接返回
   if (results.length === 1) return results[0];
 
   const cleanedTitle = removeSeasonInfo(originalTitle).toLowerCase();
 
-  // 尋找完全匹配的結果
+  // 寻找完全匹配的结果
   for (const result of results) {
     const resultTitle = (result.title || result.name || '').toLowerCase();
     const resultOriginalTitle = (result.original_title || result.original_name || '').toLowerCase();
@@ -43,7 +43,7 @@ function findExactMatch(results: any[], originalTitle: string): any | null {
     }
   }
 
-  // 如果沒有完全匹配，返回第一個
+  // 如果没有完全匹配，返回第一个
   return results[0];
 }
 
@@ -51,11 +51,11 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const title = searchParams.get('title');
-    const cachedId = searchParams.get('cachedId'); // 瀏覽器緩存的ID
+    const cachedId = searchParams.get('cachedId'); // 浏览器缓存的ID
 
     if (!title && !cachedId) {
       return NextResponse.json(
-        { error: '缺少必要參數' },
+        { error: '缺少必要参数' },
         { status: 400 }
       );
     }
@@ -75,17 +75,17 @@ export async function GET(request: NextRequest) {
     let tmdbId: number;
     let mediaType: 'movie' | 'tv';
 
-    // 如果有緩存的ID，直接使用
+    // 如果有缓存的ID，直接使用
     if (cachedId) {
       const [type, id] = cachedId.split(':');
       mediaType = type as 'movie' | 'tv';
       tmdbId = parseInt(id);
     } else {
-      // 否則搜索
+      // 否则搜索
       const cleanedTitle = removeSeasonInfo(title!);
       const cacheKey = `search:${cleanedTitle}`;
 
-      // 檢查服務器緩存
+      // 检查服务器缓存
       const cached = searchCache.get(cacheKey);
       if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
         tmdbId = cached.data.tmdbId;
@@ -100,18 +100,18 @@ export async function GET(request: NextRequest) {
             {
               status: 200,
               headers: {
-                'Cache-Control': 'public, max-age=86400', // 瀏覽器緩存1天
+                'Cache-Control': 'public, max-age=86400', // 浏览器缓存1天
               },
             }
           );
         }
 
-        // 過濾出電影和電視劇
+        // 过滤出电影和电视剧
         const validResults = searchResult.results.filter(
           (r: any) => r.media_type === 'movie' || r.media_type === 'tv'
         );
 
-        // 精確匹配
+        // 精确匹配
         const matched = findExactMatch(validResults, title!);
 
         if (!matched) {
@@ -129,13 +129,13 @@ export async function GET(request: NextRequest) {
         tmdbId = matched.id;
         mediaType = matched.media_type;
 
-        // 保存到服務器緩存
+        // 保存到服务器缓存
         searchCache.set(cacheKey, {
           data: { tmdbId, mediaType },
           timestamp: Date.now(),
         });
 
-        // 清理過期緩存
+        // 清理过期缓存
         Array.from(searchCache.entries()).forEach(([key, value]) => {
           if (Date.now() - value.timestamp > CACHE_TTL) {
             searchCache.delete(key);
@@ -144,7 +144,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // 獲取推薦
+    // 获取推荐
     const recommendationsResult =
       mediaType === 'movie'
         ? await getTMDBMovieRecommendations(tmdbApiKey, tmdbId, tmdbProxy, tmdbReverseProxy)
@@ -162,10 +162,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // 轉換為統一格式
+    // 转换为统一格式
     const recommendations = (recommendationsResult.results as any[])
-      .filter((r: any) => r.poster_path) // 只保留有海報的
-      .slice(0, 20) // 最多20個
+      .filter((r: any) => r.poster_path) // 只保留有海报的
+      .slice(0, 20) // 最多20个
       .map((r: any) => ({
         tmdbId: r.id,
         title: r.title || r.name,
@@ -177,20 +177,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         recommendations,
-        tmdbId: `${mediaType}:${tmdbId}`, // 返回給瀏覽器用於緩存
+        tmdbId: `${mediaType}:${tmdbId}`, // 返回给浏览器用于缓存
         mediaType,
       },
       {
         status: 200,
         headers: {
-          'Cache-Control': 'public, max-age=86400', // 瀏覽器緩存1天
+          'Cache-Control': 'public, max-age=86400', // 浏览器缓存1天
         },
       }
     );
   } catch (error) {
-    console.error('獲取 TMDB 推薦失敗:', error);
+    console.error('获取 TMDB 推荐失败:', error);
     return NextResponse.json(
-      { error: '獲取推薦失敗' },
+      { error: '获取推荐失败' },
       { status: 500 }
     );
   }

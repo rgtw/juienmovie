@@ -1,5 +1,5 @@
 /**
- * 本地下載視頻播放代理 API
+ * 本地下载视频播放代理 API
  */
 
 import * as fs from 'fs';
@@ -8,12 +8,12 @@ import * as path from 'path';
 
 import { getAuthInfoFromCookie } from '@/lib/auth';
 
-// 檢查是否啟用離線下載功能
+// 检查是否启用离线下载功能
 const OFFLINE_DOWNLOAD_ENABLED = process.env.NEXT_PUBLIC_ENABLE_OFFLINE_DOWNLOAD === 'true';
 const OFFLINE_DOWNLOAD_DIR = process.env.OFFLINE_DOWNLOAD_DIR || '/data';
 
 /**
- * 檢查用戶權限（僅管理員和站長）
+ * 检查用户权限（仅管理员和站长）
  */
 function checkPermission(request: NextRequest): boolean {
   if (!OFFLINE_DOWNLOAD_ENABLED) {
@@ -25,16 +25,16 @@ function checkPermission(request: NextRequest): boolean {
     return false;
   }
 
-  // 只有管理員和站長可以訪問
+  // 只有管理员和站长可以访问
   return authInfo.role === 'owner' || authInfo.role === 'admin';
 }
 
 /**
- * GET - 代理本地視頻文件
+ * GET - 代理本地视频文件
  */
 export async function GET(request: NextRequest) {
   if (!checkPermission(request)) {
-    return NextResponse.json({ error: '無權限' }, { status: 403 });
+    return NextResponse.json({ error: '无权限' }, { status: 403 });
   }
 
   try {
@@ -45,10 +45,10 @@ export async function GET(request: NextRequest) {
     const file = searchParams.get('file'); // 'playlist.m3u8', 'segment_00001.ts', 'key.key' 等
 
     if (!source || !videoId || episodeIndex === null || !file) {
-      return NextResponse.json({ error: '參數不完整' }, { status: 400 });
+      return NextResponse.json({ error: '参数不完整' }, { status: 400 });
     }
 
-    // 構建文件路徑
+    // 构建文件路径
     const downloadDir = path.join(
       OFFLINE_DOWNLOAD_DIR,
       source,
@@ -57,22 +57,22 @@ export async function GET(request: NextRequest) {
     );
     const filePath = path.join(downloadDir, file);
 
-    // 安全檢查：確保文件路徑在下載目錄內
+    // 安全检查：确保文件路径在下载目录内
     const normalizedFilePath = path.normalize(filePath);
     const normalizedDownloadDir = path.normalize(downloadDir);
     if (!normalizedFilePath.startsWith(normalizedDownloadDir)) {
-      return NextResponse.json({ error: '非法路徑' }, { status: 403 });
+      return NextResponse.json({ error: '非法路径' }, { status: 403 });
     }
 
-    // 檢查文件是否存在
+    // 检查文件是否存在
     if (!fs.existsSync(filePath)) {
       return NextResponse.json({ error: '文件不存在' }, { status: 404 });
     }
 
-    // 讀取文件
+    // 读取文件
     const fileBuffer = fs.readFileSync(filePath);
 
-    // 如果是 m3u8 文件，需要修改內容使片段指向代理地址
+    // 如果是 m3u8 文件，需要修改内容使片段指向代理地址
     if (file === 'playlist.m3u8') {
       let content = fileBuffer.toString('utf-8');
       const lines = content.split('\n');
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
       for (const line of lines) {
         const trimmedLine = line.trim();
 
-        // 處理 Key URI
+        // 处理 Key URI
         if (trimmedLine.startsWith('#EXT-X-KEY:')) {
           const modifiedLine = trimmedLine.replace(
             /URI="([^"]+)"/,
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
           );
           modifiedLines.push(modifiedLine);
         }
-        // 處理 ts 片段
+        // 处理 ts 片段
         else if (trimmedLine && !trimmedLine.startsWith('#')) {
           modifiedLines.push(
             `/api/offline-download/local?source=${source}&videoId=${videoId}&episodeIndex=${episodeIndex}&file=${trimmedLine}`
@@ -124,9 +124,9 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('代理本地文件失敗:', error);
+    console.error('代理本地文件失败:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : '代理失敗' },
+      { error: error instanceof Error ? error.message : '代理失败' },
       { status: 500 }
     );
   }

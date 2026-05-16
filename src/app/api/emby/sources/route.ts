@@ -4,14 +4,14 @@ import { embyManager } from '@/lib/emby-manager';
 import { requireFeaturePermission } from '@/lib/permissions';
 
 export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic'; // 禁用緩存
+export const dynamic = 'force-dynamic'; // 禁用缓存
 
 /**
- * 獲取所有啟用的Emby源列表
+ * 获取所有启用的Emby源列表
  */
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'emby', '無權限訪問 Emby');
+    const authResult = await requireFeaturePermission(request, 'emby', '无权限访问 Emby');
     if (authResult instanceof NextResponse) return authResult;
     const sources = await embyManager.getEnabledSources();
 
@@ -22,9 +22,9 @@ export async function GET(request: NextRequest) {
       })),
     });
   } catch (error) {
-    console.error('[Emby Sources] 獲取Emby源列表失敗:', error);
+    console.error('[Emby Sources] 获取Emby源列表失败:', error);
     return NextResponse.json(
-      { error: '獲取Emby源列表失敗', sources: [] },
+      { error: '获取Emby源列表失败', sources: [] },
       { status: 500 }
     );
   }

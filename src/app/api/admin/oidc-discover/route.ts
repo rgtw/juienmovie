@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   if (storageType === 'localstorage') {
     return NextResponse.json(
       {
-        error: '不支持本地存儲進行管理員配置',
+        error: '不支持本地存储进行管理员配置',
       },
       { status: 400 }
     );
@@ -26,31 +26,31 @@ export async function POST(request: NextRequest) {
 
     if (!issuerUrl || typeof issuerUrl !== 'string') {
       return NextResponse.json(
-        { error: 'Issuer URL不能為空' },
+        { error: 'Issuer URL不能为空' },
         { status: 400 }
       );
     }
 
-    // 構建well-known URL
+    // 构建well-known URL
     const wellKnownUrl = `${issuerUrl}/.well-known/openid-configuration`;
 
-    console.log('正在獲取OIDC配置:', wellKnownUrl);
+    console.log('正在获取OIDC配置:', wellKnownUrl);
 
-    // 通過後端獲取配置，避免CORS問題
+    // 通过后端获取配置，避免CORS问题
     const response = await fetch(wellKnownUrl, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
       },
-      // 設置超時
-      signal: AbortSignal.timeout(10000), // 10秒超時
+      // 设置超时
+      signal: AbortSignal.timeout(10000), // 10秒超时
     });
 
     if (!response.ok) {
-      console.error('獲取OIDC配置失敗:', response.status, response.statusText);
+      console.error('获取OIDC配置失败:', response.status, response.statusText);
       return NextResponse.json(
         {
-          error: `無法獲取OIDC配置: ${response.status} ${response.statusText}`,
+          error: `无法获取OIDC配置: ${response.status} ${response.statusText}`,
         },
         { status: 400 }
       );
@@ -58,17 +58,17 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json();
 
-    // 驗證返回的數據包含必需的端點
+    // 验证返回的数据包含必需的端点
     if (!data.authorization_endpoint || !data.token_endpoint || !data.userinfo_endpoint) {
       return NextResponse.json(
         {
-          error: 'OIDC配置不完整，缺少必需的端點',
+          error: 'OIDC配置不完整，缺少必需的端点',
         },
         { status: 400 }
       );
     }
 
-    // 返回端點配置
+    // 返回端点配置
     return NextResponse.json({
       authorization_endpoint: data.authorization_endpoint,
       token_endpoint: data.token_endpoint,
@@ -76,23 +76,23 @@ export async function POST(request: NextRequest) {
       issuer: data.issuer,
     });
   } catch (error) {
-    console.error('OIDC自動發現失敗:', error);
+    console.error('OIDC自动发现失败:', error);
 
     if (error instanceof Error) {
       if (error.name === 'AbortError') {
         return NextResponse.json(
-          { error: '請求超時，請檢查Issuer URL是否正確' },
+          { error: '请求超时，请检查Issuer URL是否正确' },
           { status: 408 }
         );
       }
       return NextResponse.json(
-        { error: `獲取配置失敗: ${error.message}` },
+        { error: `获取配置失败: ${error.message}` },
         { status: 500 }
       );
     }
 
     return NextResponse.json(
-      { error: '獲取配置失敗，請檢查Issuer URL是否正確' },
+      { error: '获取配置失败，请检查Issuer URL是否正确' },
       { status: 500 }
     );
   }

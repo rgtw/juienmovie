@@ -20,11 +20,11 @@ export async function GET(request: NextRequest) {
   const page = Number(searchParams.get('page') || '1');
 
   if (!sourceKey) {
-    return NextResponse.json({ error: '缺少參數: source' }, { status: 400 });
+    return NextResponse.json({ error: '缺少参数: source' }, { status: 400 });
   }
 
   try {
-    let sources = [{ id: 'default', name: '默認源' }];
+    let sources = [{ id: 'default', name: '默认源' }];
 
     try {
       const sourcesExecution = await executeSavedSourceScript({
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
       });
       sources = normalizeScriptSources(sourcesExecution.result);
     } catch {
-      // 允許腳本未實現 getSources，繼續使用默認源
+      // 允许脚本未实现 getSources，继续使用默认源
     }
 
     const execution = await executeSavedSourceScript({
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: (error as Error).message || '獲取高級推薦失敗' },
+      { error: (error as Error).message || '获取高级推荐失败' },
       { status: 500 }
     );
   }

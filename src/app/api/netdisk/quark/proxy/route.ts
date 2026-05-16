@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo?.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -19,12 +19,12 @@ export async function GET(request: NextRequest) {
     const episodeIndexRaw = searchParams.get('episodeIndex');
     const quality = searchParams.get('quality') || '';
     if (!id || episodeIndexRaw == null) {
-      return NextResponse.json({ error: '缺少參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少参数' }, { status: 400 });
     }
 
     const episodeIndex = Number.parseInt(episodeIndexRaw, 10);
     if (!Number.isInteger(episodeIndex) || episodeIndex < 0) {
-      return NextResponse.json({ error: '無效的 episodeIndex' }, { status: 400 });
+      return NextResponse.json({ error: '无效的 episodeIndex' }, { status: 400 });
     }
 
     const { session, cookie, savePath } = await resolveQuarkSession(id);
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
     const playUrls = await getQuarkPlayUrls(cookie, savedFileId);
     const selected = playUrls.find((item) => item.name === quality) || playUrls[0];
     if (!selected) {
-      return NextResponse.json({ error: '未獲取到夸克播放地址' }, { status: 500 });
+      return NextResponse.json({ error: '未获取到夸克播放地址' }, { status: 500 });
     }
 
     const range = request.headers.get('range');
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
 
       if (!upstream.ok || !upstream.body) {
         return NextResponse.json(
-          { error: `夸克視頻代理失敗 (${upstream.status})` },
+          { error: `夸克视频代理失败 (${upstream.status})` },
           { status: upstream.status || 500 }
         );
       }
@@ -131,13 +131,13 @@ export async function GET(request: NextRequest) {
     } catch (error) {
       clearTimeout(timeoutId);
       if (error instanceof Error && error.name === 'AbortError') {
-        return NextResponse.json({ error: '夸克網盤代理超時' }, { status: 504 });
+        return NextResponse.json({ error: '夸克网盘代理超时' }, { status: 504 });
       }
       throw error;
     }
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : '夸克網盤代理失敗' },
+      { error: error instanceof Error ? error.message : '夸克网盘代理失败' },
       { status: 500 }
     );
   }

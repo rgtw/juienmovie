@@ -48,13 +48,13 @@ export async function GET(request: NextRequest) {
     hasFeaturePermission(authInfo.username, 'emby'),
   ]);
 
-  // 創建權重映射表
+  // 创建权重映射表
   const weightMap = new Map<string, number>();
   config.SourceConfig.forEach(source => {
     weightMap.set(source.key, source.weight ?? 0);
   });
 
-  // 檢查是否配置了 OpenList
+  // 检查是否配置了 OpenList
   const hasOpenList = !!(
     canAccessOpenList &&
     config.OpenListConfig?.Enabled &&
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
     config.OpenListConfig?.Password
   );
 
-  // 獲取所有啟用的 Emby 源
+  // 获取所有启用的 Emby 源
   const { embyManager } = await import('@/lib/emby-manager');
   const embySourcesMap = await embyManager.getAllClients();
   const embySources = canAccessEmby ? Array.from(embySourcesMap.values()) : [];
@@ -71,10 +71,10 @@ export async function GET(request: NextRequest) {
   console.log('[Search] Emby sources count:', embySources.length);
   console.log('[Search] Emby sources:', embySources.map(s => ({ key: s.config.key, name: s.config.name })));
 
-  // 獲取代理 token（用於圖片代理）
+  // 获取代理 token（用于图片代理）
   const proxyToken = await getProxyToken(request);
 
-  // 為每個 Emby 源創建搜索 Promise（全部併發，無限制）
+  // 为每个 Emby 源创建搜索 Promise（全部并发，无限制）
   const embyPromises = embySources.map(({ client, config: embyConfig }) =>
     Promise.race([
       (async () => {
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
             Limit: 50,
           });
 
-          // 如果只有一個Emby源，保持舊格式（向後兼容）
+          // 如果只有一个Emby源，保持旧格式（向后兼容）
           const sourceValue = embySources.length === 1 ? 'emby' : `emby_${embyConfig.key}`;
           const sourceName = embySources.length === 1 ? 'Emby' : embyConfig.name;
 
@@ -102,11 +102,11 @@ export async function GET(request: NextRequest) {
             episodes_titles: [],
             year: item.ProductionYear?.toString() || '',
             desc: item.Overview || '',
-            type_name: item.Type === 'Movie' ? '電影' : '電視劇',
+            type_name: item.Type === 'Movie' ? '电影' : '电视剧',
             douban_id: 0,
           }));
         } catch (error) {
-          console.error(`[Search] 搜索 ${embyConfig.name} 失敗:`, error);
+          console.error(`[Search] 搜索 ${embyConfig.name} 失败:`, error);
           return [];
         }
       })(),
@@ -114,12 +114,12 @@ export async function GET(request: NextRequest) {
         setTimeout(() => reject(new Error(`${embyConfig.name} timeout`)), 20000)
       ),
     ]).catch((error) => {
-      console.error(`[Search] 搜索 ${embyConfig.name} 超時:`, error);
+      console.error(`[Search] 搜索 ${embyConfig.name} 超时:`, error);
       return [];
     })
   );
 
-  // 搜索 OpenList（如果配置了）- 異步帶超時
+  // 搜索 OpenList（如果配置了）- 异步带超时
   const openlistPromise = hasOpenList
     ? Promise.race([
         (async () => {
@@ -150,7 +150,7 @@ export async function GET(request: NextRequest) {
                 .map(([folderName, info]: [string, any]) => ({
                   id: folderName,
                   source: 'openlist',
-                  source_name: '私人影庫',
+                  source_name: '私人影库',
                   weight: weightMap.get('openlist') ?? 0,
                   title: info.title,
                   poster: getTMDBImageUrl(info.poster_path),
@@ -158,13 +158,13 @@ export async function GET(request: NextRequest) {
                   episodes_titles: [],
                   year: info.release_date.split('-')[0] || '',
                   desc: info.overview,
-                  type_name: info.media_type === 'movie' ? '電影' : '電視劇',
+                  type_name: info.media_type === 'movie' ? '电影' : '电视剧',
                   douban_id: 0,
                 }));
             }
             return [];
           } catch (error) {
-            console.error('[Search] 搜索 OpenList 失敗:', error);
+            console.error('[Search] 搜索 OpenList 失败:', error);
             return [];
           }
         })(),
@@ -172,12 +172,12 @@ export async function GET(request: NextRequest) {
           setTimeout(() => reject(new Error('OpenList timeout')), 20000)
         ),
       ]).catch((error) => {
-        console.error('[Search] 搜索 OpenList 超時:', error);
+        console.error('[Search] 搜索 OpenList 超时:', error);
         return [];
       })
     : Promise.resolve([]);
 
-  // 添加超時控制和錯誤處理，避免慢接口拖累整體響應
+  // 添加超时控制和错误处理，避免慢接口拖累整体响应
   const searchPromises = apiSites.map((site) =>
     Promise.race([
       searchFromApi(site, query),
@@ -185,8 +185,8 @@ export async function GET(request: NextRequest) {
         setTimeout(() => reject(new Error(`${site.name} timeout`)), 20000)
       ),
     ]).catch((err) => {
-      console.warn(`搜索失敗 ${site.name}:`, err.message);
-      return []; // 返回空數組而不是拋出錯誤
+      console.warn(`搜索失败 ${site.name}:`, err.message);
+      return []; // 返回空数组而不是抛出错误
     })
   );
 
@@ -226,7 +226,7 @@ export async function GET(request: NextRequest) {
 
           return searchResults.flat();
         } catch (error) {
-          console.error(`[Search] 搜索腳本 ${script.name} 失敗:`, error);
+          console.error(`[Search] 搜索脚本 ${script.name} 失败:`, error);
           return [];
         }
       })(),
@@ -234,7 +234,7 @@ export async function GET(request: NextRequest) {
         setTimeout(() => reject(new Error(`${script.name} timeout`)), 20000)
       ),
     ]).catch((error) => {
-      console.error(`[Search] 搜索腳本 ${script.name} 超時:`, error);
+      console.error(`[Search] 搜索脚本 ${script.name} 超时:`, error);
       return [];
     })
   );
@@ -247,14 +247,14 @@ export async function GET(request: NextRequest) {
       ...scriptPromises,
     ]);
 
-    // 分離結果：第一個是 openlist，接下來是 emby 結果，最後是 api 結果
-    // 添加安全檢查，確保即使某個結果處理出錯也不影響其他結果
+    // 分离结果：第一个是 openlist，接下来是 emby 结果，最后是 api 结果
+    // 添加安全检查，确保即使某个结果处理出错也不影响其他结果
     const openlistResults = Array.isArray(allResults[0]) ? allResults[0] : [];
     const embyResultsArray = allResults.slice(1, 1 + embyPromises.length);
     const apiResults = allResults.slice(1 + embyPromises.length, 1 + embyPromises.length + searchPromises.length);
     const scriptResults = allResults.slice(1 + embyPromises.length + searchPromises.length);
 
-    // 合併所有 Emby 結果，添加安全檢查
+    // 合并所有 Emby 结果，添加安全检查
     const embyResults = embyResultsArray.filter(Array.isArray).flat();
     const apiResultsFlat = apiResults.filter(Array.isArray).flat();
     const scriptResultsFlat = scriptResults.filter(Array.isArray).flat();
@@ -273,7 +273,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // 按權重降序排序
+    // 按权重降序排序
     flattenedResults.sort((a, b) => {
       const weightA = a.weight ?? 0;
       const weightB = b.weight ?? 0;
@@ -299,7 +299,7 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('[Search] 搜索結果處理失敗:', error);
-    return NextResponse.json({ error: '搜索失敗' }, { status: 500 });
+    console.error('[Search] 搜索结果处理失败:', error);
+    return NextResponse.json({ error: '搜索失败' }, { status: 500 });
   }
 }

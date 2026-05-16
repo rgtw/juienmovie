@@ -31,7 +31,7 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
 
   const activeIndex = options.findIndex((opt) => opt.value === active);
 
-  // 更新指示器位置（僅更新位置，不觸發滾動）
+  // 更新指示器位置（仅更新位置，不触发滚动）
   const updateIndicatorPosition = (autoScroll = false) => {
     if (
       activeIndex >= 0 &&
@@ -51,7 +51,7 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
           width: buttonWidth,
         });
 
-        // 只在需要自動滾動時才執行
+        // 只在需要自动滚动时才执行
         if (autoScroll && !isScrollingRef.current) {
           const buttonRect = button.getBoundingClientRect();
           const scrollContainerRect = scrollContainer.getBoundingClientRect();
@@ -60,7 +60,7 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
             buttonRect.right <= scrollContainerRect.right;
 
           if (!isVisible) {
-            // 將選中項滾動到視圖中心
+            // 将选中项滚动到视图中心
             const scrollToPosition =
               buttonOffsetLeft -
               scrollContainer.offsetWidth / 2 +
@@ -75,36 +75,36 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
     }
   };
 
-  // 組件掛載時立即計算初始位置並滾動到選中項
+  // 组件挂载时立即计算初始位置并滚动到选中项
   useEffect(() => {
     const timeoutId = setTimeout(() => updateIndicatorPosition(true), 0);
     return () => clearTimeout(timeoutId);
   }, []);
 
-  // 監聽選中項變化，自動滾動到新選中項
+  // 监听选中项变化，自动滚动到新选中项
   useEffect(() => {
     const timeoutId = setTimeout(() => updateIndicatorPosition(true), 0);
     return () => clearTimeout(timeoutId);
   }, [activeIndex]);
 
-  // 監聽滾動事件，僅更新指示器位置
+  // 监听滚动事件，仅更新指示器位置
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) return;
 
     const handleScroll = () => {
-      // 標記正在滾動
+      // 标记正在滚动
       isScrollingRef.current = true;
 
-      // 清除之前的超時
+      // 清除之前的超时
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }
 
-      // 僅更新指示器位置，不觸發自動滾動
+      // 仅更新指示器位置，不触发自动滚动
       updateIndicatorPosition(false);
 
-      // 滾動結束後重置標記
+      // 滚动结束后重置标记
       scrollTimeoutRef.current = setTimeout(() => {
         isScrollingRef.current = false;
       }, 150);
@@ -119,7 +119,7 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
     };
   }, [activeIndex]);
 
-  // 鼠標拖動功能
+  // 鼠标拖动功能
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) return;
@@ -141,7 +141,7 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
     const handleMouseUp = () => {
       isDraggingRef.current = false;
       scrollContainer.style.cursor = 'grab';
-      // 短暫延遲後重置拖動標記，防止點擊事件被觸發
+      // 短暂延迟后重置拖动标记，防止点击事件被触发
       setTimeout(() => {
         hasDraggedRef.current = false;
       }, 50);
@@ -151,9 +151,9 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
       if (!isDraggingRef.current) return;
       e.preventDefault();
       const x = e.pageX - scrollContainer.offsetLeft;
-      const walk = (x - startXRef.current) * 1.5; // 調整拖動速度
+      const walk = (x - startXRef.current) * 1.5; // 调整拖动速度
 
-      // 如果移動距離超過5px，標記為已拖動
+      // 如果移动距离超过5px，标记为已拖动
       if (Math.abs(walk) > 5) {
         hasDraggedRef.current = true;
       }
@@ -182,7 +182,7 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
         className || ''
       }`}
     >
-      {/* 可滾動容器 */}
+      {/* 可滚动容器 */}
       <div
         ref={scrollContainerRef}
         className='relative flex overflow-x-auto scrollbar-hide'
@@ -191,7 +191,7 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
           msOverflowStyle: 'none',
         }}
       >
-        {/* 滑動的白色背景指示器 */}
+        {/* 滑动的白色背景指示器 */}
         {indicatorStyle.width > 0 && (
           <div
             className='absolute top-0 bottom-0 bg-white dark:bg-gray-500 rounded-full shadow-sm transition-all duration-300 ease-out pointer-events-none'
@@ -211,7 +211,7 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
                 buttonRefs.current[index] = el;
               }}
               onClick={(e) => {
-                // 如果正在拖動，阻止點擊
+                // 如果正在拖动，阻止点击
                 if (hasDraggedRef.current) {
                   e.preventDefault();
                   return;

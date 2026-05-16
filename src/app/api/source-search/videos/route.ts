@@ -24,7 +24,7 @@ interface CmsVideoResponse {
 }
 
 /**
- * 獲取指定視頻源的分類視頻列表
+ * 获取指定视频源的分类视频列表
  */
 export async function GET(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
@@ -39,14 +39,14 @@ export async function GET(request: NextRequest) {
 
   if (!sourceKey) {
     return NextResponse.json(
-      { error: '缺少參數: source' },
+      { error: '缺少参数: source' },
       { status: 400 }
     );
   }
 
   if (!categoryId) {
     return NextResponse.json(
-      { error: '缺少參數: categoryId' },
+      { error: '缺少参数: categoryId' },
       { status: 400 }
     );
   }
@@ -57,12 +57,12 @@ export async function GET(request: NextRequest) {
 
     if (!targetSite) {
       return NextResponse.json(
-        { error: `未找到指定的視頻源: ${sourceKey}` },
+        { error: `未找到指定的视频源: ${sourceKey}` },
         { status: 404 }
       );
     }
 
-    // 請求分類視頻列表
+    // 请求分类视频列表
     const videoUrl = `${targetSite.api}?ac=videolist&t=${categoryId}&pg=${page}`;
     const videoResponse = await fetch(videoUrl, {
       headers: API_CONFIG.search.headers,
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!videoResponse.ok) {
-      throw new Error('獲取視頻列表失敗');
+      throw new Error('获取视频列表失败');
     }
 
     const videoData: CmsVideoResponse = await videoResponse.json();
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // 轉換為 SearchResult 格式
+    // 转换为 SearchResult 格式
     const results: SearchResult[] = videoData.list.map((item) => {
       const episodes: string[] = [];
       const episodes_titles: string[] = [];
@@ -124,7 +124,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Failed to get videos:', error);
     return NextResponse.json(
-      { error: '獲取視頻列表失敗' },
+      { error: '获取视频列表失败' },
       { status: 500 }
     );
   }

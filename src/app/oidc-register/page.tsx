@@ -17,7 +17,7 @@ function OIDCRegisterPageClient() {
 
   const { siteName } = useSite();
 
-  // 檢查OIDC session
+  // 检查OIDC session
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -26,7 +26,7 @@ function OIDCRegisterPageClient() {
           const data = await res.json();
           setOidcInfo(data);
         } else {
-          // session無效,跳轉到登錄頁
+          // session无效,跳转到登录页
           router.replace('/login?error=' + encodeURIComponent('OIDC會話已過期'));
         }
       } catch (error) {
@@ -56,7 +56,7 @@ function OIDCRegisterPageClient() {
       });
 
       if (res.ok) {
-        // 註冊成功，接口已寫入認證 cookie，這裡用整頁跳轉確保權限配置和登錄態完全重建
+        // 注册成功，接口已写入认证 cookie，这里用整页跳转确保权限配置和登录态完全重建
         window.location.replace('/');
       } else {
         const data = await res.json().catch(() => ({}));
@@ -87,28 +87,28 @@ function OIDCRegisterPageClient() {
           {siteName}
         </h1>
         <p className='text-center text-sm text-gray-600 dark:text-gray-400 mb-8'>
-          完成OIDC註冊
+          完成OIDC注册
         </p>
 
-        {/* OIDC信息顯示 */}
+        {/* OIDC信息显示 */}
         {oidcInfo && (
           <div className='mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg'>
             <p className='text-sm text-blue-700 dark:text-blue-400'>
               {oidcInfo.email && (
                 <>
-                  郵箱: <strong>{oidcInfo.email}</strong>
+                  邮箱: <strong>{oidcInfo.email}</strong>
                   <br />
                 </>
               )}
               {oidcInfo.name && (
                 <>
-                  名稱: <strong>{oidcInfo.name}</strong>
+                  名称: <strong>{oidcInfo.name}</strong>
                   <br />
                 </>
               )}
               {oidcInfo.trust_level !== undefined && (
                 <>
-                  信任等級: <strong>{oidcInfo.trust_level}</strong>
+                  信任等级: <strong>{oidcInfo.trust_level}</strong>
                 </>
               )}
             </p>
@@ -118,7 +118,7 @@ function OIDCRegisterPageClient() {
         <form onSubmit={handleSubmit} className='space-y-6'>
           <div>
             <label htmlFor='username' className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              選擇用戶名
+              选择用户名
             </label>
             <input
               id='username'
@@ -130,7 +130,7 @@ function OIDCRegisterPageClient() {
               onChange={(e) => setUsername(e.target.value)}
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              用戶名只能包含字母、數字、下劃線，長度3-20位
+              用户名只能包含字母、数字、下划线，长度3-20位
             </p>
           </div>
 
@@ -146,14 +146,14 @@ function OIDCRegisterPageClient() {
             {loading ? '註冊中...' : '完成註冊'}
           </button>
 
-          {/* 返回登錄鏈接 */}
+          {/* 返回登录链接 */}
           <div className='text-center'>
             <button
               type='button'
               onClick={() => router.push('/login')}
               className='text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors'
             >
-              返回登錄
+              返回登录
             </button>
           </div>
         </form>

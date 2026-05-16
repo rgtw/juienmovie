@@ -18,15 +18,15 @@ export const runtime = 'nodejs';
 
 /**
  * POST /api/openlist/correct
- * 糾正視頻的TMDB映射
+ * 纠正视频的TMDB映射
  */
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'private_library', '無權限訪問私人影庫');
+    const authResult = await requireFeaturePermission(request, 'private_library', '无权限访问私人影库');
     if (authResult instanceof NextResponse) return authResult;
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -44,10 +44,10 @@ export async function POST(request: NextRequest) {
       seasonName,
     } = body;
 
-    // 只驗證 key 和 title 是必需的
+    // 只验证 key 和 title 是必需的
     if (!key || !title) {
       return NextResponse.json(
-        { error: '缺少必要參數 (key 或 title)' },
+        { error: '缺少必要参数 (key 或 title)' },
         { status: 400 }
       );
     }
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       !openListConfig.Password
     ) {
       return NextResponse.json(
-        { error: 'OpenList 未配置或未啟用' },
+        { error: 'OpenList 未配置或未启用' },
         { status: 400 }
       );
     }
@@ -74,21 +74,21 @@ export async function POST(request: NextRequest) {
       openListConfig.Password
     );
 
-    // 讀取現有 metainfo (從數據庫或緩存)
+    // 读取现有 metainfo (从数据库或缓存)
     let metaInfo: MetaInfo | null = getCachedMetaInfo();
 
     if (!metaInfo) {
       try {
-        console.log('[OpenList Correct] 嘗試從數據庫讀取 metainfo');
+        console.log('[OpenList Correct] 尝试从数据库读取 metainfo');
         const metainfoJson = await db.getGlobalValue('video.metainfo');
 
         if (metainfoJson) {
           metaInfo = JSON.parse(metainfoJson);
         }
       } catch (error) {
-        console.error('[OpenList Correct] 從數據庫讀取 metainfo 失敗:', error);
+        console.error('[OpenList Correct] 从数据库读取 metainfo 失败:', error);
         return NextResponse.json(
-          { error: 'metainfo 讀取失敗' },
+          { error: 'metainfo 读取失败' },
           { status: 500 }
         );
       }
@@ -101,18 +101,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 檢查 key 是否存在
+    // 检查 key 是否存在
     if (!metaInfo.folders[key]) {
       return NextResponse.json(
-        { error: '視頻不存在' },
+        { error: '视频不存在' },
         { status: 404 }
       );
     }
 
-    // 保留原始文件夾名稱
+    // 保留原始文件夹名称
     const folderName = metaInfo.folders[key].folderName;
 
-    // 更新視頻信息
+    // 更新视频信息
     metaInfo.folders[key] = {
       folderName: folderName,
       tmdb_id: tmdbId || null,
@@ -123,28 +123,28 @@ export async function POST(request: NextRequest) {
       vote_average: voteAverage || 0,
       media_type: mediaType,
       last_updated: Date.now(),
-      failed: false, // 糾錯後標記為成功
-      season_number: seasonNumber, // 季度編號(可選)
-      season_name: seasonName, // 季度名稱(可選)
+      failed: false, // 纠错后标记为成功
+      season_number: seasonNumber, // 季度编号(可选)
+      season_name: seasonName, // 季度名称(可选)
     };
 
-    // 保存 metainfo 到數據庫
+    // 保存 metainfo 到数据库
     const metainfoContent = JSON.stringify(metaInfo);
 
     await db.setGlobalValue('video.metainfo', metainfoContent);
 
-    // 更新緩存
+    // 更新缓存
     invalidateMetaInfoCache();
     setCachedMetaInfo(metaInfo);
 
     return NextResponse.json({
       success: true,
-      message: '糾錯成功',
+      message: '纠错成功',
     });
   } catch (error) {
-    console.error('視頻糾錯失敗:', error);
+    console.error('视频纠错失败:', error);
     return NextResponse.json(
-      { error: '糾錯失敗', details: (error as Error).message },
+      { error: '纠错失败', details: (error as Error).message },
       { status: 500 }
     );
   }

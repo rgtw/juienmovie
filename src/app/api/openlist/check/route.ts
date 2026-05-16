@@ -10,30 +10,30 @@ export const runtime = 'nodejs';
 
 /**
  * POST /api/openlist/check
- * 檢查 OpenList 連通性
+ * 检查 OpenList 连通性
  */
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'private_library', '無權限訪問私人影庫');
+    const authResult = await requireFeaturePermission(request, 'private_library', '无权限访问私人影库');
     if (authResult instanceof NextResponse) return authResult;
-    // 權限檢查
+    // 权限检查
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
-    // 獲取請求參數
+    // 获取请求参数
     const body = await request.json();
     const { url, username, password } = body;
 
     if (!url || !username || !password) {
       return NextResponse.json(
-        { error: '缺少必要參數' },
+        { error: '缺少必要参数' },
         { status: 400 }
       );
     }
 
-    // 創建客戶端並檢查連通性
+    // 创建客户端并检查连通性
     const client = new OpenListClient(url, username, password);
     const result = await client.checkConnectivity();
 
@@ -52,11 +52,11 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error) {
-    console.error('檢查 OpenList 連通性失敗:', error);
+    console.error('检查 OpenList 连通性失败:', error);
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : '檢查失敗',
+        error: error instanceof Error ? error.message : '检查失败',
       },
       { status: 500 }
     );

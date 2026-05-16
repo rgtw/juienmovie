@@ -17,22 +17,22 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/openlist/detail?folder=xxx
- * 獲取視頻文件夾的詳細信息
+ * 获取视频文件夹的详细信息
  */
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'private_library', '無權限訪問私人影庫');
+    const authResult = await requireFeaturePermission(request, 'private_library', '无权限访问私人影库');
     if (authResult instanceof NextResponse) return authResult;
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
     const folderName = searchParams.get('folder');
 
     if (!folderName) {
-      return NextResponse.json({ error: '缺少參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少参数' }, { status: 400 });
     }
 
     const config = await getConfig();
@@ -45,10 +45,10 @@ export async function GET(request: NextRequest) {
       !openListConfig.Username ||
       !openListConfig.Password
     ) {
-      return NextResponse.json({ error: 'OpenList 未配置或未啟用' }, { status: 400 });
+      return NextResponse.json({ error: 'OpenList 未配置或未启用' }, { status: 400 });
     }
 
-    // folderName 已經是完整路徑，直接使用
+    // folderName 已经是完整路径，直接使用
     const folderPath = folderName;
     const client = new OpenListClient(
       openListConfig.URL,
@@ -56,11 +56,11 @@ export async function GET(request: NextRequest) {
       openListConfig.Password
     );
 
-    // 1. 嘗試讀取緩存的 videoinfo.json
+    // 1. 尝试读取缓存的 videoinfo.json
     let videoInfo: VideoInfo | null = getCachedVideoInfo(folderPath);
 
     if (!videoInfo) {
-      // 2. 嘗試從 OpenList 讀取 videoinfo.json
+      // 2. 尝试从 OpenList 读取 videoinfo.json
       try {
         const videoinfoPath = `${folderPath}/videoinfo.json`;
         const fileResponse = await client.getFile(videoinfoPath);
@@ -77,33 +77,33 @@ export async function GET(request: NextRequest) {
           const content = await contentResponse.text();
           videoInfo = JSON.parse(content);
 
-          // 緩存
+          // 缓存
           if (videoInfo) {
             setCachedVideoInfo(folderPath, videoInfo);
           }
         }
       } catch (error) {
-        console.log('videoinfo.json 不存在，將解析文件名');
+        console.log('videoinfo.json 不存在，将解析文件名');
       }
     }
 
-    // 3. 如果沒有 videoinfo.json，列出文件夾並解析
+    // 3. 如果没有 videoinfo.json，列出文件夹并解析
     if (!videoInfo) {
       const listResponse = await client.listDirectory(folderPath);
 
       if (listResponse.code !== 200) {
         return NextResponse.json(
-          { error: 'OpenList 列表獲取失敗3' },
+          { error: 'OpenList 列表获取失败3' },
           { status: 500 }
         );
       }
 
-      // 過濾視頻文件
+      // 过滤视频文件
       const videoFiles = listResponse.data.content.filter(
         (item) =>
           !item.is_dir &&
           !item.name.endsWith('.json') && // 排除 JSON 文件
-          !item.name.startsWith('.') && // 排除隱藏文件
+          !item.name.startsWith('.') && // 排除隐藏文件
           (item.name.endsWith('.mp4') ||
             item.name.endsWith('.mkv') ||
             item.name.endsWith('.avi') ||
@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
         last_updated: Date.now(),
       };
 
-      // 按文件名排序，確保順序一致
+      // 按文件名排序，确保顺序一致
       videoFiles.sort((a, b) => a.name.localeCompare(b.name));
 
       // 解析文件名
@@ -126,7 +126,7 @@ export async function GET(request: NextRequest) {
         const parsed = parseVideoFileName(file.name);
 
         videoInfo.episodes[file.name] = {
-          episode: parsed.episode || (i + 1), // 如果解析失敗，使用索引+1作為集數
+          episode: parsed.episode || (i + 1), // 如果解析失败，使用索引+1作为集数
           season: parsed.season,
           title: parsed.title,
           parsed_from: 'filename',
@@ -134,14 +134,14 @@ export async function GET(request: NextRequest) {
         };
       }
 
-      // 僅緩存到內存，不再持久化到 OpenList
+      // 仅缓存到内存，不再持久化到 OpenList
       setCachedVideoInfo(folderPath, videoInfo);
     }
 
-    // 4. 獲取視頻文件列表（不獲取播放鏈接，使用懶加載）
+    // 4. 获取视频文件列表（不获取播放链接，使用懒加载）
     const listResponse = await client.listDirectory(folderPath);
 
-    // 定義視頻文件擴展名（不區分大小寫）
+    // 定义视频文件扩展名（不区分大小写）
     const videoExtensions = [
       '.mp4', '.mkv', '.avi', '.m3u8', '.flv', '.ts',
       '.mov', '.wmv', '.webm', '.rmvb', '.rm', '.mpg',
@@ -149,28 +149,28 @@ export async function GET(request: NextRequest) {
     ];
 
     const videoFiles = listResponse.data.content.filter((item) => {
-      // 排除文件夾
+      // 排除文件夹
       if (item.is_dir) return false;
 
-      // 排除隱藏文件
+      // 排除隐藏文件
       if (item.name.startsWith('.')) return false;
 
       // 排除 JSON 文件
       if (item.name.endsWith('.json')) return false;
 
-      // 檢查是否是視頻文件（不區分大小寫）
+      // 检查是否是视频文件（不区分大小写）
       const lowerName = item.name.toLowerCase();
       return videoExtensions.some(ext => lowerName.endsWith(ext));
     });
 
-    // 5. 構建集數信息（不包含播放鏈接）
-    // 確保所有視頻文件都被顯示，即使 videoInfo 中沒有記錄
+    // 5. 构建集数信息（不包含播放链接）
+    // 确保所有视频文件都被显示，即使 videoInfo 中没有记录
     const episodes = videoFiles
       .map((file, index) => {
-        // 總是重新解析文件名，確保使用最新的解析邏輯
+        // 总是重新解析文件名，确保使用最新的解析逻辑
         const parsed = parseVideoFileName(file.name);
 
-        // 如果解析成功，使用解析結果；否則使用 videoInfo 中的記錄或索引
+        // 如果解析成功，使用解析结果；否则使用 videoInfo 中的记录或索引
         let episodeInfo;
         if (parsed.episode) {
           episodeInfo = {
@@ -181,10 +181,10 @@ export async function GET(request: NextRequest) {
             isOVA: parsed.isOVA,
           };
         } else {
-          // 如果解析失敗，嘗試從 videoInfo 獲取
+          // 如果解析失败，尝试从 videoInfo 获取
           episodeInfo = videoInfo!.episodes[file.name];
           if (!episodeInfo) {
-            // 如果 videoInfo 中也沒有，使用索引
+            // 如果 videoInfo 中也没有，使用索引
             episodeInfo = {
               episode: index + 1,
               season: undefined,
@@ -194,7 +194,7 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        // 優先使用解析出的標題，其次是"第X集"格式，最後才是文件名
+        // 优先使用解析出的标题，其次是"第X集"格式，最后才是文件名
         let displayTitle = episodeInfo.title;
         if (!displayTitle && episodeInfo.episode) {
           displayTitle = episodeInfo.isOVA ? `OVA ${episodeInfo.episode}` : `第${episodeInfo.episode}集`;
@@ -213,10 +213,10 @@ export async function GET(request: NextRequest) {
         };
       })
       .sort((a, b) => {
-        // OVA 排在最後
+        // OVA 排在最后
         if (a.isOVA && !b.isOVA) return 1;
         if (!a.isOVA && b.isOVA) return -1;
-        // 確保排序穩定，即使 episode 相同也按文件名排序
+        // 确保排序稳定，即使 episode 相同也按文件名排序
         if (a.episode !== b.episode) {
           return a.episode - b.episode;
         }
@@ -230,9 +230,9 @@ export async function GET(request: NextRequest) {
       videoInfo,
     });
   } catch (error) {
-    console.error('獲取視頻詳情失敗:', error);
+    console.error('获取视频详情失败:', error);
     return NextResponse.json(
-      { error: '獲取失敗', details: (error as Error).message },
+      { error: '获取失败', details: (error as Error).message },
       { status: 500 }
     );
   }

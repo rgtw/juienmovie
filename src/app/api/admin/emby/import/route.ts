@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
   if (storageType === 'localstorage') {
     return NextResponse.json(
-      { error: '不支持本地存儲進行管理員配置' },
+      { error: '不支持本地存储进行管理员配置' },
       { status: 400 }
     );
   }
@@ -21,25 +21,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 僅站長可用
+    // 仅站长可用
     if (authInfo.username !== process.env.USERNAME) {
-      return NextResponse.json({ error: '權限不足，僅站長可用' }, { status: 403 });
+      return NextResponse.json({ error: '权限不足，仅站长可用' }, { status: 403 });
     }
 
     const body = await request.json();
     const { data } = body;
 
     if (!data) {
-      return NextResponse.json({ error: '缺少導入數據' }, { status: 400 });
+      return NextResponse.json({ error: '缺少导入数据' }, { status: 400 });
     }
 
     const adminConfig = await getConfig();
 
-    // 追加和覆蓋：合併Sources數組
+    // 追加和覆盖：合并Sources数组
     if (data.Sources && Array.isArray(data.Sources)) {
       const existingSources = adminConfig.EmbyConfig?.Sources || [];
 
-      // 覆蓋已存在的，追加新的
+      // 覆盖已存在的，追加新的
       const mergedSources = [...existingSources];
       for (const importSource of data.Sources) {
         const existingIndex = mergedSources.findIndex(s => s.key === importSource.key);
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
         Sources: mergedSources,
       };
     } else {
-      // 舊格式：直接覆蓋
+      // 旧格式：直接覆盖
       adminConfig.EmbyConfig = {
         ...adminConfig.EmbyConfig,
         ...data,
@@ -64,16 +64,16 @@ export async function POST(request: NextRequest) {
 
     await db.saveAdminConfig(adminConfig);
 
-    // 更新內存緩存
+    // 更新内存缓存
     await setCachedConfig(adminConfig);
 
     return NextResponse.json({
       success: true,
-      message: '導入成功',
+      message: '导入成功',
     });
   } catch (error) {
     return NextResponse.json(
-      { error: '導入失敗: ' + (error as Error).message },
+      { error: '导入失败: ' + (error as Error).message },
       { status: 500 }
     );
   }

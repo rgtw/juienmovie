@@ -22,7 +22,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // 加載通知
+  // 加载通知
   const loadNotifications = async () => {
     setLoading(true);
     try {
@@ -38,7 +38,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
     }
   };
 
-  // 標記為已讀
+  // 标记为已读
   const markAsRead = async (notificationId: string) => {
     try {
       const response = await fetch('/api/notifications', {
@@ -56,7 +56,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
             n.id === notificationId ? { ...n, read: true } : n
           )
         );
-        // 觸發事件通知 UserMenu 更新未讀計數
+        // 触发事件通知 UserMenu 更新未读计数
         window.dispatchEvent(new Event('notificationsUpdated'));
       }
     } catch (error) {
@@ -64,7 +64,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
     }
   };
 
-  // 刪除通知
+  // 删除通知
   const deleteNotification = async (notificationId: string) => {
     try {
       const response = await fetch('/api/notifications', {
@@ -79,7 +79,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
       if (response.ok) {
         const deletedNotification = notifications.find((n) => n.id === notificationId);
         setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
-        // 如果刪除的是未讀通知，觸發事件更新 UserMenu
+        // 如果删除的是未读通知，触发事件更新 UserMenu
         if (deletedNotification && !deletedNotification.read) {
           window.dispatchEvent(new Event('notificationsUpdated'));
         }
@@ -102,7 +102,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
 
       if (response.ok) {
         setNotifications([]);
-        // 觸發事件通知 UserMenu 更新未讀計數
+        // 触发事件通知 UserMenu 更新未读计数
         window.dispatchEvent(new Event('notificationsUpdated'));
       }
     } catch (error) {
@@ -110,14 +110,14 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
     }
   };
 
-  // 處理通知點擊
+  // 处理通知点击
   const handleNotificationClick = (notification: Notification) => {
-    // 標記為已讀
+    // 标记为已读
     if (!notification.read) {
       markAsRead(notification.id);
     }
 
-    // 根據通知類型跳轉
+    // 根据通知类型跳转
     if (notification.type === 'favorite_update' && notification.metadata) {
       const { source, id, title } = notification.metadata;
       router.push(`/play?source=${source}&id=${id}&title=${encodeURIComponent(title)}`);
@@ -134,17 +134,17 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
       router.push(`/manga/detail?${params.toString()}`);
       onClose();
     } else if (notification.type === 'movie_request') {
-      // 獲取用戶角色
+      // 获取用户角色
       const authInfo = getAuthInfoFromBrowserCookie();
       const isAdmin = authInfo?.role === 'owner' || authInfo?.role === 'admin';
 
-      // 管理員跳轉到管理面板，普通用戶跳轉到我的求片
+      // 管理员跳转到管理面板，普通用户跳转到我的求片
       router.push(isAdmin ? '/admin' : '/movie-request');
       onClose();
     }
   };
 
-  // 打開面板時加載通知
+  // 打开面板时加载通知
   useEffect(() => {
     if (isOpen) {
       loadNotifications();
@@ -161,7 +161,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
 
       {/* 通知面板 */}
       <div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg max-h-[80vh] bg-white dark:bg-gray-900 rounded-xl shadow-xl z-[1001] flex flex-col overflow-hidden'>
-        {/* 標題欄 */}
+        {/* 标题栏 */}
         <div className='flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700'>
           <div className='flex items-center gap-2'>
             <Bell className='w-5 h-5 text-gray-600 dark:text-gray-400' />
@@ -170,7 +170,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
             </h3>
             {notifications.length > 0 && (
               <span className='px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 rounded-full'>
-                {notifications.filter((n) => !n.read).length} 條未讀
+                {notifications.filter((n) => !n.read).length} 条未读
               </span>
             )}
           </div>
@@ -216,12 +216,12 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                   } hover:shadow-md`}
                   onClick={() => handleNotificationClick(notification)}
                 >
-                  {/* 未讀標識 */}
+                  {/* 未读标识 */}
                   {!notification.read && (
                     <div className='absolute top-4 right-4 w-2 h-2 bg-green-500 rounded-full'></div>
                   )}
 
-                  {/* 通知內容 */}
+                  {/* 通知内容 */}
                   <div className='pr-8'>
                     <div className='flex items-start justify-between mb-1'>
                       <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
@@ -236,7 +236,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                     </p>
                   </div>
 
-                  {/* 操作按鈕 */}
+                  {/* 操作按钮 */}
                   <div className='absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity'>
                     {!notification.read && (
                       <button

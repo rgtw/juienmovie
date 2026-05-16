@@ -5,7 +5,7 @@ import { getStorage } from '@/lib/db';
 
 export const runtime = 'nodejs';
 
-// GET: 獲取所有通知
+// GET: 获取所有通知
 export async function GET(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
   if (!authInfo || !authInfo.username) {
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
       unreadCount,
     });
   } catch (error) {
-    console.error('獲取通知失敗:', error);
+    console.error('获取通知失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST: 標記通知為已讀或刪除通知
+// POST: 标记通知为已读或删除通知
 export async function POST(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
   if (!authInfo || !authInfo.username) {
@@ -45,12 +45,12 @@ export async function POST(request: NextRequest) {
 
     if (action === 'mark_read' && notificationId) {
       await storage.markNotificationAsRead(authInfo.username, notificationId);
-      return NextResponse.json({ message: '已標記為已讀' });
+      return NextResponse.json({ message: '已标记为已读' });
     }
 
     if (action === 'delete' && notificationId) {
       await storage.deleteNotification(authInfo.username, notificationId);
-      return NextResponse.json({ message: '已刪除' });
+      return NextResponse.json({ message: '已删除' });
     }
 
     if (action === 'clear_all') {
@@ -58,9 +58,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: '已清空所有通知' });
     }
 
-    return NextResponse.json({ error: '無效的操作' }, { status: 400 });
+    return NextResponse.json({ error: '无效的操作' }, { status: 400 });
   } catch (error) {
-    console.error('操作通知失敗:', error);
+    console.error('操作通知失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }

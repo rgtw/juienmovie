@@ -142,7 +142,7 @@ export default function MangaRecommendPage() {
   );
 
   const recommendOptions = [
-    { label: '热门', value: 'POPULAR', icon: <Flame className='h-3.5 w-3.5' /> },
+    { label: '熱門', value: 'POPULAR', icon: <Flame className='h-3.5 w-3.5' /> },
     { label: '最新', value: 'LATEST', icon: <Sparkles className='h-3.5 w-3.5' /> },
   ];
 
@@ -182,7 +182,7 @@ export default function MangaRecommendPage() {
             <CapsuleSwitch options={sourceOptions} active={sourceId} onChange={setSourceId} className='max-w-full' />
           ) : (
             <div className='rounded-2xl bg-gray-100 px-4 py-3 text-sm text-gray-500 dark:bg-gray-900 dark:text-gray-400'>
-              暫無可用漫畫源
+              暂无可用漫画源
             </div>
           )}
         </div>
@@ -225,7 +225,7 @@ export default function MangaRecommendPage() {
                       item={item}
                       href={`/manga/detail?mangaId=${item.id}&sourceId=${item.sourceId}&title=${encodeURIComponent(item.title)}&cover=${encodeURIComponent(item.cover)}&sourceName=${encodeURIComponent(item.sourceName)}&description=${encodeURIComponent(item.description || '')}&author=${encodeURIComponent(item.author || '')}&status=${encodeURIComponent(item.status || '')}&returnTo=${encodeURIComponent('/manga')}`}
                       subtitle={item.author || item.status || item.description}
-                      badge={recommendType === 'POPULAR' ? '热门' : '最新'}
+                      badge={recommendType === 'POPULAR' ? '熱門' : '最新'}
                     />
                     <button
                       onClick={() => toggleShelf(item)}

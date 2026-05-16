@@ -34,7 +34,7 @@ function SourceSearchPageClient() {
   const [searchInputValue, setSearchInputValue] = useState<string>('');
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // 加載用戶可用的視頻源
+  // 加载用户可用的视频源
   useEffect(() => {
     const fetchApiSites = async () => {
       setIsLoadingSources(true);
@@ -43,7 +43,7 @@ function SourceSearchPageClient() {
         const data = await response.json();
         if (data.sources && Array.isArray(data.sources)) {
           setApiSites(data.sources);
-          // 默認選擇第一個源
+          // 默认选择第一个源
           if (data.sources.length > 0) {
             setSelectedSource(data.sources[0].key);
           }
@@ -58,7 +58,7 @@ function SourceSearchPageClient() {
     fetchApiSites();
   }, []);
 
-  // 當選擇的源變化時，加載分類列表
+  // 当选择的源变化时，加载分类列表
   useEffect(() => {
     if (!selectedSource) return;
 
@@ -76,7 +76,7 @@ function SourceSearchPageClient() {
         const data = await response.json();
         if (data.categories && Array.isArray(data.categories)) {
           setCategories(data.categories);
-          // 默認選擇第一個分類
+          // 默认选择第一个分类
           if (data.categories.length > 0) {
             setSelectedCategory(data.categories[0].id);
           }
@@ -91,7 +91,7 @@ function SourceSearchPageClient() {
     fetchCategories();
   }, [selectedSource]);
 
-  // 當選擇的分類或頁碼變化時，加載視頻列表（瀏覽模式）
+  // 当选择的分类或页码变化时，加载视频列表（浏览模式）
   useEffect(() => {
     if (viewMode !== 'browse' || !selectedSource || !selectedCategory) return;
 
@@ -120,7 +120,7 @@ function SourceSearchPageClient() {
     fetchVideos();
   }, [selectedSource, selectedCategory, currentPage, viewMode]);
 
-  // 當搜索關鍵詞或頁碼變化時，執行搜索（搜索模式）
+  // 当搜索关键词或页码变化时，执行搜索（搜索模式）
   useEffect(() => {
     if (viewMode !== 'search' || !selectedSource || !searchKeyword) return;
 
@@ -149,14 +149,14 @@ function SourceSearchPageClient() {
     searchVideos();
   }, [selectedSource, searchKeyword, currentPage, viewMode]);
 
-  // 當分類變化時，重置到第一頁
+  // 当分类变化时，重置到第一页
   useEffect(() => {
     setCurrentPage(1);
     setVideos([]);
     setHasMore(true);
   }, [selectedCategory]);
 
-  // 處理搜索提交
+  // 处理搜索提交
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchInputValue.trim()) {
@@ -168,7 +168,7 @@ function SourceSearchPageClient() {
     }
   };
 
-  // 切換回瀏覽模式
+  // 切换回浏览模式
   const handleBackToBrowse = () => {
     setViewMode('browse');
     setSearchKeyword('');
@@ -202,34 +202,34 @@ function SourceSearchPageClient() {
   return (
     <PageLayout activePath='/source-search'>
       <div className='px-4 sm:px-10 py-4 sm:py-8 overflow-visible mb-10'>
-        {/* 頁面標題 */}
+        {/* 页面标题 */}
         <div className='mb-6'>
           <h1 className='text-2xl font-bold text-gray-800 dark:text-gray-200'>
-            源站尋片
+            源站寻片
           </h1>
           <p className='text-sm text-gray-500 dark:text-gray-400 mt-1'>
-            根據可用視頻源瀏覽分類內容
+            根据可用视频源浏览分类内容
           </p>
         </div>
 
-        {/* 源選擇和分類選擇 */}
+        {/* 源选择和分类选择 */}
         <div className='max-w-4xl mx-auto mb-8 space-y-6'>
-          {/* 源選擇 CapsuleSwitch */}
+          {/* 源选择 CapsuleSwitch */}
           <div className='relative'>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3'>
-              選擇視頻源
+              选择视频源
             </label>
             {isLoadingSources ? (
               <div className='flex items-center justify-center h-12 bg-gray-50/80 rounded-lg border border-gray-200/50 dark:bg-gray-800 dark:border-gray-700'>
                 <Loader2 className='h-5 w-5 animate-spin text-gray-400' />
                 <span className='ml-2 text-sm text-gray-500 dark:text-gray-400'>
-                  加載視頻源中...
+                  加载视频源中...
                 </span>
               </div>
             ) : apiSites.length === 0 ? (
               <div className='flex items-center justify-center h-12 bg-gray-50/80 rounded-lg border border-gray-200/50 dark:bg-gray-800 dark:border-gray-700'>
                 <span className='text-sm text-gray-500 dark:text-gray-400'>
-                  暫無可用源
+                  暂无可用源
                 </span>
               </div>
             ) : (
@@ -272,38 +272,38 @@ function SourceSearchPageClient() {
             </div>
           )}
 
-          {/* 搜索結果提示和返回按鈕 */}
+          {/* 搜索结果提示和返回按钮 */}
           {viewMode === 'search' && searchKeyword && (
             <div className='flex items-center justify-between bg-blue-50/80 dark:bg-blue-900/20 border border-blue-200/50 dark:border-blue-800/50 rounded-lg px-4 py-3'>
               <span className='text-sm text-gray-700 dark:text-gray-300'>
-                搜索結果: <span className='font-medium'>{searchKeyword}</span>
+                搜索结果: <span className='font-medium'>{searchKeyword}</span>
               </span>
               <button
                 onClick={handleBackToBrowse}
                 className='text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium'
               >
-                返回分類瀏覽
+                返回分类浏览
               </button>
             </div>
           )}
 
-          {/* 分類選擇 CapsuleSwitch */}
+          {/* 分类选择 CapsuleSwitch */}
           {selectedSource && viewMode === 'browse' && (
             <div className='relative'>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3'>
-                選擇分類
+                选择分类
               </label>
               {isLoadingCategories ? (
                 <div className='flex items-center justify-center h-12 bg-gray-50/80 rounded-lg border border-gray-200/50 dark:bg-gray-800 dark:border-gray-700'>
                   <Loader2 className='h-5 w-5 animate-spin text-gray-400' />
                   <span className='ml-2 text-sm text-gray-500 dark:text-gray-400'>
-                    加載分類中...
+                    加载分类中...
                   </span>
                 </div>
               ) : categories.length === 0 ? (
                 <div className='flex items-center justify-center h-12 bg-gray-50/80 rounded-lg border border-gray-200/50 dark:bg-gray-800 dark:border-gray-700'>
                   <span className='text-sm text-gray-500 dark:text-gray-400'>
-                    暫無分類
+                    暂无分类
                   </span>
                 </div>
               ) : (
@@ -322,12 +322,12 @@ function SourceSearchPageClient() {
           )}
         </div>
 
-        {/* 視頻列表 */}
+        {/* 视频列表 */}
         {selectedSource && (viewMode === 'search' ? searchKeyword : selectedCategory) && (
           <div className='max-w-[95%] mx-auto mt-8'>
             <div className='mb-4'>
               <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                視頻列表
+                视频列表
               </h2>
             </div>
 
@@ -337,7 +337,7 @@ function SourceSearchPageClient() {
               </div>
             ) : videos.length === 0 ? (
               <div className='text-center text-gray-500 py-8 dark:text-gray-400'>
-                暫無視頻
+                暂无视频
               </div>
             ) : (
               <>
@@ -375,7 +375,7 @@ function SourceSearchPageClient() {
                   )}
                   {!hasMore && videos.length > 0 && (
                     <span className='text-sm text-gray-500 dark:text-gray-400'>
-                      沒有更多了
+                      没有更多了
                     </span>
                   )}
                 </div>

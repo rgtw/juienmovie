@@ -18,7 +18,7 @@ export default function Toast({ message, type = 'info', duration = 3000, onClose
       setIsVisible(false);
       setTimeout(() => {
         onClose?.();
-      }, 300); // 等待動畫完成
+      }, 300); // 等待动画完成
     }, duration);
 
     return () => clearTimeout(timer);

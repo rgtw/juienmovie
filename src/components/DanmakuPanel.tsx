@@ -33,7 +33,7 @@ export default function DanmakuPanel({
   const [isSearching, setIsSearching] = useState(false);
   const [isLoadingEpisodes, setIsLoadingEpisodes] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const initializedRef = useRef(false); // 標記是否已初始化過
+  const initializedRef = useRef(false); // 标记是否已初始化过
   const fileInputRef = useRef<HTMLInputElement>(null);
   const episodeGroupContainerRef = useRef<HTMLDivElement>(null);
   const episodeGroupButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -43,7 +43,7 @@ export default function DanmakuPanel({
   const [isEpisodeGroupHovered, setIsEpisodeGroupHovered] = useState(false);
   const episodesPerGroup = 50;
 
-  // 搜索彈幕
+  // 搜索弹幕
   const handleSearch = useCallback(async (keyword: string) => {
     if (!keyword.trim()) {
       setSearchError('請輸入搜索關鍵詞');
@@ -74,7 +74,7 @@ export default function DanmakuPanel({
     }
   }, []);
 
-  // 選擇動漫，加載劇集列表
+  // 选择动漫，加载剧集列表
   const handleAnimeSelect = useCallback(async (anime: DanmakuAnime) => {
     setSelectedAnime(anime);
     setIsLoadingEpisodes(true);
@@ -97,7 +97,7 @@ export default function DanmakuPanel({
     }
   }, []);
 
-  // 選擇劇集
+  // 选择剧集
   const handleEpisodeSelect = useCallback(
     (episode: DanmakuEpisode) => {
       if (!selectedAnime) return;
@@ -107,7 +107,7 @@ export default function DanmakuPanel({
         episodeId: episode.episodeId,
         animeTitle: selectedAnime.animeTitle,
         episodeTitle: episode.episodeTitle,
-        searchKeyword: searchKeyword.trim() || undefined, // 使用當前搜索框的關鍵詞
+        searchKeyword: searchKeyword.trim() || undefined, // 使用当前搜索框的关键词
       };
 
       onDanmakuSelect(selection);
@@ -115,14 +115,14 @@ export default function DanmakuPanel({
     [selectedAnime, searchKeyword, onDanmakuSelect]
   );
 
-  // 回到搜索結果
+  // 回到搜索结果
   const handleBackToResults = useCallback(() => {
     setSelectedAnime(null);
     setEpisodes([]);
     setEpisodeGroupIndex(0);
   }, []);
 
-  // 判斷當前劇集是否已選中
+  // 判断当前剧集是否已选中
   const isEpisodeSelected = useCallback(
     (episodeId: number) => {
       return currentSelection?.episodeId === episodeId;
@@ -130,7 +130,7 @@ export default function DanmakuPanel({
     [currentSelection]
   );
 
-  // 處理文件上傳
+  // 处理文件上传
   const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -162,11 +162,11 @@ export default function DanmakuPanel({
     }
   }, [onUploadDanmaku]);
 
-  // 當視頻標題首次加載時，初始化搜索關鍵詞（僅執行一次）
+  // 当视频标题首次加载时，初始化搜索关键词（仅执行一次）
   useEffect(() => {
     if (videoTitle && !initializedRef.current) {
       setSearchKeyword(videoTitle);
-      initializedRef.current = true; // 標記已初始化，防止後續自動填充
+      initializedRef.current = true; // 标记已初始化，防止后续自动填充
     }
   }, [videoTitle]);
 
@@ -225,7 +225,7 @@ export default function DanmakuPanel({
       return `S${season}E${episode}`;
     }
 
-    const match = episodeTitle.match(/(?:第)?(\d+(?:\.\d+)?)(?:集|話)/);
+    const match = episodeTitle.match(/(?:第)?(\d+(?:\.\d+)?)(?:集|话)/);
     if (match) {
       return match[1];
     }
@@ -291,7 +291,7 @@ export default function DanmakuPanel({
 
   return (
     <div className='flex h-full flex-col overflow-hidden'>
-      {/* 搜索區域 - 固定在頂部 */}
+      {/* 搜索区域 - 固定在顶部 */}
       <div className='mb-4 flex-shrink-0'>
         <div className='flex flex-wrap gap-2'>
           <input
@@ -337,7 +337,7 @@ export default function DanmakuPanel({
           </button>
         </div>
 
-        {/* 錯誤提示 */}
+        {/* 错误提示 */}
         {searchError && (
           <div
             className='mt-3 rounded-lg border border-red-500/30 bg-red-500/10
@@ -348,16 +348,16 @@ export default function DanmakuPanel({
         )}
       </div>
 
-      {/* 可滾動內容區域 */}
+      {/* 可滚动内容区域 */}
       <div className='flex-1 overflow-y-auto min-h-0'>
-        {/* 當前選擇的彈幕信息 */}
+        {/* 当前选择的弹幕信息 */}
         {currentSelection && (
           <div
             className='mb-4 rounded-lg border border-green-500/30 bg-green-500/10
                         px-3 py-2 text-sm'
           >
             <p className='font-semibold text-green-600 dark:text-green-400'>
-              當前彈幕
+              当前弹幕
             </p>
             <p className='mt-1 text-gray-700 dark:text-gray-300'>
               {currentSelection.animeTitle}
@@ -367,33 +367,33 @@ export default function DanmakuPanel({
             </p>
             {currentSelection.danmakuCount !== undefined && (
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-500'>
-                彈幕數量: {currentSelection.danmakuCount}
+                弹幕数量: {currentSelection.danmakuCount}
                 {currentSelection.danmakuOriginalCount && ` (原始 ${currentSelection.danmakuOriginalCount} 條)`}
               </p>
             )}
           </div>
         )}
 
-        {/* 內容區域 */}
+        {/* 内容区域 */}
         <div>
-        {/* 顯示劇集列表 */}
+        {/* 显示剧集列表 */}
         {selectedAnime && (
           <div className='space-y-2'>
-            {/* 返回按鈕 */}
+            {/* 返回按钮 */}
             <button
               onClick={handleBackToResults}
               className='mb-2 text-sm text-green-600 hover:underline
                        dark:text-green-400'
             >
-              ← 返回搜索結果
+              ← 返回搜索结果
             </button>
 
-            {/* 動漫標題 */}
+            {/* 动漫标题 */}
             <h3 className='mb-3 text-base font-semibold text-gray-800 dark:text-white'>
               {selectedAnime.animeTitle}
             </h3>
 
-            {/* 加載中 */}
+            {/* 加载中 */}
             {isLoadingEpisodes && (
               <div className='flex items-center justify-center py-8'>
                 <div
@@ -403,7 +403,7 @@ export default function DanmakuPanel({
               </div>
             )}
 
-            {/* 劇集列表 */}
+            {/* 剧集列表 */}
             {!isLoadingEpisodes && episodes.length > 0 && (
               <div className='pb-4'>
                 <div className='mb-4 border-b border-gray-300 dark:border-gray-700'>
@@ -563,13 +563,13 @@ export default function DanmakuPanel({
 
             {!isLoadingEpisodes && episodes.length === 0 && (
               <div className='py-8 text-center text-sm text-gray-500'>
-                暫無劇集信息
+                暂无剧集信息
               </div>
             )}
           </div>
         )}
 
-        {/* 顯示搜索結果 */}
+        {/* 显示搜索结果 */}
         {!selectedAnime && searchResults.length > 0 && (
           <div className='space-y-2 pb-4'>
             {searchResults.map((anime) => (
@@ -600,7 +600,7 @@ export default function DanmakuPanel({
                     <p className='truncate font-semibold text-gray-800 dark:text-white peer'>
                       {anime.animeTitle}
                     </p>
-                    {/* 自定義 tooltip */}
+                    {/* 自定义 tooltip */}
                     <div
                       className='absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-xs rounded-md shadow-lg opacity-0 invisible peer-hover:opacity-100 peer-hover:visible transition-all duration-200 ease-out delay-100 whitespace-nowrap pointer-events-none z-[100]'
                     >
@@ -623,18 +623,18 @@ export default function DanmakuPanel({
           </div>
         )}
 
-        {/* 空狀態 */}
+        {/* 空状态 */}
         {!selectedAnime && searchResults.length === 0 && !isSearching && (
           <div className='flex flex-col items-center justify-center py-12 text-center'>
             <MagnifyingGlassIcon className='mb-3 h-12 w-12 text-gray-400' />
             <p className='text-sm text-gray-500 dark:text-gray-400'>
-              輸入劇集名稱搜索彈幕
+              输入剧集名称搜索弹幕
             </p>
           </div>
         )}
         </div>
 
-        {/* 上傳彈幕區域 - 移動端：在滾動容器內 */}
+        {/* 上传弹幕区域 - 移动端：在滚动容器内 */}
         {onUploadDanmaku && (
           <div className='mt-3 border-t border-gray-200 pt-3 dark:border-gray-700 md:hidden'>
             <input
@@ -648,20 +648,20 @@ export default function DanmakuPanel({
               onClick={() => fileInputRef.current?.click()}
               className='w-full text-center text-xs text-gray-500 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors py-2'
             >
-              搜不到想要的彈幕？自行上傳
+              搜不到想要的弹幕？自行上传
             </button>
           </div>
         )}
       </div>
 
-      {/* 上傳彈幕區域 - PC端：固定在底部 */}
+      {/* 上传弹幕区域 - PC端：固定在底部 */}
       {onUploadDanmaku && (
         <div className='mt-3 flex-shrink-0 border-t border-gray-200 pt-3 dark:border-gray-700 hidden md:block'>
           <button
             onClick={() => fileInputRef.current?.click()}
             className='w-full text-center text-xs text-gray-500 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors py-2'
           >
-            搜不到想要的彈幕？自行上傳
+            搜不到想要的弹幕？自行上传
           </button>
         </div>
       )}

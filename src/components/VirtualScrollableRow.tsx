@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 
 interface VirtualScrollableRowProps {
   children: React.ReactNode[];
-  maxVisible?: number; // 最大可見數量
-  className?: string; // 額外的 CSS 類名
+  maxVisible?: number; // 最大可见数量
+  className?: string; // 额外的 CSS 类名
 }
 
 export default function VirtualScrollableRow({
   children,
-  maxVisible = 30, // 默認最多顯示 30 個項目
+  maxVisible = 30, // 默认最多显示 30 个项目
   className = '',
 }: VirtualScrollableRowProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -19,7 +19,7 @@ export default function VirtualScrollableRow({
   const [showRightScroll, setShowRightScroll] = useState(false);
   const [visibleRange, setVisibleRange] = useState({ start: 0, end: maxVisible });
 
-  // 檢查滾動狀態
+  // 检查滚动状态
   const checkScroll = () => {
     if (!containerRef.current) return;
 
@@ -30,12 +30,12 @@ export default function VirtualScrollableRow({
     setShowLeftScroll(canScrollLeft);
     setShowRightScroll(canScrollRight);
 
-    // 計算可見範圍（基於滾動位置）
-    const itemWidth = 208; // 每個項目約 200px + 8px gap
+    // 计算可见范围（基于滚动位置）
+    const itemWidth = 208; // 每个项目约 200px + 8px gap
     const scrolledItems = Math.floor(scrollLeft / itemWidth);
     const visibleItems = Math.ceil(clientWidth / itemWidth);
 
-    // 擴展渲染範圍（當前可見 + 前後緩衝）
+    // 扩展渲染范围（当前可见 + 前后缓冲）
     const bufferSize = 5;
     const newStart = Math.max(0, scrolledItems - bufferSize);
     const newEnd = Math.min(children.length, scrolledItems + visibleItems + bufferSize);
@@ -53,7 +53,7 @@ export default function VirtualScrollableRow({
     }
   }, [children.length]);
 
-  // 監聽窗口大小變化
+  // 监听窗口大小变化
   useEffect(() => {
     window.addEventListener('resize', checkScroll);
     return () => window.removeEventListener('resize', checkScroll);
@@ -77,12 +77,12 @@ export default function VirtualScrollableRow({
     }
   };
 
-  // 渲染可見項目
+  // 渲染可见项目
   const visibleChildren = children.slice(visibleRange.start, visibleRange.end);
 
   return (
     <div className="relative group">
-      {/* 左側滾動按鈕 */}
+      {/* 左侧滚动按钮 */}
       {showLeftScroll && (
         <button
           onClick={scrollLeft}
@@ -93,27 +93,27 @@ export default function VirtualScrollableRow({
         </button>
       )}
 
-      {/* 滾動容器 */}
+      {/* 滚动容器 */}
       <div
         ref={containerRef}
         className={`flex gap-2 overflow-x-auto scrollbar-hide scroll-smooth ${className}`}
         style={{ scrollBehavior: 'smooth', paddingTop: '20px', paddingBottom: '20px', marginTop: '-20px', marginBottom: '-20px' }}
       >
-        {/* 左側佔位符（用於保持滾動位置） */}
+        {/* 左侧占位符（用于保持滚动位置） */}
         {visibleRange.start > 0 && (
           <div style={{ minWidth: visibleRange.start * 208, flexShrink: 0 }} />
         )}
 
-        {/* 渲染可見項目 */}
+        {/* 渲染可见项目 */}
         {visibleChildren}
 
-        {/* 右側佔位符 */}
+        {/* 右侧占位符 */}
         {visibleRange.end < children.length && (
           <div style={{ minWidth: (children.length - visibleRange.end) * 208, flexShrink: 0 }} />
         )}
       </div>
 
-      {/* 右側滾動按鈕 */}
+      {/* 右侧滚动按钮 */}
       {showRightScroll && (
         <button
           onClick={scrollRight}

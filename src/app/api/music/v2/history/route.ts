@@ -25,12 +25,12 @@ export async function GET(request: NextRequest) {
   if (!username) return unauthorized();
 
   try {
-    // 注意：records 按“播放隊列順序”返回（createdAt ASC），
-    // 前端再基於 lastPlayedAt 定位當前播放項。
+    // 注意：records 按“播放队列顺序”返回（createdAt ASC），
+    // 前端再基于 lastPlayedAt 定位当前播放项。
     const records = await db.listMusicV2History(username);
     return NextResponse.json({ success: true, data: { records } });
   } catch (error) {
-    return internalError('獲取播放歷史失敗', (error as Error).message);
+    return internalError('获取播放历史失败', (error as Error).message);
   }
 }
 
@@ -53,13 +53,13 @@ export async function POST(request: NextRequest) {
 
     const record = toHistoryRecord(body.record || body, existingMap.get(body.song?.songId || body.songId));
     if (!record.songId || !record.source || !record.name || !record.artist) {
-      return badRequest('歷史記錄數據不完整');
+      return badRequest('历史记录数据不完整');
     }
 
     await db.upsertMusicV2History(username, record);
     return NextResponse.json({ success: true, data: { record } });
   } catch (error) {
-    return internalError('保存播放歷史失敗', (error as Error).message);
+    return internalError('保存播放历史失败', (error as Error).message);
   }
 }
 
@@ -77,6 +77,6 @@ export async function DELETE(request: NextRequest) {
     }
     return NextResponse.json({ success: true });
   } catch (error) {
-    return internalError('刪除播放歷史失敗', (error as Error).message);
+    return internalError('删除播放历史失败', (error as Error).message);
   }
 }

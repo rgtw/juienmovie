@@ -7,14 +7,14 @@ import { getConfig } from '@/lib/config';
 import { getThemeCSS } from '@/styles/themes';
 
 export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic'; // 禁用緩存
+export const dynamic = 'force-dynamic'; // 禁用缓存
 
 export async function GET(request: NextRequest) {
   try {
     const adminConfig = await getConfig();
     const themeConfig = adminConfig.ThemeConfig;
 
-    // 如果沒有配置主題，返回空CSS
+    // 如果没有配置主题，返回空CSS
     if (!themeConfig) {
       return new NextResponse('', {
         headers: {
@@ -26,26 +26,26 @@ export async function GET(request: NextRequest) {
 
     let css = '';
 
-    // 如果啟用了內置主題，使用內置主題CSS
+    // 如果启用了内置主题，使用内置主题CSS
     if (themeConfig.enableBuiltInTheme) {
       css = getThemeCSS(themeConfig.builtInTheme as any);
     } else {
-      // 否則使用自定義CSS
+      // 否则使用自定义CSS
       css = themeConfig.customCSS || '';
     }
 
-    // 設置緩存控制
-    const cacheMinutes = themeConfig.cacheMinutes || 1440; // 默認1天（1440分鐘）
-    const maxAge = cacheMinutes * 60; // 轉換為秒
-    const staleWhileRevalidate = maxAge * 7; // 過期後7倍時間內可使用舊版本
+    // 设置缓存控制
+    const cacheMinutes = themeConfig.cacheMinutes || 1440; // 默认1天（1440分钟）
+    const maxAge = cacheMinutes * 60; // 转换为秒
+    const staleWhileRevalidate = maxAge * 7; // 过期后7倍时间内可使用旧版本
     const cacheControl = themeConfig.enableCache
       ? `public, max-age=${maxAge}, stale-while-revalidate=${staleWhileRevalidate}`
       : 'no-store';
 
-    // 添加版本號到ETag
+    // 添加版本号到ETag
     const etag = `"${themeConfig.cacheVersion}"`;
 
-    // 檢查客戶端緩存
+    // 检查客户端缓存
     const ifNoneMatch = request.headers.get('if-none-match');
     if (ifNoneMatch === etag && themeConfig.enableCache) {
       return new NextResponse(null, {
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('獲取主題CSS失敗:', error);
+    console.error('获取主题CSS失败:', error);
     return new NextResponse('', {
       headers: {
         'Content-Type': 'text/css',

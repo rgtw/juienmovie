@@ -93,8 +93,8 @@ function formatNetdiskEpisodeTitle(parsed: {
 }
 
 /**
- * 根據 source 和 id 直接獲取視頻詳情
- * 這個API專門用於play頁面快速獲取當前源的詳情
+ * 根据 source 和 id 直接获取视频详情
+ * 这个API专门用于play页面快速获取当前源的详情
  */
 export async function GET(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
@@ -105,11 +105,11 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
   const sourceCode = normalizeNetdiskSource(searchParams.get('source'));
-  const fileName = searchParams.get('fileName'); // 小雅源：用戶點擊的文件名
+  const fileName = searchParams.get('fileName'); // 小雅源：用户点击的文件名
   const title = searchParams.get('title');
 
   if (!id || !sourceCode) {
-    return NextResponse.json({ error: '缺少必要參數' }, { status: 400 });
+    return NextResponse.json({ error: '缺少必要参数' }, { status: 400 });
   }
 
   const parsedScriptSource = parseScriptSourceValue(sourceCode);
@@ -155,14 +155,14 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // 特殊處理 emby 源（支持多源）
+  // 特殊处理 emby 源（支持多源）
   if (sourceCode === 'emby' || sourceCode.startsWith('emby_')) {
     try {
       const config = await getConfig();
 
-      // 檢查是否有啟用的 Emby 源
+      // 检查是否有启用的 Emby 源
       if (!config.EmbyConfig?.Sources || config.EmbyConfig.Sources.length === 0) {
-        throw new Error('Emby 未配置或未啟用');
+        throw new Error('Emby 未配置或未启用');
       }
 
       // 解析 embyKey
@@ -171,7 +171,7 @@ export async function GET(request: NextRequest) {
         embyKey = sourceCode.substring(5); // 'emby_'.length = 5
       }
 
-      // 使用 EmbyManager 獲取客戶端和配置
+      // 使用 EmbyManager 获取客户端和配置
       const { embyManager } = await import('@/lib/emby-manager');
       const sources = await embyManager.getEnabledSources();
       const sourceConfig = sources.find(s => s.key === embyKey);
@@ -179,19 +179,19 @@ export async function GET(request: NextRequest) {
 
       const client = await embyManager.getClient(embyKey);
 
-      // 獲取代理 token（如果啟用了代理）
+      // 获取代理 token（如果启用了代理）
       const proxyToken = client.isProxyEnabled() ? await getProxyToken(request) : null;
 
-      // 獲取媒體詳情
+      // 获取媒体详情
       const item = await client.getItem(id);
 
-      // 根據類型處理
+      // 根据类型处理
       if (item.Type === 'Movie') {
-        // 電影
+        // 电影
         const subtitles = client.getSubtitles(item);
 
         const result = {
-          source: sourceCode, // 保持與請求一致（emby 或 emby_key）
+          source: sourceCode, // 保持与请求一致（emby 或 emby_key）
           source_name: sourceName,
           id: item.Id,
           title: item.Name,
@@ -207,7 +207,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json(result);
       } else if (item.Type === 'Series') {
-        // 劇集 - 獲取所有季和集
+        // 剧集 - 获取所有季和集
         const seasons = await client.getSeasons(item.Id);
         const allEpisodes: any[] = [];
 
@@ -225,7 +225,7 @@ export async function GET(request: NextRequest) {
         });
 
         const result = {
-          source: sourceCode, // 保持與請求一致（emby 或 emby_key）
+          source: sourceCode, // 保持与请求一致（emby 或 emby_key）
           source_name: sourceName,
           id: item.Id,
           title: item.Name,
@@ -245,7 +245,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json(result);
       } else {
-        throw new Error('不支持的媒體類型');
+        throw new Error('不支持的媒体类型');
       }
     } catch (error) {
       return NextResponse.json(
@@ -255,7 +255,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // 特殊處理 xiaoya 源
+  // 特殊处理 xiaoya 源
   if (sourceCode === 'xiaoya') {
     try {
       const config = await getConfig();
@@ -266,7 +266,7 @@ export async function GET(request: NextRequest) {
         !xiaoyaConfig.Enabled ||
         !xiaoyaConfig.ServerURL
       ) {
-        throw new Error('小雅未配置或未啟用');
+        throw new Error('小雅未配置或未启用');
       }
 
       const { XiaoyaClient } = await import('@/lib/xiaoya.client');
@@ -280,30 +280,30 @@ export async function GET(request: NextRequest) {
         xiaoyaConfig.Token
       );
 
-      // 對id進行base58解碼得到目錄路徑
+      // 对id进行base58解码得到目录路径
       let decodedDirPath: string;
       try {
         decodedDirPath = base58Decode(id);
-        console.log('[xiaoya] 解碼目錄路徑:', decodedDirPath);
+        console.log('[xiaoya] 解码目录路径:', decodedDirPath);
       } catch (decodeError) {
-        console.error('[xiaoya] Base58解碼失敗:', decodeError);
-        throw new Error('無效的視頻ID');
+        console.error('[xiaoya] Base58解码失败:', decodeError);
+        throw new Error('无效的视频ID');
       }
 
-      // 驗證解碼後的路徑
+      // 验证解码后的路径
       if (!decodedDirPath || decodedDirPath.trim() === '') {
-        throw new Error('解碼後的路徑為空');
+        throw new Error('解码后的路径为空');
       }
 
-      // 如果有fileName參數，拼接完整文件路徑
+      // 如果有fileName参数，拼接完整文件路径
       let clickedFilePath: string | undefined;
       if (fileName) {
-        // 拼接目錄路徑和文件名
+        // 拼接目录路径和文件名
         clickedFilePath = `${decodedDirPath}${decodedDirPath.endsWith('/') ? '' : '/'}${fileName}`;
-        console.log('[xiaoya] 用戶點擊的文件路徑:', clickedFilePath);
+        console.log('[xiaoya] 用户点击的文件路径:', clickedFilePath);
       }
 
-      // 獲取元數據（使用目錄路徑或點擊的文件路徑）
+      // 获取元数据（使用目录路径或点击的文件路径）
       const metadataPath = clickedFilePath || decodedDirPath;
       const metadata = await getXiaoyaMetadata(
         client,
@@ -313,20 +313,20 @@ export async function GET(request: NextRequest) {
         config.SiteConfig.TMDBReverseProxy
       );
 
-      // 獲取集數列表（使用目錄路徑或點擊的文件路徑）
+      // 获取集数列表（使用目录路径或点击的文件路径）
       const episodes = await getXiaoyaEpisodes(client, metadataPath);
 
-      // 如果有點擊的文件路徑，找到對應的集數索引
+      // 如果有点击的文件路径，找到对应的集数索引
       let clickedFileIndex = -1;
       if (clickedFilePath) {
         clickedFileIndex = episodes.findIndex(ep => ep.path === clickedFilePath);
-        console.log('[xiaoya] 文件在集數列表中的索引:', clickedFileIndex);
+        console.log('[xiaoya] 文件在集数列表中的索引:', clickedFileIndex);
       }
 
       const result = {
         source: 'xiaoya',
         source_name: '小雅',
-        id: id, // 保持編碼後的目錄id
+        id: id, // 保持编码后的目录id
         title: metadata.title,
         poster: metadata.poster || '',
         year: metadata.year || '',
@@ -336,15 +336,15 @@ export async function GET(request: NextRequest) {
         episodes_titles: episodes.map(ep => ep.title),
         subtitles: [],
         proxyMode: false,
-        // 返回用戶點擊的文件索引（如果找到的話）
+        // 返回用户点击的文件索引（如果找到的话）
         initialEpisodeIndex: clickedFileIndex >= 0 ? clickedFileIndex : undefined,
-        // 返回元數據來源
+        // 返回元数据来源
         metadataSource: metadata.source,
       };
 
       return NextResponse.json(result);
     } catch (error) {
-      console.error('[xiaoya] 獲取詳情失敗:', error);
+      console.error('[xiaoya] 获取详情失败:', error);
       return NextResponse.json(
         { error: (error as Error).message },
         { status: 500 }
@@ -357,7 +357,7 @@ export async function GET(request: NextRequest) {
       const config = await getConfig();
       const mobileConfig = config.NetDiskConfig?.Mobile;
       if (!mobileConfig?.Enabled || !mobileConfig.Authorization) {
-        throw new Error('移動雲盤未配置或未啟用');
+        throw new Error('移动云盘未配置或未启用');
       }
 
       let session = refreshMobileNetdiskSession(id) || getMobileNetdiskSession(id);
@@ -373,7 +373,7 @@ export async function GET(request: NextRequest) {
         });
       }
       if (!session) {
-        throw new Error('移動雲盤播放信息恢復失敗');
+        throw new Error('移动云盘播放信息恢复失败');
       }
       const mobileSession = session;
       const { parseVideoFileName } = await import('@/lib/video-parser');
@@ -403,13 +403,13 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         source: NETDISK_MOBILE_SOURCE,
-        source_name: '移動雲盤',
+        source_name: '移动云盘',
         id: mobileSession.id,
         title: title || mobileSession.title,
         poster: '',
         year: '',
         douban_id: 0,
-        desc: `移動雲盤分享：${mobileSession.shareUrl}`,
+        desc: `移动云盘分享：${mobileSession.shareUrl}`,
         episodes,
         episodes_titles: parsedFiles.map((file) => file.displayTitle),
         proxyMode: false,
@@ -427,7 +427,7 @@ export async function GET(request: NextRequest) {
       const config = await getConfig();
       const baiduConfig = config.NetDiskConfig?.Baidu;
       if (!baiduConfig?.Enabled || !baiduConfig.Cookie) {
-        throw new Error('百度網盤未配置或未啟用');
+        throw new Error('百度网盘未配置或未启用');
       }
 
       let session = refreshBaiduNetdiskSession(id) || getBaiduNetdiskSession(id);
@@ -445,7 +445,7 @@ export async function GET(request: NextRequest) {
         });
       }
       if (!session) {
-        throw new Error('百度網盤播放信息恢復失敗');
+        throw new Error('百度网盘播放信息恢复失败');
       }
       const baiduSession = session;
       const { parseVideoFileName } = await import('@/lib/video-parser');
@@ -470,13 +470,13 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         source: NETDISK_BAIDU_SOURCE,
-        source_name: '百度網盤',
+        source_name: '百度网盘',
         id: baiduSession.id,
         title: title || baiduSession.title,
         poster: '',
         year: '',
         douban_id: 0,
-        desc: `百度網盤分享：${baiduSession.shareUrl}`,
+        desc: `百度网盘分享：${baiduSession.shareUrl}`,
         episodes: parsedFiles.map((file) => (
           `/api/netdisk/baidu/play?id=${encodeURIComponent(baiduSession.id)}&episodeIndex=${file.originalIndex}`
         )),
@@ -496,7 +496,7 @@ export async function GET(request: NextRequest) {
       const config = await getConfig();
       const tianyiConfig = config.NetDiskConfig?.Tianyi;
       if (!tianyiConfig?.Enabled || !tianyiConfig.Account || !tianyiConfig.Password) {
-        throw new Error('天翼雲盤未配置或未啟用');
+        throw new Error('天翼云盘未配置或未启用');
       }
 
       let session = refreshTianyiNetdiskSession(id) || getTianyiNetdiskSession(id);
@@ -521,7 +521,7 @@ export async function GET(request: NextRequest) {
         });
       }
       if (!session) {
-        throw new Error('天翼雲盤播放信息恢復失敗');
+        throw new Error('天翼云盘播放信息恢复失败');
       }
 
       const tianyiSession = session;
@@ -547,13 +547,13 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         source: NETDISK_TIANYI_SOURCE,
-        source_name: '天翼雲盤',
+        source_name: '天翼云盘',
         id: tianyiSession.id,
         title: title || tianyiSession.title,
         poster: '',
         year: '',
         douban_id: 0,
-        desc: `天翼雲盤分享：${tianyiSession.shareUrl}`,
+        desc: `天翼云盘分享：${tianyiSession.shareUrl}`,
         episodes: parsedFiles.map((file) => (
           `/api/netdisk/tianyi/play?id=${encodeURIComponent(tianyiSession.id)}&episodeIndex=${file.originalIndex}`
         )),
@@ -573,7 +573,7 @@ export async function GET(request: NextRequest) {
       const config = await getConfig();
       const pan123Config = config.NetDiskConfig?.Pan123;
       if (!pan123Config?.Enabled || !pan123Config.Account || !pan123Config.Password) {
-        throw new Error('123網盤未配置或未啟用');
+        throw new Error('123网盘未配置或未启用');
       }
 
       let session = refreshPan123NetdiskSession(id) || getPan123NetdiskSession(id);
@@ -589,7 +589,7 @@ export async function GET(request: NextRequest) {
         });
       }
       if (!session) {
-        throw new Error('123網盤播放信息恢復失敗');
+        throw new Error('123网盘播放信息恢复失败');
       }
 
       const pan123Session = session;
@@ -615,13 +615,13 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         source: NETDISK_123_SOURCE,
-        source_name: '123網盤',
+        source_name: '123网盘',
         id: pan123Session.id,
         title: title || pan123Session.title,
         poster: '',
         year: '',
         douban_id: 0,
-        desc: `123網盤分享：${pan123Session.shareUrl}`,
+        desc: `123网盘分享：${pan123Session.shareUrl}`,
         episodes: parsedFiles.map((file) => (
           `/api/netdisk/123/play?id=${encodeURIComponent(pan123Session.id)}&episodeIndex=${file.originalIndex}`
         )),
@@ -642,7 +642,7 @@ export async function GET(request: NextRequest) {
       const config = await getConfig();
       const pan115Config = config.NetDiskConfig?.Pan115;
       if (!pan115Config?.Enabled || !pan115Config.Cookie) {
-        throw new Error('115網盤未配置或未啟用');
+        throw new Error('115网盘未配置或未启用');
       }
 
       let session = refreshPan115NetdiskSession(id) || getPan115NetdiskSession(id);
@@ -658,7 +658,7 @@ export async function GET(request: NextRequest) {
         });
       }
       if (!session) {
-        throw new Error('115網盤播放信息恢復失敗');
+        throw new Error('115网盘播放信息恢复失败');
       }
 
       const pan115Session = session;
@@ -684,13 +684,13 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         source: NETDISK_115_SOURCE,
-        source_name: '115網盤',
+        source_name: '115网盘',
         id: pan115Session.id,
         title: title || pan115Session.title,
         poster: '',
         year: '',
         douban_id: 0,
-        desc: `115網盤分享：${pan115Session.shareUrl}`,
+        desc: `115网盘分享：${pan115Session.shareUrl}`,
         episodes: parsedFiles.map((file) => (
           `/api/netdisk/115/play?id=${encodeURIComponent(pan115Session.id)}&episodeIndex=${file.originalIndex}`
         )),
@@ -710,7 +710,7 @@ export async function GET(request: NextRequest) {
       const config = await getConfig();
       const quarkConfig = config.NetDiskConfig?.Quark;
       if (!quarkConfig?.Enabled || !quarkConfig.Cookie) {
-        throw new Error('夸克網盤未配置或未啟用');
+        throw new Error('夸克网盘未配置或未启用');
       }
       const { parseVideoFileName } = await import('@/lib/video-parser');
 
@@ -729,7 +729,7 @@ export async function GET(request: NextRequest) {
         });
       }
       if (!session) {
-        throw new Error('夸克網盤播放信息恢復失敗');
+        throw new Error('夸克网盘播放信息恢复失败');
       }
 
       const quarkSession = session;
@@ -754,13 +754,13 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         source: NETDISK_QUARK_SOURCE,
-        source_name: '夸克網盤',
+        source_name: '夸克网盘',
         id: quarkSession.id,
         title: title || quarkSession.title,
         poster: '',
         year: '',
         douban_id: 0,
-        desc: `夸克網盤分享：${quarkSession.shareUrl}`,
+        desc: `夸克网盘分享：${quarkSession.shareUrl}`,
         episodes: episodes.map((ep) => (
           `/api/netdisk/quark/play?id=${encodeURIComponent(quarkSession.id)}&episodeIndex=${ep.originalIndex}`
         )),
@@ -780,7 +780,7 @@ export async function GET(request: NextRequest) {
       const config = await getConfig();
       const ucConfig = config.NetDiskConfig?.UC;
       if (!ucConfig?.Enabled || !ucConfig.Cookie) {
-        throw new Error('UC網盤未配置或未啟用');
+        throw new Error('UC网盘未配置或未启用');
       }
       const { parseVideoFileName } = await import('@/lib/video-parser');
 
@@ -799,7 +799,7 @@ export async function GET(request: NextRequest) {
         });
       }
       if (!session) {
-        throw new Error('UC網盤播放信息恢復失敗');
+        throw new Error('UC网盘播放信息恢复失败');
       }
 
       const ucSession = session;
@@ -824,13 +824,13 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         source: NETDISK_UC_SOURCE,
-        source_name: 'UC網盤',
+        source_name: 'UC网盘',
         id: ucSession.id,
         title: title || ucSession.title,
         poster: '',
         year: '',
         douban_id: 0,
-        desc: `UC網盤分享：${ucSession.shareUrl}`,
+        desc: `UC网盘分享：${ucSession.shareUrl}`,
         episodes: episodes.map((ep) => (
           `/api/netdisk/uc/play?id=${encodeURIComponent(ucSession.id)}&episodeIndex=${ep.originalIndex}`
         )),
@@ -845,7 +845,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // 特殊處理 openlist 源 - 直接調用 /api/detail
+  // 特殊处理 openlist 源 - 直接调用 /api/detail
   if (sourceCode === 'openlist') {
     try {
       const config = await getConfig();
@@ -858,12 +858,12 @@ export async function GET(request: NextRequest) {
         !openListConfig.Username ||
         !openListConfig.Password
       ) {
-        throw new Error('OpenList 未配置或未啟用');
+        throw new Error('OpenList 未配置或未启用');
       }
 
       const rootPath = openListConfig.RootPath || '/';
 
-      // 1. 讀取 metainfo 獲取元數據
+      // 1. 读取 metainfo 获取元数据
       let metaInfo: any = null;
       let folderMeta: any = null;
       try {
@@ -880,20 +880,20 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        // 使用 key 查找文件夾信息
+        // 使用 key 查找文件夹信息
         folderMeta = metaInfo?.folders?.[id];
         if (!folderMeta) {
-          throw new Error('未找到該視頻信息');
+          throw new Error('未找到该视频信息');
         }
       } catch (error) {
-        throw new Error('讀取視頻信息失敗: ' + (error as Error).message);
+        throw new Error('读取视频信息失败: ' + (error as Error).message);
       }
 
-      // 使用 folderName 構建實際路徑
+      // 使用 folderName 构建实际路径
       const folderName = folderMeta.folderName;
       const folderPath = `${rootPath}${rootPath.endsWith('/') ? '' : '/'}${folderName}`;
 
-      // 2. 直接調用 OpenList 客戶端獲取視頻列表
+      // 2. 直接调用 OpenList 客户端获取视频列表
       const { OpenListClient } = await import('@/lib/openlist.client');
       const { getCachedVideoInfo, setCachedVideoInfo } = await import('@/lib/openlist-cache');
       const { parseVideoFileName } = await import('@/lib/video-parser');
@@ -906,7 +906,7 @@ export async function GET(request: NextRequest) {
 
       let videoInfo = getCachedVideoInfo(folderPath);
 
-      // 獲取所有分頁的視頻文件
+      // 获取所有分页的视频文件
       const allFiles: any[] = [];
       let currentPage = 1;
       const pageSize = 100;
@@ -917,7 +917,7 @@ export async function GET(request: NextRequest) {
         const listResponse = await client.listDirectory(folderPath, currentPage, pageSize);
 
         if (listResponse.code !== 200) {
-          throw new Error('OpenList 列表獲取失敗4');
+          throw new Error('OpenList 列表获取失败4');
         }
 
         total = listResponse.data.total;
@@ -969,19 +969,19 @@ export async function GET(request: NextRequest) {
           return { fileName: file.name, episode: episodeInfo.episode || 0, season: episodeInfo.season, title: displayTitle, isOVA: episodeInfo.isOVA };
         })
         .sort((a, b) => {
-          // OVA 排在最後
+          // OVA 排在最后
           if (a.isOVA && !b.isOVA) return 1;
           if (!a.isOVA && b.isOVA) return -1;
-          // 都是 OVA 或都不是 OVA，按集數排序
+          // 都是 OVA 或都不是 OVA，按集数排序
           return a.episode !== b.episode ? a.episode - b.episode : a.fileName.localeCompare(b.fileName);
         });
 
-      // 3. 從 metainfo 中獲取元數據
+      // 3. 从 metainfo 中获取元数据
       const { getTMDBImageUrl } = await import('@/lib/tmdb.search');
 
       const result = {
         source: 'openlist',
-        source_name: '私人影庫',
+        source_name: '私人影库',
         id: id,
         title: folderMeta?.title || folderName,
         poster: folderMeta?.poster_path ? getTMDBImageUrl(folderMeta.poster_path) : '',
@@ -1003,21 +1003,21 @@ export async function GET(request: NextRequest) {
   }
 
   if (!/^[\w-]+$/.test(id)) {
-    return NextResponse.json({ error: '無效的視頻ID格式' }, { status: 400 });
+    return NextResponse.json({ error: '无效的视频ID格式' }, { status: 400 });
   }
 
-  // 對於其他採集源，直接按 id 獲取詳情。
+  // 对于其他采集源，直接按 id 获取详情。
   try {
     const apiSites = await getAvailableApiSites(authInfo.username);
     const apiSite = apiSites.find((site) => site.key === sourceCode);
 
     if (!apiSite) {
-      return NextResponse.json({ error: '無效的API來源' }, { status: 400 });
+      return NextResponse.json({ error: '无效的API来源' }, { status: 400 });
     }
 
     const result = await getDetailFromApiV2(apiSite, id);
 
-    // 添加 proxyMode 到返回結果
+    // 添加 proxyMode 到返回结果
     const resultWithProxy = {
       ...result,
       proxyMode: apiSite.proxyMode || false,

@@ -12,7 +12,7 @@ import {
 
 export const runtime = 'nodejs';
 
-// 生成簽名
+// 生成签名
 async function generateSignature(
   data: string,
   secret: string
@@ -36,16 +36,16 @@ async function generateSignature(
     .join('');
 }
 
-// 獲取設備信息
+// 获取设备信息
 function getDeviceInfo(userAgent: string): string {
   const ua = userAgent.toLowerCase();
 
-  // 檢查是否為 MoonTVPlus APP
+  // 检查是否为 MoonTVPlus APP
   if (ua.includes('moontvplus')) {
     return 'MoonTVPlus APP';
   }
 
-  // 檢查是否為 OrionTV
+  // 检查是否为 OrionTV
   if (ua.includes('oriontv')) {
     return 'OrionTV';
   }
@@ -67,7 +67,7 @@ function getDeviceInfo(userAgent: string): string {
   return 'Unknown Device';
 }
 
-// 生成認證Cookie
+// 生成认证Cookie
 async function generateAuthCookie(
   username: string,
   role: 'owner' | 'admin' | 'user',
@@ -79,7 +79,7 @@ async function generateAuthCookie(
     authData.username = username;
     authData.timestamp = Date.now();
 
-    // 生成簽名（包含 username, role, timestamp）
+    // 生成签名（包含 username, role, timestamp）
     const dataToSign = JSON.stringify({
       username: authData.username,
       role: authData.role,
@@ -88,7 +88,7 @@ async function generateAuthCookie(
     const signature = await generateSignature(dataToSign, process.env.PASSWORD);
     authData.signature = signature;
 
-    // 生成雙 Token
+    // 生成双 Token
     const tokenId = generateTokenId();
     const refreshToken = generateRefreshToken();
     const now = Date.now();
@@ -98,7 +98,7 @@ async function generateAuthCookie(
     authData.refreshToken = refreshToken;
     authData.refreshExpires = refreshExpires;
 
-    // 存儲 Refresh Token
+    // 存储 Refresh Token
     await storeRefreshToken(username, tokenId, {
       token: refreshToken,
       deviceInfo,
@@ -118,36 +118,36 @@ export async function GET(request: NextRequest) {
     const state = searchParams.get('state');
     const error = searchParams.get('error');
 
-    // 使用環境變量SITE_BASE或當前請求的origin
+    // 使用环境变量SITE_BASE或当前请求的origin
     const origin = process.env.SITE_BASE || request.nextUrl.origin;
 
-    // 檢查是否有錯誤
+    // 检查是否有错误
     if (error) {
-      console.error('OIDC認證錯誤:', error);
+      console.error('OIDC认证错误:', error);
       return NextResponse.redirect(
-        new URL(`/login?error=${encodeURIComponent('OIDC認證失敗')}`, origin)
+        new URL(`/login?error=${encodeURIComponent('OIDC认证失败')}`, origin)
       );
     }
 
-    // 驗證必需參數
+    // 验证必需参数
     if (!code || !state) {
       return NextResponse.redirect(
-        new URL('/login?error=' + encodeURIComponent('缺少必需參數'), origin)
+        new URL('/login?error=' + encodeURIComponent('缺少必需参数'), origin)
       );
     }
 
-    // 驗證state
+    // 验证state
     const storedState = request.cookies.get('oidc_state')?.value;
     if (!storedState || storedState !== state) {
       return NextResponse.redirect(
-        new URL('/login?error=' + encodeURIComponent('狀態驗證失敗'), origin)
+        new URL('/login?error=' + encodeURIComponent('状态验证失败'), origin)
       );
     }
 
     const config = await getConfig();
     const siteConfig = config.SiteConfig;
 
-    // 檢查OIDC配置
+    // 检查OIDC配置
     if (!siteConfig.OIDCTokenEndpoint || !siteConfig.OIDCUserInfoEndpoint || !siteConfig.OIDCClientId || !siteConfig.OIDCClientSecret) {
       return NextResponse.redirect(
         new URL('/login?error=' + encodeURIComponent('OIDC配置不完整'), origin)
@@ -156,7 +156,7 @@ export async function GET(request: NextRequest) {
 
     const redirectUri = `${origin}/api/auth/oidc/callback`;
 
-    // 交換code獲取token
+    // 交换code获取token
     const tokenResponse = await fetch(siteConfig.OIDCTokenEndpoint, {
       method: 'POST',
       headers: {
@@ -172,9 +172,9 @@ export async function GET(request: NextRequest) {
     });
 
     if (!tokenResponse.ok) {
-      console.error('獲取token失敗:', await tokenResponse.text());
+      console.error('获取token失败:', await tokenResponse.text());
       return NextResponse.redirect(
-        new URL('/login?error=' + encodeURIComponent('獲取token失敗'), origin)
+        new URL('/login?error=' + encodeURIComponent('获取token失败'), origin)
       );
     }
 
@@ -184,11 +184,11 @@ export async function GET(request: NextRequest) {
 
     if (!accessToken || !idToken) {
       return NextResponse.redirect(
-        new URL('/login?error=' + encodeURIComponent('token無效'), origin)
+        new URL('/login?error=' + encodeURIComponent('token无效'), origin)
       );
     }
 
-    // 獲取用戶信息
+    // 获取用户信息
     const userInfoResponse = await fetch(siteConfig.OIDCUserInfoEndpoint, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -196,41 +196,41 @@ export async function GET(request: NextRequest) {
     });
 
     if (!userInfoResponse.ok) {
-      console.error('獲取用戶信息失敗:', await userInfoResponse.text());
+      console.error('获取用户信息失败:', await userInfoResponse.text());
       return NextResponse.redirect(
-        new URL('/login?error=' + encodeURIComponent('獲取用戶信息失敗'), origin)
+        new URL('/login?error=' + encodeURIComponent('获取用户信息失败'), origin)
       );
     }
 
     const userInfo = await userInfoResponse.json();
-    const oidcSub = userInfo.sub; // OIDC的唯一標識符
+    const oidcSub = userInfo.sub; // OIDC的唯一标识符
 
     if (!oidcSub) {
       return NextResponse.redirect(
-        new URL('/login?error=' + encodeURIComponent('用戶信息無效'), origin)
+        new URL('/login?error=' + encodeURIComponent('用户信息无效'), origin)
       );
     }
 
-    // 檢查用戶是否已存在(通過OIDC sub查找)
+    // 检查用户是否已存在(通过OIDC sub查找)
     const username = await db.getUserByOidcSub(oidcSub);
     let userRole: 'owner' | 'admin' | 'user' = 'user';
 
     if (username) {
-      // 獲取用戶信息
+      // 获取用户信息
       const userInfoV2 = await db.getUserInfoV2(username);
       if (userInfoV2) {
         userRole = userInfoV2.role;
-        // 檢查用戶是否被封禁
+        // 检查用户是否被封禁
         if (userInfoV2.banned) {
           return NextResponse.redirect(
-            new URL('/login?error=' + encodeURIComponent('用戶被封禁'), origin)
+            new URL('/login?error=' + encodeURIComponent('用户被封禁'), origin)
           );
         }
       }
     }
 
     if (username) {
-      // 用戶已存在,直接登錄
+      // 用户已存在,直接登录
       const response = NextResponse.redirect(new URL('/', origin));
       const userAgent = request.headers.get('user-agent') || 'Unknown';
       const deviceInfo = getDeviceInfo(userAgent);
@@ -251,15 +251,15 @@ export async function GET(request: NextRequest) {
       return response;
     }
 
-    // 用戶不存在,檢查是否允許註冊
+    // 用户不存在,检查是否允许注册
     if (!siteConfig.EnableOIDCRegistration) {
       return NextResponse.redirect(
-        new URL('/login?error=' + encodeURIComponent('該OIDC賬號未註冊'), origin)
+        new URL('/login?error=' + encodeURIComponent('该OIDC账号未注册'), origin)
       );
     }
 
-    // 需要註冊,跳轉到用戶名輸入頁面
-    // 將OIDC信息存儲到session中
+    // 需要注册,跳转到用户名输入页面
+    // 将OIDC信息存储到session中
     const oidcSession = {
       sub: oidcSub,
       email: userInfo.email,
@@ -273,7 +273,7 @@ export async function GET(request: NextRequest) {
       path: '/',
       httpOnly: true,
       sameSite: 'lax',
-      maxAge: 600, // 10分鐘
+      maxAge: 600, // 10分钟
     });
 
     // 清除state cookie
@@ -281,10 +281,10 @@ export async function GET(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error('OIDC回調處理失敗:', error);
+    console.error('OIDC回调处理失败:', error);
     const origin = process.env.SITE_BASE || request.nextUrl.origin;
     return NextResponse.redirect(
-      new URL('/login?error=' + encodeURIComponent('服務器錯誤'), origin)
+      new URL('/login?error=' + encodeURIComponent('服务器错误'), origin)
     );
   }
 }

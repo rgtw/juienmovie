@@ -38,7 +38,7 @@ export default function AIChatPanel({
 }: AIChatPanelProps) {
   const pathname = usePathname();
 
-  // 使用 useMemo 穩定 storage key，只在實際內容變化時才改變
+  // 使用 useMemo 稳定 storage key，只在实际内容变化时才改变
   const storageKey = useMemo(() => {
     if (context?.title) {
       return `ai-chat-${context.title}-${context.year || ''}-${context.type || ''}`;
@@ -59,7 +59,7 @@ export default function AIChatPanel({
   const abortControllerRef = useRef<AbortController | null>(null);
   const hasLoadedRef = useRef(false);
 
-  // 將《》包裹的影視名稱轉換為鏈接
+  // 将《》包裹的影视名称转换为链接
   const convertTitleToLink = (content: string): string => {
     return content.replace(/《([^》]+)》/g, (match, title) => {
       const encodedTitle = encodeURIComponent(title);
@@ -67,7 +67,7 @@ export default function AIChatPanel({
     });
   };
 
-  // 自動滾動到底部
+  // 自动滚动到底部
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -83,11 +83,11 @@ export default function AIChatPanel({
 
   const userAvatarText = currentUsername.trim().charAt(0).toUpperCase() || '用';
 
-  // 從sessionStorage加載消息記錄
+  // 从sessionStorage加载消息记录
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // 如果已經加載過當前 storageKey，跳過
+    // 如果已经加载过当前 storageKey，跳过
     if (hasLoadedRef.current) return;
 
     const savedMessages = sessionStorage.getItem(storageKey);
@@ -103,11 +103,11 @@ export default function AIChatPanel({
       }
     }
 
-    // 標記為已加載
+    // 标记为已加载
     hasLoadedRef.current = true;
-  }, [storageKey]); // 當 storageKey 變化時重新加載
+  }, [storageKey]); // 当 storageKey 变化时重新加载
 
-  // 保存消息記錄到sessionStorage
+  // 保存消息记录到sessionStorage
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -116,14 +116,14 @@ export default function AIChatPanel({
     } catch (error) {
       console.error('保存聊天記錄失敗:', error);
     }
-  }, [messages, storageKey]); // 消息變化時保存
+  }, [messages, storageKey]); // 消息变化时保存
 
-  // 檢測VideoContext變化，清除舊的聊天記錄
+  // 检测VideoContext变化，清除旧的聊天记录
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     if (prevStorageKeyRef.current !== storageKey) {
-      // 上下文變化了，取消正在進行的請求
+      // 上下文变化了，取消正在进行的请求
       if (abortControllerRef.current) {
         console.log('視頻上下文變化，取消正在進行的AI請求');
         abortControllerRef.current.abort();
@@ -131,42 +131,42 @@ export default function AIChatPanel({
         setIsStreaming(false);
       }
 
-      // 清除消息並重置為歡迎消息
+      // 清除消息并重置为欢迎消息
       console.log('視頻上下文變化，清除聊天記錄');
       setMessages([{ role: 'assistant', content: welcomeMessage }]);
 
-      // 重置加載標記，允許加載新視頻的聊天記錄
+      // 重置加载标记，允许加载新视频的聊天记录
       hasLoadedRef.current = false;
 
       prevStorageKeyRef.current = storageKey;
     }
-  }, [storageKey, welcomeMessage]); // 監聽 storageKey 變化
+  }, [storageKey, welcomeMessage]); // 监听 storageKey 变化
 
-  // 通知父組件 streaming 狀態變化
+  // 通知父组件 streaming 状态变化
   useEffect(() => {
     onStreamingChange?.(isStreaming);
   }, [isStreaming, onStreamingChange]);
 
-  // 自動聚焦輸入框和防止背景滾動
+  // 自动聚焦输入框和防止背景滚动
   useEffect(() => {
     if (isOpen) {
-      // 檢測是否為移動設備
+      // 检测是否为移动设备
       const checkMobile = () => {
         setIsMobile(window.innerWidth < 768);
       };
       checkMobile();
 
-      // 只在非移動設備上聚焦輸入框
+      // 只在非移动设备上聚焦输入框
       if (inputRef.current && window.innerWidth >= 768) {
         inputRef.current.focus();
       }
 
-      // 只在非抽屜模式下防止背景滾動
+      // 只在非抽屉模式下防止背景滚动
       if (!useDrawer) {
         const originalOverflow = document.body.style.overflow;
         const originalPaddingRight = document.body.style.paddingRight;
 
-        // 獲取滾動條寬度
+        // 获取滚动条宽度
         const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
         document.body.style.overflow = 'hidden';
@@ -186,16 +186,16 @@ export default function AIChatPanel({
     const userMessage = input.trim();
     setInput('');
 
-    // 添加用戶消息
+    // 添加用户消息
     setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
 
-    // 開始流式響應
+    // 开始流式响应
     setIsStreaming(true);
 
-    // 先添加一個空的助手消息用於流式更新或顯示錯誤
+    // 先添加一个空的助手消息用于流式更新或显示错误
     setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
 
-    // 創建新的 AbortController
+    // 创建新的 AbortController
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
 
@@ -219,11 +219,11 @@ export default function AIChatPanel({
         throw new Error(errorMsg);
       }
 
-      // 檢查響應類型：流式(text/event-stream)或非流式(application/json)
+      // 检查响应类型：流式(text/event-stream)或非流式(application/json)
       const contentType = response.headers.get('content-type');
 
       if (contentType?.includes('text/event-stream')) {
-        // 處理流式響應
+        // 处理流式响应
         const reader = response.body?.getReader();
         const decoder = new TextDecoder();
 
@@ -232,21 +232,21 @@ export default function AIChatPanel({
         }
 
         let assistantMessage = '';
-        let buffer = ''; // 緩衝區，用於保存不完整的行
+        let buffer = ''; // 缓冲区，用于保存不完整的行
 
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
 
           const chunk = decoder.decode(value, { stream: true });
-          // 將新chunk與緩衝區拼接
+          // 将新chunk与缓冲区拼接
           const text = buffer + chunk;
-          // 按換行符分割，最後一個元素可能是不完整的行
+          // 按换行符分割，最后一个元素可能是不完整的行
           const parts = text.split('\n');
-          // 保存最後一個不完整的行到緩衝區
+          // 保存最后一个不完整的行到缓冲区
           buffer = parts.pop() || '';
 
-          // 處理完整的行
+          // 处理完整的行
           const lines = parts.filter((line) => line.trim() !== '');
 
           for (const line of lines) {
@@ -264,7 +264,7 @@ export default function AIChatPanel({
                 if (text) {
                   assistantMessage += text;
 
-              // 更新最後一條消息
+              // 更新最后一条消息
                   setMessages((prev) => {
                     const newMessages = [...prev];
                     newMessages[newMessages.length - 1] = {
@@ -281,7 +281,7 @@ export default function AIChatPanel({
           }
         }
 
-        // 處理緩衝區中剩餘的數據
+        // 处理缓冲区中剩余的数据
         if (buffer.trim()) {
           const line = buffer.trim();
           if (line.startsWith('data: ')) {
@@ -308,11 +308,11 @@ export default function AIChatPanel({
           }
         }
       } else {
-        // 處理非流式響應
+        // 处理非流式响应
         const data = await response.json();
         const content = data.content || '';
 
-        // 更新最後一條消息為完整響應
+        // 更新最后一条消息为完整响应
         setMessages((prev) => {
           const newMessages = [...prev];
           newMessages[newMessages.length - 1] = {
@@ -323,7 +323,7 @@ export default function AIChatPanel({
         });
       }
     } catch (error) {
-      // 如果是主動取消的請求（切換視頻或其他原因），不顯示錯誤
+      // 如果是主动取消的请求（切换视频或其他原因），不显示错误
       if ((error as Error).name === 'AbortError') {
         console.log('請求已取消');
         return;
@@ -331,7 +331,7 @@ export default function AIChatPanel({
 
       console.error('發送消息失敗:', error);
 
-      // 更新最後一條空消息為錯誤消息
+      // 更新最后一条空消息为错误消息
       setMessages((prev) => {
         const newMessages = [...prev];
         newMessages[newMessages.length - 1] = {
@@ -360,14 +360,14 @@ export default function AIChatPanel({
     // 清除sessionStorage
     sessionStorage.removeItem(storageKey);
 
-    // 重置消息為歡迎消息
+    // 重置消息为欢迎消息
     setMessages([{ role: 'assistant', content: welcomeMessage }]);
 
     console.log('已清空聊天上下文');
   };
 
   const modalContent = useDrawer ? (
-    // 抽屜模式
+    // 抽屉模式
     <div
       className={`fixed inset-0 z-[1002] flex items-center justify-end transition-opacity duration-200 pointer-events-none ${
         isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -378,7 +378,7 @@ export default function AIChatPanel({
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* 頭部 */}
+        {/* 头部 */}
         <div className='flex items-center justify-between border-b border-gray-200 p-4 dark:border-gray-700'>
           <div className='flex items-center gap-3 min-w-0 flex-1'>
             <div className='flex h-10 w-10 items-center justify-center rounded-full bg-purple-500 flex-shrink-0'>
@@ -386,11 +386,11 @@ export default function AIChatPanel({
             </div>
             <div className='min-w-0 flex-1'>
               <h2 className='text-lg font-semibold text-gray-900 dark:text-white'>
-                AI影視助手
+                AI影视助手
               </h2>
               {context?.title && (
                 <p className='text-xs text-gray-500 dark:text-gray-400 truncate'>
-                  正在討論: {context.title}
+                  正在讨论: {context.title}
                   {context.year && ` (${context.year})`}
                 </p>
               )}
@@ -415,7 +415,7 @@ export default function AIChatPanel({
                 <div
                   className={`flex max-w-[80%] gap-3 ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
                 >
-                  {/* 頭像 */}
+                  {/* 头像 */}
                   <div
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
                       message.role === 'user'
@@ -432,7 +432,7 @@ export default function AIChatPanel({
                     )}
                   </div>
 
-                  {/* 消息內容 */}
+                  {/* 消息内容 */}
                   <div
                     className={`rounded-2xl px-4 py-2 ${
                       message.role === 'user'
@@ -450,9 +450,9 @@ export default function AIChatPanel({
                           remarkPlugins={[remarkGfm as any]}
                           components={{
                             a: ({ node, href, children, ...props }) => {
-                              // 如果是內部鏈接（以 / 開頭），使用 Next.js Link
+                              // 如果是内部链接（以 / 开头），使用 Next.js Link
                               if (href?.startsWith('/')) {
-                                // 如果當前在 /play 頁面且鏈接也是 /play，不做處理（返回純文本）
+                                // 如果当前在 /play 页面且链接也是 /play，不做处理（返回纯文本）
                                 if (pathname === '/play' && href.startsWith('/play')) {
                                   return <span>{children}</span>;
                                 }
@@ -462,7 +462,7 @@ export default function AIChatPanel({
                                   </Link>
                                 );
                               }
-                              // 外部鏈接使用普通 a 標籤
+                              // 外部链接使用普通 a 标签
                               return <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>;
                             }
                           }}
@@ -476,7 +476,7 @@ export default function AIChatPanel({
               </div>
             ))}
 
-            {/* 加載指示器 */}
+            {/* 加载指示器 */}
             {isStreaming && (
               <div className='flex justify-start'>
                 <div className='flex max-w-[80%] gap-3'>
@@ -497,7 +497,7 @@ export default function AIChatPanel({
           </div>
         </div>
 
-        {/* 輸入區域 */}
+        {/* 输入区域 */}
         <div className='border-t border-gray-200 p-4 dark:border-gray-700'>
           <div className='flex gap-2'>
             <button
@@ -547,7 +547,7 @@ export default function AIChatPanel({
                 onClick={() => setInput('推薦一些高分電影')}
                 className='rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
               >
-                推薦高分電影
+                推荐高分电影
               </button>
               <button
                 onClick={() => setInput('最近有什麼新電影上映？')}
@@ -562,7 +562,7 @@ export default function AIChatPanel({
                   }
                   className='rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
                 >
-                  劇情介紹
+                  剧情介绍
                 </button>
               )}
             </div>
@@ -571,20 +571,20 @@ export default function AIChatPanel({
       </div>
     </div>
   ) : (
-    // 原有的居中彈窗模式
+    // 原有的居中弹窗模式
     <div
       className={`fixed inset-0 z-[1002] flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-hidden transition-opacity duration-200 ${
         isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
       onClick={(e) => {
-        // 點擊遮罩層關閉彈窗
+        // 点击遮罩层关闭弹窗
         if (e.target === e.currentTarget && isOpen) {
           onClose();
         }
       }}
     >
       <div className='relative mx-4 my-auto flex h-[85vh] sm:h-[80vh] max-h-[90vh] sm:max-h-[600px] w-full max-w-3xl flex-col rounded-2xl bg-white shadow-2xl dark:bg-gray-900'>
-        {/* 頭部 */}
+        {/* 头部 */}
         <div className='flex items-center justify-between border-b border-gray-200 p-4 dark:border-gray-700'>
           <div className='flex items-center gap-3 min-w-0 flex-1'>
             <div className='flex h-10 w-10 items-center justify-center rounded-full bg-purple-500 flex-shrink-0'>
@@ -592,11 +592,11 @@ export default function AIChatPanel({
             </div>
             <div className='min-w-0 flex-1'>
         <h2 className='text-lg font-semibold text-gray-900 dark:text-white'>
-                AI影視助手
+                AI影视助手
               </h2>
               {context?.title && (
                 <p className='text-xs text-gray-500 dark:text-gray-400 truncate'>
-                  正在討論: {context.title}
+                  正在讨论: {context.title}
                   {context.year && ` (${context.year})`}
                 </p>
               )}
@@ -621,7 +621,7 @@ export default function AIChatPanel({
                 <div
                   className={`flex max-w-[80%] gap-3 ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
                 >
-                  {/* 頭像 */}
+                  {/* 头像 */}
                   <div
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
                       message.role === 'user'
@@ -638,7 +638,7 @@ export default function AIChatPanel({
                     )}
                   </div>
 
-                  {/* 消息內容 */}
+                  {/* 消息内容 */}
                   <div
                     className={`rounded-2xl px-4 py-2 ${
                       message.role === 'user'
@@ -656,9 +656,9 @@ export default function AIChatPanel({
                           remarkPlugins={[remarkGfm as any]}
                           components={{
                             a: ({ node, href, children, ...props }) => {
-                              // 如果是內部鏈接（以 / 開頭），使用 Next.js Link
+                              // 如果是内部链接（以 / 开头），使用 Next.js Link
                               if (href?.startsWith('/')) {
-                                // 如果當前在 /play 頁面且鏈接也是 /play，不做處理（返回純文本）
+                                // 如果当前在 /play 页面且链接也是 /play，不做处理（返回纯文本）
                                 if (pathname === '/play' && href.startsWith('/play')) {
                                   return <span>{children}</span>;
                                 }
@@ -668,7 +668,7 @@ export default function AIChatPanel({
                                   </Link>
                                 );
                               }
-                              // 外部鏈接使用普通 a 標籤
+                              // 外部链接使用普通 a 标签
                               return <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>;
                             }
                           }}
@@ -682,7 +682,7 @@ export default function AIChatPanel({
               </div>
             ))}
 
-            {/* 加載指示器 */}
+            {/* 加载指示器 */}
             {isStreaming && (
               <div className='flex justify-start'>
                 <div className='flex max-w-[80%] gap-3'>
@@ -703,7 +703,7 @@ export default function AIChatPanel({
           </div>
         </div>
 
-        {/* 輸入區域 */}
+        {/* 输入区域 */}
         <div className='border-t border-gray-200 p-4 dark:border-gray-700'>
           <div className='flex gap-2'>
             <button
@@ -753,7 +753,7 @@ export default function AIChatPanel({
                 onClick={() => setInput('推薦一些高分電影')}
                 className='rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
               >
-                推薦高分電影
+                推荐高分电影
               </button>
               <button
                 onClick={() => setInput('最近有什麼新電影上映？')}
@@ -768,7 +768,7 @@ export default function AIChatPanel({
                   }
                   className='rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
                 >
-                  劇情介紹
+                  剧情介绍
                 </button>
               )}
             </div>

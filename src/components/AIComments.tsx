@@ -33,7 +33,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
       const params = new URLSearchParams({
         name: movieName,
         count: '10',
-        _t: Date.now().toString(), // 添加時間戳防止緩存
+        _t: Date.now().toString(), // 添加时间戳防止缓存
       });
 
       if (movieInfo) {
@@ -41,7 +41,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
       }
 
       const response = await fetch(`/api/ai-comments?${params.toString()}`, {
-        cache: 'no-store', // 禁用緩存
+        cache: 'no-store', // 禁用缓存
       });
 
       if (!response.ok) {
@@ -62,7 +62,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
   }, [movieName, movieInfo]);
 
   useEffect(() => {
-    // 重置狀態當 movieName 變化時
+    // 重置状态当 movieName 变化时
     setHasStartedLoading(false);
     setComments([]);
     setLoading(false);
@@ -80,7 +80,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
     fetchComments();
   };
 
-  // 星級渲染
+  // 星级渲染
   const renderStars = (rating: number | null) => {
     if (rating === null) return null;
 
@@ -100,7 +100,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
     );
   };
 
-  // 初始狀態：顯示生成按鈕
+  // 初始状态：显示生成按钮
   if (!hasStartedLoading) {
     return (
       <div className='flex flex-col items-center justify-center py-12'>
@@ -120,7 +120,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
           </svg>
           <p className='text-center'>點擊生成AI評論</p>
           <p className='text-xs text-center mt-2 text-gray-400'>
-            基於影片信息和網絡資料生成
+            基于影片信息和网络资料生成
           </p>
         </div>
         <button
@@ -135,7 +135,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
               d='M13 10V3L4 14h7v7l9-11h-7z'
             />
           </svg>
-          生成AI評論
+          生成AI评论
         </button>
       </div>
     );
@@ -147,7 +147,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
         <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-3'></div>
         <span className='text-gray-600 dark:text-gray-400'>AI正在生成評論...</span>
         <span className='text-xs text-gray-500 dark:text-gray-500 mt-2'>
-          這可能需要幾秒鐘
+          这可能需要几秒钟
         </span>
       </div>
     );
@@ -159,13 +159,13 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
         <div className='text-red-500 mb-2'>❌</div>
         <p className='text-gray-600 dark:text-gray-400 mb-1'>{error}</p>
         <p className='text-xs text-gray-500 dark:text-gray-500 mb-4'>
-          請檢查管理面板的AI配置是否正確
+          请检查管理面板的AI配置是否正确
         </p>
         <button
           onClick={startLoading}
           className='px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors'
         >
-          重試
+          重试
         </button>
       </div>
     );
@@ -173,10 +173,10 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
 
   return (
     <div className='space-y-4'>
-      {/* 頭部統計和操作 */}
+      {/* 头部统计和操作 */}
       <div className='flex items-center justify-between'>
         <div className='text-sm text-gray-600 dark:text-gray-400'>
-          已生成 {comments.length} 條AI評論
+          已生成 {comments.length} 条AI评论
         </div>
         <button
           onClick={regenerate}
@@ -200,16 +200,16 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
         </button>
       </div>
 
-      {/* 評論列表 */}
+      {/* 评论列表 */}
       <div className='space-y-4'>
         {comments.map((comment) => (
           <div
             key={comment.id}
             className='bg-blue-50/50 dark:bg-blue-900/10 rounded-lg p-4 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors border border-blue-100 dark:border-blue-900/30'
           >
-            {/* 用戶信息 */}
+            {/* 用户信息 */}
             <div className='flex items-start gap-3 mb-3'>
-              {/* 頭像 */}
+              {/* 头像 */}
               <div className='flex-shrink-0'>
                 <img
                   src={comment.userAvatar}
@@ -218,14 +218,14 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
                 />
               </div>
 
-              {/* 用戶名和評分 */}
+              {/* 用户名和评分 */}
               <div className='flex-1 min-w-0'>
                 <div className='flex items-center gap-2 flex-wrap'>
                   <span className='font-medium text-gray-900 dark:text-white'>
                     {comment.userName}
                   </span>
                   {renderStars(comment.rating)}
-                  {/* AI標識 */}
+                  {/* AI标识 */}
                   <span className='inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs rounded-full'>
                     <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 24 24'>
                       <path d='M13 10V3L4 14h7v7l9-11h-7z' />
@@ -234,13 +234,13 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
                   </span>
                 </div>
 
-                {/* 時間 */}
+                {/* 时间 */}
                 <div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
                   {comment.time}
                 </div>
               </div>
 
-              {/* 有用數 */}
+              {/* 有用数 */}
               {comment.votes > 0 && (
                 <div className='flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400'>
                   <svg
@@ -261,7 +261,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
               )}
             </div>
 
-            {/* 評論內容 */}
+            {/* 评论内容 */}
             <div className='text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap'>
               {comment.content}
             </div>
@@ -271,7 +271,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
 
       {/* 提示信息 */}
       <div className='text-center text-xs text-gray-500 dark:text-gray-400 py-2 border-t border-gray-200 dark:border-gray-700'>
-        以上評論由AI基於影片信息和網絡資料生成，僅供參考
+        以上评论由AI基于影片信息和网络资料生成，仅供参考
       </div>
     </div>
   );

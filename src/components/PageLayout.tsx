@@ -14,7 +14,7 @@ import { VersionCheckProvider } from './VersionCheckProvider';
 interface PageLayoutProps {
   children: React.ReactNode;
   activePath?: string;
-  hideNavigation?: boolean; // 控制是否隱藏頂部和底部導航欄
+  hideNavigation?: boolean; // 控制是否隐藏顶部和底部导航栏
 }
 
 const PageLayout = ({ children, activePath = '/', hideNavigation = false }: PageLayoutProps) => {
@@ -66,30 +66,30 @@ const PageLayout = ({ children, activePath = '/', hideNavigation = false }: Page
           </>
         )}
 
-        {/* 移動端頭部 */}
+        {/* 移动端头部 */}
         {!hideNavigation && (
           <MobileHeader showBackButton={['/play', '/live'].includes(activePath)} />
         )}
 
-        {/* 主要佈局容器 */}
+        {/* 主要布局容器 */}
         <div className='relative z-10 flex md:grid md:grid-cols-[auto_1fr] w-full min-h-screen md:min-h-auto'>
-          {/* 側邊欄 - 桌面端顯示，移動端隱藏 */}
+          {/* 侧边栏 - 桌面端显示，移动端隐藏 */}
           {!hideNavigation && (
             <div className='hidden md:block'>
               <Sidebar activePath={activePath} />
             </div>
           )}
 
-          {/* 主內容區域 */}
+          {/* 主内容区域 */}
           <div className='relative min-w-0 flex-1 transition-all duration-300'>
-            {/* 桌面端左上角返回按鈕 */}
+            {/* 桌面端左上角返回按钮 */}
             {!hideNavigation && ['/play', '/live'].includes(activePath) && (
               <div className='absolute top-3 left-1 z-20 hidden md:flex'>
                 <BackButton />
               </div>
             )}
 
-            {/* 桌面端頂部按鈕 */}
+            {/* 桌面端顶部按钮 */}
             {!hideNavigation && (
               <div className='absolute top-2 right-4 z-20 hidden md:flex items-center gap-2'>
                 <ThemeToggle />
@@ -98,7 +98,7 @@ const PageLayout = ({ children, activePath = '/', hideNavigation = false }: Page
               </div>
             )}
 
-            {/* 主內容 */}
+            {/* 主内容 */}
             <main
               className='flex-1 md:min-h-0 mb-14 md:mb-0 md:mt-0 mt-12'
               style={{
@@ -110,7 +110,7 @@ const PageLayout = ({ children, activePath = '/', hideNavigation = false }: Page
           </div>
         </div>
 
-        {/* 移動端底部導航 */}
+        {/* 移动端底部导航 */}
         {!hideNavigation && (
           <div className='md:hidden'>
             <MobileBottomNav activePath={activePath} />

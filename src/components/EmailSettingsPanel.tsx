@@ -53,7 +53,7 @@ export function EmailSettingsPanel({
         >
           <div className='flex items-center justify-between mb-6'>
             <h3 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-              郵件通知設置
+              邮件通知设置
             </h3>
             <button
               onClick={onClose}
@@ -77,14 +77,14 @@ export function EmailSettingsPanel({
                 <div className='h-10 bg-gray-200 dark:bg-gray-700 rounded'></div>
               </div>
               <div className='text-center text-sm text-gray-500 dark:text-gray-400'>
-                加載中...
+                加载中...
               </div>
             </div>
           ) : (
             <div className='space-y-4'>
               <div>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  郵箱地址
+                  邮箱地址
                 </label>
                 <input
                   type='email'
@@ -102,7 +102,7 @@ export function EmailSettingsPanel({
                     接收收藏更新通知
                   </h4>
                   <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                    當收藏的影片有更新時發送郵件通知
+                    当收藏的影片有更新时发送邮件通知
                   </p>
                 </div>
                 <button
@@ -151,7 +151,7 @@ export function EmailSettingsPanel({
 
           <div className='mt-6 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg'>
             <p className='text-xs text-blue-800 dark:text-blue-200'>
-              💡 提示：需要管理員先在管理面板中配置郵件服務
+              💡 提示：需要管理员先在管理面板中配置邮件服务
             </p>
           </div>
         </div>

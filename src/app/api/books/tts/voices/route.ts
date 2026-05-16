@@ -26,6 +26,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message || '獲取音色列表失敗' }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message || '获取音色列表失败' }, { status: 500 });
   }
 }

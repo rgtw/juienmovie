@@ -3,28 +3,28 @@
 import React, { useMemo,useState } from 'react';
 
 interface DownloadEpisodeSelectorProps {
-  /** 是否顯示彈窗 */
+  /** 是否显示弹窗 */
   isOpen: boolean;
-  /** 關閉彈窗回調 */
+  /** 关闭弹窗回调 */
   onClose: () => void;
-  /** 總集數 */
+  /** 总集数 */
   totalEpisodes: number;
-  /** 劇集標題 */
+  /** 剧集标题 */
   episodesTitles?: string[];
-  /** 視頻標題 */
+  /** 视频标题 */
   videoTitle: string;
-  /** 當前集數索引（0開始） */
+  /** 当前集数索引（0开始） */
   currentEpisodeIndex: number;
-  /** 下載回調 - 支持批量下載 */
+  /** 下载回调 - 支持批量下载 */
   onDownload: (episodeIndexes: number[], offlineMode: boolean) => void;
-  /** 是否啟用離線下載功能 */
+  /** 是否启用离线下载功能 */
   enableOfflineDownload?: boolean;
-  /** 是否有離線下載權限（管理員或站長） */
+  /** 是否有离线下载权限（管理员或站长） */
   hasOfflinePermission?: boolean;
 }
 
 /**
- * 下載選集面板組件
+ * 下载选集面板组件
  */
 const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
   isOpen,
@@ -37,26 +37,26 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
   enableOfflineDownload = false,
   hasOfflinePermission = false,
 }) => {
-  // 多選狀態 - 使用 Set 存儲選中的集數索引
+  // 多选状态 - 使用 Set 存储选中的集数索引
   const [selectedEpisodes, setSelectedEpisodes] = useState<Set<number>>(
     new Set([currentEpisodeIndex])
   );
 
-  // 離線下載模式
+  // 离线下载模式
   const [offlineMode, setOfflineMode] = useState(false);
 
-  // 每頁顯示的集數
+  // 每页显示的集数
   const episodesPerPage = 50;
   const pageCount = Math.ceil(totalEpisodes / episodesPerPage);
 
-  // 當前分頁索引（0 開始）
+  // 当前分页索引（0 开始）
   const initialPage = Math.floor(currentEpisodeIndex / episodesPerPage);
   const [currentPage, setCurrentPage] = useState<number>(initialPage);
 
-  // 是否倒序顯示
+  // 是否倒序显示
   const [descending, setDescending] = useState<boolean>(false);
 
-  // 根據 descending 狀態計算實際顯示的分頁索引
+  // 根据 descending 状态计算实际显示的分页索引
   const displayPage = useMemo(() => {
     if (descending) {
       return pageCount - 1 - currentPage;
@@ -64,7 +64,7 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
     return currentPage;
   }, [currentPage, descending, pageCount]);
 
-  // 升序分頁標籤
+  // 升序分页标签
   const categoriesAsc = useMemo(() => {
     return Array.from({ length: pageCount }, (_, i) => {
       const start = i * episodesPerPage + 1;
@@ -73,7 +73,7 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
     });
   }, [pageCount, episodesPerPage, totalEpisodes]);
 
-  // 根據 descending 狀態決定分頁標籤的排序和內容
+  // 根据 descending 状态决定分页标签的排序和内容
   const categories = useMemo(() => {
     if (descending) {
       return [...categoriesAsc]
@@ -126,11 +126,11 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
   return (
     <div className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm'>
       <div className='bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-[90vw] max-w-4xl max-h-[80vh] flex flex-col overflow-hidden border border-gray-200 dark:border-gray-700'>
-        {/* 標題欄 */}
+        {/* 标题栏 */}
         <div className='flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700'>
           <div className='flex-1'>
             <h2 className='text-xl font-bold text-gray-900 dark:text-gray-100'>
-              選擇要下載的集數
+              选择要下载的集数
             </h2>
             <p className='text-sm text-gray-500 dark:text-gray-400 mt-1'>
               {videoTitle}
@@ -141,7 +141,7 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
               onClick={handleSelectAll}
               className='px-3 py-1.5 text-xs font-medium text-green-600 hover:text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:text-green-300 dark:hover:bg-green-900/20 rounded-md transition-colors'
             >
-              全選
+              全选
             </button>
             <button
               onClick={handleClearAll}
@@ -170,11 +170,11 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
           </div>
         </div>
 
-        {/* 離線下載開關 - 僅管理員和站長可見 */}
+        {/* 离线下载开关 - 仅管理员和站长可见 */}
         {enableOfflineDownload && hasOfflinePermission && (
           <div className='flex items-center justify-between px-6 py-3 bg-blue-50 dark:bg-blue-900/10 border-b border-blue-100 dark:border-blue-900/30'>
             <div className='flex items-center gap-3'>
-              {/* 服務器圖標 */}
+              {/* 服务器图标 */}
               <div className='flex-shrink-0 w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center'>
                 <svg className='w-5 h-5 text-blue-600 dark:text-blue-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01' />
@@ -183,20 +183,20 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
               <div className='flex-1'>
                 <div className='flex items-center gap-2'>
                   <h3 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
-                    服務器離線下載
+                    服务器离线下载
                   </h3>
                   {offlineMode && (
                     <span className='px-2 py-0.5 text-xs font-medium bg-blue-500 text-white rounded'>
-                      已啟用
+                      已启用
                     </span>
                   )}
                 </div>
                 <p className='text-xs text-gray-600 dark:text-gray-400 mt-0.5'>
-                  開啟後將在服務器端下載視頻文件，支持斷點續傳和後臺下載
+                  开启后将在服务器端下载视频文件，支持断点续传和后台下载
                 </p>
               </div>
             </div>
-            {/* 開關 */}
+            {/* 开关 */}
             <button
               onClick={() => setOfflineMode(!offlineMode)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
@@ -214,7 +214,7 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
           </div>
         )}
 
-        {/* 分頁標籤 */}
+        {/* 分页标签 */}
         {pageCount > 1 && (
           <div className='flex items-center gap-4 px-6 py-3 border-b border-gray-200 dark:border-gray-700'>
             <div className='flex-1 overflow-x-auto'>
@@ -239,7 +239,7 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
                 })}
               </div>
             </div>
-            {/* 向上/向下按鈕 */}
+            {/* 向上/向下按钮 */}
             <button
               className='flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center text-gray-700 hover:text-green-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-green-400 dark:hover:bg-gray-700 transition-colors'
               onClick={() => setDescending((prev) => !prev)}
@@ -261,7 +261,7 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
           </div>
         )}
 
-        {/* 集數網格 */}
+        {/* 集数网格 */}
         <div className='flex-1 overflow-y-auto px-6 py-4'>
           <div className='flex flex-wrap gap-3'>
             {(() => {
@@ -291,12 +291,12 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
                     if (!title) {
                       return episodeNumber;
                     }
-                    // 如果是 OVA 格式，直接返回完整標題
+                    // 如果是 OVA 格式，直接返回完整标题
                     if (title.match(/^OVA\s+\d+/i)) {
                       return title;
                     }
-                    // 如果匹配"第X集"、"第X話"、"X集"、"X話"格式，提取中間的數字
-                    const match = title.match(/(?:第)?(\d+)(?:集|話)/);
+                    // 如果匹配"第X集"、"第X话"、"X集"、"X话"格式，提取中间的数字
+                    const match = title.match(/(?:第)?(\d+)(?:集|话)/);
                     if (match) {
                       return match[1];
                     }
@@ -311,10 +311,10 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
           </div>
         </div>
 
-        {/* 底部操作欄 */}
+        {/* 底部操作栏 */}
         <div className='flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900'>
           <div className='text-sm text-gray-600 dark:text-gray-400'>
-            已選擇：
+            已选择：
             {selectedEpisodes.size === 0 ? (
               <span className='text-red-500 dark:text-red-400'>未選擇任何集數</span>
             ) : selectedEpisodes.size === 1 ? (
@@ -346,7 +346,7 @@ const DownloadEpisodeSelector: React.FC<DownloadEpisodeSelectorProps> = ({
                   : 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 disabled:hover:bg-green-500'
               }`}
             >
-              {offlineMode && enableOfflineDownload && hasOfflinePermission ? '離線' : ''}下載 {selectedEpisodes.size > 0 && `(${selectedEpisodes.size})`}
+              {offlineMode && enableOfflineDownload && hasOfflinePermission ? '離線' : ''}下载 {selectedEpisodes.size > 0 && `(${selectedEpisodes.size})`}
             </button>
           </div>
         </div>

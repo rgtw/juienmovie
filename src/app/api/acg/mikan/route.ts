@@ -17,15 +17,15 @@ const pickText = (value: any): string => {
 
 /**
  * POST /api/acg/mikan
- * 搜索 Mikan RSS（僅管理員和站長可用，不支持分頁）
+ * 搜索 Mikan RSS（仅管理员和站长可用，不支持分页）
  */
 export async function POST(req: NextRequest) {
   try {
-    // 檢查權限
+    // 检查权限
     const authInfo = getAuthInfoFromCookie(req);
     if (!authInfo?.username || !(await hasFeaturePermission(authInfo.username, 'magnet_search'))) {
       return NextResponse.json(
-        { error: '無權限訪問' },
+        { error: '无权限访问' },
         { status: 403 }
       );
     }
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     if (!keyword || typeof keyword !== 'string') {
       return NextResponse.json(
-        { error: '搜索關鍵詞不能為空' },
+        { error: '搜索关键词不能为空' },
         { status: 400 }
       );
     }
@@ -42,16 +42,16 @@ export async function POST(req: NextRequest) {
     const trimmedKeyword = keyword.trim();
     if (!trimmedKeyword) {
       return NextResponse.json(
-        { error: '搜索關鍵詞不能為空' },
+        { error: '搜索关键词不能为空' },
         { status: 400 }
       );
     }
 
-    // 驗證頁碼（Mikan RSS 不支持分頁，這裡仍接收 page 以保持接口一致）
+    // 验证页码（Mikan RSS 不支持分页，这里仍接收 page 以保持接口一致）
     const pageNum = parseInt(String(page), 10);
     if (isNaN(pageNum) || pageNum < 1) {
       return NextResponse.json(
-        { error: '頁碼必須是大於0的整數' },
+        { error: '页码必须是大于0的整数' },
         { status: 400 }
       );
     }
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new Error(`Mikan API 請求失敗: ${response.status}`);
+      throw new Error(`Mikan API 请求失败: ${response.status}`);
     }
 
     const xmlData = await response.text();
@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
         pickText(item.enclosure?.[0]?.$?.href) ||
         '';
 
-      // 提取描述中的圖片（如果有）
+      // 提取描述中的图片（如果有）
       let images: string[] = [];
       if (description) {
         const imgMatches = description.match(/src="([^"]+)"/g);
@@ -146,9 +146,9 @@ export async function POST(req: NextRequest) {
       items: results,
     });
   } catch (error: any) {
-    console.error('Mikan 搜索失敗:', error);
+    console.error('Mikan 搜索失败:', error);
     return NextResponse.json(
-      { error: error.message || '搜索失敗' },
+      { error: error.message || '搜索失败' },
       { status: 500 }
     );
   }

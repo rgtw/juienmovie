@@ -11,15 +11,15 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/xiaoya/browse?path=<path>
- * 瀏覽小雅目錄
+ * 浏览小雅目录
  */
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'xiaoya', '無權限訪問小雅');
+    const authResult = await requireFeaturePermission(request, 'xiaoya', '无权限访问小雅');
     if (authResult instanceof NextResponse) return authResult;
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       !xiaoyaConfig.Enabled ||
       !xiaoyaConfig.ServerURL
     ) {
-      return NextResponse.json({ error: '小雅未配置或未啟用' }, { status: 400 });
+      return NextResponse.json({ error: '小雅未配置或未启用' }, { status: 400 });
     }
 
     const client = new XiaoyaClient(
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
 
     const result = await client.listDirectory(path);
 
-    // 過濾出文件夾和視頻文件
+    // 过滤出文件夹和视频文件
     const videoExtensions = ['.mp4', '.mkv', '.avi', '.m3u8', '.flv', '.ts', '.mov', '.wmv', '.webm'];
 
     const folders = result.content

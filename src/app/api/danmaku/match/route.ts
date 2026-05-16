@@ -1,4 +1,4 @@
-// 自動匹配 API 路由
+// 自动匹配 API 路由
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getConfig } from '@/lib/config';
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
         {
           errorCode: -1,
           success: false,
-          errorMessage: '缺少文件名參數',
+          errorMessage: '缺少文件名参数',
           isMatched: false,
           matches: [],
         },
@@ -24,15 +24,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 從數據庫讀取彈幕配置
+    // 从数据库读取弹幕配置
     const config = await getConfig();
     const baseUrl = getDanmakuApiBaseUrl(config.SiteConfig);
 
     const apiUrl = `${baseUrl}/api/v2/match`;
 
-    // 添加超時控制
+    // 添加超时控制
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // 10秒超時
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 10秒超时
 
     try {
       const response = await fetch(apiUrl, {
@@ -57,20 +57,20 @@ export async function POST(request: NextRequest) {
     } catch (fetchError) {
       clearTimeout(timeoutId);
 
-      // 如果是超時錯誤，返回更友好的錯誤信息
+      // 如果是超时错误，返回更友好的错误信息
       if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-        throw new Error('彈幕服務器請求超時，請稍後重試');
+        throw new Error('弹幕服务器请求超时，请稍后重试');
       }
 
       throw fetchError;
     }
   } catch (error) {
-    console.error('自動匹配代理錯誤:', error);
+    console.error('自动匹配代理错误:', error);
     return NextResponse.json(
       {
         errorCode: -1,
         success: false,
-        errorMessage: error instanceof Error ? error.message : '匹配失敗',
+        errorMessage: error instanceof Error ? error.message : '匹配失败',
         isMatched: false,
         matches: [],
       },

@@ -54,7 +54,7 @@ export default function MovieRequestPage() {
   const [submitting, setSubmitting] = useState(false);
   const [isFeatureEnabled, setIsFeatureEnabled] = useState(true);
 
-  // 檢查求片功能是否啟用
+  // 检查求片功能是否启用
   useEffect(() => {
     const runtimeConfig = (window as any).RUNTIME_CONFIG;
     if (runtimeConfig && runtimeConfig.ENABLE_MOVIE_REQUEST === false) {
@@ -99,7 +99,7 @@ export default function MovieRequestPage() {
           setSeasons(validSeasons);
 
           if (validSeasons.length === 1) {
-            // 只有一季，自動提交
+            // 只有一季，自动提交
             setShowSeasonDialog(false);
             submitRequest(item, validSeasons[0].season_number);
           } else {
@@ -171,7 +171,7 @@ export default function MovieRequestPage() {
     setSelectedItem(null);
   };
 
-  // 加載我的求片列表
+  // 加载我的求片列表
   useEffect(() => {
     const fetchMyRequests = async () => {
       try {
@@ -215,16 +215,16 @@ export default function MovieRequestPage() {
           </p>
         </div>
 
-        {/* 功能關閉提示 */}
+        {/* 功能关闭提示 */}
         {!isFeatureEnabled && (
           <div className='mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg'>
             <p className='text-sm text-yellow-800 dark:text-yellow-200'>
-              求片功能已被管理員關閉，您可以查看已提交的求片記錄
+              求片功能已被管理员关闭，您可以查看已提交的求片记录
             </p>
           </div>
         )}
 
-        {/* 搜索框 - 僅在功能啟用時顯示 */}
+        {/* 搜索框 - 仅在功能启用时显示 */}
         {isFeatureEnabled && (
           <div className='mb-6'>
             <div className='flex gap-2'>
@@ -261,7 +261,7 @@ export default function MovieRequestPage() {
               </div>
             ) : myRequests.length === 0 ? (
               <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-                暫無求片記錄
+                暂无求片记录
               </div>
             ) : (
               <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4'>
@@ -303,7 +303,7 @@ export default function MovieRequestPage() {
           </div>
         )}
 
-        {/* 搜索結果 */}
+        {/* 搜索结果 */}
         {searchResults.length > 0 ? (
           <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4'>
             {searchResults.map((item) => (
@@ -342,12 +342,12 @@ export default function MovieRequestPage() {
           </div>
         ) : searchKeyword && !isSearching ? (
           <div className='text-center py-12 text-gray-500 dark:text-gray-400'>
-            未找到相關影片
+            未找到相关影片
           </div>
         ) : null}
       </div>
 
-      {/* 提示彈窗 */}
+      {/* 提示弹窗 */}
       {alertModal.isOpen && typeof window !== 'undefined' && createPortal(
         <div className='fixed inset-0 bg-black/50 z-[1002] flex items-center justify-center p-4'>
           <div className='bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-sm w-full p-6'>
@@ -368,14 +368,14 @@ export default function MovieRequestPage() {
               onClick={() => setAlertModal({ ...alertModal, isOpen: false })}
               className='w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg'
             >
-              確定
+              确定
             </button>
           </div>
         </div>,
         document.body
       )}
 
-      {/* 季度選擇彈窗 */}
+      {/* 季度选择弹窗 */}
       {showSeasonDialog && typeof window !== 'undefined' && createPortal(
         <>
           <div
@@ -384,7 +384,7 @@ export default function MovieRequestPage() {
           />
           <div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-xl z-[1001] p-6'>
             <h3 className='text-lg font-bold text-gray-800 dark:text-gray-200 mb-4'>
-              選擇季度
+              选择季度
             </h3>
             <p className='text-sm text-gray-600 dark:text-gray-400 mb-4'>
               {selectedItem?.title || selectedItem?.name}
@@ -421,7 +421,7 @@ export default function MovieRequestPage() {
                 onClick={handleSeasonConfirm}
                 className='flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg'
               >
-                確認
+                确认
               </button>
             </div>
           </div>

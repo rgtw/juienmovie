@@ -18,15 +18,15 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/openlist/list?page=1&pageSize=20&includeFailed=false&noCache=false
- * 獲取私人影庫視頻列表
+ * 获取私人影库视频列表
  */
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'private_library', '無權限訪問私人影庫');
+    const authResult = await requireFeaturePermission(request, 'private_library', '无权限访问私人影库');
     if (authResult instanceof NextResponse) return authResult;
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
       !openListConfig.Password
     ) {
       return NextResponse.json(
-        { error: 'OpenList 未配置或未啟用', list: [], total: 0 },
+        { error: 'OpenList 未配置或未启用', list: [], total: 0 },
         { status: 200 }
       );
     }
@@ -57,12 +57,12 @@ export async function GET(request: NextRequest) {
       openListConfig.Password
     );
 
-    // 讀取 metainfo (從數據庫或緩存)
+    // 读取 metainfo (从数据库或缓存)
     let metaInfo: MetaInfo | null = null;
 
-    // 如果不使用緩存，直接從數據庫讀取
+    // 如果不使用缓存，直接从数据库读取
     if (noCache) {
-      // noCache 模式：跳過緩存
+      // noCache 模式：跳过缓存
     } else {
       metaInfo = getCachedMetaInfo();
     }
@@ -75,30 +75,30 @@ export async function GET(request: NextRequest) {
           try {
             metaInfo = JSON.parse(metainfoJson);
 
-            // 驗證數據結構
+            // 验证数据结构
             if (!metaInfo || typeof metaInfo !== 'object') {
-              throw new Error('metaInfo 不是有效對象');
+              throw new Error('metaInfo 不是有效对象');
             }
             if (!metaInfo.folders || typeof metaInfo.folders !== 'object') {
-              throw new Error('metaInfo.folders 不存在或不是對象');
+              throw new Error('metaInfo.folders 不存在或不是对象');
             }
 
-            // 只有在不是 noCache 模式時才更新緩存
+            // 只有在不是 noCache 模式时才更新缓存
             if (!noCache) {
               setCachedMetaInfo(metaInfo);
             }
           } catch (parseError) {
-            console.error('[OpenList List] JSON 解析或驗證失敗:', parseError);
-            throw new Error(`JSON 解析失敗: ${(parseError as Error).message}`);
+            console.error('[OpenList List] JSON 解析或验证失败:', parseError);
+            throw new Error(`JSON 解析失败: ${(parseError as Error).message}`);
           }
         } else {
-          throw new Error('數據庫中沒有 metainfo 數據');
+          throw new Error('数据库中没有 metainfo 数据');
         }
       } catch (error) {
-        console.error('[OpenList List] 從數據庫讀取 metainfo 失敗:', error);
+        console.error('[OpenList List] 从数据库读取 metainfo 失败:', error);
         return NextResponse.json(
           {
-            error: 'metainfo 讀取失敗',
+            error: 'metainfo 读取失败',
             details: (error as Error).message,
             list: [],
             total: 0,
@@ -110,22 +110,22 @@ export async function GET(request: NextRequest) {
 
     if (!metaInfo) {
       return NextResponse.json(
-        { error: '無數據', list: [], total: 0 },
+        { error: '无数据', list: [], total: 0 },
         { status: 200 }
       );
     }
 
-    // 驗證 metaInfo 結構
+    // 验证 metaInfo 结构
     if (!metaInfo.folders || typeof metaInfo.folders !== 'object') {
       return NextResponse.json(
-        { error: 'metainfo.json 結構無效', list: [], total: 0 },
+        { error: 'metainfo.json 结构无效', list: [], total: 0 },
         { status: 200 }
       );
     }
 
-    // 轉換為數組並分頁
+    // 转换为数组并分页
     const allVideos = Object.entries(metaInfo.folders)
-      .filter(([, info]) => includeFailed || !info.failed) // 根據參數過濾失敗的視頻
+      .filter(([, info]) => includeFailed || !info.failed) // 根据参数过滤失败的视频
       .map(
         ([key, info]) => {
           return {
@@ -146,7 +146,7 @@ export async function GET(request: NextRequest) {
         }
       );
 
-    // 按更新時間倒序排序
+    // 按更新时间倒序排序
     allVideos.sort((a, b) => b.lastUpdated - a.lastUpdated);
 
     const total = allVideos.length;
@@ -163,9 +163,9 @@ export async function GET(request: NextRequest) {
       totalPages: Math.ceil(total / pageSize),
     });
   } catch (error) {
-    console.error('獲取視頻列表失敗:', error);
+    console.error('获取视频列表失败:', error);
     return NextResponse.json(
-      { error: '獲取失敗', details: (error as Error).message, list: [], total: 0 },
+      { error: '获取失败', details: (error as Error).message, list: [], total: 0 },
       { status: 500 }
     );
   }

@@ -21,12 +21,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Missing source' }, { status: 400 });
   }
 
-  // 定義直鏈播放模式常量
+  // 定义直链播放模式常量
   const DIRECT_PLAY_SOURCE = 'directplay';
 
-  // 直鏈播放模式：跳過源站配置檢查，直接代理
+  // 直链播放模式：跳过源站配置检查，直接代理
   if (source !== DIRECT_PLAY_SOURCE) {
-    // 檢查該視頻源是否啟用了代理模式
+    // 检查该视频源是否启用了代理模式
     const config = await getConfig();
     const videoSource = config.SourceConfig?.find((s: any) => s.key === source);
 
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
   try {
     const decodedUrl = decodeURIComponent(url);
 
-    // 安全校驗：防 SSRF 攔截請求內網或非法 URL (強制檢查所有代理請求)
+    // 安全校验：防 SSRF 拦截请求内网或非法 URL (强制检查所有代理请求)
     const isSafeUrl = await validateProxyUrlServerSide(decodedUrl);
     if (!isSafeUrl) {
       return NextResponse.json({ error: 'Proxy request to local or invalid network is forbidden' }, { status: 403 });
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
       response.headers.get('content-length')
     );
 
-    // 使用流式傳輸，避免佔用內存
+    // 使用流式传输，避免占用内存
     let isCancelled = false;
 
     const stream = new ReadableStream({
@@ -109,7 +109,7 @@ export async function GET(request: Request) {
             try {
               reader.releaseLock();
             } catch (e) {
-              // reader 可能已經被釋放，忽略錯誤
+              // reader 可能已经被释放，忽略错误
             }
             reader = null;
           }
@@ -119,12 +119,12 @@ export async function GET(request: Request) {
       },
       cancel() {
         isCancelled = true;
-        // 當流被取消時，確保釋放所有資源
+        // 当流被取消时，确保释放所有资源
         if (reader) {
           try {
             reader.releaseLock();
           } catch (e) {
-            // reader 可能已經被釋放，忽略錯誤
+            // reader 可能已经被释放，忽略错误
           }
           reader = null;
         }
@@ -133,7 +133,7 @@ export async function GET(request: Request) {
           try {
             response.body.cancel();
           } catch (e) {
-            // 忽略取消時的錯誤
+            // 忽略取消时的错误
           }
         }
       }
@@ -141,12 +141,12 @@ export async function GET(request: Request) {
 
     return new Response(stream, { headers });
   } catch (error) {
-    // 確保在錯誤情況下也釋放資源
+    // 确保在错误情况下也释放资源
     if (reader) {
       try {
         (reader as ReadableStreamDefaultReader<Uint8Array>).releaseLock();
       } catch (e) {
-        // 忽略錯誤
+        // 忽略错误
       }
     }
 
@@ -154,7 +154,7 @@ export async function GET(request: Request) {
       try {
         response.body.cancel();
       } catch (e) {
-        // 忽略錯誤
+        // 忽略错误
       }
     }
 

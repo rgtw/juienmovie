@@ -36,7 +36,7 @@ const AlertModal = ({
 }: AlertModalProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // 控制動畫狀態
+  // 控制动画状态
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
@@ -127,7 +127,7 @@ const AlertModal = ({
                 onClick={onClose}
                 className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
               >
-                確定
+                确定
               </button>
             )}
           </div>
@@ -183,7 +183,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
     setAlertModal(prev => ({ ...prev, isOpen: false }));
   };
 
-  // 導出數據
+  // 导出数据
   const handleExport = async () => {
     if (!exportPassword.trim()) {
       showAlert({
@@ -200,7 +200,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
       setIsExporting(true);
       setExportProgress(null);
 
-      // 連接到進度 SSE 端點
+      // 连接到进度 SSE 端点
       eventSource = new EventSource('/api/admin/data_migration/progress?operation=export');
       eventSource.onmessage = (event) => {
         try {
@@ -228,12 +228,12 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
         throw new Error(errorData.error || `導出失敗: ${response.status}`);
       }
 
-      // 獲取文件名
+      // 获取文件名
       const contentDisposition = response.headers.get('content-disposition');
       const filenameMatch = contentDisposition?.match(/filename="(.+)"/);
       const filename = filenameMatch?.[1] || 'moontv-backup.dat';
 
-      // 下載文件
+      // 下载文件
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -271,7 +271,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
     }
   };
 
-  // 文件選擇處理
+  // 文件选择处理
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -279,7 +279,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
     }
   };
 
-  // 導入數據
+  // 导入数据
   const handleImport = async () => {
     if (!selectedFile) {
       showAlert({
@@ -305,7 +305,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
       setIsImporting(true);
       setImportProgress(null);
 
-      // 連接到進度 SSE 端點
+      // 连接到进度 SSE 端点
       eventSource = new EventSource('/api/admin/data_migration/progress?operation=import');
       eventSource.onmessage = (event) => {
         try {
@@ -348,7 +348,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
         confirmText: '刷新頁面',
         showConfirm: true,
         onConfirm: async () => {
-          // 清理狀態
+          // 清理状态
           setSelectedFile(null);
           setImportPassword('');
           if (fileInputRef.current) {
@@ -360,7 +360,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
             await onRefreshConfig();
           }
 
-          // 刷新頁面
+          // 刷新页面
           window.location.reload();
         },
       });
@@ -382,17 +382,17 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
   return (
     <>
       <div className="max-w-6xl mx-auto space-y-6">
-        {/* 簡潔警告提示 */}
+        {/* 简洁警告提示 */}
         <div className="flex items-center gap-3 p-4 border border-amber-200 dark:border-amber-700 rounded-lg bg-amber-50/30 dark:bg-amber-900/5">
           <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
           <p className="text-sm text-amber-800 dark:text-amber-200">
-            數據遷移操作請謹慎，確保已備份重要數據
+            数据迁移操作请谨慎，确保已备份重要数据
           </p>
         </div>
 
-        {/* 主要操作區域 - 響應式佈局 */}
+        {/* 主要操作区域 - 响应式布局 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* 數據導出 */}
+          {/* 数据导出 */}
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 hover:shadow-sm transition-shadow flex flex-col">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
@@ -406,11 +406,11 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
 
             <div className="flex-1 flex flex-col">
               <div className="space-y-4">
-                {/* 密碼輸入 */}
+                {/* 密码输入 */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <Lock className="w-4 h-4" />
-                    加密密碼
+                    加密密码
                   </label>
                   <input
                     type="password"
@@ -421,7 +421,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                     disabled={isExporting}
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    導入時需要使用相同密碼
+                    导入时需要使用相同密码
                   </p>
                 </div>
 
@@ -435,7 +435,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                       disabled={isExporting}
                       className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
-                    漫畫數據（書架 + 閱讀記錄）
+                    漫画数据（书架 + 阅读记录）
                   </label>
                   <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                     <input
@@ -445,11 +445,11 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                       disabled={isExporting}
                       className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
-                    電子書數據（書架 + 閱讀記錄）
+                    电子书数据（书架 + 阅读记录）
                   </label>
                 </div>
 
-                {/* 備份內容列表 */}
+                {/* 备份内容列表 */}
                 <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
                   <p className="font-medium text-gray-700 dark:text-gray-300 mb-2">備份內容：</p>
                   <div className="grid grid-cols-2 gap-1">
@@ -463,7 +463,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                 </div>
               </div>
 
-              {/* 導出按鈕 */}
+              {/* 导出按钮 */}
               <button
                 onClick={handleExport}
                 disabled={isExporting || !exportPassword.trim()}
@@ -476,7 +476,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                   <div className="space-y-2">
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      導出中...
+                      导出中...
                     </div>
                     {exportProgress && (
                       <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 space-y-2">
@@ -495,14 +495,14 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                 ) : (
                   <div className="flex items-center justify-center gap-2">
                     <Download className="w-4 h-4" />
-                    導出數據
+                    导出数据
                   </div>
                 )}
               </button>
             </div>
           </div>
 
-          {/* 數據導入 */}
+          {/* 数据导入 */}
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 hover:shadow-sm transition-shadow flex flex-col">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
@@ -516,11 +516,11 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
 
             <div className="flex-1 flex flex-col">
               <div className="space-y-4">
-                {/* 文件選擇 */}
+                {/* 文件选择 */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <FileCheck className="w-4 h-4" />
-                    備份文件
+                    备份文件
                     {selectedFile && (
                       <span className="ml-auto text-xs text-green-600 dark:text-green-400 font-normal">
                         {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
@@ -537,11 +537,11 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                   />
                 </div>
 
-                {/* 密碼輸入 */}
+                {/* 密码输入 */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <Lock className="w-4 h-4" />
-                    解密密碼
+                    解密密码
                   </label>
                   <input
                     type="password"
@@ -555,7 +555,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
 
               </div>
 
-              {/* 導入按鈕 */}
+              {/* 导入按钮 */}
               <button
                 onClick={handleImport}
                 disabled={isImporting || !selectedFile || !importPassword.trim()}
@@ -568,7 +568,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                   <div className="space-y-2">
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      導入中...
+                      导入中...
                     </div>
                     {importProgress && (
                       <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 space-y-2">
@@ -587,7 +587,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                 ) : (
                   <div className="flex items-center justify-center gap-2">
                     <Upload className="w-4 h-4" />
-                    導入數據
+                    导入数据
                   </div>
                 )}
               </button>
@@ -596,7 +596,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
         </div>
       </div>
 
-      {/* 彈窗組件 */}
+      {/* 弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}

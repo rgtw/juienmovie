@@ -12,33 +12,33 @@ export async function GET(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未登錄' }, { status: 401 });
+      return NextResponse.json({ error: '未登录' }, { status: 401 });
     }
 
     if (authInfo.username !== process.env.USERNAME) {
-      // 非站長，檢查用戶存在或被封禁
+      // 非站长，检查用户存在或被封禁
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
-    // 獲取彈幕過濾配置
+    // 获取弹幕过滤配置
     const filterConfig = await db.getDanmakuFilterConfig(authInfo.username);
 
-    // 如果沒有配置，返回默認值
+    // 如果没有配置，返回默认值
     if (!filterConfig) {
       return NextResponse.json({ rules: [] });
     }
 
     return NextResponse.json(filterConfig);
   } catch (error) {
-    console.error('獲取彈幕過濾配置失敗:', error);
+    console.error('获取弹幕过滤配置失败:', error);
     return NextResponse.json(
-      { error: '獲取彈幕過濾配置失敗' },
+      { error: '获取弹幕过滤配置失败' },
       { status: 500 }
     );
   }
@@ -48,17 +48,17 @@ export async function POST(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未登錄' }, { status: 401 });
+      return NextResponse.json({ error: '未登录' }, { status: 401 });
     }
 
     if (authInfo.username !== process.env.USERNAME) {
-      // 非站長，檢查用戶存在或被封禁
+      // 非站长，检查用户存在或被封禁
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
@@ -66,10 +66,10 @@ export async function POST(request: NextRequest) {
     const config: DanmakuFilterConfig = body;
 
     if (!config || !Array.isArray(config.rules)) {
-      return NextResponse.json({ error: '配置格式錯誤' }, { status: 400 });
+      return NextResponse.json({ error: '配置格式错误' }, { status: 400 });
     }
 
-    // 驗證每個規則的格式
+    // 验证每个规则的格式
     const validatedRules = config.rules.map((rule) => ({
       keyword: String(rule.keyword || ''),
       type: (rule.type === 'regex' || rule.type === 'normal') ? rule.type : 'normal',
@@ -85,9 +85,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('保存彈幕過濾配置失敗:', error);
+    console.error('保存弹幕过滤配置失败:', error);
     return NextResponse.json(
-      { error: '保存彈幕過濾配置失敗' },
+      { error: '保存弹幕过滤配置失败' },
       { status: 500 }
     );
   }

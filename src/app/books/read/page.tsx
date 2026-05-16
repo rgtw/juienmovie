@@ -1791,8 +1791,8 @@ export default function BookReadPage() {
               </div>
 
               <div className='rounded-2xl bg-gray-50 p-4 text-xs text-gray-500 dark:bg-gray-900 dark:text-gray-400'>
-                首次會緩存到當前瀏覽器，之後再次打開同一本書通常不需要重新整包下載。
-當前緩存狀態：{cacheHit ? '已命中本地緩存' : '本次為網絡加載'}。
+                首次会缓存到当前浏览器，之后再次打开同一本书通常不需要重新整包下载。
+当前缓存状态：{cacheHit ? '已命中本地緩存' : '本次為網絡加載'}。
               </div>
 
               <div className='flex justify-end'>
@@ -1907,7 +1907,7 @@ export default function BookReadPage() {
                 <div className='mb-3 flex items-center justify-between'>
                   <div className='flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100'>
                     <Headphones className='h-4 w-4 text-sky-500' />
-                    聽書控制
+                    听书控制
                   </div>
                   <button
                     type='button'

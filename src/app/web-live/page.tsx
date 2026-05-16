@@ -33,16 +33,16 @@ export default function WebLivePage() {
   const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
   const [isWebLiveEnabled, setIsWebLiveEnabled] = useState<boolean | null>(null);
   const [librariesLoaded, setLibrariesLoaded] = useState(false);
-  const hasAutoLoadedRef = useRef(false); // 防止重複自動加載
+  const hasAutoLoadedRef = useRef(false); // 防止重复自动加载
 
-  // 觀影室同步功能
+  // 观影室同步功能
   const webLiveSync = useWebLiveSync({
     currentSourceKey: currentSource?.key || '',
     currentSourceName: currentSource?.name || '',
     currentSourcePlatform: currentSource?.platform || '',
     currentSourceRoomId: currentSource?.roomId || '',
     onSourceChange: (sourceKey, platform, roomId) => {
-      // 房員接收到直播源切換指令
+      // 房员接收到直播源切换指令
       if (!sources || !Array.isArray(sources)) return;
       const source = sources.find(s => s.key === sourceKey);
       if (source) {
@@ -58,7 +58,7 @@ export default function WebLivePage() {
     document.head.appendChild(meta);
 
     if (typeof window !== 'undefined') {
-      // 異步加載所有必需的庫
+      // 异步加载所有必需的库
       Promise.all([
         import('artplayer').then(mod => { Artplayer = mod.default; }),
         import('hls.js').then(mod => { Hls = mod.default; }),
@@ -67,7 +67,7 @@ export default function WebLivePage() {
         setLibrariesLoaded(true);
       });
 
-      // 檢查網絡直播功能是否啟用
+      // 检查网络直播功能是否启用
       const runtimeConfig = (window as any).RUNTIME_CONFIG;
       const enabled = runtimeConfig?.WEB_LIVE_ENABLED ?? false;
       setIsWebLiveEnabled(enabled);
@@ -104,26 +104,26 @@ export default function WebLivePage() {
     }
   };
 
-  // 當 sources 加載完成後，檢查 URL 參數並自動加載對應的頻道
+  // 当 sources 加载完成后，检查 URL 参数并自动加载对应的频道
   useEffect(() => {
     if (!sources || sources.length === 0) return;
-    if (!librariesLoaded) return; // 等待庫加載完成
+    if (!librariesLoaded) return; // 等待库加载完成
 
-    // 直接從 searchParams 讀取，而不是從 useState
+    // 直接从 searchParams 读取，而不是从 useState
     const needLoadPlatform = searchParams.get('platform');
     const needLoadRoomId = searchParams.get('roomId');
 
     if (!needLoadPlatform || !needLoadRoomId) {
-      hasAutoLoadedRef.current = false; // 重置標誌
+      hasAutoLoadedRef.current = false; // 重置标志
       return;
     }
 
-    // 檢查是否已經加載了這個頻道
+    // 检查是否已经加载了这个频道
     if (currentSource?.platform === needLoadPlatform && currentSource?.roomId === needLoadRoomId) {
       return;
     }
 
-    // 防止重複加載
+    // 防止重复加载
     if (hasAutoLoadedRef.current) {
       return;
     }
@@ -135,7 +135,7 @@ export default function WebLivePage() {
     if (foundSource) {
       handleSourceClick(foundSource);
     } else {
-      hasAutoLoadedRef.current = false; // 重置標誌以便重試
+      hasAutoLoadedRef.current = false; // 重置标志以便重试
     }
   }, [sources, librariesLoaded, searchParams]);
 
@@ -160,24 +160,24 @@ export default function WebLivePage() {
     (video as any).flv = flvPlayer;
   }
 
-  // 清理播放器資源的統一函數
+  // 清理播放器资源的统一函数
   const cleanupPlayer = () => {
     if (artPlayerRef.current) {
       try {
-        // 先暫停播放
+        // 先暂停播放
         if (artPlayerRef.current.video) {
           artPlayerRef.current.video.pause();
           artPlayerRef.current.video.src = '';
           artPlayerRef.current.video.load();
         }
 
-        // 銷燬 HLS 實例
+        // 销毁 HLS 实例
         if (artPlayerRef.current.video && artPlayerRef.current.video.hls) {
           artPlayerRef.current.video.hls.destroy();
           artPlayerRef.current.video.hls = null;
         }
 
-        // 銷燬 FLV 實例
+        // 销毁 FLV 实例
         if (artPlayerRef.current.video && (artPlayerRef.current.video as any).flv) {
           try {
             if ((artPlayerRef.current.video as any).flv.unload) {
@@ -191,11 +191,11 @@ export default function WebLivePage() {
           }
         }
 
-        // 移除所有事件監聽器
+        // 移除所有事件监听器
         artPlayerRef.current.off('ready');
         artPlayerRef.current.off('error');
 
-        // 銷燬 ArtPlayer 實例
+        // 销毁 ArtPlayer 实例
         artPlayerRef.current.destroy();
         artPlayerRef.current = null;
       } catch (err) {
@@ -208,7 +208,7 @@ export default function WebLivePage() {
   useEffect(() => {
     if (!Artplayer || !Hls || !flvjs || !videoUrl || !artRef.current) return;
 
-    // 銷燬舊的播放器實例
+    // 销毁旧的播放器实例
     cleanupPlayer();
 
     artPlayerRef.current = new Artplayer({
@@ -229,14 +229,14 @@ export default function WebLivePage() {
     };
   }, [videoUrl]);
 
-  // 組件卸載時清理
+  // 组件卸载时清理
   useEffect(() => {
     return () => {
       cleanupPlayer();
     };
   }, []);
 
-  // 頁面卸載前清理
+  // 页面卸载前清理
   useEffect(() => {
     const handleBeforeUnload = () => {
       cleanupPlayer();
@@ -251,7 +251,7 @@ export default function WebLivePage() {
   }, []);
 
   const handleSourceClick = async (source: any) => {
-    // 立即清理舊的播放器
+    // 立即清理旧的播放器
     cleanupPlayer();
 
     setCurrentSource(source);
@@ -259,7 +259,7 @@ export default function WebLivePage() {
     setErrorMessage(null);
     setStreamInfo(null);
 
-    // 更新 URL 參數
+    // 更新 URL 参数
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set('platform', source.platform);
     newSearchParams.set('roomId', source.roomId);
@@ -270,7 +270,7 @@ export default function WebLivePage() {
       if (res.ok) {
         const data = await res.json();
 
-        // 等待 DOM 渲染完成後再設置 videoUrl
+        // 等待 DOM 渲染完成后再设置 videoUrl
         const waitForDom = () => {
           if (artRef.current) {
             setVideoUrl(data.url);
@@ -280,7 +280,7 @@ export default function WebLivePage() {
           }
         };
 
-        // 使用 requestAnimationFrame 等待下一幀
+        // 使用 requestAnimationFrame 等待下一帧
         requestAnimationFrame(waitForDom);
 
         // 保存主播信息
@@ -317,23 +317,23 @@ export default function WebLivePage() {
 
   const platforms = Array.from(new Set(sources.map(s => s.platform)));
 
-  // 根據選中的平臺篩選房間
+  // 根据选中的平台筛选房间
   const filteredSources = selectedPlatform
     ? sources.filter(s => s.platform === selectedPlatform)
     : sources;
 
-  // 處理平臺點擊
+  // 处理平台点击
   const handlePlatformClick = (platform: string) => {
     setSelectedPlatform(platform);
     setActiveTab('rooms');
   };
 
-  // 清除平臺篩選
+  // 清除平台筛选
   const clearPlatformFilter = () => {
     setSelectedPlatform(null);
   };
 
-  // 如果功能未啟用，顯示提示
+  // 如果功能未启用，显示提示
   if (isWebLiveEnabled === false) {
     return (
       <PageLayout activePath='/web-live'>
@@ -350,7 +350,7 @@ export default function WebLivePage() {
               <h3 className='text-2xl font-bold text-gray-900 dark:text-gray-100'>功能未啟用</h3>
               <div className='bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4'>
                 <p className='text-sm text-gray-700 dark:text-gray-300 leading-relaxed'>
-                  網絡直播功能當前未啟用。請聯繫管理員在管理面板中開啟此功能。
+                  网络直播功能当前未启用。请联系管理员在管理面板中开启此功能。
                 </p>
               </div>
             </div>
@@ -365,15 +365,15 @@ export default function WebLivePage() {
       <PageLayout activePath='/web-live'>
         <div className='flex items-center justify-center min-h-screen bg-transparent'>
           <div className='text-center max-w-md mx-auto px-6'>
-            {/* 動畫直播圖標 */}
+            {/* 动画直播图标 */}
             <div className='relative mb-8'>
               <div className='relative mx-auto w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-2xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300'>
                 <div className='text-white text-4xl'>📺</div>
-                {/* 旋轉光環 */}
+                {/* 旋转光环 */}
                 <div className='absolute -inset-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl opacity-20 animate-spin'></div>
               </div>
 
-              {/* 浮動粒子效果 */}
+              {/* 浮动粒子效果 */}
               <div className='absolute top-0 left-0 w-full h-full pointer-events-none'>
                 <div className='absolute top-2 left-2 w-2 h-2 bg-green-400 rounded-full animate-bounce'></div>
                 <div
@@ -387,7 +387,7 @@ export default function WebLivePage() {
               </div>
             </div>
 
-            {/* 進度指示器 */}
+            {/* 进度指示器 */}
             <div className='mb-6 w-80 mx-auto'>
               <div className='flex justify-center space-x-2 mb-4'>
                 <div
@@ -401,7 +401,7 @@ export default function WebLivePage() {
                 ></div>
               </div>
 
-              {/* 進度條 */}
+              {/* 进度条 */}
               <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden'>
                 <div
                   className='h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-1000 ease-out'
@@ -412,7 +412,7 @@ export default function WebLivePage() {
               </div>
             </div>
 
-            {/* 加載消息 */}
+            {/* 加载消息 */}
             <div className='space-y-2'>
               <p className='text-xl font-semibold text-gray-800 dark:text-gray-200 animate-pulse'>
                 {loadingMessage}
@@ -501,12 +501,12 @@ export default function WebLivePage() {
                 )}
               </div>
 
-              {/* 外部播放器按鈕 */}
+              {/* 外部播放器按钮 */}
               {currentSource && !webLiveSync.isInRoom && (
                 <div className='mt-3 px-2 lg:flex-shrink-0 flex justify-end'>
                   <div className='bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 border border-gray-200/50 dark:border-gray-700/50 w-full lg:w-auto overflow-x-auto'>
                     <div className='flex gap-1.5 justify-end lg:flex-wrap items-center'>
-                      {/* 網頁播放 */}
+                      {/* 网页播放 */}
                       <button
                         onClick={(e) => {
                           e.preventDefault();
@@ -533,7 +533,7 @@ export default function WebLivePage() {
                           />
                         </svg>
                         <span className='hidden lg:inline max-w-0 group-hover:max-w-[100px] overflow-hidden whitespace-nowrap transition-all duration-200 ease-in-out text-gray-700 dark:text-gray-200'>
-                          網頁播放
+                          网页播放
                         </span>
                       </button>
 
@@ -675,7 +675,7 @@ export default function WebLivePage() {
                 </div>
               )}
 
-              {/* 直播信息顯示 */}
+              {/* 直播信息显示 */}
               {streamInfo && (streamInfo.name || streamInfo.title) && (
                 <div className='mt-3 px-2'>
                   <div className='space-y-1.5'>
@@ -701,13 +701,13 @@ export default function WebLivePage() {
                     onClick={() => setActiveTab('rooms')}
                     className={`flex-1 py-3 px-6 text-center cursor-pointer transition-all duration-200 font-medium ${activeTab === 'rooms' ? 'text-green-600 dark:text-green-400' : 'text-gray-700 hover:text-green-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'}`}
                   >
-                    房間
+                    房间
                   </div>
                   <div
                     onClick={() => setActiveTab('platforms')}
                     className={`flex-1 py-3 px-6 text-center cursor-pointer transition-all duration-200 font-medium ${activeTab === 'platforms' ? 'text-green-600 dark:text-green-400' : 'text-gray-700 hover:text-green-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'}`}
                   >
-                    平臺
+                    平台
                   </div>
                 </div>
 
@@ -725,7 +725,7 @@ export default function WebLivePage() {
                           onClick={clearPlatformFilter}
                           className='text-xs text-green-700 dark:text-green-300 hover:text-green-900 dark:hover:text-green-100 underline'
                         >
-                          清除篩選
+                          清除筛选
                         </button>
                       </div>
                     )}
@@ -791,7 +791,7 @@ export default function WebLivePage() {
                                 {platform === 'huya' ? '虎牙' : platform === 'bilibili' ? '嗶哩嗶哩' : platform === 'douyin' ? '抖音' : platform}
                               </div>
                               <div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                                {sources.filter(s => s.platform === platform).length} 個房間
+                                {sources.filter(s => s.platform === platform).length} 个房间
                               </div>
                             </div>
                           </button>

@@ -163,7 +163,7 @@ export default function BookHistoryPage() {
                       onClick={() => { cacheBookReadRecord(item); if (item.sourceId && item.bookId) { cacheBookShelfItem({ sourceId: item.sourceId, sourceName: item.sourceName, bookId: item.bookId, title: item.title, author: item.author, cover: item.cover, format: item.format, detailHref: item.detailHref, acquisitionHref: item.acquisitionHref, saveTime: item.saveTime }); } }}
                       className='rounded-2xl bg-sky-600 px-3 py-2 text-xs text-white'
                     >
-                      繼續閱讀
+                      继续阅读
                     </Link>
                   ) : (
                     <span className='rounded-2xl bg-gray-200 px-3 py-2 text-xs text-gray-500 dark:bg-gray-800'>歷史記錄缺少書源信息</span>
@@ -252,7 +252,7 @@ export default function BookHistoryPage() {
                 }}
                 className='rounded-2xl bg-red-600 px-4 py-2 text-sm text-white'
               >
-                確認
+                确认
               </button>
             </div>
           </div>

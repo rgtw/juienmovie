@@ -106,11 +106,11 @@ export default function PlayRecordsPanel({
           <div className='flex items-center gap-2'>
             <History className='w-5 h-5 text-sky-500' />
             <h3 className='text-lg font-bold text-gray-800 dark:text-gray-200'>
-              播放記錄
+              播放记录
             </h3>
             {playRecords.length > 0 && (
               <span className='px-2 py-0.5 text-xs font-medium bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-300 rounded-full'>
-                {playRecords.length} 項
+                {playRecords.length} 项
               </span>
             )}
           </div>
@@ -197,10 +197,10 @@ export default function PlayRecordsPanel({
                   </div>
                   <div className='flex-1'>
                     <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2'>
-                      清空播放記錄
+                      清空播放记录
                     </h3>
                     <p className='text-sm text-gray-600 dark:text-gray-400'>
-                      確定要清空所有播放記錄嗎？此操作不可恢復。
+                      确定要清空所有播放记录吗？此操作不可恢复。
                     </p>
                   </div>
                 </div>
@@ -216,7 +216,7 @@ export default function PlayRecordsPanel({
                     onClick={handleClearAll}
                     className='flex-1 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors'
                   >
-                    確定清空
+                    确定清空
                   </button>
                 </div>
               </div>

@@ -47,6 +47,6 @@ export async function POST(request: NextRequest) {
       cacheHit: result.cacheHit,
     });
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message || '語音合成失敗' }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message || '语音合成失败' }, { status: 500 });
   }
 }

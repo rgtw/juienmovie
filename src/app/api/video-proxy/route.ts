@@ -3,7 +3,7 @@ import { validateProxyUrlServerSide } from '@/lib/server/ssrf';
 
 export const runtime = 'nodejs';
 
-// 視頻代理接口，支持Range請求
+// 视频代理接口，支持Range请求
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const videoUrl = searchParams.get('url');
@@ -12,14 +12,14 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Missing video URL' }, { status: 400 });
   }
 
-  // 安全校驗：防 SSRF，只允許合法的公網 URL
+  // 安全校验：防 SSRF，只允许合法的公网 URL
   const isSafeUrl = await validateProxyUrlServerSide(videoUrl);
   if (!isSafeUrl) {
     return NextResponse.json({ error: 'Proxy request to local or invalid network is forbidden' }, { status: 403 });
   }
 
   try {
-    // 獲取客戶端的Range請求頭
+    // 获取客户端的Range请求头
     const range = request.headers.get('range');
 
     const fetchHeaders: HeadersInit = {
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
       Referer: 'https://movie.douban.com/',
     };
 
-    // 如果客戶端發送了Range請求，轉發給源服務器
+    // 如果客户端发送了Range请求，转发给源服务器
     if (range) {
       fetchHeaders['Range'] = range;
     }
@@ -52,10 +52,10 @@ export async function GET(request: Request) {
       );
     }
 
-    // 創建響應頭
+    // 创建响应头
     const headers = new Headers();
 
-    // 複製重要的響應頭
+    // 复制重要的响应头
     const contentType = videoResponse.headers.get('content-type');
     if (contentType) {
       headers.set('Content-Type', contentType);
@@ -76,12 +76,12 @@ export async function GET(request: Request) {
       headers.set('Accept-Ranges', acceptRanges);
     }
 
-    // 設置緩存頭
-    headers.set('Cache-Control', 'public, max-age=31536000, s-maxage=31536000'); // 緩存1年
+    // 设置缓存头
+    headers.set('Cache-Control', 'public, max-age=31536000, s-maxage=31536000'); // 缓存1年
     headers.set('CDN-Cache-Control', 'public, s-maxage=31536000');
     headers.set('Vercel-CDN-Cache-Control', 'public, s-maxage=31536000');
 
-    // 返回視頻流，狀態碼根據是否有Range請求決定
+    // 返回视频流，状态码根据是否有Range请求决定
     const status = range && contentRange ? 206 : 200;
 
     return new Response(videoResponse.body, {

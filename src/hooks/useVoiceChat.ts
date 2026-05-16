@@ -81,7 +81,7 @@ export function useVoiceChat({
       return stream;
     } catch (err) {
       console.error('[VoiceChat] Failed to get local stream:', err);
-      setError('无法访问麦克风，请检查权限设置');
+      setError('無法訪問麥克風，請檢查權限設置');
       throw err;
     }
   }, []);
@@ -473,7 +473,7 @@ export function useVoiceChat({
       console.log('[VoiceChat] Server relay started');
     } catch (err) {
       console.error('[VoiceChat] Failed to start server relay:', err);
-      setError('服务器中转启动失败');
+      setError('服務器中轉啟動失敗');
     }
   }, [socket, roomId]);
 
@@ -493,7 +493,7 @@ export function useVoiceChat({
   // 切换到服务器中转模式
   const switchToServerRelay = useCallback(async () => {
     console.log('[VoiceChat] Switching to server relay mode');
-    setError('P2P连接失败，切换到服务器中转模式');
+    setError('P2P連接失敗，切換到服務器中轉模式');
 
     // 清理WebRTC连接
     cleanupWebRTC();
@@ -508,11 +508,11 @@ export function useVoiceChat({
         startServerRelay();
       } else {
         console.error('[VoiceChat] Cannot start server relay - no enabled audio tracks');
-        setError('服务器中转启动失败：麦克风未启用');
+        setError('服務器中轉啟動失敗：麥克風未啟用');
       }
     } else {
       console.error('[VoiceChat] Cannot start server relay - mic disabled or no stream');
-      setError('服务器中转启动失败：麦克风未开启');
+      setError('服務器中轉啟動失敗：麥克風未開啟');
     }
   }, [isMicEnabled, cleanupWebRTC, startServerRelay]);
 
@@ -581,7 +581,7 @@ export function useVoiceChat({
       nextPlayTimeRef.current.set(userId, nextPlayTime + duration);
     } catch (err) {
       console.error('[VoiceChat] Failed to play audio:', err);
-      setError('音频播放失败: ' + (err as Error).message);
+      setError('音頻播放失敗: ' + (err as Error).message);
     }
   }, [isSpeakerEnabled]);
 

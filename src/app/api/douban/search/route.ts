@@ -21,14 +21,14 @@ interface DoubanSearchResponse {
 
 /**
  * GET /api/douban/search?q=<query>
- * 搜索豆瓣影視作品
+ * 搜索豆瓣影视作品
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q');
 
   if (!query) {
-    return NextResponse.json({ error: '缺少搜索關鍵詞' }, { status: 400 });
+    return NextResponse.json({ error: '缺少搜索关键词' }, { status: 400 });
   }
 
   try {
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response);
   } catch (error) {
     return NextResponse.json(
-      { error: '搜索豆瓣數據失敗', details: (error as Error).message },
+      { error: '搜索豆瓣数据失败', details: (error as Error).message },
       { status: 500 }
     );
   }

@@ -9,17 +9,17 @@ export const runtime = 'nodejs';
 
 /**
  * PUT /api/admin/anime-subscription/[id]
- * 更新訂閱
+ * 更新订阅
  */
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    // 權限檢查
+    // 权限检查
     const authInfo = getAuthInfoFromCookie(req);
     if (!authInfo || (authInfo.role !== 'admin' && authInfo.role !== 'owner')) {
-      return NextResponse.json({ error: '無權限訪問' }, { status: 403 });
+      return NextResponse.json({ error: '无权限访问' }, { status: 403 });
     }
 
     const config = await getConfig();
@@ -27,7 +27,7 @@ export async function PUT(
 
     const index = subscriptions.findIndex((sub) => sub.id === params.id);
     if (index === -1) {
-      return NextResponse.json({ error: '訂閱不存在' }, { status: 404 });
+      return NextResponse.json({ error: '订阅不存在' }, { status: 404 });
     }
 
     const updates = await req.json();
@@ -42,7 +42,7 @@ export async function PUT(
     }
     if (updates.source !== undefined) {
       if (!['acgrip', 'mikan', 'dmhy'].includes(updates.source)) {
-        return NextResponse.json({ error: '無效的搜索源' }, { status: 400 });
+        return NextResponse.json({ error: '无效的搜索源' }, { status: 400 });
       }
       subscription.source = updates.source;
     }
@@ -50,11 +50,11 @@ export async function PUT(
       subscription.enabled = updates.enabled;
     }
     if (updates.lastEpisode !== undefined) {
-      // 驗證集數為非負整數
+      // 验证集数为非负整数
       const episode = parseInt(String(updates.lastEpisode), 10);
       if (isNaN(episode) || episode < 0) {
         return NextResponse.json(
-          { error: '集數必須是非負整數' },
+          { error: '集数必须是非负整数' },
           { status: 400 }
         );
       }
@@ -67,9 +67,9 @@ export async function PUT(
 
     return NextResponse.json(subscription);
   } catch (error: any) {
-    console.error('更新追番訂閱失敗:', error);
+    console.error('更新追番订阅失败:', error);
     return NextResponse.json(
-      { error: error.message || '更新訂閱失敗' },
+      { error: error.message || '更新订阅失败' },
       { status: 500 }
     );
   }
@@ -77,17 +77,17 @@ export async function PUT(
 
 /**
  * DELETE /api/admin/anime-subscription/[id]
- * 刪除訂閱
+ * 删除订阅
  */
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    // 權限檢查
+    // 权限检查
     const authInfo = getAuthInfoFromCookie(req);
     if (!authInfo || (authInfo.role !== 'admin' && authInfo.role !== 'owner')) {
-      return NextResponse.json({ error: '無權限訪問' }, { status: 403 });
+      return NextResponse.json({ error: '无权限访问' }, { status: 403 });
     }
 
     const config = await getConfig();
@@ -95,7 +95,7 @@ export async function DELETE(
 
     const index = subscriptions.findIndex((sub) => sub.id === params.id);
     if (index === -1) {
-      return NextResponse.json({ error: '訂閱不存在' }, { status: 404 });
+      return NextResponse.json({ error: '订阅不存在' }, { status: 404 });
     }
 
     subscriptions.splice(index, 1);
@@ -103,9 +103,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error('刪除追番訂閱失敗:', error);
+    console.error('删除追番订阅失败:', error);
     return NextResponse.json(
-      { error: error.message || '刪除訂閱失敗' },
+      { error: error.message || '删除订阅失败' },
       { status: 500 }
     );
   }

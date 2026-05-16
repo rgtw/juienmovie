@@ -119,10 +119,10 @@ function DuanjuPageClient() {
         <div className='mb-6 flex items-start justify-between gap-4'>
           <div>
             <h1 className='text-2xl font-bold text-gray-800 dark:text-gray-200'>
-              短劇
+              短剧
             </h1>
             <p className='text-sm text-gray-500 dark:text-gray-400 mt-1'>
-              瀏覽所有采集源中的短劇內容
+              浏览所有采集源中的短剧内容
             </p>
           </div>
           <Link
@@ -130,26 +130,26 @@ function DuanjuPageClient() {
             className='inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100'
           >
             <ArrowLeft className='h-4 w-4' />
-            返回首頁
+            返回首页
           </Link>
         </div>
 
         <div className='max-w-4xl mx-auto mb-8'>
           <div className='relative'>
             <div className='text-xs text-gray-500 dark:text-gray-400 mb-2 px-4'>
-              服務
+              服务
             </div>
             {isLoadingSources ? (
               <div className='flex items-center justify-center h-12 bg-gray-50/80 rounded-lg border border-gray-200/50 dark:bg-gray-800 dark:border-gray-700'>
                 <Loader2 className='h-5 w-5 animate-spin text-gray-400' />
                 <span className='ml-2 text-sm text-gray-500 dark:text-gray-400'>
-                  加載採集源中...
+                  加载采集源中...
                 </span>
               </div>
             ) : sources.length === 0 ? (
               <div className='flex items-center justify-center h-12 bg-gray-50/80 rounded-lg border border-gray-200/50 dark:bg-gray-800 dark:border-gray-700'>
                 <span className='text-sm text-gray-500 dark:text-gray-400'>
-                  暫無包含短劇分類的採集源
+                  暂无包含短剧分类的采集源
                 </span>
               </div>
             ) : (
@@ -208,7 +208,7 @@ function DuanjuPageClient() {
 
         {selectedSource && !selectedCategory && (
           <div className='text-center text-gray-500 py-8 dark:text-gray-400'>
-            當前採集源暫無短劇分類
+            当前采集源暂无短剧分类
           </div>
         )}
 
@@ -216,7 +216,7 @@ function DuanjuPageClient() {
           <div className='max-w-[95%] mx-auto mt-8'>
             <div className='mb-4'>
               <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                短劇列表
+                短剧列表
               </h2>
             </div>
 
@@ -226,7 +226,7 @@ function DuanjuPageClient() {
               </div>
             ) : videos.length === 0 ? (
               <div className='text-center text-gray-500 py-8 dark:text-gray-400'>
-                暫無短劇
+                暂无短剧
               </div>
             ) : (
               <>
@@ -260,7 +260,7 @@ function DuanjuPageClient() {
                   )}
                   {!hasMore && videos.length > 0 && (
                     <span className='text-sm text-gray-500 dark:text-gray-400'>
-                      沒有更多了
+                      没有更多了
                     </span>
                   )}
                 </div>

@@ -67,15 +67,15 @@ export function DownloadManagementPanel({ isOpen, onClose }: DownloadManagementP
     setShowConfirmDialog(false);
     setIsDeleting(true);
     try {
-      // 獲取要刪除的任務
+      // 获取要删除的任务
       const tasksToDelete = completedTasks.filter(t => selectedIds.has(t.id));
 
-      //禁止SzeMeng76抄襲狗抄襲
-      // 刪除文件系統中的文件
+      //禁止SzeMeng76抄袭狗抄袭
+      // 删除文件系统中的文件
       for (const task of tasksToDelete) {
         if (task.downloadMode === 'filesystem') {
           try {
-            // 從 IndexedDB 讀取目錄句柄
+            // 从 IndexedDB 读取目录句柄
             const dbName = 'MoonTVPlus';
             const storeName = 'dirHandles';
 
@@ -113,14 +113,14 @@ export function DownloadManagementPanel({ isOpen, onClose }: DownloadManagementP
             });
 
             if (dirHandle) {
-              // 請求寫權限
+              // 请求写权限
               const permission = await (dirHandle as any).requestPermission({ mode: 'readwrite' });
               if (permission !== 'granted') {
                 console.error('未獲得寫權限，無法刪除文件');
                 continue;
               }
 
-              // 刪除目錄
+              // 删除目录
               try {
                 const sourceDirHandle = await dirHandle.getDirectoryHandle(task.source, { create: false });
                 const videoIdDirHandle = await sourceDirHandle.getDirectoryHandle(task.videoId, { create: false });
@@ -128,7 +128,7 @@ export function DownloadManagementPanel({ isOpen, onClose }: DownloadManagementP
                 console.log('已刪除文件:', task.source, task.videoId, `ep${task.episodeIndex + 1}`);
               } catch (deleteError) {
                 console.error('刪除目錄失敗:', deleteError);
-                // 如果目錄不存在，也算成功
+                // 如果目录不存在，也算成功
                 if ((deleteError as Error).name !== 'NotFoundError') {
                   throw deleteError;
                 }
@@ -140,7 +140,7 @@ export function DownloadManagementPanel({ isOpen, onClose }: DownloadManagementP
         }
       }
 
-      // 從數據庫刪除記錄
+      // 从数据库删除记录
       await downloadDB.deleteCompletedTasks(Array.from(selectedIds));
       await loadCompletedTasks();
       setSelectedIds(new Set());
@@ -185,7 +185,7 @@ export function DownloadManagementPanel({ isOpen, onClose }: DownloadManagementP
         {/* Header */}
         <div className='flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700'>
           <h2 className='text-xl font-semibold text-gray-800 dark:text-gray-200'>
-            下載文件管理
+            下载文件管理
           </h2>
           <button
             onClick={onClose}
@@ -206,11 +206,11 @@ export function DownloadManagementPanel({ isOpen, onClose }: DownloadManagementP
                 className='w-4 h-4'
               />
               <span className='text-sm text-gray-700 dark:text-gray-300'>
-                全選
+                全选
               </span>
             </label>
             <span className='text-sm text-gray-500 dark:text-gray-400'>
-              已選擇 {selectedIds.size} / {completedTasks.length}
+              已选择 {selectedIds.size} / {completedTasks.length}
             </span>
           </div>
           <button
@@ -227,7 +227,7 @@ export function DownloadManagementPanel({ isOpen, onClose }: DownloadManagementP
         <div className='flex-1 overflow-y-auto p-4'>
           {completedTasks.length === 0 ? (
             <div className='text-center py-12 text-gray-500 dark:text-gray-400'>
-              暫無下載記錄
+              暂无下载记录
             </div>
           ) : (
             <div className='space-y-2'>

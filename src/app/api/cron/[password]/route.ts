@@ -141,14 +141,14 @@ async function fetchMangaCoverAsDataUri(coverUrl?: string): Promise<string | und
 
     return `data:${finalContentType};base64,${buffer.toString('base64')}`;
   } catch (error) {
-    console.warn('漫畫封面轉 base64 失敗:', error);
+    console.warn('漫画封面转 base64 失败:', error);
     return undefined;
   }
 }
 
-// 內存中記錄最後執行時間（毫秒時間戳）
+// 内存中记录最后执行时间（毫秒时间戳）
 let lastExecutionTime = 0;
-const COOLDOWN_MS = 10 * 60 * 1000; // 10分鐘冷卻時間
+const COOLDOWN_MS = 10 * 60 * 1000; // 10分钟冷却时间
 
 export async function GET(
   request: NextRequest,
@@ -164,7 +164,7 @@ export async function GET(
     );
   }
 
-  // 檢查冷卻時間
+  // 检查冷却时间
   const now = Date.now();
   const timeSinceLastExecution = now - lastExecutionTime;
 
@@ -187,15 +187,15 @@ export async function GET(
   try {
     console.log('Cron job triggered:', new Date().toISOString());
 
-    // 更新最後執行時間
+    // 更新最后执行时间
     lastExecutionTime = now;
 
-    // 環境變量控制是否等待定時任務完全結束後再返回響應（默認 false）
-    // 用於防止 Vercel 等平臺殺後臺進程
+    // 环境变量控制是否等待定时任务完全结束后再返回响应（默认 false）
+    // 用于防止 Vercel 等平台杀后台进程
     const waitForCompletion = process.env.CRON_WAIT_FOR_COMPLETION === 'true';
 
     if (waitForCompletion) {
-      // 等待定時任務完成後再返回 200
+      // 等待定时任务完成后再返回 200
       await cronJob();
       return NextResponse.json({
         success: true,
@@ -203,7 +203,7 @@ export async function GET(
         timestamp: new Date().toISOString(),
       });
     } else {
-      // 立即返回 202，定時任務在後臺執行
+      // 立即返回 202，定时任务在后台执行
       cronJob();
       return NextResponse.json({
         success: true,
@@ -227,10 +227,10 @@ export async function GET(
 }
 
 async function cronJob() {
-  // 先刷新配置，確保其他任務使用最新配置
+  // 先刷新配置，确保其他任务使用最新配置
   await refreshConfig();
 
-  // 其餘任務並行執行
+  // 其余任务并行执行
   await Promise.all([
     refreshAllLiveChannels(),
     refreshOpenList(),
@@ -249,11 +249,11 @@ async function refreshAllLiveChannels() {
 
   if (lastRefreshTime > 0 && timeSinceLastRefresh < intervalMs) {
     const remainingHours = Math.ceil((intervalMs - timeSinceLastRefresh) / (60 * 60 * 1000));
-    console.log(`跳過刷新電視直播：距離上次刷新僅 ${Math.floor(timeSinceLastRefresh / (60 * 60 * 1000))} 小時，還需等待 ${remainingHours} 小時`);
+    console.log(`跳过刷新电视直播：距离上次刷新仅 ${Math.floor(timeSinceLastRefresh / (60 * 60 * 1000))} 小时，还需等待 ${remainingHours} 小时`);
     return;
   }
 
-  // 併發刷新所有啟用的直播源
+  // 并发刷新所有启用的直播源
   const refreshPromises = (config.LiveConfig || [])
     .filter(liveInfo => !liveInfo.disabled)
     .map(async (liveInfo) => {
@@ -261,12 +261,12 @@ async function refreshAllLiveChannels() {
         const nums = await refreshLiveChannels(liveInfo);
         liveInfo.channelNumber = nums;
       } catch (error) {
-        console.error(`刷新直播源失敗 [${liveInfo.name || liveInfo.key}]:`, error);
+        console.error(`刷新直播源失败 [${liveInfo.name || liveInfo.key}]:`, error);
         liveInfo.channelNumber = 0;
       }
     });
 
-  // 等待所有刷新任務完成
+  // 等待所有刷新任务完成
   await Promise.all(refreshPromises);
 
   setLastGlobalLiveRefreshTime(Date.now());
@@ -282,45 +282,45 @@ async function refreshConfig() {
       const response = await fetch(config.ConfigSubscribtion.URL);
 
       if (!response.ok) {
-        throw new Error(`請求失敗: ${response.status} ${response.statusText}`);
+        throw new Error(`请求失败: ${response.status} ${response.statusText}`);
       }
 
       const configContent = await response.text();
 
-      // 對 configContent 進行 base58 解碼
+      // 对 configContent 进行 base58 解码
       let decodedContent;
       try {
         const bs58 = (await import('bs58')).default;
         const decodedBytes = bs58.decode(configContent);
         decodedContent = new TextDecoder().decode(decodedBytes);
       } catch (decodeError) {
-        console.warn('Base58 解碼失敗:', decodeError);
+        console.warn('Base58 解码失败:', decodeError);
         throw decodeError;
       }
 
       try {
         JSON.parse(decodedContent);
       } catch (e) {
-        throw new Error('配置文件格式錯誤，請檢查 JSON 語法');
+        throw new Error('配置文件格式错误，请检查 JSON 语法');
       }
       config.ConfigFile = decodedContent;
       config.ConfigSubscribtion.LastCheck = new Date().toISOString();
       config = refineConfig(config);
       await db.saveAdminConfig(config);
 
-      // 清除短劇視頻源緩存（因為配置文件可能包含新的視頻源）
+      // 清除短剧视频源缓存（因为配置文件可能包含新的视频源）
       try {
         await db.deleteGlobalValue('duanju');
-        console.log('已清除短劇視頻源緩存');
+        console.log('已清除短剧视频源缓存');
       } catch (error) {
-        console.error('清除短劇視頻源緩存失敗:', error);
-        // 不影響主流程，繼續執行
+        console.error('清除短剧视频源缓存失败:', error);
+        // 不影响主流程，继续执行
       }
     } catch (e) {
-      console.error('刷新配置失敗:', e);
+      console.error('刷新配置失败:', e);
     }
   } else {
-    console.log('跳過刷新：未配置訂閱地址或自動更新');
+    console.log('跳过刷新：未配置订阅地址或自动更新');
   }
 }
 
@@ -331,19 +331,19 @@ async function refreshRecordAndFavorites() {
       users.push(process.env.USERNAME);
     }
 
-    // 環境變量控制是否跳過特定源（默認為 false，即默認跳過）
+    // 环境变量控制是否跳过特定源（默认为 false，即默认跳过）
     const includeSpecialSources = process.env.CRON_INCLUDE_SPECIAL_SOURCES === 'true';
 
-    // 檢查是否應該跳過該源
+    // 检查是否应该跳过该源
     const shouldSkipSource = (source: string): boolean => {
       if (includeSpecialSources) {
-        return false; // 如果開啟了包含特殊源，則不跳過任何源
+        return false; // 如果开启了包含特殊源，则不跳过任何源
       }
-      // 默認跳過 emby 開頭、openlist、xiaoya 和 live 開頭的源
+      // 默认跳过 emby 开头、openlist、xiaoya 和 live 开头的源
       return source.startsWith('emby') || source === 'openlist' || source === 'xiaoya' || source.startsWith('live');
     };
 
-    // 函數級緩存：key 為 `${source}+${id}`，值為 Promise<VideoDetail | null>
+    // 函数级缓存：key 为 `${source}+${id}`，值为 Promise<VideoDetail | null>
     const detailCache = new Map<string, Promise<SearchResult | null>>();
     const mangaDetailCache = new Map<
       string,
@@ -351,7 +351,7 @@ async function refreshRecordAndFavorites() {
     >();
     const suwayomiClient = new SuwayomiClient();
 
-    // 獲取詳情 Promise（帶緩存和錯誤處理）
+    // 获取详情 Promise（带缓存和错误处理）
     const getDetail = async (
       source: string,
       id: string,
@@ -360,7 +360,7 @@ async function refreshRecordAndFavorites() {
       const key = `${source}+${id}`;
       let promise = detailCache.get(key);
       if (!promise) {
-        // 立即緩存Promise，避免併發時的競態條件
+        // 立即缓存Promise，避免并发时的竞态条件
         promise = fetchVideoDetail({
           source,
           id,
@@ -370,8 +370,8 @@ async function refreshRecordAndFavorites() {
             return detail;
           })
           .catch((err) => {
-            console.error(`獲取視頻詳情失敗 (${source}+${id}):`, err);
-            // 失敗時從緩存中移除，下次可以重試
+            console.error(`获取视频详情失败 (${source}+${id}):`, err);
+            // 失败时从缓存中移除，下次可以重试
             detailCache.delete(key);
             return null;
           });
@@ -420,7 +420,7 @@ async function refreshRecordAndFavorites() {
             };
           })
           .catch((err) => {
-            console.error(`獲取漫畫詳情失敗 (${key}):`, err);
+            console.error(`获取漫画详情失败 (${key}):`, err);
             mangaDetailCache.delete(key);
             return null;
           });
@@ -429,12 +429,12 @@ async function refreshRecordAndFavorites() {
       return promise;
     };
 
-    // 處理單個用戶的函數
+    // 处理单个用户的函数
     const processUser = async (user: string) => {
-      console.log(`開始處理用戶: ${user}`);
+      console.log(`开始处理用户: ${user}`);
       const storage = getStorage();
 
-      // 播放記錄
+      // 播放记录
       try {
         const playRecords = await db.getAllPlayRecords(user);
         const totalRecords = Object.keys(playRecords).length;
@@ -444,31 +444,31 @@ async function refreshRecordAndFavorites() {
           try {
             const [source, id] = key.split('+');
             if (!source || !id) {
-              console.warn(`跳過無效的播放記錄鍵: ${key}`);
+              console.warn(`跳过无效的播放记录键: ${key}`);
               continue;
             }
 
-            // 檢查是否應該跳過該源
+            // 检查是否应该跳过该源
             if (shouldSkipSource(source)) {
-              console.log(`跳過播放記錄 (源被過濾): ${key}`);
+              console.log(`跳过播放记录 (源被过滤): ${key}`);
               processedRecords++;
               continue;
             }
 
             const detail = await getDetail(source, id, record.title);
             if (!detail) {
-              console.warn(`跳過無法獲取詳情的播放記錄: ${key}`);
+              console.warn(`跳过无法获取详情的播放记录: ${key}`);
               continue;
             }
 
             const episodeCount = detail.episodes?.length || 0;
             if (episodeCount > 0 && episodeCount !== record.total_episodes) {
-              // 計算新增的劇集數量
+              // 计算新增的剧集数量
               const newEpisodesCount = episodeCount > record.total_episodes
                 ? episodeCount - record.total_episodes
                 : 0;
 
-              // 如果有新增劇集，累加到現有的 new_episodes 字段
+              // 如果有新增剧集，累加到现有的 new_episodes 字段
               const updatedNewEpisodes = (record.new_episodes || 0) + newEpisodesCount;
 
               await db.savePlayRecord(user, source, id, {
@@ -485,20 +485,20 @@ async function refreshRecordAndFavorites() {
                 new_episodes: updatedNewEpisodes > 0 ? updatedNewEpisodes : undefined,
               });
               console.log(
-                `更新播放記錄: ${record.title} (${record.total_episodes} -> ${episodeCount}, 新增 ${newEpisodesCount} 集)`
+                `更新播放记录: ${record.title} (${record.total_episodes} -> ${episodeCount}, 新增 ${newEpisodesCount} 集)`
               );
             }
 
             processedRecords++;
           } catch (err) {
-            console.error(`處理播放記錄失敗 (${key}):`, err);
-            // 繼續處理下一個記錄
+            console.error(`处理播放记录失败 (${key}):`, err);
+            // 继续处理下一个记录
           }
         }
 
-        console.log(`播放記錄處理完成: ${processedRecords}/${totalRecords}`);
+        console.log(`播放记录处理完成: ${processedRecords}/${totalRecords}`);
       } catch (err) {
-        console.error(`獲取用戶播放記錄失敗 (${user}):`, err);
+        console.error(`获取用户播放记录失败 (${user}):`, err);
       }
 
       // 收藏
@@ -510,26 +510,26 @@ async function refreshRecordAndFavorites() {
         const totalFavorites = Object.keys(favorites).length;
         let processedFavorites = 0;
         const now = Date.now();
-        const userUpdates: FavoriteUpdate[] = []; // 收集該用戶的所有更新
+        const userUpdates: FavoriteUpdate[] = []; // 收集该用户的所有更新
 
         for (const [key, fav] of Object.entries(favorites)) {
           try {
             const [source, id] = key.split('+');
             if (!source || !id) {
-              console.warn(`跳過無效的收藏鍵: ${key}`);
+              console.warn(`跳过无效的收藏键: ${key}`);
               continue;
             }
 
-            // 檢查是否應該跳過該源
+            // 检查是否应该跳过该源
             if (shouldSkipSource(source)) {
-              console.log(`跳過收藏 (源被過濾): ${key}`);
+              console.log(`跳过收藏 (源被过滤): ${key}`);
               processedFavorites++;
               continue;
             }
 
             const favDetail = await getDetail(source, id, fav.title);
             if (!favDetail) {
-              console.warn(`跳過無法獲取詳情的收藏: ${key}`);
+              console.warn(`跳过无法获取详情的收藏: ${key}`);
               continue;
             }
 
@@ -548,12 +548,12 @@ async function refreshRecordAndFavorites() {
                 `更新收藏: ${fav.title} (${fav.total_episodes} -> ${favEpisodeCount})`
               );
 
-              // 創建通知
+              // 创建通知
               const notification = {
                 id: `fav_update_${source}_${id}_${now}`,
                 type: 'favorite_update' as const,
                 title: '收藏更新',
-                message: `《${fav.title}》有新集數更新！從 ${fav.total_episodes} 集更新到 ${favEpisodeCount} 集`,
+                message: `《${fav.title}》有新集数更新！从 ${fav.total_episodes} 集更新到 ${favEpisodeCount} 集`,
                 timestamp: now,
                 read: false,
                 metadata: {
@@ -566,9 +566,9 @@ async function refreshRecordAndFavorites() {
               };
 
               await storage.addNotification(user, notification);
-              console.log(`已為用戶 ${user} 創建收藏更新通知: ${fav.title}`);
+              console.log(`已为用户 ${user} 创建收藏更新通知: ${fav.title}`);
 
-              // 收集更新信息用於郵件
+              // 收集更新信息用于邮件
               const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
               const playUrl = `${siteUrl}/play?source=${source}&id=${id}&title=${encodeURIComponent(fav.title)}`;
               userUpdates.push({
@@ -582,14 +582,14 @@ async function refreshRecordAndFavorites() {
 
             processedFavorites++;
           } catch (err) {
-            console.error(`處理收藏失敗 (${key}):`, err);
-            // 繼續處理下一個收藏
+            console.error(`处理收藏失败 (${key}):`, err);
+            // 继续处理下一个收藏
           }
         }
 
-        console.log(`收藏處理完成: ${processedFavorites}/${totalFavorites}`);
+        console.log(`收藏处理完成: ${processedFavorites}/${totalFavorites}`);
 
-        // 如果有更新，異步發送彙總郵件（不阻塞主流程）
+        // 如果有更新，异步发送汇总邮件（不阻塞主流程）
         if (userUpdates.length > 0) {
           (async () => {
             try {
@@ -608,7 +608,7 @@ async function refreshRecordAndFavorites() {
 
                   await EmailService.send(emailConfig, {
                     to: userEmail,
-                    subject: `📺 收藏更新彙總 - ${userUpdates.length} 部影片有更新`,
+                    subject: `📺 收藏更新汇总 - ${userUpdates.length} 部影片有更新`,
                     html: getBatchFavoriteUpdateEmailTemplate(
                       user,
                       userUpdates,
@@ -617,19 +617,19 @@ async function refreshRecordAndFavorites() {
                     ),
                   });
 
-                  console.log(`郵件彙總已發送至: ${userEmail} (${userUpdates.length} 個更新)`);
+                  console.log(`邮件汇总已发送至: ${userEmail} (${userUpdates.length} 个更新)`);
                 }
               }
             } catch (emailError) {
-              console.error(`發送郵件彙總失敗 (${user}):`, emailError);
+              console.error(`发送邮件汇总失败 (${user}):`, emailError);
             }
-          })().catch(err => console.error(`郵件發送異步任務失敗 (${user}):`, err));
+          })().catch(err => console.error(`邮件发送异步任务失败 (${user}):`, err));
         }
       } catch (err) {
-        console.error(`獲取用戶收藏失敗 (${user}):`, err);
+        console.error(`获取用户收藏失败 (${user}):`, err);
       }
 
-      // 漫畫書架
+      // 漫画书架
       try {
         const shelf = await db.getAllMangaShelf(user);
         const totalShelfItems = Object.keys(shelf).length;
@@ -663,7 +663,7 @@ async function refreshRecordAndFavorites() {
               continue;
             }
 
-            // 首次為老數據補齊基線，不觸發通知
+            // 首次为老数据补齐基线，不触发通知
             if (!previousChapterCount || !item.latestChapterId) {
               await db.saveMangaShelf(user, item.sourceId, item.mangaId, {
                 ...baseItem,
@@ -694,8 +694,8 @@ async function refreshRecordAndFavorites() {
               await storage.addNotification(user, {
                 id: `manga_update_${item.sourceId}_${item.mangaId}_${now}`,
                 type: 'manga_update',
-                title: '漫畫更新',
-                message: `《${item.title}》新增 ${addedChapters} 話，已更新至 ${latestChapterName || '最新章節'}`,
+                title: '漫画更新',
+                message: `《${item.title}》新增 ${addedChapters} 话，已更新至 ${latestChapterName || '最新章节'}`,
                 timestamp: now,
                 read: false,
                 metadata: {
@@ -731,11 +731,11 @@ async function refreshRecordAndFavorites() {
             await db.saveMangaShelf(user, item.sourceId, item.mangaId, nextItem);
             processedShelfItems++;
           } catch (err) {
-            console.error(`處理漫畫書架失敗 (${key}):`, err);
+            console.error(`处理漫画书架失败 (${key}):`, err);
           }
         }
 
-        console.log(`漫畫書架處理完成: ${processedShelfItems}/${totalShelfItems}`);
+        console.log(`漫画书架处理完成: ${processedShelfItems}/${totalShelfItems}`);
 
         if (mangaUpdates.length > 0) {
           (async () => {
@@ -755,7 +755,7 @@ async function refreshRecordAndFavorites() {
 
                   await EmailService.send(emailConfig, {
                     to: userEmail,
-                    subject: `漫畫書架更新彙總 - ${mangaUpdates.length} 部漫畫有新章節`,
+                    subject: `漫画书架更新汇总 - ${mangaUpdates.length} 部漫画有新章节`,
                     html: getBatchMangaUpdateEmailTemplate(
                       user,
                       mangaUpdates,
@@ -766,27 +766,27 @@ async function refreshRecordAndFavorites() {
                 }
               }
             } catch (emailError) {
-              console.error(`發送漫畫更新郵件失敗 (${user}):`, emailError);
+              console.error(`发送漫画更新邮件失败 (${user}):`, emailError);
             }
-          })().catch((err) => console.error(`漫畫更新郵件異步任務失敗 (${user}):`, err));
+          })().catch((err) => console.error(`漫画更新邮件异步任务失败 (${user}):`, err));
         }
       } catch (err) {
-        console.error(`獲取用戶漫畫書架失敗 (${user}):`, err);
+        console.error(`获取用户漫画书架失败 (${user}):`, err);
       }
     };
 
-    // 分批並行處理用戶，避免併發過高
-    // 可通過環境變量 CRON_USER_BATCH_SIZE 配置批處理大小，默認為 3
+    // 分批并行处理用户，避免并发过高
+    // 可通过环境变量 CRON_USER_BATCH_SIZE 配置批处理大小，默认为 3
     const BATCH_SIZE = parseInt(process.env.CRON_USER_BATCH_SIZE || '3', 10);
     for (let i = 0; i < users.length; i += BATCH_SIZE) {
       const batch = users.slice(i, i + BATCH_SIZE);
-      console.log(`處理用戶批次 ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(users.length / BATCH_SIZE)}: ${batch.join(', ')}`);
+      console.log(`处理用户批次 ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(users.length / BATCH_SIZE)}: ${batch.join(', ')}`);
       await Promise.all(batch.map(user => processUser(user)));
     }
 
-    console.log('刷新播放記錄/收藏任務完成');
+    console.log('刷新播放记录/收藏任务完成');
   } catch (err) {
-    console.error('刷新播放記錄/收藏任務啟動失敗', err);
+    console.error('刷新播放记录/收藏任务启动失败', err);
   }
 }
 
@@ -795,31 +795,31 @@ async function refreshOpenList() {
     const config = await getConfig();
     const openListConfig = config.OpenListConfig;
 
-    // 檢查功能是否啟用
+    // 检查功能是否启用
     if (!openListConfig || !openListConfig.Enabled) {
-      console.log('跳過 OpenList 掃描：功能未啟用');
+      console.log('跳过 OpenList 扫描：功能未启用');
       return;
     }
 
-    // 檢查是否配置了 OpenList 和定時掃描
+    // 检查是否配置了 OpenList 和定时扫描
     if (!openListConfig.URL || !openListConfig.Username || !openListConfig.Password) {
-      console.log('跳過 OpenList 掃描：未配置');
+      console.log('跳过 OpenList 扫描：未配置');
       return;
     }
 
     const scanInterval = openListConfig.ScanInterval || 0;
     if (scanInterval === 0) {
-      console.log('跳過 OpenList 掃描：定時掃描已關閉');
+      console.log('跳过 OpenList 扫描：定时扫描已关闭');
       return;
     }
 
-    // 檢查間隔時間是否滿足最低要求（60分鐘）
+    // 检查间隔时间是否满足最低要求（60分钟）
     if (scanInterval < 60) {
-      console.log(`跳過 OpenList 掃描：間隔時間 ${scanInterval} 分鐘小於最低要求 60 分鐘`);
+      console.log(`跳过 OpenList 扫描：间隔时间 ${scanInterval} 分钟小于最低要求 60 分钟`);
       return;
     }
 
-    // 檢查上次掃描時間
+    // 检查上次扫描时间
     const lastRefreshTime = openListConfig.LastRefreshTime || 0;
     const now = Date.now();
     const timeSinceLastRefresh = now - lastRefreshTime;
@@ -827,17 +827,17 @@ async function refreshOpenList() {
 
     if (timeSinceLastRefresh < intervalMs) {
       const remainingMinutes = Math.ceil((intervalMs - timeSinceLastRefresh) / 60000);
-      console.log(`跳過 OpenList 掃描：距離上次掃描僅 ${Math.floor(timeSinceLastRefresh / 60000)} 分鐘，還需等待 ${remainingMinutes} 分鐘`);
+      console.log(`跳过 OpenList 扫描：距离上次扫描仅 ${Math.floor(timeSinceLastRefresh / 60000)} 分钟，还需等待 ${remainingMinutes} 分钟`);
       return;
     }
 
-    console.log(`開始 OpenList 定時掃描（間隔: ${scanInterval} 分鐘）`);
+    console.log(`开始 OpenList 定时扫描（间隔: ${scanInterval} 分钟）`);
 
-    // 直接調用掃描函數（立即掃描模式，不清空 metainfo）
+    // 直接调用扫描函数（立即扫描模式，不清空 metainfo）
     const { taskId } = await startOpenListRefresh(false);
-    console.log('OpenList 定時掃描已啟動，任務ID:', taskId);
+    console.log('OpenList 定时扫描已启动，任务ID:', taskId);
   } catch (err) {
-    console.error('OpenList 定時掃描失敗:', err);
+    console.error('OpenList 定时扫描失败:', err);
   }
 }
 

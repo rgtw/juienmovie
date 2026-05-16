@@ -1,4 +1,4 @@
-// 獲取劇集列表 API 路由
+// 获取剧集列表 API 路由
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getConfig } from '@/lib/config';
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
         {
           errorCode: -1,
           success: false,
-          errorMessage: '缺少動漫ID參數',
+          errorMessage: '缺少动漫ID参数',
           bangumi: {
             bangumiId: '',
             animeTitle: '',
@@ -27,15 +27,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // 從數據庫讀取彈幕配置
+    // 从数据库读取弹幕配置
     const config = await getConfig();
     const baseUrl = getDanmakuApiBaseUrl(config.SiteConfig);
 
     const apiUrl = `${baseUrl}/api/v2/bangumi/${animeId}`;
 
-    // 添加超時控制和重試機制
+    // 添加超时控制和重试机制
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // 10秒超時
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 10秒超时
 
     try {
       const response = await fetch(apiUrl, {
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
           'Content-Type': 'application/json',
         },
         signal: controller.signal,
-        // 添加 keepalive 避免連接被重置
+        // 添加 keepalive 避免连接被重置
         keepalive: true,
       });
 
@@ -60,21 +60,21 @@ export async function GET(request: NextRequest) {
     } catch (fetchError) {
       clearTimeout(timeoutId);
 
-      // 如果是超時錯誤，返回更友好的錯誤信息
+      // 如果是超时错误，返回更友好的错误信息
       if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-        throw new Error('彈幕服務器請求超時，請稍後重試');
+        throw new Error('弹幕服务器请求超时，请稍后重试');
       }
 
       throw fetchError;
     }
   } catch (error) {
-    console.error('獲取劇集列表代理錯誤:', error);
+    console.error('获取剧集列表代理错误:', error);
     return NextResponse.json(
       {
         errorCode: -1,
         success: false,
         errorMessage:
-          error instanceof Error ? error.message : '獲取劇集列表失敗',
+          error instanceof Error ? error.message : '获取剧集列表失败',
         bangumi: {
           bangumiId: '',
           animeTitle: '',

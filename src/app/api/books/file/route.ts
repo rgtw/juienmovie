@@ -33,13 +33,13 @@ async function resolveFileHref(username: string, payload: FilePayload): Promise<
   }
 
   const detailHref = shelfItem?.detailHref || readRecord?.detailHref;
-  if (!detailHref) throw new Error('找不到可下載文件');
+  if (!detailHref) throw new Error('找不到可下载文件');
 
   const preferred = await opdsClient.getPreferredAcquisition(sourceId, detailHref);
   if (payload.format && preferred.format !== payload.format) {
     const detail = await opdsClient.getBookDetail(sourceId, detailHref);
     const matched = detail.acquisitionLinks.find((item) => (payload.format === 'pdf' ? item.type.toLowerCase().includes('pdf') : item.type.toLowerCase().includes('epub')));
-    if (!matched?.href) throw new Error('找不到對應格式文件');
+    if (!matched?.href) throw new Error('找不到对应格式文件');
     return { sourceId, href: matched.href };
   }
 
@@ -64,7 +64,7 @@ async function proxyFile(request: NextRequest, sourceId: string, href: string) {
   });
 
   if (!response.ok) {
-    return NextResponse.json({ error: `文件代理失敗: ${response.status}` }, { status: response.status });
+    return NextResponse.json({ error: `文件代理失败: ${response.status}` }, { status: response.status });
   }
 
   const outHeaders = new Headers();

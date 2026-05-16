@@ -17,7 +17,7 @@ const MobileHeader = ({ showBackButton = false }: MobileHeaderProps) => {
   return (
     <header className='md:hidden fixed top-0 left-0 right-0 z-[999] w-full bg-white/70 backdrop-blur-xl border-b border-gray-200/50 shadow-sm dark:bg-gray-900/70 dark:border-gray-700/50'>
       <div className='h-12 flex items-center justify-between px-4'>
-        {/* 左側：搜索按鈕、返回按鈕和設置按鈕 */}
+        {/* 左侧：搜索按钮、返回按钮和设置按钮 */}
         <div className='flex items-center gap-2'>
           <Link
             href='/search'
@@ -42,7 +42,7 @@ const MobileHeader = ({ showBackButton = false }: MobileHeaderProps) => {
           {showBackButton && <BackButton />}
         </div>
 
-        {/* 右側按鈕 */}
+        {/* 右侧按钮 */}
         <div className='flex items-center gap-2'>
           <ThemeToggle />
           <UserMenu />
@@ -50,12 +50,12 @@ const MobileHeader = ({ showBackButton = false }: MobileHeaderProps) => {
         </div>
       </div>
 
-      {/* 中間：Logo（絕對居中） */}
+      {/* 中间：Logo（绝对居中） */}
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <Link
           href='/'
           prefetch={false}
-          className='text-2xl font-bold text-primary-500 tracking-tight hover:opacity-80 transition-opacity'
+          className='text-2xl font-bold text-green-600 tracking-tight hover:opacity-80 transition-opacity'
         >
           {siteName}
         </Link>

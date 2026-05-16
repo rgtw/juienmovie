@@ -18,37 +18,37 @@ export const runtime = 'nodejs';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  // 獲取參數
+  // 获取参数
   const type = searchParams.get('type');
   const tag = searchParams.get('tag');
   const pageSize = parseInt(searchParams.get('pageSize') || '16');
   const pageStart = parseInt(searchParams.get('pageStart') || '0');
 
-  // 驗證參數
+  // 验证参数
   if (!type || !tag) {
     return NextResponse.json(
-      { error: '缺少必要參數: type 或 tag' },
+      { error: '缺少必要参数: type 或 tag' },
       { status: 400 }
     );
   }
 
   if (!['tv', 'movie'].includes(type)) {
     return NextResponse.json(
-      { error: 'type 參數必須是 tv 或 movie' },
+      { error: 'type 参数必须是 tv 或 movie' },
       { status: 400 }
     );
   }
 
   if (pageSize < 1 || pageSize > 100) {
     return NextResponse.json(
-      { error: 'pageSize 必須在 1-100 之間' },
+      { error: 'pageSize 必须在 1-100 之间' },
       { status: 400 }
     );
   }
 
   if (pageStart < 0) {
     return NextResponse.json(
-      { error: 'pageStart 不能小於 0' },
+      { error: 'pageStart 不能小于 0' },
       { status: 400 }
     );
   }
@@ -60,10 +60,10 @@ export async function GET(request: Request) {
   const target = `https://movie.douban.com/j/search_subjects?type=${type}&tag=${tag}&sort=recommend&page_limit=${pageSize}&page_start=${pageStart}`;
 
   try {
-    // 調用豆瓣 API
+    // 调用豆瓣 API
     const doubanData = await fetchDoubanData<DoubanApiResponse>(target);
 
-    // 轉換數據格式
+    // 转换数据格式
     const list: DoubanItem[] = doubanData.subjects.map((item) => ({
       id: item.id,
       title: item.title,
@@ -74,7 +74,7 @@ export async function GET(request: Request) {
 
     const response: DoubanResult = {
       code: 200,
-      message: '獲取成功',
+      message: '获取成功',
       list: list,
     };
 
@@ -89,7 +89,7 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: '獲取豆瓣數據失敗', details: (error as Error).message },
+      { error: '获取豆瓣数据失败', details: (error as Error).message },
       { status: 500 }
     );
   }
@@ -98,7 +98,7 @@ export async function GET(request: Request) {
 function handleTop250(pageStart: number) {
   const target = `https://movie.douban.com/top250?start=${pageStart}&filter=`;
 
-  // 直接使用 fetch 獲取 HTML 頁面
+  // 直接使用 fetch 获取 HTML 页面
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -121,10 +121,10 @@ function handleTop250(pageStart: number) {
         throw new Error(`HTTP error! Status: ${fetchResponse.status}`);
       }
 
-      // 獲取 HTML 內容
+      // 获取 HTML 内容
       const html = await fetchResponse.text();
 
-      // 通過正則同時捕獲影片 id、標題、封面以及評分
+      // 通过正则同时捕获影片 id、标题、封面以及评分
       const moviePattern =
         /<div class="item">[\s\S]*?<a[^>]+href="https?:\/\/movie\.douban\.com\/subject\/(\d+)\/"[\s\S]*?<img[^>]+alt="([^"]+)"[^>]*src="([^"]+)"[\s\S]*?<span class="rating_num"[^>]*>([^<]*)<\/span>[\s\S]*?<\/div>/g;
       const movies: DoubanItem[] = [];
@@ -136,7 +136,7 @@ function handleTop250(pageStart: number) {
         const cover = match[3];
         const rate = match[4] || '';
 
-        // 處理圖片 URL，確保使用 HTTPS
+        // 处理图片 URL，确保使用 HTTPS
         const processedCover = cover.replace(/^http:/, 'https:');
 
         movies.push({
@@ -150,7 +150,7 @@ function handleTop250(pageStart: number) {
 
       const apiResponse: DoubanResult = {
         code: 200,
-        message: '獲取成功',
+        message: '获取成功',
         list: movies,
       };
 
@@ -168,7 +168,7 @@ function handleTop250(pageStart: number) {
       clearTimeout(timeoutId);
       return NextResponse.json(
         {
-          error: '獲取豆瓣 Top250 數據失敗',
+          error: '获取豆瓣 Top250 数据失败',
           details: (error as Error).message,
         },
         { status: 500 }

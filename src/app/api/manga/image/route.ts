@@ -10,7 +10,7 @@ function resolveUpstreamUrl(serverBaseUrl: string, pathOrUrl: string): string {
     const target = new URL(pathOrUrl);
     const base = new URL(serverBaseUrl);
     if (target.origin !== base.origin) {
-      throw new Error('不允許代理非當前 Suwayomi 服務的地址');
+      throw new Error('不允许代理非当前 Suwayomi 服务的地址');
     }
     return target.toString();
   }
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
   try {
     const pathOrUrl = new URL(request.url).searchParams.get('path')?.trim();
     if (!pathOrUrl) {
-      return NextResponse.json({ error: '缺少 path 參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少 path 参数' }, { status: 400 });
     }
 
     const config = await getSuwayomiConfig();
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     ): Promise<HeadersInit | undefined> => {
       if (config.authMode === 'basic_auth') {
         if (!config.username || !config.password) {
-          throw new Error('Suwayomi basic_auth 缺少用戶名或密碼');
+          throw new Error('Suwayomi basic_auth 缺少用户名或密码');
         }
 
         return new Headers({
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
 
     if (!response.ok) {
       return NextResponse.json(
-        { error: `Suwayomi 圖片請求失敗: ${response.status}` },
+        { error: `Suwayomi 图片请求失败: ${response.status}` },
         { status: response.status }
       );
     }
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : '圖片代理失敗' },
+      { error: error instanceof Error ? error.message : '图片代理失败' },
       { status: 500 }
     );
   }

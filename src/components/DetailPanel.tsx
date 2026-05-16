@@ -122,7 +122,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
   const galleryScrollRef = React.useRef<HTMLDivElement>(null);
 
 
-  // 數據源狀態管理
+  // 数据源状态管理
   const [currentSource, setCurrentSource] = useState<'douban' | 'bangumi' | 'cms' | 'tmdb'>('tmdb');
   const [originalSource, setOriginalSource] = useState<'douban' | 'bangumi' | 'cms' | 'tmdb'>('tmdb');
   const [isUsingTmdb, setIsUsingTmdb] = useState(false);
@@ -153,7 +153,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
 
   const externalUrl = getExternalUrl();
 
-  // 拖動滾動狀態
+  // 拖动滚动状态
   const [isDragging, setIsDragging] = useState(false);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -165,7 +165,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
   const [actorsStartX, setActorsStartX] = useState(0);
   const [actorsScrollLeft, setActorsScrollLeft] = useState(0);
 
-  // 圖片點擊處理
+  // 图片点击处理
   const handleImageClick = (imageUrl: string) => {
     setSelectedImage(imageUrl);
     setShowImageViewer(true);
@@ -205,7 +205,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     setShowGallery(true);
   };
 
-  // 確保組件在客戶端掛載後才渲染 Portal
+  // 确保组件在客户端挂载后才渲染 Portal
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -247,7 +247,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     };
   }, [showGallery]);
 
-  // 控制動畫狀態
+  // 控制动画状态
   useEffect(() => {
     let animationId: number;
     let timer: NodeJS.Timeout;
@@ -282,19 +282,19 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     }
   }, [isOpen]);
 
-  // 阻止背景滾動（僅在非抽屜模式下）
+  // 阻止背景滚动（仅在非抽屉模式下）
   useEffect(() => {
     if (isVisible && !useDrawer) {
-      // 保存當前滾動位置
+      // 保存当前滚动位置
       const scrollY = window.scrollY;
       const scrollX = window.scrollX;
       const body = document.body;
       const html = document.documentElement;
 
-      // 獲取滾動條寬度
+      // 获取滚动条宽度
       const scrollBarWidth = window.innerWidth - html.clientWidth;
 
-      // 保存原始樣式
+      // 保存原始样式
       const originalBodyStyle = {
         position: body.style.position,
         top: body.style.top,
@@ -305,7 +305,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         overflow: body.style.overflow,
       };
 
-      // 設置body樣式來阻止滾動，但保持原位置
+      // 设置body样式来阻止滚动，但保持原位置
       body.style.position = 'fixed';
       body.style.top = `-${scrollY}px`;
       body.style.left = `-${scrollX}px`;
@@ -315,7 +315,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
       body.style.paddingRight = `${scrollBarWidth}px`;
 
       return () => {
-        // 恢復所有原始樣式
+        // 恢复所有原始样式
         body.style.position = originalBodyStyle.position;
         body.style.top = originalBodyStyle.top;
         body.style.left = originalBodyStyle.left;
@@ -324,7 +324,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         body.style.paddingRight = originalBodyStyle.paddingRight;
         body.style.overflow = originalBodyStyle.overflow;
 
-        // 使用 requestAnimationFrame 確保樣式恢復後再滾動
+        // 使用 requestAnimationFrame 确保样式恢复后再滚动
         requestAnimationFrame(() => {
           window.scrollTo(scrollX, scrollY);
         });
@@ -332,7 +332,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     }
   }, [isVisible, useDrawer]);
 
-  // ESC鍵關閉
+  // ESC键关闭
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -346,7 +346,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     }
   }, [isVisible, onClose]);
 
-  // 獲取詳情數據
+  // 获取详情数据
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -357,14 +357,14 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
       setError(null);
 
       try {
-        // 如果正在使用 TMDB 數據，強制使用 TMDB
+        // 如果正在使用 TMDB 数据，强制使用 TMDB
         if (isUsingTmdb && title) {
           await fetchTmdbData();
           return;
         }
 
-        // 優先使用蘋果CMS數據（短劇等）
-        // 如果 cmsData 存在但 desc 為空，嘗試通過 source-detail API 獲取
+        // 优先使用苹果CMS数据（短剧等）
+        // 如果 cmsData 存在但 desc 为空，尝试通过 source-detail API 获取
         if (cmsData) {
           setCurrentSource('cms');
           setOriginalSource('cms');
@@ -382,7 +382,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
             return;
           }
 
-          // cmsData 存在但 desc 為空，嘗試通過 API 獲取詳情
+          // cmsData 存在但 desc 为空，尝试通过 API 获取详情
           if (sourceId && source) {
             try {
               const response = await fetch(
@@ -404,12 +404,12 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
               }
             } catch (err) {
               console.error('獲取source-detail失敗:', err);
-              // 繼續執行後續邏輯
+              // 继续执行后续逻辑
             }
           }
         }
 
-        // 優先使用 Bangumi ID（因為 isBangumi 為 true 時，doubanId 實際上是 bangumiId）
+        // 优先使用 Bangumi ID（因为 isBangumi 为 true 时，doubanId 实际上是 bangumiId）
         if (bangumiId || (isBangumi && doubanId)) {
           setCurrentSource('bangumi');
           setOriginalSource('bangumi');
@@ -493,14 +493,14 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
       }
     };
 
-    // 提取 TMDB 數據獲取邏輯為獨立函數
+    // 提取 TMDB 数据获取逻辑为独立函数
     const fetchTmdbData = async () => {
       setCurrentSource('tmdb');
-      // 移除季度信息進行搜索
+      // 移除季度信息进行搜索
       let searchTitle = title;
       let extractedSeasonNumber = seasonNumber;
 
-      // 匹配各種季度格式: 第一季、第1季、第一部、Season 1、S1等
+      // 匹配各种季度格式: 第一季、第1季、第一部、Season 1、S1等
       const seasonPatterns = [
         /第([一二三四五六七八九十\d]+)[季部]/,
         /Season\s*(\d+)/i,
@@ -511,10 +511,10 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         const match = title.match(pattern);
         if (match) {
           searchTitle = title.replace(pattern, '').trim();
-          // 如果沒有傳入seasonNumber,嘗試從標題中提取
+          // 如果没有传入seasonNumber,尝试从标题中提取
           if (!extractedSeasonNumber) {
             const seasonStr = match[1];
-            // 中文數字轉數字
+            // 中文数字转数字
             const chineseNumbers: Record<string, number> = {
               '一': 1, '二': 2, '三': 3, '四': 4, '五': 5,
               '六': 6, '七': 7, '八': 8, '九': 9, '十': 10,
@@ -538,14 +538,14 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         const detailId = result.id;
         const mediaType = result.media_type || type;
 
-        // 獲取詳情
+        // 获取详情
         const detailResponse = await fetch(`/api/tmdb/detail?id=${detailId}&type=${mediaType}`);
         if (!detailResponse.ok) {
           throw new Error('獲取TMDB詳情失敗');
         }
         const detailResult = await detailResponse.json();
 
-        // 如果有季度信息,嘗試獲取季度詳情
+        // 如果有季度信息,尝试获取季度详情
         let seasonData = null;
         if (extractedSeasonNumber && mediaType === 'tv') {
           try {
@@ -602,18 +602,18 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     fetchDetail();
   }, [isOpen, doubanId, bangumiId, isBangumi, tmdbId, title, type, seasonNumber, poster, cmsData, sourceId, source, isUsingTmdb]);
 
-  // 切換數據源的函數
+  // 切换数据源的函数
   const handleToggleSource = async () => {
     if (currentSource === 'tmdb') {
-      // 切換回原始數據源
+      // 切换回原始数据源
       if (originalDetailData) {
         setDetailData(originalDetailData);
         setCurrentSource(originalSource);
         setError(null);
       }
     } else {
-      // 切換到 TMDB
-      // 保存當前數據
+      // 切换到 TMDB
+      // 保存当前数据
       if (detailData && !originalDetailData) {
         setOriginalDetailData(detailData);
       }
@@ -625,7 +625,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
       } catch (err) {
         console.error('切換到TMDB失敗:', err);
         setError(err instanceof Error ? err.message : '切換到TMDB失敗');
-        // 切換失敗，但保持 currentSource 為 tmdb，這樣可以顯示切換回按鈕
+        // 切换失败，但保持 currentSource 为 tmdb，这样可以显示切换回按钮
         setCurrentSource('tmdb');
       } finally {
         setLoading(false);
@@ -633,13 +633,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     }
   };
 
-  // 用於切換時獲取 TMDB 數據
+  // 用于切换时获取 TMDB 数据
   const fetchTmdbDataForToggle = async () => {
-    // 移除季度信息進行搜索
+    // 移除季度信息进行搜索
     let searchTitle = title;
     let extractedSeasonNumber = seasonNumber;
 
-    // 匹配各種季度格式: 第一季、第1季、第一部、Season 1、S1等
+    // 匹配各种季度格式: 第一季、第1季、第一部、Season 1、S1等
     const seasonPatterns = [
       /第([一二三四五六七八九十\d]+)[季部]/,
       /Season\s*(\d+)/i,
@@ -650,10 +650,10 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
       const match = title.match(pattern);
       if (match) {
         searchTitle = title.replace(pattern, '').trim();
-        // 如果沒有傳入seasonNumber,嘗試從標題中提取
+        // 如果没有传入seasonNumber,尝试从标题中提取
         if (!extractedSeasonNumber) {
           const seasonStr = match[1];
-          // 中文數字轉數字
+          // 中文数字转数字
           const chineseNumbers: Record<string, number> = {
             '一': 1, '二': 2, '三': 3, '四': 4, '五': 5,
             '六': 6, '七': 7, '八': 8, '九': 9, '十': 10,
@@ -677,14 +677,14 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
       const detailId = result.id;
       const mediaType = result.media_type || type;
 
-      // 獲取詳情
+      // 获取详情
       const detailResponse = await fetch(`/api/tmdb/detail?id=${detailId}&type=${mediaType}`);
       if (!detailResponse.ok) {
         throw new Error('獲取TMDB詳情失敗');
       }
       const detailResult = await detailResponse.json();
 
-      // 如果有季度信息,嘗試獲取季度詳情
+      // 如果有季度信息,尝试获取季度详情
       let seasonData = null;
       if (extractedSeasonNumber && mediaType === 'tv') {
         try {
@@ -739,7 +739,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     throw new Error('未找到相關內容');
   };
 
-  // 異步獲取季度和集數詳情（僅TMDB）
+  // 异步获取季度和集数详情（仅TMDB）
   useEffect(() => {
     if (!detailData?.tmdbId || !detailData?.mediaType || detailData.mediaType !== 'tv' || seasonsLoaded) {
       return;
@@ -748,16 +748,16 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     const fetchSeasonData = async () => {
       setLoadingSeasons(true);
       try {
-        // 獲取所有季度
+        // 获取所有季度
         const seasonsResponse = await fetch(`/api/tmdb/seasons?tvId=${detailData.tmdbId}`);
         if (!seasonsResponse.ok) return;
         const seasonsData = await seasonsResponse.json();
 
-        // 設置默認選中季度
+        // 设置默认选中季度
         const defaultSeason = detailData.seasonNumber || 1;
         setSelectedSeason(defaultSeason);
 
-        // 獲取默認季度的集數詳情
+        // 获取默认季度的集数详情
         const episodesResponse = await fetch(
           `/api/tmdb/episodes?id=${detailData.tmdbId}&season=${defaultSeason}`
         );
@@ -779,17 +779,17 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     fetchSeasonData();
   }, [detailData?.tmdbId, detailData?.mediaType, detailData?.seasonNumber, seasonsLoaded]);
 
-  // 自動滾動到當前集數
+  // 自动滚动到当前集数
   useEffect(() => {
     if (!currentEpisode || !seasonData?.episodes || !episodesScrollRef.current || currentSource !== 'tmdb') {
       return;
     }
 
-    // 等待 DOM 更新後再滾動
+    // 等待 DOM 更新后再滚动
     const timer = setTimeout(() => {
       const episodeElement = document.getElementById(`episode-${currentEpisode}`);
       if (episodeElement && episodesScrollRef.current) {
-        // 計算滾動位置，使當前集數居中顯示
+        // 计算滚动位置，使当前集数居中显示
         const container = episodesScrollRef.current;
         const elementLeft = episodeElement.offsetLeft;
         const elementWidth = episodeElement.offsetWidth;
@@ -803,13 +803,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     return () => clearTimeout(timer);
   }, [currentEpisode, seasonData?.episodes, currentSource]);
 
-  // 異步獲取演職人員信息（僅TMDB）
+  // 异步获取演职人员信息（仅TMDB）
   useEffect(() => {
     if (!detailData?.tmdbId || !detailData?.mediaType || currentSource !== 'tmdb') {
       return;
     }
 
-    // 如果已經有演員信息，不重複獲取
+    // 如果已经有演员信息，不重复获取
     if (detailData.actors && detailData.actors.length > 0) {
       return;
     }
@@ -822,7 +822,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         if (!creditsResponse.ok) return;
         const creditsData = await creditsResponse.json();
 
-        // 更新演員和導演信息
+        // 更新演员和导演信息
         setDetailData(prev => prev ? {
           ...prev,
           directors: creditsData.crew
@@ -848,7 +848,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     fetchCredits();
   }, [detailData?.tmdbId, detailData?.mediaType, currentSource, detailData?.actors]);
 
-  // 切換季度時獲取集數
+  // 切换季度时获取集数
   const handleSeasonChange = async (seasonNumber: number) => {
     if (!detailData?.tmdbId || selectedSeason === seasonNumber) return;
 
@@ -861,7 +861,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
       if (!episodesResponse.ok) return;
       const episodesData = await episodesResponse.json();
 
-      // 從當前 seasonData 中查找季度信息
+      // 从当前 seasonData 中查找季度信息
       const season = seasonData?.seasons.find((s: any) => s.season_number === seasonNumber);
 
       setSeasonData(prev => ({
@@ -888,7 +888,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     }
   };
 
-  // 拖動滾動處理函數
+  // 拖动滚动处理函数
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!episodesScrollRef.current) return;
     setIsMouseDown(true);
@@ -902,7 +902,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     const x = e.pageX - episodesScrollRef.current.offsetLeft;
     const distance = Math.abs(x - startX);
 
-    // 只有移動超過5px才進入拖動模式
+    // 只有移动超过5px才进入拖动模式
     if (distance > 5 && !isDragging) {
       setIsDragging(true);
       episodesScrollRef.current.style.cursor = 'grabbing';
@@ -911,7 +911,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
 
     if (isDragging) {
       e.preventDefault();
-      const walk = (x - startX) * 2; // 滾動速度倍數
+      const walk = (x - startX) * 2; // 滚动速度倍数
       episodesScrollRef.current.scrollLeft = scrollLeft - walk;
     }
   };
@@ -936,7 +936,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     }
   };
 
-  // 演員列表拖動滾動處理函數
+  // 演员列表拖动滚动处理函数
   const handleActorsMouseDown = (e: React.MouseEvent) => {
     if (!actorsScrollRef.current) return;
     setIsActorsMouseDown(true);
@@ -950,7 +950,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     const x = e.pageX - actorsScrollRef.current.offsetLeft;
     const distance = Math.abs(x - actorsStartX);
 
-    // 只有移動超過5px才進入拖動模式
+    // 只有移动超过5px才进入拖动模式
     if (distance > 5 && !isActorsDragging) {
       setIsActorsDragging(true);
       actorsScrollRef.current.style.cursor = 'grabbing';
@@ -959,7 +959,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
 
     if (isActorsDragging) {
       e.preventDefault();
-      const walk = (x - actorsStartX) * 2; // 滾動速度倍數
+      const walk = (x - actorsStartX) * 2; // 滚动速度倍数
       actorsScrollRef.current.scrollLeft = actorsScrollLeft - walk;
     }
   };
@@ -990,7 +990,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
       className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
     >
       <Images size={16} />
-      照片牆
+      照片墙
     </button>
   ) : null;
 
@@ -1115,7 +1115,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">照片牆</h3>
         {!galleryLoading && (
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            共 {galleryTotal} 張
+            共 {galleryTotal} 张
           </p>
         )}
       </div>
@@ -1153,13 +1153,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
 
   const content = useDrawer ? (
     <div className="fixed inset-0 z-[9999] flex items-center justify-end pointer-events-none">
-      {/* 詳情面板 - 抽屜模式 */}
+      {/* 详情面板 - 抽屉模式 */}
       <div
         className={`relative ${drawerWidth} h-full bg-white dark:bg-gray-900 shadow-2xl overflow-hidden flex flex-col transition-transform duration-300 ease-out pointer-events-auto ${
           isAnimating ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* 頭部 */}
+        {/* 头部 */}
         <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900 z-10">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">詳情</h2>
           <div className="flex items-center gap-2">
@@ -1184,7 +1184,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
           </div>
         </div>
 
-        {/* 內容區域 */}
+        {/* 内容区域 */}
         <div className="overflow-y-auto max-h-[calc(90vh-4rem)]">
           {loading && (
             <div className="flex items-center justify-center py-20">
@@ -1198,7 +1198,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 <p className="text-red-500 dark:text-red-400">{error}</p>
               </div>
 
-              {/* 數據源顯示和切換 - 錯誤時也顯示 */}
+              {/* 数据源显示和切换 - 错误时也显示 */}
               <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div className="flex items-center gap-2">
@@ -1218,7 +1218,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                         disabled={loading}
                         className="px-3 py-1.5 text-sm rounded-lg bg-green-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        切換到 TMDB
+                        切换到 TMDB
                       </button>
                     )}
                     {currentSource === 'tmdb' && originalSource !== 'tmdb' && originalDetailData && (
@@ -1227,7 +1227,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                         disabled={loading}
                         className="px-3 py-1.5 text-sm rounded-lg bg-gray-500 hover:bg-gray-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        切換回 {originalSource === 'douban' ? 'Douban' : originalSource === 'bangumi' ? 'Bangumi' : 'CMS'}
+                        切换回 {originalSource === 'douban' ? 'Douban' : originalSource === 'bangumi' ? 'Bangumi' : 'CMS'}
                       </button>
                     )}
                   </div>
@@ -1238,7 +1238,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
 
           {!loading && !error && detailData && (
             <div className="p-6">
-              {/* 海報和基本信息 */}
+              {/* 海报和基本信息 */}
               <div className="flex gap-6 mb-6">
                 {detailData.poster && (
                   <div className="flex flex-col items-start gap-3 flex-shrink-0">
@@ -1266,7 +1266,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                     </p>
                   )}
 
-                  {/* 評分 */}
+                  {/* 评分 */}
                   {detailData.rating && (
                     <div className="flex items-center gap-2 mb-3">
                       <Star
@@ -1278,13 +1278,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                       </span>
                       {detailData.rating.count > 0 && (
                         <span className="text-sm text-gray-500 dark:text-gray-400">
-                          ({detailData.rating.count} 評價)
+                          ({detailData.rating.count} 评价)
                         </span>
                       )}
                     </div>
                   )}
 
-                  {/* 類型標籤 */}
+                  {/* 类型标签 */}
                   {detailData.genres && detailData.genres.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-3">
                       {detailData.genres.map((genre, index) => (
@@ -1298,7 +1298,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                     </div>
                   )}
 
-                  {/* 年份和時長 */}
+                  {/* 年份和时长 */}
                   <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
                     {detailData.year && (
                       <div className="flex items-center gap-1">
@@ -1322,11 +1322,11 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 </div>
               </div>
 
-              {/* 簡介 */}
+              {/* 简介 */}
               {(detailData.intro || detailData.overview) && (
                 <div className="mb-6">
                   <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                    簡介
+                    简介
                   </h4>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
                     {detailData.intro || detailData.overview}
@@ -1334,12 +1334,12 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 </div>
               )}
 
-              {/* 導演和演員 */}
+              {/* 导演和演员 */}
               {detailData.directors && detailData.directors.length > 0 && (
                 <div className="mb-4">
                   <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
                     <Users size={16} />
-                    導演
+                    导演
                   </h4>
                   <p className="text-gray-700 dark:text-gray-300">
                     {detailData.directors.map((d) => d.name).join(', ')}
@@ -1351,7 +1351,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 <div className="mb-4">
                   <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
                     <Users size={16} />
-                    演員
+                    演员
                   </h4>
                   {currentSource === 'tmdb' ? (
                     <div
@@ -1416,13 +1416,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 </div>
               )}
 
-              {/* 製作信息 */}
+              {/* 制作信息 */}
               <div className="grid grid-cols-2 gap-4 text-sm">
                 {detailData.countries && detailData.countries.length > 0 && (
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-1">
                       <Globe size={14} />
-                      國家/地區
+                      国家/地区
                     </h4>
                     <p className="text-gray-700 dark:text-gray-300">
                       {detailData.countries.join(', ')}
@@ -1434,7 +1434,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-1">
                       <Tag size={14} />
-                      語言
+                      语言
                     </h4>
                     <p className="text-gray-700 dark:text-gray-300">
                       {detailData.languages.join(', ')}
@@ -1460,7 +1460,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 )}
               </div>
 
-              {/* 季度和集數信息（僅TMDB電視劇） */}
+              {/* 季度和集数信息（仅TMDB电视剧） */}
               {detailData.mediaType === 'tv' && (
                 <div className="mt-6">
                   {loadingSeasons && (
@@ -1518,7 +1518,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                         </div>
                       )}
 
-                      {/* 集數列表 */}
+                      {/* 集数列表 */}
                       {seasonData.episodes.length > 0 && (
                         <div>
                           <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
@@ -1600,7 +1600,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 </div>
               )}
 
-              {/* 數據源顯示和切換 */}
+              {/* 数据源显示和切换 */}
               <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div className="flex items-center gap-2">
@@ -1620,7 +1620,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                         disabled={loading}
                         className="px-3 py-1.5 text-sm rounded-lg bg-green-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        切換到 TMDB
+                        切换到 TMDB
                       </button>
                     )}
                     {currentSource === 'tmdb' && originalSource !== 'tmdb' && originalDetailData && (
@@ -1629,7 +1629,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                         disabled={loading}
                         className="px-3 py-1.5 text-sm rounded-lg bg-gray-500 hover:bg-gray-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        切換回 {originalSource === 'douban' ? 'Douban' : originalSource === 'bangumi' ? 'Bangumi' : 'CMS'}
+                        切换回 {originalSource === 'douban' ? 'Douban' : originalSource === 'bangumi' ? 'Bangumi' : 'CMS'}
                       </button>
                     )}
                   </div>
@@ -1640,7 +1640,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         </div>
       </div>
 
-      {/* 圖片查看器 */}
+      {/* 图片查看器 */}
       {galleryModal}
       {showImageViewer && (
         <ImageViewer
@@ -1665,7 +1665,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         }}
       />
 
-      {/* 詳情面板 - 居中模式 */}
+      {/* 详情面板 - 居中模式 */}
       <div
         className="relative w-full max-w-2xl max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden transition-all duration-200 ease-out"
         style={{
@@ -1675,7 +1675,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
           opacity: isAnimating ? 1 : 0,
         }}
       >
-        {/* 頭部 */}
+        {/* 头部 */}
         <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900 z-10">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">詳情</h2>
           <div className="flex items-center gap-2">
@@ -1700,7 +1700,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
           </div>
         </div>
 
-        {/* 內容區域 */}
+        {/* 内容区域 */}
         <div className="overflow-y-auto max-h-[calc(90vh-4rem)]">
           {loading && (
             <div className="flex items-center justify-center py-20">
@@ -1714,7 +1714,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 <p className="text-red-500 dark:text-red-400">{error}</p>
               </div>
 
-              {/* 數據源顯示和切換 - 錯誤時也顯示 */}
+              {/* 数据源显示和切换 - 错误时也显示 */}
               <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -1732,7 +1732,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                       disabled={loading}
                       className="px-3 py-1.5 text-sm rounded-lg bg-green-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      切換到 TMDB
+                      切换到 TMDB
                     </button>
                   )}
                   {currentSource === 'tmdb' && originalSource !== 'tmdb' && originalDetailData && (
@@ -1741,7 +1741,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                       disabled={loading}
                       className="px-3 py-1.5 text-sm rounded-lg bg-gray-500 hover:bg-gray-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      切換回 {originalSource === 'douban' ? 'Douban' : originalSource === 'bangumi' ? 'Bangumi' : 'CMS'}
+                      切换回 {originalSource === 'douban' ? 'Douban' : originalSource === 'bangumi' ? 'Bangumi' : 'CMS'}
                     </button>
                   )}
                 </div>
@@ -1751,7 +1751,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
 
           {!loading && !error && detailData && (
             <div className="p-6">
-              {/* 海報和基本信息 */}
+              {/* 海报和基本信息 */}
               <div className="flex gap-6 mb-6">
                 {detailData.poster && (
                   <div className="flex flex-col items-start gap-3 flex-shrink-0">
@@ -1779,7 +1779,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                     </p>
                   )}
 
-                  {/* 評分 */}
+                  {/* 评分 */}
                   {detailData.rating && (
                     <div className="flex items-center gap-2 mb-3">
                       <Star
@@ -1791,13 +1791,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                       </span>
                       {detailData.rating.count > 0 && (
                         <span className="text-sm text-gray-500 dark:text-gray-400">
-                          ({detailData.rating.count} 評價)
+                          ({detailData.rating.count} 评价)
                         </span>
                       )}
                     </div>
                   )}
 
-                  {/* 類型標籤 */}
+                  {/* 类型标签 */}
                   {detailData.genres && detailData.genres.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-3">
                       {detailData.genres.map((genre, index) => (
@@ -1811,7 +1811,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                     </div>
                   )}
 
-                  {/* 年份和時長 */}
+                  {/* 年份和时长 */}
                   <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
                     {detailData.year && (
                       <div className="flex items-center gap-1">
@@ -1835,11 +1835,11 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 </div>
               </div>
 
-              {/* 簡介 */}
+              {/* 简介 */}
               {(detailData.intro || detailData.overview) && (
                 <div className="mb-6">
                   <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                    簡介
+                    简介
                   </h4>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
                     {detailData.intro || detailData.overview}
@@ -1847,12 +1847,12 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 </div>
               )}
 
-              {/* 導演和演員 */}
+              {/* 导演和演员 */}
               {detailData.directors && detailData.directors.length > 0 && (
                 <div className="mb-4">
                   <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
                     <Users size={16} />
-                    導演
+                    导演
                   </h4>
                   <p className="text-gray-700 dark:text-gray-300">
                     {detailData.directors.map((d) => d.name).join(', ')}
@@ -1864,7 +1864,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 <div className="mb-4">
                   <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
                     <Users size={16} />
-                    演員
+                    演员
                   </h4>
                   {currentSource === 'tmdb' ? (
                     <div
@@ -1929,13 +1929,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 </div>
               )}
 
-              {/* 製作信息 */}
+              {/* 制作信息 */}
               <div className="grid grid-cols-2 gap-4 text-sm">
                 {detailData.countries && detailData.countries.length > 0 && (
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-1">
                       <Globe size={14} />
-                      國家/地區
+                      国家/地区
                     </h4>
                     <p className="text-gray-700 dark:text-gray-300">
                       {detailData.countries.join(', ')}
@@ -1947,7 +1947,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-1">
                       <Tag size={14} />
-                      語言
+                      语言
                     </h4>
                     <p className="text-gray-700 dark:text-gray-300">
                       {detailData.languages.join(', ')}
@@ -1973,7 +1973,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 )}
               </div>
 
-              {/* 季度和集數信息（僅TMDB電視劇） */}
+              {/* 季度和集数信息（仅TMDB电视剧） */}
               {detailData.mediaType === 'tv' && (
                 <div className="mt-6">
                   {loadingSeasons && (
@@ -2031,7 +2031,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                         </div>
                       )}
 
-                      {/* 集數列表 */}
+                      {/* 集数列表 */}
                       {seasonData.episodes.length > 0 && (
                         <div>
                           <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
@@ -2113,7 +2113,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 </div>
               )}
 
-              {/* 數據源顯示和切換 */}
+              {/* 数据源显示和切换 */}
               <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -2131,7 +2131,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                       disabled={loading}
                       className="px-3 py-1.5 text-sm rounded-lg bg-green-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      切換到 TMDB
+                      切换到 TMDB
                     </button>
                   )}
                   {currentSource === 'tmdb' && originalSource !== 'tmdb' && originalDetailData && (
@@ -2140,7 +2140,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                       disabled={loading}
                       className="px-3 py-1.5 text-sm rounded-lg bg-gray-500 hover:bg-gray-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      切換回 {originalSource === 'douban' ? 'Douban' : originalSource === 'bangumi' ? 'Bangumi' : 'CMS'}
+                      切换回 {originalSource === 'douban' ? 'Douban' : originalSource === 'bangumi' ? 'Bangumi' : 'CMS'}
                     </button>
                   )}
                 </div>
@@ -2150,7 +2150,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         </div>
       </div>
 
-      {/* 圖片查看器 */}
+      {/* 图片查看器 */}
       {galleryModal}
       {showImageViewer && (
         <ImageViewer

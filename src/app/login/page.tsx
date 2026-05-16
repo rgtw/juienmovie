@@ -12,7 +12,7 @@ import { checkForUpdates, UpdateStatus } from '@/lib/version_check';
 import { useSite } from '@/components/SiteProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-// 版本顯示組件
+// 版本显示组件
 function VersionDisplay() {
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus | null>(null);
   const [isChecking, setIsChecking] = useState(true);
@@ -67,7 +67,7 @@ function VersionDisplay() {
   );
 }
 
-// 根據按鈕文本識別OIDC提供商並返回對應的圖標
+// 根据按钮文本识别OIDC提供商并返回对应的图标
 function getOIDCProviderIcon(buttonText: string) {
   const text = buttonText.toLowerCase();
 
@@ -85,7 +85,7 @@ function getOIDCProviderIcon(buttonText: string) {
     }
   }
 
-  // 默認圖標
+  // 默认图标
   return (
     <svg className='w-5 h-5 mr-2' fill='currentColor' viewBox='0 0 20 20'>
       <path fillRule='evenodd' d='M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z' clipRule='evenodd' />
@@ -111,7 +111,7 @@ function LoginPageClient() {
 
   const { siteName } = useSite();
 
-  // 處理URL中的error參數
+  // 处理URL中的error参数
   useEffect(() => {
     const errorParam = searchParams.get('error');
     if (errorParam) {
@@ -119,7 +119,7 @@ function LoginPageClient() {
     }
   }, [searchParams]);
 
-  // 在客戶端掛載後設置配置
+  // 在客户端挂载后设置配置
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const runtimeConfig = (window as any).RUNTIME_CONFIG;
@@ -127,7 +127,7 @@ function LoginPageClient() {
       const shouldAsk = storageType && storageType !== 'localstorage';
       setShouldAskUsername(shouldAsk);
 
-      // 設置背景圖（支持多張隨機選擇）
+      // 设置背景图（支持多张随机选择）
       const loginBg = runtimeConfig?.LOGIN_BACKGROUND_IMAGE;
       if (loginBg) {
         const urls = loginBg
@@ -136,13 +136,13 @@ function LoginPageClient() {
           .filter((url: string) => url !== '');
 
         if (urls.length > 0) {
-          // 隨機選擇一張背景圖
+          // 随机选择一张背景图
           const randomIndex = Math.floor(Math.random() * urls.length);
           setBackgroundImage(urls[randomIndex]);
         }
       }
 
-      // 設置站點配置
+      // 设置站点配置
       setSiteConfig({
         LoginRequireTurnstile: runtimeConfig?.LOGIN_REQUIRE_TURNSTILE || false,
         TurnstileSiteKey: runtimeConfig?.TURNSTILE_SITE_KEY || '',
@@ -151,7 +151,7 @@ function LoginPageClient() {
         OIDCButtonText: runtimeConfig?.OIDC_BUTTON_TEXT || '',
       });
 
-      // 從localStorage讀取記住的密碼信息
+      // 从localStorage读取记住的密码信息
       const rememberedCredentials = localStorage.getItem('rememberedCredentials');
       if (rememberedCredentials) {
         try {
@@ -164,14 +164,14 @@ function LoginPageClient() {
           }
           setRememberPassword(true);
         } catch (error) {
-          // 清除無效的數據
+          // 清除无效的数据
           localStorage.removeItem('rememberedCredentials');
         }
       }
     }
   }, []);
 
-  // 加載Cloudflare Turnstile腳本
+  // 加载Cloudflare Turnstile脚本
   useEffect(() => {
     if (!siteConfig?.LoginRequireTurnstile || !siteConfig?.TurnstileSiteKey) {
       return;
@@ -191,7 +191,7 @@ function LoginPageClient() {
     };
   }, [siteConfig]);
 
-  // 渲染Turnstile組件
+  // 渲染Turnstile组件
   useEffect(() => {
     if (!turnstileLoaded || !siteConfig?.TurnstileSiteKey) {
       return;
@@ -215,7 +215,7 @@ function LoginPageClient() {
 
     if (!password || (shouldAskUsername && !username)) return;
 
-    // 檢查Turnstile驗證
+    // 检查Turnstile验证
     if (siteConfig?.LoginRequireTurnstile && !turnstileToken) {
       setError('請完成人機驗證');
       return;
@@ -234,23 +234,23 @@ function LoginPageClient() {
       });
 
       if (res.ok) {
-        // 處理記住密碼邏輯
+        // 处理记住密码逻辑
         if (rememberPassword) {
           const credentials: any = { password };
-          // 如果需要用戶名且有用戶名，就保存用戶名
+          // 如果需要用户名且有用户名，就保存用户名
           if (shouldAskUsername && username) {
             credentials.username = username;
           }
           localStorage.setItem('rememberedCredentials', JSON.stringify(credentials));
         } else {
-          // 如果不記住密碼，清除已存儲的信息
+          // 如果不记住密码，清除已存储的信息
           localStorage.removeItem('rememberedCredentials');
         }
 
         const redirect = searchParams.get('redirect') || '/';
         window.location.replace(redirect);
       } else {
-        // 登錄失敗，重置Turnstile
+        // 登录失败，重置Turnstile
         if (siteConfig?.LoginRequireTurnstile && turnstileWidgetId !== null && (window as any).turnstile) {
           (window as any).turnstile.reset(turnstileWidgetId);
           setTurnstileToken(null);
@@ -264,7 +264,7 @@ function LoginPageClient() {
         }
       }
     } catch (error) {
-      // 網絡錯誤，重置Turnstile
+      // 网络错误，重置Turnstile
       if (siteConfig?.LoginRequireTurnstile && turnstileWidgetId !== null && (window as any).turnstile) {
         (window as any).turnstile.reset(turnstileWidgetId);
         setTurnstileToken(null);
@@ -298,7 +298,7 @@ function LoginPageClient() {
           {shouldAskUsername && (
             <div>
               <label htmlFor='username' className='sr-only'>
-                用戶名
+                用户名
               </label>
               <div className='relative'>
                 <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
@@ -319,7 +319,7 @@ function LoginPageClient() {
 
           <div>
             <label htmlFor='password' className='sr-only'>
-              密碼
+              密码
             </label>
             <div className='relative'>
               <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
@@ -357,7 +357,7 @@ function LoginPageClient() {
             <p className='text-sm text-red-600 dark:text-red-400'>{error}</p>
           )}
 
-          {/* 記住密碼複選框 */}
+          {/* 记住密码复选框 */}
           <div className='flex items-center'>
             <input
               id='remember-password'
@@ -370,11 +370,11 @@ function LoginPageClient() {
               htmlFor='remember-password'
               className='ml-2 block text-sm text-gray-700 dark:text-gray-300'
             >
-              記住密碼
+              记住密码
             </label>
           </div>
 
-          {/* 登錄按鈕 */}
+          {/* 登录按钮 */}
           <button
             type='submit'
             disabled={
@@ -386,7 +386,7 @@ function LoginPageClient() {
             {loading ? '登錄中...' : '登錄'}
           </button>
 
-          {/* 註冊按鈕 */}
+          {/* 注册按钮 */}
           {siteConfig?.EnableRegistration && shouldAskUsername && (
             <div className='text-center'>
               <button
@@ -394,13 +394,13 @@ function LoginPageClient() {
                 onClick={() => router.push('/register')}
                 className='text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors'
               >
-                還沒有賬號？立即註冊
+                还没有账号？立即注册
               </button>
             </div>
           )}
         </form>
 
-        {/* OIDC登錄按鈕 */}
+        {/* OIDC登录按钮 */}
         {siteConfig?.EnableOIDCLogin && shouldAskUsername && (
           <div className='mt-6'>
             <div className='relative'>
@@ -425,7 +425,7 @@ function LoginPageClient() {
         )}
       </div>
 
-      {/* 版本信息顯示 */}
+      {/* 版本信息显示 */}
       <VersionDisplay />
     </div>
   );

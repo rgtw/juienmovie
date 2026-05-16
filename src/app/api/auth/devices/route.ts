@@ -11,7 +11,7 @@ import {
 
 export const runtime = 'nodejs';
 
-// 獲取所有設備
+// 获取所有设备
 export async function GET(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
 
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
   try {
     const devices = await getUserDevices(authInfo.username);
 
-    // 標記當前設備
+    // 标记当前设备
     const devicesWithCurrent = devices.map((device) => ({
       ...device,
       isCurrent: device.tokenId === authInfo.tokenId,
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// 撤銷指定設備
+// 撤销指定设备
 export async function DELETE(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
 
@@ -59,7 +59,7 @@ export async function DELETE(request: NextRequest) {
   }
 }
 
-// 登出所有設備
+// 登出所有设备
 export async function POST(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
 
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json({ ok: true });
 
-    // 清除當前設備的 Cookie
+    // 清除当前设备的 Cookie
     response.cookies.set('auth', '', {
       path: '/',
       expires: new Date(0),

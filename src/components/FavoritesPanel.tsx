@@ -41,14 +41,14 @@ export const FavoritesPanel: React.FC<FavoritesPanelProps> = ({
   const [loading, setLoading] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-  // 加載收藏數據
+  // 加载收藏数据
   const loadFavorites = async () => {
     setLoading(true);
     try {
       const allFavorites = await getAllFavorites();
       const allPlayRecords = await getAllPlayRecords();
 
-      // 根據保存時間排序（從近到遠）
+      // 根据保存时间排序（从近到远）
       const sorted = Object.entries(allFavorites)
         .sort(([, a], [, b]) => b.save_time - a.save_time)
         .map(([key, fav]) => {
@@ -56,7 +56,7 @@ export const FavoritesPanel: React.FC<FavoritesPanelProps> = ({
           const source = key.slice(0, plusIndex);
           const id = key.slice(plusIndex + 1);
 
-          // 查找對應的播放記錄，獲取當前集數
+          // 查找对应的播放记录，获取当前集数
           const playRecord = allPlayRecords[key];
           const currentEpisode = playRecord?.index;
 
@@ -92,21 +92,21 @@ export const FavoritesPanel: React.FC<FavoritesPanelProps> = ({
     }
   };
 
-  // 打開面板時加載收藏
+  // 打开面板时加载收藏
   useEffect(() => {
     if (isOpen) {
       loadFavorites();
     }
   }, [isOpen]);
 
-  // 監聽收藏變化,實時移除已取消收藏的項目
+  // 监听收藏变化,实时移除已取消收藏的项目
   useEffect(() => {
     const unsubscribe = subscribeToDataUpdates('favoritesUpdated', async (newFavorites: Record<string, any>) => {
       if (isOpen) {
-        // 獲取最新的收藏列表的鍵
+        // 获取最新的收藏列表的键
         const currentKeys = Object.keys(newFavorites);
 
-        // 過濾掉已經不在收藏中的項目
+        // 过滤掉已经不在收藏中的项目
         setFavoriteItems((prevItems) =>
           prevItems.filter((item) => {
             const key = `${item.source}+${item.id}`;
@@ -131,7 +131,7 @@ export const FavoritesPanel: React.FC<FavoritesPanelProps> = ({
 
       {/* 收藏面板 */}
       <div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[85vh] bg-white dark:bg-gray-900 rounded-xl shadow-xl z-[1001] flex flex-col overflow-hidden'>
-        {/* 標題欄 */}
+        {/* 标题栏 */}
         <div className='flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700'>
           <div className='flex items-center gap-2'>
             <Star className='w-5 h-5 text-yellow-500' />
@@ -140,7 +140,7 @@ export const FavoritesPanel: React.FC<FavoritesPanelProps> = ({
             </h3>
             {favoriteItems.length > 0 && (
               <span className='px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 rounded-full'>
-                {favoriteItems.length} 項
+                {favoriteItems.length} 项
               </span>
             )}
           </div>
@@ -191,7 +191,7 @@ export const FavoritesPanel: React.FC<FavoritesPanelProps> = ({
         </div>
       </div>
 
-      {/* 確認對話框 */}
+      {/* 确认对话框 */}
       {showConfirmDialog && createPortal(
         <div
           className='fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center p-4 transition-opacity duration-300'
@@ -202,7 +202,7 @@ export const FavoritesPanel: React.FC<FavoritesPanelProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6">
-              {/* 圖標和標題 */}
+              {/* 图标和标题 */}
               <div className="flex items-start gap-4 mb-4">
                 <div className="flex-shrink-0">
                   <AlertTriangle className="w-8 h-8 text-red-500" />
@@ -212,12 +212,12 @@ export const FavoritesPanel: React.FC<FavoritesPanelProps> = ({
                     清空收藏
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    確定要清空所有收藏嗎？此操作不可恢復。
+                    确定要清空所有收藏吗？此操作不可恢复。
                   </p>
                 </div>
               </div>
 
-              {/* 按鈕組 */}
+              {/* 按钮组 */}
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setShowConfirmDialog(false)}
@@ -229,7 +229,7 @@ export const FavoritesPanel: React.FC<FavoritesPanelProps> = ({
                   onClick={handleClearAll}
                   className="flex-1 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
                 >
-                  確定清空
+                  确定清空
                 </button>
               </div>
             </div>

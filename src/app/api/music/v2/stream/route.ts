@@ -80,7 +80,7 @@ async function resolveStreamUrl(
 
     const upstreamUrl = urlResult?.url;
     if (!upstreamUrl) {
-      throw new Error(urlResult?.error || '獲取音頻流失敗');
+      throw new Error(urlResult?.error || '获取音频流失败');
     }
 
     setCachedStreamUrl(cacheKey, upstreamUrl);
@@ -181,7 +181,7 @@ export async function GET(request: NextRequest) {
       if (upstream.status === 401 || upstream.status === 403 || upstream.status === 404) {
         streamUrlCache.delete(cacheKey);
       }
-      return NextResponse.json({ success: false, error: { code: 'STREAM_FAILED', message: '獲取音頻流失敗' } }, { status: upstream.status });
+      return NextResponse.json({ success: false, error: { code: 'STREAM_FAILED', message: '获取音频流失败' } }, { status: upstream.status });
     }
 
     const responseHeaders = new Headers();

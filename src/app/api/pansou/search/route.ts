@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     const authResult = await requireFeaturePermission(
       request,
       'netdisk_search',
-      '無權限使用網盤搜索'
+      '无权限使用网盘搜索'
     );
     if (authResult instanceof NextResponse) return authResult;
 
@@ -22,18 +22,18 @@ export async function POST(request: NextRequest) {
 
     if (!keyword) {
       return NextResponse.json(
-        { error: '關鍵詞不能為空' },
+        { error: '关键词不能为空' },
         { status: 400 }
       );
     }
 
-    // 從系統配置中獲取 Pansou 配置
+    // 从系统配置中获取 Pansou 配置
     const config = await getConfig();
     const apiUrl = config.SiteConfig.PansouApiUrl;
     const username = config.SiteConfig.PansouUsername;
     const password = config.SiteConfig.PansouPassword;
 
-    console.log('Pansou 搜索請求:', {
+    console.log('Pansou 搜索请求:', {
       keyword,
       apiUrl: apiUrl ? '已配置' : '未配置',
       hasAuth: !!(username && password),
@@ -41,12 +41,12 @@ export async function POST(request: NextRequest) {
 
     if (!apiUrl) {
       return NextResponse.json(
-        { error: '未配置 Pansou API 地址，請在管理面板配置' },
+        { error: '未配置 Pansou API 地址，请在管理面板配置' },
         { status: 400 }
       );
     }
 
-    // 調用 Pansou 搜索
+    // 调用 Pansou 搜索
     const results = await searchPansou(apiUrl, keyword, {
       username,
       password,
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    console.log('Pansou 搜索結果:', {
+    console.log('Pansou 搜索结果:', {
       total: filteredResults.total,
       hasData: !!filteredResults.merged_by_type,
       types: filteredResults.merged_by_type
@@ -97,9 +97,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(filteredResults);
   } catch (error: any) {
-    console.error('Pansou 搜索失敗:', error);
+    console.error('Pansou 搜索失败:', error);
     return NextResponse.json(
-      { error: error.message || '搜索失敗' },
+      { error: error.message || '搜索失败' },
       { status: 500 }
     );
   }

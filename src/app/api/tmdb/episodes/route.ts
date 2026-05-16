@@ -10,13 +10,13 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/tmdb/episodes?id=xxx&season=xxx
- * 獲取電視劇季度的集數詳情（帶圖片）
+ * 获取电视剧季度的集数详情（带图片）
  */
 export async function GET(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const season = searchParams.get('season');
 
     if (!id || !season) {
-      return NextResponse.json({ error: '缺少參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少参数' }, { status: 400 });
     }
 
     const config = await getConfig();
@@ -46,16 +46,16 @@ export async function GET(request: NextRequest) {
 
     if (response.code !== 200 || !response.season) {
       return NextResponse.json(
-        { error: '獲取失敗', code: response.code },
+        { error: '获取失败', code: response.code },
         { status: response.code }
       );
     }
 
     return NextResponse.json(response.season);
   } catch (error) {
-    console.error('獲取集數詳情失敗:', error);
+    console.error('获取集数详情失败:', error);
     return NextResponse.json(
-      { error: '獲取失敗', details: (error as Error).message },
+      { error: '获取失败', details: (error as Error).message },
       { status: 500 }
     );
   }

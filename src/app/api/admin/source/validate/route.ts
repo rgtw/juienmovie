@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
   if (!searchKeyword) {
     return new Response(
-      JSON.stringify({ error: '搜索關鍵詞不能為空' }),
+      JSON.stringify({ error: '搜索关键词不能为空' }),
       {
         status: 400,
         headers: {
@@ -32,15 +32,15 @@ export async function GET(request: NextRequest) {
   const config = await getConfig();
   const apiSites = config.SourceConfig;
 
-  // 共享狀態
+  // 共享状态
   let streamClosed = false;
 
-  // 創建可讀流
+  // 创建可读流
   const stream = new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
 
-      // 輔助函數：安全地向控制器寫入數據
+      // 辅助函数：安全地向控制器写入数据
       const safeEnqueue = (data: Uint8Array) => {
         try {
           if (streamClosed || (!controller.desiredSize && controller.desiredSize !== 0)) {
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
         }
       };
 
-      // 發送開始事件
+      // 发送开始事件
       const startEvent = `data: ${JSON.stringify({
         type: 'start',
         totalSources: apiSites.length
@@ -65,16 +65,16 @@ export async function GET(request: NextRequest) {
         return;
       }
 
-      // 記錄已完成的源數量
+      // 记录已完成的源数量
       let completedSources = 0;
 
-      // 為每個源創建驗證 Promise
+      // 为每个源创建验证 Promise
       const validationPromises = apiSites.map(async (site) => {
         try {
-          // 構建搜索URL，只獲取第一頁
+          // 构建搜索URL，只获取第一页
           const searchUrl = `${site.api}?ac=videolist&wd=${encodeURIComponent(searchKeyword)}`;
 
-          // 設置超時控制
+          // 设置超时控制
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
 
             const data = await response.json() as any;
 
-            // 檢查結果是否有效
+            // 检查结果是否有效
             let status: 'valid' | 'no_results' | 'invalid';
             if (
               data &&
@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
               Array.isArray(data.list) &&
               data.list.length > 0
             ) {
-              // 檢查是否有標題包含搜索詞的結果
+              // 检查是否有标题包含搜索词的结果
               const validResults = data.list.filter((item: any) => {
                 const title = item.vod_name || '';
                 return title.toLowerCase().includes(searchKeyword.toLowerCase());
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
               status = 'no_results';
             }
 
-            // 發送該源的驗證結果
+            // 发送该源的验证结果
             completedSources++;
 
             if (!streamClosed) {
@@ -136,9 +136,9 @@ export async function GET(request: NextRequest) {
           }
 
         } catch (error) {
-          console.warn(`驗證失敗 ${site.name}:`, error);
+          console.warn(`验证失败 ${site.name}:`, error);
 
-          // 發送源錯誤事件
+          // 发送源错误事件
           completedSources++;
 
           if (!streamClosed) {
@@ -155,10 +155,10 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        // 檢查是否所有源都已完成
+        // 检查是否所有源都已完成
         if (completedSources === apiSites.length) {
           if (!streamClosed) {
-            // 發送最終完成事件
+            // 发送最终完成事件
             const completeEvent = `data: ${JSON.stringify({
               type: 'complete',
               completedSources
@@ -175,7 +175,7 @@ export async function GET(request: NextRequest) {
         }
       });
 
-      // 等待所有驗證完成
+      // 等待所有验证完成
       await Promise.allSettled(validationPromises);
     },
 
@@ -185,7 +185,7 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  // 返回流式響應
+  // 返回流式响应
   return new Response(stream, {
     headers: {
       'Content-Type': 'text/event-stream',

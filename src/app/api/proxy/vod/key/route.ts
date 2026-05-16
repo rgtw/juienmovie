@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Missing source' }, { status: 400 });
   }
 
-  // 檢查該視頻源是否啟用了代理模式
+  // 检查该视频源是否启用了代理模式
   const config = await getConfig();
   const videoSource = config.SourceConfig?.find((s: any) => s.key === source);
 
@@ -36,7 +36,7 @@ export async function GET(request: Request) {
   try {
     const decodedUrl = decodeURIComponent(url);
 
-    // 安全校驗：防 SSRF 攔截請求內網或非法 URL
+    // 安全校验：防 SSRF 拦截请求内网或非法 URL
     const isSafeUrl = await validateProxyUrlServerSide(decodedUrl);
     if (!isSafeUrl) {
       return NextResponse.json({ error: 'Proxy request to local or invalid network is forbidden' }, { status: 403 });

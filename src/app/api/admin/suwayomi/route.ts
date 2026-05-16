@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     if (username !== process.env.USERNAME) {
       const userInfo = await db.getUserInfoV2(username);
       if (!userInfo || userInfo.role !== 'admin' || userInfo.banned) {
-        return NextResponse.json({ error: '權限不足' }, { status: 401 });
+        return NextResponse.json({ error: '权限不足' }, { status: 401 });
       }
     }
 
@@ -37,11 +37,11 @@ export async function POST(request: NextRequest) {
     };
 
     if (!ServerURL?.trim()) {
-      return NextResponse.json({ success: false, message: '請先填寫 Suwayomi 服務地址' }, { status: 400 });
+      return NextResponse.json({ success: false, message: '请先填写 Suwayomi 服务地址' }, { status: 400 });
     }
 
     if ((AuthMode === 'basic_auth' || AuthMode === 'simple_login') && (!Username?.trim() || !Password)) {
-      return NextResponse.json({ success: false, message: '當前認證方式需要填寫用戶名和密碼' }, { status: 400 });
+      return NextResponse.json({ success: false, message: '当前认证方式需要填写用户名和密码' }, { status: 400 });
     }
 
     const client = new SuwayomiClient({
@@ -55,13 +55,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `連接成功，當前語言下檢測到 ${sources.length} 個源`,
+      message: `连接成功，当前语言下检测到 ${sources.length} 个源`,
     });
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : '測試連接失敗',
+        message: error instanceof Error ? error.message : '测试连接失败',
       },
       { status: 400 }
     );

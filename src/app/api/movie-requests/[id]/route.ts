@@ -5,7 +5,7 @@ import { getStorage } from '@/lib/db';
 
 export const runtime = 'nodejs';
 
-// GET: 獲取單個求片詳情
+// GET: 获取单个求片详情
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -25,7 +25,7 @@ export async function GET(
 
     return NextResponse.json({ request: movieRequest });
   } catch (error) {
-    console.error('獲取求片詳情失敗:', error);
+    console.error('获取求片详情失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }
@@ -33,7 +33,7 @@ export async function GET(
   }
 }
 
-// PATCH: 更新求片狀態（標記已上架）
+// PATCH: 更新求片状态（标记已上架）
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -46,16 +46,16 @@ export async function PATCH(
   try {
     const storage = getStorage();
 
-    // 檢查權限：只有管理員和站長可以操作
+    // 检查权限：只有管理员和站长可以操作
     if (storage.getUserInfoV2) {
       const userInfo = await storage.getUserInfoV2(authInfo.username);
       if (userInfo?.role !== 'admin' && userInfo?.role !== 'owner') {
-        return NextResponse.json({ error: '無權限操作' }, { status: 403 });
+        return NextResponse.json({ error: '无权限操作' }, { status: 403 });
       }
     } else {
-      // 如果不支持 getUserInfoV2，只允許站長操作
+      // 如果不支持 getUserInfoV2，只允许站长操作
       if (authInfo.username !== process.env.USERNAME) {
-        return NextResponse.json({ error: '無權限操作' }, { status: 403 });
+        return NextResponse.json({ error: '无权限操作' }, { status: 403 });
       }
     }
 
@@ -67,7 +67,7 @@ export async function PATCH(
       return NextResponse.json({ error: '求片不存在' }, { status: 404 });
     }
 
-    // 更新狀態
+    // 更新状态
     const updates: any = {
       status,
       updatedAt: Date.now(),
@@ -78,7 +78,7 @@ export async function PATCH(
       updates.fulfilledSource = fulfilledSource;
       updates.fulfilledId = fulfilledId;
 
-      // 給所有求片用戶發送通知
+      // 给所有求片用户发送通知
       for (const username of movieRequest.requestedBy) {
         await storage.addNotification(username, {
           id: `req_fulfilled_${params.id}_${Date.now()}`,
@@ -103,7 +103,7 @@ export async function PATCH(
       request: { ...movieRequest, ...updates },
     });
   } catch (error) {
-    console.error('更新求片失敗:', error);
+    console.error('更新求片失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }
@@ -111,7 +111,7 @@ export async function PATCH(
   }
 }
 
-// DELETE: 刪除求片
+// DELETE: 删除求片
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -124,16 +124,16 @@ export async function DELETE(
   try {
     const storage = getStorage();
 
-    // 檢查權限：只有管理員和站長可以刪除
+    // 检查权限：只有管理员和站长可以删除
     if (storage.getUserInfoV2) {
       const userInfo = await storage.getUserInfoV2(authInfo.username);
       if (userInfo?.role !== 'admin' && userInfo?.role !== 'owner') {
-        return NextResponse.json({ error: '無權限操作' }, { status: 403 });
+        return NextResponse.json({ error: '无权限操作' }, { status: 403 });
       }
     } else {
-      // 如果不支持 getUserInfoV2，只允許站長操作
+      // 如果不支持 getUserInfoV2，只允许站长操作
       if (authInfo.username !== process.env.USERNAME) {
-        return NextResponse.json({ error: '無權限操作' }, { status: 403 });
+        return NextResponse.json({ error: '无权限操作' }, { status: 403 });
       }
     }
 
@@ -142,17 +142,17 @@ export async function DELETE(
       return NextResponse.json({ error: '求片不存在' }, { status: 404 });
     }
 
-    // 刪除求片
+    // 删除求片
     await storage.deleteMovieRequest(params.id);
 
-    // 從所有用戶的求片列表中移除
+    // 从所有用户的求片列表中移除
     for (const username of movieRequest.requestedBy) {
       await storage.removeUserMovieRequest(username, params.id);
     }
 
-    return NextResponse.json({ message: '刪除成功' });
+    return NextResponse.json({ message: '删除成功' });
   } catch (error) {
-    console.error('刪除求片失敗:', error);
+    console.error('删除求片失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }

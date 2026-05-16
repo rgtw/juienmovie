@@ -6,7 +6,7 @@ import { getStorage } from '@/lib/db';
 export const runtime = 'nodejs';
 
 /**
- * GET - 獲取用戶郵箱設置
+ * GET - 获取用户邮箱设置
  */
 export async function GET(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       emailNotifications,
     });
   } catch (error) {
-    console.error('獲取用戶郵箱設置失敗:', error);
+    console.error('获取用户邮箱设置失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST - 保存用戶郵箱設置
+ * POST - 保存用户邮箱设置
  */
 export async function POST(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
@@ -54,12 +54,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, emailNotifications } = body;
 
-    // 驗證郵箱格式
+    // 验证邮箱格式
     if (email && typeof email === 'string') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return NextResponse.json(
-          { error: '郵箱格式不正確' },
+          { error: '邮箱格式不正确' },
           { status: 400 }
         );
       }
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 保存郵件通知偏好
+    // 保存邮件通知偏好
     if (typeof emailNotifications === 'boolean') {
       if (storage.setEmailNotificationPreference) {
         await storage.setEmailNotificationPreference(username, emailNotifications);
@@ -78,10 +78,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: '郵箱設置保存成功',
+      message: '邮箱设置保存成功',
     });
   } catch (error) {
-    console.error('保存用戶郵箱設置失敗:', error);
+    console.error('保存用户邮箱设置失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }

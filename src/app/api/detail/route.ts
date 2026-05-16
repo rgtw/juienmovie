@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   const sourceCode = searchParams.get('source');
 
   if (!id || !sourceCode) {
-    return NextResponse.json({ error: '缺少必要參數' }, { status: 400 });
+    return NextResponse.json({ error: '缺少必要参数' }, { status: 400 });
   }
 
   const parsedScriptSource = parseScriptSourceValue(sourceCode);
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // 特殊處理 openlist 源
+  // 特殊处理 openlist 源
   if (sourceCode === 'openlist') {
     try {
       const config = await getConfig();
@@ -82,12 +82,12 @@ export async function GET(request: NextRequest) {
         !openListConfig.Username ||
         !openListConfig.Password
       ) {
-        throw new Error('OpenList 未配置或未啟用');
+        throw new Error('OpenList 未配置或未启用');
       }
 
       const rootPath = openListConfig.RootPath || '/';
 
-      // 1. 讀取 metainfo 獲取元數據
+      // 1. 读取 metainfo 获取元数据
       let metaInfo: any = null;
       let folderMeta: any = null;
       try {
@@ -104,20 +104,20 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        // 使用 key 查找文件夾信息
+        // 使用 key 查找文件夹信息
         folderMeta = metaInfo?.folders?.[id];
         if (!folderMeta) {
-          throw new Error('未找到該視頻信息');
+          throw new Error('未找到该视频信息');
         }
       } catch (error) {
-        throw new Error('讀取視頻信息失敗: ' + (error as Error).message);
+        throw new Error('读取视频信息失败: ' + (error as Error).message);
       }
 
-      // 使用 folderName 構建實際路徑
+      // 使用 folderName 构建实际路径
       const folderName = folderMeta.folderName;
       const folderPath = `${rootPath}${rootPath.endsWith('/') ? '' : '/'}${folderName}`;
 
-      // 2. 直接調用 OpenList 客戶端獲取視頻列表
+      // 2. 直接调用 OpenList 客户端获取视频列表
       const { OpenListClient } = await import('@/lib/openlist.client');
       const { getCachedVideoInfo, setCachedVideoInfo } = await import('@/lib/openlist-cache');
       const { parseVideoFileName } = await import('@/lib/video-parser');
@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
 
       let videoInfo = getCachedVideoInfo(folderPath);
 
-      // 獲取所有分頁的視頻文件
+      // 获取所有分页的视频文件
       const allFiles: any[] = [];
       let currentPage = 1;
       const pageSize = 100;
@@ -140,7 +140,7 @@ export async function GET(request: NextRequest) {
         const listResponse = await client.listDirectory(folderPath, currentPage, pageSize);
 
         if (listResponse.code !== 200) {
-          throw new Error('OpenList 列表獲取失敗1');
+          throw new Error('OpenList 列表获取失败1');
         }
 
         total = listResponse.data.total;
@@ -195,19 +195,19 @@ export async function GET(request: NextRequest) {
           return { fileName: file.name, episode: episodeInfo.episode || 0, season: episodeInfo.season, title: displayTitle, isOVA: episodeInfo.isOVA };
         })
         .sort((a, b) => {
-          // OVA 排在最後
+          // OVA 排在最后
           if (a.isOVA && !b.isOVA) return 1;
           if (!a.isOVA && b.isOVA) return -1;
-          // 都是 OVA 或都不是 OVA，按集數排序
+          // 都是 OVA 或都不是 OVA，按集数排序
           return a.episode !== b.episode ? a.episode - b.episode : a.fileName.localeCompare(b.fileName);
         });
 
-      // 3. 從 metainfo 中獲取元數據
+      // 3. 从 metainfo 中获取元数据
       const { getTMDBImageUrl } = await import('@/lib/tmdb.search');
 
       const result = {
         source: 'openlist',
-        source_name: '私人影庫',
+        source_name: '私人影库',
         id: id,
         title: folderMeta?.title || folderName,
         poster: folderMeta?.poster_path ? getTMDBImageUrl(folderMeta.poster_path) : '',
@@ -229,7 +229,7 @@ export async function GET(request: NextRequest) {
   }
 
   if (!/^[\w-]+$/.test(id)) {
-    return NextResponse.json({ error: '無效的視頻ID格式' }, { status: 400 });
+    return NextResponse.json({ error: '无效的视频ID格式' }, { status: 400 });
   }
 
   try {
@@ -237,12 +237,12 @@ export async function GET(request: NextRequest) {
     const apiSite = apiSites.find((site) => site.key === sourceCode);
 
     if (!apiSite) {
-      return NextResponse.json({ error: '無效的API來源' }, { status: 400 });
+      return NextResponse.json({ error: '无效的API来源' }, { status: 400 });
     }
 
     const result = await getDetailFromApi(apiSite, id);
 
-    // 添加 proxyMode 到返回結果
+    // 添加 proxyMode 到返回结果
     const resultWithProxy = {
       ...result,
       proxyMode: apiSite.proxyMode || false,

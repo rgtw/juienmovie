@@ -10,14 +10,14 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/admin/anime-subscription
- * 獲取訂閱列表和配置
+ * 获取订阅列表和配置
  */
 export async function GET(req: NextRequest) {
   try {
-    // 權限檢查
+    // 权限检查
     const authInfo = getAuthInfoFromCookie(req);
     if (!authInfo || (authInfo.role !== 'admin' && authInfo.role !== 'owner')) {
-      return NextResponse.json({ error: '無權限訪問' }, { status: 403 });
+      return NextResponse.json({ error: '无权限访问' }, { status: 403 });
     }
 
     const config = await getConfig();
@@ -28,9 +28,9 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(animeConfig);
   } catch (error: any) {
-    console.error('獲取追番訂閱配置失敗:', error);
+    console.error('获取追番订阅配置失败:', error);
     return NextResponse.json(
-      { error: error.message || '獲取配置失敗' },
+      { error: error.message || '获取配置失败' },
       { status: 500 }
     );
   }
@@ -38,27 +38,27 @@ export async function GET(req: NextRequest) {
 
 /**
  * POST /api/admin/anime-subscription
- * 創建新訂閱
+ * 创建新订阅
  */
 export async function POST(req: NextRequest) {
   try {
-    // 權限檢查
+    // 权限检查
     const authInfo = getAuthInfoFromCookie(req);
     if (!authInfo || (authInfo.role !== 'admin' && authInfo.role !== 'owner')) {
-      return NextResponse.json({ error: '無權限訪問' }, { status: 403 });
+      return NextResponse.json({ error: '无权限访问' }, { status: 403 });
     }
 
     const { title, filterText, source, enabled, lastEpisode } =
       await req.json();
 
-    // 驗證必填字段
+    // 验证必填字段
     if (!title || !filterText || !source) {
       return NextResponse.json({ error: '缺少必填字段' }, { status: 400 });
     }
 
-    // 驗證 source
+    // 验证 source
     if (!['acgrip', 'mikan', 'dmhy'].includes(source)) {
-      return NextResponse.json({ error: '無效的搜索源' }, { status: 400 });
+      return NextResponse.json({ error: '无效的搜索源' }, { status: 400 });
     }
 
     const config = await getConfig();
@@ -66,19 +66,19 @@ export async function POST(req: NextRequest) {
       config.AnimeSubscriptionConfig = { Enabled: false, Subscriptions: [] };
     }
 
-    // 驗證集數
+    // 验证集数
     let episodeNum = 0;
     if (lastEpisode !== undefined) {
       episodeNum = parseInt(String(lastEpisode), 10);
       if (isNaN(episodeNum) || episodeNum < 0) {
         return NextResponse.json(
-          { error: '集數必須是非負整數' },
+          { error: '集数必须是非负整数' },
           { status: 400 }
         );
       }
     }
 
-    // 創建新訂閱
+    // 创建新订阅
     const newSubscription: AnimeSubscription = {
       id: crypto.randomUUID(),
       title: title.trim(),
@@ -97,9 +97,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newSubscription);
   } catch (error: any) {
-    console.error('創建追番訂閱失敗:', error);
+    console.error('创建追番订阅失败:', error);
     return NextResponse.json(
-      { error: error.message || '創建訂閱失敗' },
+      { error: error.message || '创建订阅失败' },
       { status: 500 }
     );
   }

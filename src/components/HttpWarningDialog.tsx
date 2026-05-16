@@ -15,25 +15,25 @@ export default function HttpWarningDialog({ onClose }: HttpWarningDialogProps) {
   const [shouldShow, setShouldShow] = useState(false);
 
   useEffect(() => {
-    // 檢查是否應該顯示彈窗
+    // 检查是否应该显示弹窗
     const checkShouldShow = () => {
-      // 只在客戶端執行
+      // 只在客户端执行
       if (typeof window === 'undefined') return false;
 
-      // 檢查是否已經選擇不再提示
+      // 检查是否已经选择不再提示
       const dontShowAgain = localStorage.getItem('httpWarningDismissed');
       if (dontShowAgain === 'true') return false;
 
-      // 檢查是否是站長
+      // 检查是否是站长
       const authInfo = getAuthInfoFromBrowserCookie();
       if (!authInfo || authInfo.role !== 'owner') return false;
 
-      // 檢查是否是 HTTP 環境（非 localhost 和 127.0.0.1）
+      // 检查是否是 HTTP 环境（非 localhost 和 127.0.0.1）
       const { protocol, hostname } = window.location;
       const isHttp = protocol === 'http:';
       const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
 
-      // 只在 HTTP 且非本地環境下顯示
+      // 只在 HTTP 且非本地环境下显示
       return isHttp && !isLocalhost;
     };
 
@@ -41,7 +41,7 @@ export default function HttpWarningDialog({ onClose }: HttpWarningDialogProps) {
     setShouldShow(shouldDisplay);
 
     if (shouldDisplay) {
-      // 延遲顯示動畫
+      // 延迟显示动画
       setTimeout(() => setIsVisible(true), 100);
     }
   }, []);
@@ -58,7 +58,7 @@ export default function HttpWarningDialog({ onClose }: HttpWarningDialogProps) {
     }, 300);
   };
 
-  // 如果不需要顯示，直接返回 null
+  // 如果不需要显示，直接返回 null
   if (!shouldShow) return null;
 
   return createPortal(
@@ -75,18 +75,18 @@ export default function HttpWarningDialog({ onClose }: HttpWarningDialogProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6">
-          {/* 圖標和標題 */}
+          {/* 图标和标题 */}
           <div className="flex items-start gap-4 mb-4">
             <div className="flex-shrink-0">
               <AlertTriangle className="w-8 h-8 text-yellow-500" />
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                HTTP 環境功能限制提示
+                HTTP 环境功能限制提示
               </h3>
               <div className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
                 <p>
-                  檢測到您正在使用 HTTP 協議訪問本站。由於瀏覽器安全策略限制，以下功能將無法正常使用:
+                  检测到您正在使用 HTTP 协议访问本站。由于浏览器安全策略限制，以下功能将无法正常使用:
                 </p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
                   <li>視頻超分（AI 畫質增強）</li>
@@ -94,13 +94,13 @@ export default function HttpWarningDialog({ onClose }: HttpWarningDialogProps) {
                   <li>其他需要安全上下文的高級功能</li>
                 </ul>
                 <p className="mt-3 text-yellow-600 dark:text-yellow-500 font-medium">
-                  建議配置 HTTPS 證書以獲得完整功能體驗。
+                  建议配置 HTTPS 证书以获得完整功能体验。
                 </p>
               </div>
             </div>
           </div>
 
-          {/* 按鈕組 */}
+          {/* 按钮组 */}
           <div className="flex gap-3 mt-6">
             <button
               onClick={handleDontShowAgain}

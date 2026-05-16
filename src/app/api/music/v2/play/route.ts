@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: 'MUSIC_PLAY_FAILED',
-            message: urlResult?.error || '獲取播放地址失敗',
+            message: urlResult?.error || '获取播放地址失败',
           },
         }, { status: 502 });
       }
@@ -160,6 +160,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('[music-v2] play route error:', error);
-    return internalError('獲取播放信息失敗', (error as Error).message);
+    return internalError('获取播放信息失败', (error as Error).message);
   }
 }

@@ -10,19 +10,19 @@ export async function GET(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo?.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     const episodeIndexRaw = searchParams.get('episodeIndex');
     if (!id || episodeIndexRaw == null) {
-      return NextResponse.json({ error: '缺少參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少参数' }, { status: 400 });
     }
 
     const episodeIndex = Number.parseInt(episodeIndexRaw, 10);
     if (!Number.isInteger(episodeIndex) || episodeIndex < 0) {
-      return NextResponse.json({ error: '無效的 episodeIndex' }, { status: 400 });
+      return NextResponse.json({ error: '无效的 episodeIndex' }, { status: 400 });
     }
 
     const { session, cookie } = await resolveBaiduSession(id);
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
       if (!upstream.ok || !upstream.body) {
         return NextResponse.json(
-          { error: `百度網盤視頻代理失敗 (${upstream.status})` },
+          { error: `百度网盘视频代理失败 (${upstream.status})` },
           { status: upstream.status || 500 }
         );
       }
@@ -106,13 +106,13 @@ export async function GET(request: NextRequest) {
     } catch (error) {
       clearTimeout(timeoutId);
       if (error instanceof Error && error.name === 'AbortError') {
-        return NextResponse.json({ error: '百度網盤代理超時' }, { status: 504 });
+        return NextResponse.json({ error: '百度网盘代理超时' }, { status: 504 });
       }
       throw error;
     }
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : '百度網盤代理失敗' },
+      { error: error instanceof Error ? error.message : '百度网盘代理失败' },
       { status: 500 }
     );
   }

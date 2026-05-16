@@ -13,7 +13,7 @@ interface AnimeSubscriptionComponentProps {
   refreshConfig: () => Promise<void>;
 }
 
-// Switch 組件
+// Switch 组件
 const Switch = ({ checked, onChange, disabled }: { checked: boolean; onChange: (checked: boolean) => void; disabled?: boolean }) => (
   <button
     type='button'
@@ -36,7 +36,7 @@ const Switch = ({ checked, onChange, disabled }: { checked: boolean; onChange: (
   </button>
 );
 
-// AlertModal 組件
+// AlertModal 组件
 interface AlertModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -168,7 +168,7 @@ export default function AnimeSubscriptionComponent({
     setAlertModal(prev => ({ ...prev, isOpen: false }));
   };
 
-  // 表單狀態
+  // 表单状态
   const [formData, setFormData] = useState({
     title: '',
     filterText: '',
@@ -177,7 +177,7 @@ export default function AnimeSubscriptionComponent({
     enabled: true,
   });
 
-  // 加載配置
+  // 加载配置
   useEffect(() => {
     if (config?.AnimeSubscriptionConfig) {
       setEnabled(config.AnimeSubscriptionConfig.Enabled || false);
@@ -185,7 +185,7 @@ export default function AnimeSubscriptionComponent({
     }
   }, [config]);
 
-  // 重置表單
+  // 重置表单
   const resetForm = () => {
     setFormData({
       title: '',
@@ -198,7 +198,7 @@ export default function AnimeSubscriptionComponent({
     setShowAddForm(false);
   };
 
-  // 切換啟用狀態
+  // 切换启用状态
   const handleToggleEnabled = async (newEnabled: boolean) => {
     try {
       setLoading(true);
@@ -225,13 +225,13 @@ export default function AnimeSubscriptionComponent({
     }
   };
 
-  // 開始添加
+  // 开始添加
   const handleAdd = () => {
     resetForm();
     setShowAddForm(true);
   };
 
-  // 開始編輯
+  // 开始编辑
   const handleEdit = (sub: AnimeSubscription) => {
     setFormData({
       title: sub.title,
@@ -244,7 +244,7 @@ export default function AnimeSubscriptionComponent({
     setShowAddForm(false);
   };
 
-  // 保存訂閱
+  // 保存订阅
   const handleSave = async () => {
     if (!formData.title.trim() || !formData.filterText.trim()) {
       showAlert({
@@ -270,7 +270,7 @@ export default function AnimeSubscriptionComponent({
           throw new Error('更新訂閱失敗');
         }
       } else {
-        // 創建
+        // 创建
         const response = await fetch('/api/admin/anime-subscription', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -299,7 +299,7 @@ export default function AnimeSubscriptionComponent({
     }
   };
 
-  // 刪除訂閱
+  // 删除订阅
   const handleDelete = async (id: string, title: string) => {
     showAlert({
       type: 'warning',
@@ -336,7 +336,7 @@ export default function AnimeSubscriptionComponent({
     });
   };
 
-  // 手動檢查更新
+  // 手动检查更新
   const handleCheckSubscription = async (id: string) => {
     try {
       setCheckingId(id);
@@ -366,7 +366,7 @@ export default function AnimeSubscriptionComponent({
     }
   };
 
-  // 切換訂閱啟用狀態
+  // 切换订阅启用状态
   const handleToggleSubscription = async (sub: AnimeSubscription) => {
     try {
       setLoading(true);
@@ -407,11 +407,11 @@ export default function AnimeSubscriptionComponent({
 
   return (
     <div className='space-y-6'>
-      {/* 頂部控制 */}
+      {/* 顶部控制 */}
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
           <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-            啟用追番功能
+            启用追番功能
           </span>
           <Switch checked={enabled} onChange={handleToggleEnabled} disabled={loading} />
         </div>
@@ -421,11 +421,11 @@ export default function AnimeSubscriptionComponent({
           className='flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:opacity-50'
         >
           <Plus size={16} />
-          添加訂閱
+          添加订阅
         </button>
       </div>
 
-      {/* 說明 */}
+      {/* 说明 */}
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <div className='flex gap-2'>
           <AlertCircle className='w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5' />
@@ -438,7 +438,7 @@ export default function AnimeSubscriptionComponent({
         </div>
       </div>
 
-      {/* 添加/編輯表單 */}
+      {/* 添加/编辑表单 */}
       {(showAddForm || editingSubscription) && (
         <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6'>
           <div className='flex items-center justify-between mb-4'>
@@ -456,7 +456,7 @@ export default function AnimeSubscriptionComponent({
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               <div>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                  番劇名稱 *
+                  番剧名称 *
                 </label>
                 <input
                   type='text'
@@ -468,7 +468,7 @@ export default function AnimeSubscriptionComponent({
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                  過濾關鍵詞 *
+                  过滤关键词 *
                 </label>
                 <input
                   type='text'
@@ -478,7 +478,7 @@ export default function AnimeSubscriptionComponent({
                   className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500'
                 />
                 <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                  多個關鍵詞用逗號分隔
+                  多个关键词用逗号分隔
                 </p>
               </div>
             </div>
@@ -499,7 +499,7 @@ export default function AnimeSubscriptionComponent({
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                  當前集數
+                  当前集数
                 </label>
                 <input
                   type='number'
@@ -509,13 +509,13 @@ export default function AnimeSubscriptionComponent({
                   className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500'
                 />
                 <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                  已看到第幾集
+                  已看到第几集
                 </p>
               </div>
             </div>
             <div className='flex items-center gap-3'>
               <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                啟用此訂閱
+                启用此订阅
               </span>
               <Switch
                 checked={formData.enabled}
@@ -543,10 +543,10 @@ export default function AnimeSubscriptionComponent({
         </div>
       )}
 
-      {/* 訂閱列表 */}
+      {/* 订阅列表 */}
       {subscriptions.length === 0 ? (
         <div className='text-center py-12 text-gray-500 dark:text-gray-400'>
-          暫無訂閱，點擊"添加訂閱"開始追番
+          暂无订阅，点击"添加訂閱"开始追番
         </div>
       ) : (
         <div className='space-y-3'>
@@ -555,7 +555,7 @@ export default function AnimeSubscriptionComponent({
               key={sub.id}
               className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4'
             >
-              {/* 桌面端佈局 */}
+              {/* 桌面端布局 */}
               <div className='hidden md:flex items-start justify-between gap-4'>
                 <div className='flex-1 space-y-2'>
                   <div className='flex items-center gap-3'>
@@ -611,7 +611,7 @@ export default function AnimeSubscriptionComponent({
                 </div>
               </div>
 
-              {/* 移動端佈局 */}
+              {/* 移动端布局 */}
               <div className='md:hidden space-y-3'>
                 <div className='flex items-start justify-between gap-2'>
                   <div className='flex-1 min-w-0'>

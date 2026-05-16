@@ -60,14 +60,14 @@ export async function GET(request: NextRequest) {
 
   if (!sourceKey) {
     return NextResponse.json(
-      { code: 400, message: '缺少參數: source', data: [] },
+      { code: 400, message: '缺少参数: source', data: [] },
       { status: 400 }
     );
   }
 
   if (!categoryId) {
     return NextResponse.json(
-      { code: 400, message: '缺少參數: categoryId', data: [] },
+      { code: 400, message: '缺少参数: categoryId', data: [] },
       { status: 400 }
     );
   }
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
 
     if (!targetSource) {
       return NextResponse.json(
-        { code: 404, message: `未找到短劇採集源: ${sourceKey}`, data: [] },
+        { code: 404, message: `未找到短剧采集源: ${sourceKey}`, data: [] },
         { status: 404 }
       );
     }
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
     );
 
     if (!response.ok) {
-      throw new Error('獲取短劇列表失敗');
+      throw new Error('获取短剧列表失败');
     }
 
     const videoData: CmsVideoResponse = await response.json();
@@ -121,7 +121,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         code: 200,
-        message: '獲取成功',
+        message: '获取成功',
         data: results,
         total: videoData.total || 0,
         page: videoData.page || page,
@@ -134,11 +134,11 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('獲取短劇列表失敗:', error);
+    console.error('获取短剧列表失败:', error);
     return NextResponse.json(
       {
         code: 500,
-        message: '獲取短劇列表失敗',
+        message: '获取短剧列表失败',
         data: [],
         error: (error as Error).message,
       },

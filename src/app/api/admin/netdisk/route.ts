@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
   const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
   if (storageType === 'localstorage') {
     return NextResponse.json(
-      { error: '不支持本地存儲進行管理員配置' },
+      { error: '不支持本地存储进行管理员配置' },
       { status: 400 }
     );
   }
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     if (!requireOwner(authInfo.username)) {
       const userInfo = await db.getUserInfoV2(authInfo.username);
       if (!userInfo || userInfo.role !== 'admin' || userInfo.banned) {
-        return NextResponse.json({ error: '權限不足' }, { status: 401 });
+        return NextResponse.json({ error: '权限不足' }, { status: 401 });
       }
     }
 
@@ -118,28 +118,28 @@ export async function POST(request: NextRequest) {
     if (action === 'validate') {
       if (provider === 'mobile') {
         if (!Mobile?.Authorization) {
-          return NextResponse.json({ error: '請先填寫移動雲盤 Authorization' }, { status: 400 });
+          return NextResponse.json({ error: '请先填写移动云盘 Authorization' }, { status: 400 });
         }
 
         normalizeMobileAuthorization(Mobile.Authorization);
         return NextResponse.json({
           success: true,
-          message: '移動雲盤 Authorization 格式正常',
+          message: '移动云盘 Authorization 格式正常',
         });
       }
       if (provider === 'baidu') {
         if (!Baidu?.Cookie) {
-          return NextResponse.json({ error: '請先填寫百度網盤 Cookie' }, { status: 400 });
+          return NextResponse.json({ error: '请先填写百度网盘 Cookie' }, { status: 400 });
         }
         normalizeBaiduCookie(Baidu.Cookie);
         return NextResponse.json({
           success: true,
-          message: '百度網盤 Cookie 格式正常',
+          message: '百度网盘 Cookie 格式正常',
         });
       }
       if (provider === 'tianyi') {
         if (!Tianyi?.Account || !Tianyi?.Password) {
-          return NextResponse.json({ error: '請先填寫天翼雲盤賬號和密碼' }, { status: 400 });
+          return NextResponse.json({ error: '请先填写天翼云盘账号和密码' }, { status: 400 });
         }
         await validateTianyiCredentials(
           normalizeTianyiAccount(Tianyi.Account),
@@ -147,12 +147,12 @@ export async function POST(request: NextRequest) {
         );
         return NextResponse.json({
           success: true,
-          message: '天翼雲盤賬號密碼可用',
+          message: '天翼云盘账号密码可用',
         });
       }
       if (provider === 'pan123') {
         if (!Pan123?.Account || !Pan123?.Password) {
-          return NextResponse.json({ error: '請先填寫123網盤賬號和密碼' }, { status: 400 });
+          return NextResponse.json({ error: '请先填写123网盘账号和密码' }, { status: 400 });
         }
         await validatePan123Credentials(
           normalizePan123Account(Pan123.Account),
@@ -160,22 +160,22 @@ export async function POST(request: NextRequest) {
         );
         return NextResponse.json({
           success: true,
-          message: '123網盤賬號密碼可用',
+          message: '123网盘账号密码可用',
         });
       }
       if (provider === 'uc') {
         if (!UC?.Cookie) {
-          return NextResponse.json({ error: '請先填寫UC Cookie' }, { status: 400 });
+          return NextResponse.json({ error: '请先填写UC Cookie' }, { status: 400 });
         }
         await validateUCCookieReadable(normalizeUCCookie(UC.Cookie));
         return NextResponse.json({
           success: true,
-          message: 'UC Cookie 可讀',
+          message: 'UC Cookie 可读',
         });
       }
       if (provider === 'pan115') {
         if (!Pan115?.Cookie) {
-          return NextResponse.json({ error: '請先填寫115 Cookie' }, { status: 400 });
+          return NextResponse.json({ error: '请先填写115 Cookie' }, { status: 400 });
         }
         await validatePan115Cookie(normalizePan115Cookie(Pan115.Cookie));
         return NextResponse.json({
@@ -185,7 +185,7 @@ export async function POST(request: NextRequest) {
       }
 
       if (!Quark?.Cookie) {
-        return NextResponse.json({ error: '請先填寫夸克 Cookie' }, { status: 400 });
+        return NextResponse.json({ error: '请先填写夸克 Cookie' }, { status: 400 });
       }
       await validateQuarkCookieReadable(normalizeQuarkCookie(Quark.Cookie));
 
@@ -197,9 +197,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: '未知操作' }, { status: 400 });
   } catch (error) {
-    console.error('[Admin NetDisk] 操作失敗:', error);
+    console.error('[Admin NetDisk] 操作失败:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : '操作失敗' },
+      { error: error instanceof Error ? error.message : '操作失败' },
       { status: 500 }
     );
   }

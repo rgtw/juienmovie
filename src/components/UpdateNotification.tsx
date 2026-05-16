@@ -15,11 +15,11 @@ export const UpdateNotification: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // 檢查認證信息
+    // 检查认证信息
     const authInfo = getAuthInfoFromBrowserCookie();
     setIsOwner(authInfo?.role === 'owner');
 
-    // 檢查是否是移動設備
+    // 检查是否是移动设备
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -30,7 +30,7 @@ export const UpdateNotification: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // 檢查中、不是站長、是移動設備或沒有更新時不渲染任何內容
+  // 检查中、不是站长、是移动设备或没有更新时不渲染任何内容
   if (isChecking || !isOwner || isMobile || updateStatus !== UpdateStatus.HAS_UPDATE) {
     return null;
   }

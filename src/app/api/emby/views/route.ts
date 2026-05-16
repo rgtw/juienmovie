@@ -10,25 +10,25 @@ export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'emby', '無權限訪問 Emby');
+    const authResult = await requireFeaturePermission(request, 'emby', '无权限访问 Emby');
     if (authResult instanceof NextResponse) return authResult;
     const { searchParams } = new URL(request.url);
     const embyKey = searchParams.get('embyKey') || undefined;
 
-    // 檢查緩存（按embyKey緩存）
+    // 检查缓存（按embyKey缓存）
     const cacheKey = embyKey || 'default';
     const cached = getCachedEmbyViews(cacheKey);
     if (cached) {
       return NextResponse.json(cached);
     }
 
-    // 獲取Emby客戶端
+    // 获取Emby客户端
     const client = await embyManager.getClient(embyKey);
 
-    // 獲取媒體庫列表
+    // 获取媒体库列表
     const views = await client.getUserViews();
 
-    // 過濾出電影和電視劇媒體庫
+    // 过滤出电影和电视剧媒体库
     const filteredViews = views.filter(
       (view) => view.CollectionType === 'movies' || view.CollectionType === 'tvshows'
     );
@@ -42,14 +42,14 @@ export async function GET(request: NextRequest) {
       })),
     };
 
-    // 緩存結果
+    // 缓存结果
     setCachedEmbyViews(cacheKey, response);
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('獲取 Emby 媒體庫列表失敗:', error);
+    console.error('获取 Emby 媒体库列表失败:', error);
     return NextResponse.json({
-      error: '獲取 Emby 媒體庫列表失敗: ' + (error as Error).message,
+      error: '获取 Emby 媒体库列表失败: ' + (error as Error).message,
       views: [],
     });
   }

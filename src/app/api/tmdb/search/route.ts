@@ -10,20 +10,20 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/tmdb/search?query=xxx
- * 搜索TMDB，返回多個結果供用戶選擇
+ * 搜索TMDB，返回多个结果供用户选择
  */
 export async function GET(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query');
 
     if (!query) {
-      return NextResponse.json({ error: '缺少查詢參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少查询参数' }, { status: 400 });
     }
 
     const config = await getConfig();
@@ -47,12 +47,12 @@ export async function GET(request: NextRequest) {
 
     if (response.code !== 200) {
       return NextResponse.json(
-        { error: 'TMDB 搜索失敗', code: response.code },
+        { error: 'TMDB 搜索失败', code: response.code },
         { status: response.code }
       );
     }
 
-    // 過濾出電影和電視劇
+    // 过滤出电影和电视剧
     const validResults = response.results.filter(
       (item: any) => item.media_type === 'movie' || item.media_type === 'tv'
     );
@@ -63,9 +63,9 @@ export async function GET(request: NextRequest) {
       total: validResults.length,
     });
   } catch (error) {
-    console.error('TMDB搜索失敗:', error);
+    console.error('TMDB搜索失败:', error);
     return NextResponse.json(
-      { error: '搜索失敗', details: (error as Error).message },
+      { error: '搜索失败', details: (error as Error).message },
       { status: 500 }
     );
   }

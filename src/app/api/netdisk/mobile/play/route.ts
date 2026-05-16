@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo?.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -29,18 +29,18 @@ export async function GET(request: NextRequest) {
     const format = searchParams.get('format');
 
     if (!sessionId || episodeIndexRaw == null) {
-      return NextResponse.json({ error: '缺少參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少参数' }, { status: 400 });
     }
 
     const episodeIndex = Number.parseInt(episodeIndexRaw, 10);
     if (!Number.isInteger(episodeIndex) || episodeIndex < 0) {
-      return NextResponse.json({ error: '無效的 episodeIndex' }, { status: 400 });
+      return NextResponse.json({ error: '无效的 episodeIndex' }, { status: 400 });
     }
 
     const config = await getConfig();
     const mobileConfig = config.NetDiskConfig?.Mobile;
     if (!mobileConfig?.Enabled || !mobileConfig.Authorization) {
-      return NextResponse.json({ error: '移動雲盤未配置或未啟用' }, { status: 400 });
+      return NextResponse.json({ error: '移动云盘未配置或未启用' }, { status: 400 });
     }
 
     let session = refreshMobileNetdiskSession(sessionId) || getMobileNetdiskSession(sessionId);
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(url);
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : '獲取播放地址失敗' },
+      { error: error instanceof Error ? error.message : '获取播放地址失败' },
       { status: 500 }
     );
   }

@@ -57,7 +57,7 @@ export function useWatchRoom(
           if (response.success && response.room && response.members) {
             resolve({ room: response.room, members: response.members });
           } else {
-            reject(new Error(response.error || '重新加入房间失败'));
+            reject(new Error(response.error || '重新加入房間失敗'));
           }
         });
       });
@@ -149,7 +149,7 @@ export function useWatchRoom(
             });
             resolve(response.room);
           } else {
-            reject(new Error(response.error || '创建房间失败'));
+            reject(new Error(response.error || '創建房間失敗'));
           }
         });
       });
@@ -184,7 +184,7 @@ export function useWatchRoom(
             });
             resolve({ room: response.room, members: response.members });
           } else {
-            reject(new Error(response.error || '加入房间失败'));
+            reject(new Error(response.error || '加入房間失敗'));
           }
         });
       });

@@ -17,11 +17,11 @@ import Toast, { ToastProps } from '@/components/Toast';
 
 interface PansouSearchProps {
   keyword: string;
-  triggerSearch?: boolean; // 觸發搜索的標誌
+  triggerSearch?: boolean; // 触发搜索的标志
   onError?: (error: string) => void;
 }
 
-// 網盤類型映射
+// 网盘类型映射
 const CLOUD_TYPE_NAMES: Record<string, string> = {
   baidu: '百度網盤',
   aliyun: '阿里雲盤',
@@ -38,7 +38,7 @@ const CLOUD_TYPE_NAMES: Record<string, string> = {
   others: '其他',
 };
 
-// 網盤類型顏色
+// 网盘类型颜色
 const CLOUD_TYPE_COLORS: Record<string, string> = {
   baidu: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200',
   aliyun:
@@ -147,7 +147,7 @@ export default function PansouSearch({
   const [results, setResults] = useState<PansouSearchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
-  const [selectedType, setSelectedType] = useState<string>('all'); // 'all' 表示顯示全部
+  const [selectedType, setSelectedType] = useState<string>('all'); // 'all' 表示显示全部
   const typeScrollContainerRef = useRef<HTMLDivElement>(null);
   const isTypeDraggingRef = useRef(false);
   const typeDragStartXRef = useRef(0);
@@ -239,7 +239,7 @@ export default function PansouSearch({
     };
   }, [checkStatesByType]);
 
-  // 提取搜索函數，以便在重試時調用
+  // 提取搜索函数，以便在重试时调用
   const searchPansou = useCallback(async () => {
     const currentKeyword = keyword.trim();
     if (!currentKeyword) {
@@ -278,13 +278,13 @@ export default function PansouSearch({
   }, [keyword, onError]);
 
   useEffect(() => {
-    // triggerSearch 變化時觸發搜索（無論是 true 還是 false）
+    // triggerSearch 变化时触发搜索（无论是 true 还是 false）
     if (triggerSearch === undefined) {
       return;
     }
 
     searchPansou();
-  }, [triggerSearch]); // 只在觸發標誌變化時搜索，避免 keyword 變化自動搜索
+  }, [triggerSearch]); // 只在触发标志变化时搜索，避免 keyword 变化自动搜索
 
   const handleCopy = async (text: string, url: string) => {
     try {
@@ -475,7 +475,7 @@ export default function PansouSearch({
     return checkStatesByType[cloudType]?.task || null;
   };
 
-  // 網盤類型選項卡橫向拖動滾動
+  // 网盘类型选项卡横向拖动滚动
   const handleTypeMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!typeScrollContainerRef.current) return;
     isTypeDraggingRef.current = true;
@@ -539,7 +539,7 @@ export default function PansouSearch({
           <div className='text-center'>
             <Loader2 className='mx-auto h-8 w-8 animate-spin text-green-600 dark:text-green-400' />
             <p className='mt-4 text-sm text-gray-600 dark:text-gray-400'>
-              正在搜索網盤資源...
+              正在搜索网盘资源...
             </p>
           </div>
         </div>
@@ -559,7 +559,7 @@ export default function PansouSearch({
               className='mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors'
             >
               <RefreshCw className='h-4 w-4' />
-              重試
+              重试
             </button>
           </div>
         </div>
@@ -572,7 +572,7 @@ export default function PansouSearch({
           <div className='text-center'>
             <AlertCircle className='mx-auto h-12 w-12 text-gray-400 dark:text-gray-600' />
             <p className='mt-4 text-sm text-gray-600 dark:text-gray-400'>
-              未找到相關資源
+              未找到相关资源
             </p>
           </div>
         </div>
@@ -581,13 +581,13 @@ export default function PansouSearch({
 
     const cloudTypes = Object.keys(results.merged_by_type || {});
 
-    // 過濾顯示的網盤類型
+    // 过滤显示的网盘类型
     const filteredCloudTypes =
       selectedType === 'all'
         ? cloudTypes
         : cloudTypes.filter((type) => type === selectedType);
 
-    // 計算每種網盤類型的數量
+    // 计算每种网盘类型的数量
     const typeStats = cloudTypes.map((type) => ({
       type,
       count: results.merged_by_type?.[type]?.length || 0,
@@ -595,19 +595,19 @@ export default function PansouSearch({
 
     return (
       <>
-        {/* 搜索結果統計 */}
+        {/* 搜索结果统计 */}
         <div className='text-sm text-gray-600 dark:text-gray-400'>
           找到{' '}
           <span className='font-semibold text-green-600 dark:text-green-400'>
             {results.total}
           </span>{' '}
-          個資源
+          个资源
         </div>
 
-        {/* 網盤類型過濾器 */}
+        {/* 网盘类型过滤器 */}
         <div className='space-y-2'>
           <h3 className='text-sm font-semibold text-gray-700 dark:text-gray-200'>
-            網盤類型
+            网盘类型
           </h3>
           <div className='relative'>
             <div
@@ -651,7 +651,7 @@ export default function PansouSearch({
           </div>
         </div>
 
-        {/* 按網盤類型分類顯示 */}
+        {/* 按网盘类型分类显示 */}
         {filteredCloudTypes.map((cloudType) => {
           const links = results.merged_by_type?.[cloudType];
           if (!links || links.length === 0) return null;
@@ -667,7 +667,7 @@ export default function PansouSearch({
 
           return (
             <div key={cloudType} className='space-y-3'>
-              {/* 網盤類型標題 */}
+              {/* 网盘类型标题 */}
               <div className='flex flex-wrap items-center gap-2'>
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${typeColor}`}
@@ -675,11 +675,11 @@ export default function PansouSearch({
                   {typeName}
                 </span>
                 <span className='text-xs text-gray-500 dark:text-gray-400'>
-                  {links.length} 個鏈接
+                  {links.length} 个链接
                 </span>
                 {groupProgress && (
                   <span className='text-xs text-gray-500 dark:text-gray-400'>
-                    進度 {groupProgress.done}/{groupProgress.total} · 有效{' '}
+                    进度 {groupProgress.done}/{groupProgress.total} · 有效{' '}
                     {groupProgress.valid} · 失效 {groupProgress.invalid} · 未知{' '}
                     {groupProgress.unknown + groupProgress.rateLimited}
                   </span>
@@ -702,33 +702,33 @@ export default function PansouSearch({
                         onClick={() => handleCancelCheck(cloudType)}
                         className='px-3 py-1 rounded-md bg-gray-600 hover:bg-gray-700 text-white text-xs transition-colors'
                       >
-                        停止檢測
+                        停止检测
                       </button>
                     )}
                   </>
                 )}
                 {cooldownRemainingMs > 0 && (
                   <span className='text-xs text-orange-600 dark:text-orange-400'>
-                    冷卻中 {Math.ceil(cooldownRemainingMs / 1000)}s
+                    冷却中 {Math.ceil(cooldownRemainingMs / 1000)}s
                   </span>
                 )}
               </div>
 
-              {/* 鏈接列表 */}
+              {/* 链接列表 */}
               <div className='space-y-2'>
                 {sortedLinks.map((link: PansouLink, index: number) => (
                   <div
                     key={`${cloudType}-${index}`}
                     className='p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors'
                   >
-                    {/* 資源標題 */}
+                    {/* 资源标题 */}
                     {link.note && (
                       <div className='mb-2 text-sm font-medium text-gray-900 dark:text-gray-100'>
                         {link.note}
                       </div>
                     )}
 
-                    {/* 鏈接和密碼 */}
+                    {/* 链接和密码 */}
                     <div className='flex items-center gap-2 mb-2'>
                       <div className='flex-1 min-w-0'>
                         <div className='text-xs text-gray-600 dark:text-gray-400 truncate'>
@@ -736,7 +736,7 @@ export default function PansouSearch({
                         </div>
                         {link.password && (
                           <div className='text-xs text-gray-600 dark:text-gray-400 mt-1'>
-                            提取碼:{' '}
+                            提取码:{' '}
                             <span className='font-mono font-semibold'>
                               {link.password}
                             </span>
@@ -744,7 +744,7 @@ export default function PansouSearch({
                         )}
                       </div>
 
-                      {/* 操作按鈕 */}
+                      {/* 操作按钮 */}
                       <div className='flex items-center gap-1 flex-shrink-0'>
                         {(() => {
                           const checkResult = getCheckResultForUrl(
@@ -812,7 +812,7 @@ export default function PansouSearch({
                         >
                           {copiedUrl === link.url ? (
                             <span className='text-xs text-green-600 dark:text-green-400'>
-                              已複製
+                              已复制
                             </span>
                           ) : (
                             <Copy className='h-4 w-4 text-gray-600 dark:text-gray-400' />
@@ -828,7 +828,7 @@ export default function PansouSearch({
                       </div>
                     </div>
 
-                    {/* 來源和時間 */}
+                    {/* 来源和时间 */}
                     <div className='flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400'>
                       {link.source && <span>來源: {link.source}</span>}
                       {link.datetime && (
@@ -844,13 +844,13 @@ export default function PansouSearch({
                         if (!checkResult?.reason) return null;
                         return (
                           <span className='truncate'>
-                            檢測結果: {checkResult.reason}
+                            检测结果: {checkResult.reason}
                           </span>
                         );
                       })()}
                     </div>
 
-                    {/* 圖片預覽 */}
+                    {/* 图片预览 */}
                     {link.images && link.images.length > 0 && (
                       <div className='mt-3 flex gap-2 overflow-x-auto'>
                         {link.images.map((img, imgIndex) => (

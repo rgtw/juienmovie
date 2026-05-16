@@ -10,33 +10,33 @@ export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   try {
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 檢查用戶狀態和執行遷移
+    // 检查用户状态和执行迁移
     if (authInfo.username !== process.env.USERNAME) {
-      // 非站長，檢查用戶存在或被封禁
+      // 非站长，检查用户存在或被封禁
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
 
-      // 檢查播放記錄遷移標識，沒有遷移標識時執行遷移
+      // 检查播放记录迁移标识，没有迁移标识时执行迁移
       if (!userInfoV2.playrecord_migrated) {
-        console.log(`用戶 ${authInfo.username} 播放記錄未遷移，開始執行遷移...`);
+        console.log(`用户 ${authInfo.username} 播放记录未迁移，开始执行迁移...`);
         await db.migratePlayRecords(authInfo.username);
       }
     } else {
-      // 站長也需要執行遷移（站長可能不在數據庫中，直接嘗試遷移）
+      // 站长也需要执行迁移（站长可能不在数据库中，直接尝试迁移）
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2 || !userInfoV2.playrecord_migrated) {
-        console.log(`站長 ${authInfo.username} 播放記錄未遷移，開始執行遷移...`);
+        console.log(`站长 ${authInfo.username} 播放记录未迁移，开始执行迁移...`);
         await db.migratePlayRecords(authInfo.username);
       }
     }
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     const records = await db.getAllPlayRecords(authInfo.username);
     return NextResponse.json(records, { status: 200 });
   } catch (err) {
-    console.error('獲取播放記錄失敗', err);
+    console.error('获取播放记录失败', err);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
@@ -54,20 +54,20 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     if (authInfo.username !== process.env.USERNAME) {
-      // 非站長，檢查用戶存在或被封禁
+      // 非站长，检查用户存在或被封禁
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 驗證播放記錄數據
+    // 验证播放记录数据
     if (!record.title || !record.source_name || record.index < 1) {
       return NextResponse.json(
         { error: 'Invalid record data' },
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 從key中解析source和id
+    // 从key中解析source和id
     const [source, id] = key.split('+');
     if (!source || !id) {
       return NextResponse.json(
@@ -105,14 +105,14 @@ export async function POST(request: NextRequest) {
 
     await db.savePlayRecord(authInfo.username, source, id, finalRecord);
 
-    // 異步清理舊的播放記錄（不阻塞響應）
+    // 异步清理旧的播放记录（不阻塞响应）
     (db as any).storage.cleanupOldPlayRecords(authInfo.username).catch((err: Error) => {
-      console.error('異步清理播放記錄失敗:', err);
+      console.error('异步清理播放记录失败:', err);
     });
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
-    console.error('保存播放記錄失敗', err);
+    console.error('保存播放记录失败', err);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
@@ -122,20 +122,20 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     if (authInfo.username !== process.env.USERNAME) {
-      // 非站長，檢查用戶存在或被封禁
+      // 非站长，检查用户存在或被封禁
       const userInfoV2 = await db.getUserInfoV2(authInfo.username);
       if (!userInfoV2) {
-        return NextResponse.json({ error: '用戶不存在' }, { status: 401 });
+        return NextResponse.json({ error: '用户不存在' }, { status: 401 });
       }
       if (userInfoV2.banned) {
-        return NextResponse.json({ error: '用戶已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
       }
     }
 
@@ -144,7 +144,7 @@ export async function DELETE(request: NextRequest) {
     const key = searchParams.get('key');
 
     if (key) {
-      // 如果提供了 key，刪除單條播放記錄
+      // 如果提供了 key，删除单条播放记录
       const [source, id] = key.split('+');
       if (!source || !id) {
         return NextResponse.json(
@@ -155,8 +155,8 @@ export async function DELETE(request: NextRequest) {
 
       await db.deletePlayRecord(username, source, id);
     } else {
-      // 未提供 key，則清空全部播放記錄
-      // 目前 DbManager 沒有對應方法，這裡直接遍歷刪除
+      // 未提供 key，则清空全部播放记录
+      // 目前 DbManager 没有对应方法，这里直接遍历删除
       const all = await db.getAllPlayRecords(username);
       await Promise.all(
         Object.keys(all).map(async (k) => {
@@ -168,7 +168,7 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
-    console.error('刪除播放記錄失敗', err);
+    console.error('删除播放记录失败', err);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }

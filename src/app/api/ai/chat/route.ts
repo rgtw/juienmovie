@@ -24,7 +24,7 @@ interface ChatRequest {
 }
 
 /**
- * OpenAI兼容的流式聊天請求
+ * OpenAI兼容的流式聊天请求
  */
 async function streamOpenAIChat(
   messages: ChatMessage[],
@@ -62,7 +62,7 @@ async function streamOpenAIChat(
 }
 
 /**
- * 轉換流為SSE格式
+ * 转换流为SSE格式
  */
 function transformToSSE(
   stream: ReadableStream,
@@ -73,9 +73,9 @@ function transformToSSE(
 
   return new ReadableStream({
     async start(controller) {
-      let buffer = ''; // 緩衝區，用於保存不完整的行
-      let contentBuffer = ''; // 累積的內容，用於處理跨chunk的thinking標籤
-      let inThinkingBlock = false; // 是否在thinking塊內
+      let buffer = ''; // 缓冲区，用于保存不完整的行
+      let contentBuffer = ''; // 累积的内容，用于处理跨chunk的thinking标签
+      let inThinkingBlock = false; // 是否在thinking块内
 
       try {
         while (true) {
@@ -83,21 +83,21 @@ function transformToSSE(
           if (done) break;
 
           const chunk = decoder.decode(value, { stream: true });
-          // 將新chunk與緩衝區拼接
+          // 将新chunk与缓冲区拼接
           const text = buffer + chunk;
-          // 按換行符分割，最後一個元素可能是不完整的行
+          // 按换行符分割，最后一个元素可能是不完整的行
           const parts = text.split('\n');
-          // 保存最後一個不完整的行到緩衝區
+          // 保存最后一个不完整的行到缓冲区
           buffer = parts.pop() || '';
 
-          // 處理完整的行
+          // 处理完整的行
           const lines = parts.filter((line) => line.trim() !== '');
 
           for (const line of lines) {
             if (line.startsWith('data: ')) {
               const data = line.slice(6).trim();
 
-              // 跳過空數據
+              // 跳过空数据
               if (!data) {
                 continue;
               }
@@ -112,7 +112,7 @@ function transformToSSE(
               try {
                 const json = JSON.parse(data);
 
-                // 提取文本內容
+                // 提取文本内容
                 let text = '';
                 if (provider === 'claude') {
                   // Claude格式
@@ -125,35 +125,35 @@ function transformToSSE(
                 }
 
                 if (text) {
-                  // 累積內容並處理thinking標籤
+                  // 累积内容并处理thinking标签
                   contentBuffer += text;
 
-                  // 檢查是否進入thinking塊
+                  // 检查是否进入thinking块
                   if (contentBuffer.includes('<think>')) {
                     inThinkingBlock = true;
                   }
 
-                  // 檢查是否退出thinking塊
+                  // 检查是否退出thinking块
                   if (inThinkingBlock && contentBuffer.includes('</think>')) {
-                    // 移除thinking塊內容
+                    // 移除thinking块内容
                     contentBuffer = contentBuffer.replace(/<think>[\s\S]*?<\/think>/g, '');
                     inThinkingBlock = false;
                   }
 
-                  // 只有在不在thinking塊內時才輸出內容
+                  // 只有在不在thinking块内时才输出内容
                   if (!inThinkingBlock) {
-                    // 輸出非thinking部分的內容
+                    // 输出非thinking部分的内容
                     const outputText = contentBuffer;
                     if (outputText) {
                       controller.enqueue(
                         new TextEncoder().encode(`data: ${JSON.stringify({ text: outputText })}\n\n`)
                       );
-                      contentBuffer = ''; // 清空已輸出的內容
+                      contentBuffer = ''; // 清空已输出的内容
                     }
                   }
                 }
               } catch (e) {
-                // 只在非空數據解析失敗時打印錯誤
+                // 只在非空数据解析失败时打印错误
                 if (data.length > 0) {
                   console.error('Parse stream chunk error:', e, 'Data:', data.substring(0, 100));
                 }
@@ -162,7 +162,7 @@ function transformToSSE(
           }
         }
 
-        // 處理緩衝區中剩餘的數據
+        // 处理缓冲区中剩余的数据
         if (buffer.trim()) {
           const line = buffer.trim();
           if (line.startsWith('data: ')) {
@@ -180,7 +180,7 @@ function transformToSSE(
                 }
                 if (text) {
                   contentBuffer += text;
-                  // 最後清理一次thinking標籤
+                  // 最后清理一次thinking标签
                   contentBuffer = contentBuffer.replace(/<think>[\s\S]*?<\/think>/g, '');
                   if (contentBuffer) {
                     controller.enqueue(
@@ -206,45 +206,45 @@ function transformToSSE(
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. 驗證用戶登錄
+    // 1. 验证用户登录
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     if (!(await hasFeaturePermission(authInfo.username, 'ai_ask'))) {
-      return NextResponse.json({ error: '無權限使用 AI 問片功能' }, { status: 403 });
+      return NextResponse.json({ error: '无权限使用 AI 问片功能' }, { status: 403 });
     }
 
-    // 2. 獲取AI配置
+    // 2. 获取AI配置
     const adminConfig = await getConfig();
     const aiConfig = adminConfig.AIConfig;
 
     if (!aiConfig || !aiConfig.Enabled) {
       return NextResponse.json(
-        { error: 'AI功能未啟用' },
+        { error: 'AI功能未启用' },
         { status: 400 }
       );
     }
 
-    // 3. 解析請求參數
+    // 3. 解析请求参数
     const body = (await request.json()) as ChatRequest;
     const { message, context, history = [] } = body;
 
     if (!message || typeof message !== 'string') {
       return NextResponse.json(
-        { error: '消息內容不能為空' },
+        { error: '消息内容不能为空' },
         { status: 400 }
       );
     }
 
-    console.log('📨 收到AI聊天請求:', {
+    console.log('📨 收到AI聊天请求:', {
       message: message.slice(0, 50),
       context,
       historyLength: history.length,
     });
 
-    // 4. 使用orchestrator協調數據源
+    // 4. 使用orchestrator协调数据源
     const orchestrationResult = await orchestrateDataSources(
       message,
       context,
@@ -258,7 +258,7 @@ export async function POST(request: NextRequest) {
         tmdbApiKey: adminConfig.SiteConfig.TMDBApiKey,
         tmdbProxy: adminConfig.SiteConfig.TMDBProxy,
         tmdbReverseProxy: adminConfig.SiteConfig.TMDBReverseProxy,
-        // 決策模型配置（固定使用自定義provider，複用主模型的API配置）
+        // 决策模型配置（固定使用自定义provider，复用主模型的API配置）
         enableDecisionModel: aiConfig.EnableDecisionModel,
         decisionProvider: 'custom',
         decisionApiKey: aiConfig.CustomApiKey,
@@ -267,28 +267,28 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    console.log('🎯 數據協調完成, systemPrompt長度:', orchestrationResult.systemPrompt.length);
+    console.log('🎯 数据协调完成, systemPrompt长度:', orchestrationResult.systemPrompt.length);
 
-    // 5. 構建消息列表
+    // 5. 构建消息列表
     const systemPrompt = aiConfig.SystemPrompt
       ? `${aiConfig.SystemPrompt}\n\n${orchestrationResult.systemPrompt}`
       : orchestrationResult.systemPrompt;
 
     const messages: ChatMessage[] = [
       { role: 'user', content: systemPrompt },
-      { role: 'assistant', content: '明白了，我會按照要求回答用戶的問題。' },
+      { role: 'assistant', content: '明白了，我会按照要求回答用户的问题。' },
       ...history,
       { role: 'user', content: message },
     ];
 
-    // 6. 調用自定義API
+    // 6. 调用自定义API
     const temperature = aiConfig.Temperature ?? 0.7;
     const maxTokens = aiConfig.MaxTokens ?? 1000;
-    const enableStreaming = aiConfig.EnableStreaming !== false; // 默認啟用流式響應
+    const enableStreaming = aiConfig.EnableStreaming !== false; // 默认启用流式响应
 
     if (!aiConfig.CustomApiKey || !aiConfig.CustomBaseURL) {
       return NextResponse.json(
-        { error: '自定義API配置不完整' },
+        { error: '自定义API配置不完整' },
         { status: 400 }
       );
     }
@@ -301,9 +301,9 @@ export async function POST(request: NextRequest) {
       maxTokens,
     }, enableStreaming);
 
-    // 7. 根據是否啟用流式響應返回不同格式
+    // 7. 根据是否启用流式响应返回不同格式
     if (enableStreaming) {
-      // 流式響應：轉換為SSE格式並返回
+      // 流式响应：转换为SSE格式并返回
       const sseStream = transformToSSE(result as ReadableStream, 'openai');
 
       return new NextResponse(sseStream, {
@@ -314,21 +314,21 @@ export async function POST(request: NextRequest) {
         },
       });
     } else {
-      // 非流式響應：等待完整響應後返回JSON
+      // 非流式响应：等待完整响应后返回JSON
       const response = result as Response;
       const data = await response.json();
       let content = data.choices?.[0]?.message?.content || '';
 
-      // 移除thinking標籤內容
+      // 移除thinking标签内容
       content = content.replace(/<think>[\s\S]*?<\/think>/g, '');
 
       return NextResponse.json({ content });
     }
   } catch (error) {
-    console.error('❌ AI聊天API錯誤:', error);
+    console.error('❌ AI聊天API错误:', error);
     return NextResponse.json(
       {
-        error: 'AI聊天請求失敗',
+        error: 'AI聊天请求失败',
         details: (error as Error).message,
       },
       { status: 500 }

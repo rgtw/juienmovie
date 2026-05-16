@@ -9,13 +9,13 @@ import { hasFeaturePermission } from '@/lib/permissions';
 export const runtime = 'nodejs';
 
 /**
- * 獲取 Emby 客戶端
+ * 获取 Emby 客户端
  */
 async function getEmbyClient(embyKey?: string) {
   const config = await getConfig();
 
   if (!config.EmbyConfig?.Sources || config.EmbyConfig.Sources.length === 0) {
-    throw new Error('Emby 未配置或未啟用');
+    throw new Error('Emby 未配置或未启用');
   }
 
   const { embyManager } = await import('@/lib/emby-manager');
@@ -24,10 +24,10 @@ async function getEmbyClient(embyKey?: string) {
 
 /**
  * GET /api/emby/play/{token}/{filename}?itemId=xxx
- * 代理 Emby 視頻播放鏈接，URL 中包含文件擴展名（如 video.mp4）
- * 實際返回的內容根據 Emby 服務器的 Content-Type 決定
+ * 代理 Emby 视频播放链接，URL 中包含文件扩展名（如 video.mp4）
+ * 实际返回的内容根据 Emby 服务器的 Content-Type 决定
  *
- * 權限驗證：TVBox Token（路徑參數） 或 用戶登錄（滿足其一即可）
+ * 权限验证：TVBox Token（路径参数） 或 用户登录（满足其一即可）
  */
 export async function GET(
   request: NextRequest,
@@ -36,25 +36,25 @@ export async function GET(
   try {
     const { searchParams } = new URL(request.url);
 
-    // 雙重驗證：TVBox Token（全局或用戶） 或 用戶登錄
+    // 双重验证：TVBox Token（全局或用户） 或 用户登录
     const requestToken = params.token;
     const globalToken = process.env.TVBOX_SUBSCRIBE_TOKEN;
     const authInfo = getAuthInfoFromCookie(request);
 
-    // 驗證 TVBox Token（全局token或用戶token）
+    // 验证 TVBox Token（全局token或用户token）
     let hasValidToken = false;
     if (requestToken === 'proxy') {
-      // 使用固定的 'proxy' token，跳過token驗證，依賴用戶登錄驗證
+      // 使用固定的 'proxy' token，跳过token验证，依赖用户登录验证
       hasValidToken = false;
     } else if (globalToken && requestToken === globalToken) {
       // 全局token
       hasValidToken = true;
     } else {
-      // 檢查是否是用戶token
+      // 检查是否是用户token
       const { db } = await import('@/lib/db');
       const username = await db.getUsernameByTvboxToken(requestToken);
       if (username) {
-        // 檢查用戶是否被封禁
+        // 检查用户是否被封禁
         const userInfo = await db.getUserInfoV2(username);
         const allowed = await hasFeaturePermission(username, 'emby');
         if (userInfo && !userInfo.banned && allowed) {
@@ -63,32 +63,32 @@ export async function GET(
       }
     }
 
-    // 驗證用戶登錄
+    // 验证用户登录
     const hasValidAuth = !!(
       authInfo?.username &&
       (await hasFeaturePermission(authInfo.username, 'emby'))
     );
 
-    // 兩者至少滿足其一
+    // 两者至少满足其一
     if (!hasValidToken && !hasValidAuth) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const itemId = searchParams.get('itemId');
     const embyKey = searchParams.get('embyKey') || undefined;
 
     if (!itemId) {
-      return NextResponse.json({ error: '缺少 itemId 參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少 itemId 参数' }, { status: 400 });
     }
 
-    // 獲取 Emby 客戶端
+    // 获取 Emby 客户端
     let client = await getEmbyClient(embyKey);
 
-    // 構建 Emby 原始播放鏈接（強制獲取直接URL，避免代理循環）
+    // 构建 Emby 原始播放链接（强制获取直接URL，避免代理循环）
     let embyStreamUrl = await client.getStreamUrl(itemId, true, true);
 	console.log(embyStreamUrl)
 
-    // 構建請求頭，轉發 Range 請求，並添加自定義 User-Agent
+    // 构建请求头，转发 Range 请求，并添加自定义 User-Agent
     const requestHeaders: HeadersInit = {
       'User-Agent': client.getUserAgent(),
     };
@@ -97,26 +97,26 @@ export async function GET(
       requestHeaders['Range'] = rangeHeader;
     }
 
-    // 創建 AbortController 用於超時控制
+    // 创建 AbortController 用于超时控制
     const abortController = new AbortController();
-    const timeoutId = setTimeout(() => abortController.abort(), 300000); // 5分鐘超時
+    const timeoutId = setTimeout(() => abortController.abort(), 300000); // 5分钟超时
 
     try {
-      // 流式代理視頻內容
+      // 流式代理视频内容
       let videoResponse = await fetch(embyStreamUrl, {
         headers: requestHeaders,
         signal: abortController.signal,
       });
 
-      // 如果返回 401，嘗試重新認證並重試
+      // 如果返回 401，尝试重新认证并重试
       if (videoResponse.status === 401) {
-        console.log('[Emby Play] 收到 401 錯誤，嘗試重新認證');
+        console.log('[Emby Play] 收到 401 错误，尝试重新认证');
         const { embyManager } = await import('@/lib/emby-manager');
         embyManager.clearCache();
         client = await getEmbyClient(embyKey);
         embyStreamUrl = await client.getStreamUrl(itemId, true, true);
 
-        // 重置超時
+        // 重置超时
         clearTimeout(timeoutId);
         const retryAbortController = new AbortController();
         const retryTimeoutId = setTimeout(() => retryAbortController.abort(), 300000);
@@ -131,29 +131,29 @@ export async function GET(
         }
       }
 
-      // 清除超時定時器
+      // 清除超时定时器
       clearTimeout(timeoutId);
 
     if (!videoResponse.ok) {
-      console.error('[Emby Play] 獲取視頻流失敗:', {
+      console.error('[Emby Play] 获取视频流失败:', {
         itemId,
         status: videoResponse.status,
         statusText: videoResponse.statusText,
       });
       return NextResponse.json(
-        { error: '獲取視頻流失敗' },
+        { error: '获取视频流失败' },
         { status: 500 }
       );
     }
 
-    // 獲取 Content-Type
+    // 获取 Content-Type
     const contentType = videoResponse.headers.get('content-type') || 'video/mp4';
 
-    // 構建響應頭
+    // 构建响应头
     const headers = new Headers();
     headers.set('Content-Type', contentType);
 
-    // 複製重要的響應頭
+    // 复制重要的响应头
     const contentLength = videoResponse.headers.get('content-length');
     if (contentLength) {
       headers.set('Content-Length', contentLength);
@@ -172,18 +172,18 @@ export async function GET(
     // 使用 URL 中的文件名
     headers.set('Content-Disposition', `inline; filename="${params.filename}"`);
 
-    // 創建一個可以被中斷的流
+    // 创建一个可以被中断的流
     const { readable, writable } = new TransformStream();
     const reader = videoResponse.body?.getReader();
 
     if (!reader) {
       return NextResponse.json(
-        { error: '無法讀取視頻流' },
+        { error: '无法读取视频流' },
         { status: 500 }
       );
     }
 
-    // 異步管道傳輸，確保在客戶端斷開時清理資源
+    // 异步管道传输，确保在客户端断开时清理资源
     (async () => {
       const writer = writable.getWriter();
       try {
@@ -193,47 +193,47 @@ export async function GET(
           await writer.write(value);
         }
       } catch (error) {
-        // 客戶端斷開連接或其他錯誤
-        console.log('[Emby Play] 流傳輸中斷:', error instanceof Error ? error.message : 'Unknown error');
-        // 取消上游 fetch，停止繼續下載
+        // 客户端断开连接或其他错误
+        console.log('[Emby Play] 流传输中断:', error instanceof Error ? error.message : 'Unknown error');
+        // 取消上游 fetch，停止继续下载
         try {
           await reader.cancel();
         } catch (e) {
-          // 忽略取消錯誤
+          // 忽略取消错误
         }
       } finally {
-        // 確保資源被釋放
+        // 确保资源被释放
         try {
           reader.releaseLock();
           await writer.close();
         } catch (e) {
-          // 忽略關閉錯誤
+          // 忽略关闭错误
         }
       }
     })();
 
-    // 流式返回視頻內容
+    // 流式返回视频内容
     return new NextResponse(readable, {
       status: videoResponse.status,
       headers,
     });
     } catch (error) {
-      // 清除超時定時器
+      // 清除超时定时器
       clearTimeout(timeoutId);
 
       if (error instanceof Error && error.name === 'AbortError') {
-        console.error('[Emby Play] 請求超時');
+        console.error('[Emby Play] 请求超时');
         return NextResponse.json(
-          { error: '請求超時' },
+          { error: '请求超时' },
           { status: 504 }
         );
       }
       throw error;
     }
   } catch (error) {
-    console.error('[Emby Play] 錯誤:', error);
+    console.error('[Emby Play] 错误:', error);
     return NextResponse.json(
-      { error: '播放失敗', details: (error as Error).message },
+      { error: '播放失败', details: (error as Error).message },
       { status: 500 }
     );
   }

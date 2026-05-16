@@ -31,7 +31,7 @@ async function ensureAdmin(request: NextRequest) {
   if (authInfo.username !== process.env.USERNAME) {
     const userInfo = await db.getUserInfoV2(authInfo.username);
     if (!userInfo || (userInfo.role !== 'admin' && userInfo.role !== 'owner') || userInfo.banned) {
-      return NextResponse.json({ error: '權限不足' }, { status: 401 });
+      return NextResponse.json({ error: '权限不足' }, { status: 401 });
     }
   }
 
@@ -57,7 +57,7 @@ async function detectCapabilitiesFromSource(source: BookSource): Promise<BookSou
       catalogMode: 'disabled',
       acquisitionTypes: [],
       lastCheckedAt: Date.now(),
-      lastError: error instanceof Error ? error.message : '測試失敗',
+      lastError: error instanceof Error ? error.message : '测试失败',
     };
   }
 }
@@ -70,14 +70,14 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const inputSources = (body?.Sources || []) as TestSourceInput[];
     if (!Array.isArray(inputSources) || inputSources.length === 0) {
-      return NextResponse.json({ success: false, message: '請至少填寫一個 OPDS 書源' }, { status: 400 });
+      return NextResponse.json({ success: false, message: '请至少填写一个 OPDS 书源' }, { status: 400 });
     }
 
     const sources: BookSource[] = inputSources
       .filter((item) => item?.url?.trim())
       .map((item, index) => ({
         id: item.id?.trim() || `source_${index + 1}`,
-        name: item.name?.trim() || `書源 ${index + 1}`,
+        name: item.name?.trim() || `书源 ${index + 1}`,
         url: (item.url || '').trim(),
         enabled: item.enabled !== false,
         authMode: item.authMode || 'none',
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       }));
 
     if (sources.length === 0) {
-      return NextResponse.json({ success: false, message: '沒有可測試的有效書源地址' }, { status: 400 });
+      return NextResponse.json({ success: false, message: '没有可测试的有效书源地址' }, { status: 400 });
     }
 
     const results = await Promise.all(
@@ -106,14 +106,14 @@ export async function POST(request: NextRequest) {
     const successCount = results.filter((item) => item.capability.catalogSupported || item.capability.searchSupported).length;
     return NextResponse.json({
       success: successCount > 0,
-      message: `測試完成，${successCount}/${results.length} 個書源可用`,
+      message: `测试完成，${successCount}/${results.length} 个书源可用`,
       results,
     });
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : '測試連接失敗',
+        message: error instanceof Error ? error.message : '测试连接失败',
       },
       { status: 400 }
     );

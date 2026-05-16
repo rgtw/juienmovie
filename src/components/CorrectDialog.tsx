@@ -71,13 +71,13 @@ export default function CorrectDialog({
   const [error, setError] = useState('');
   const [correcting, setCorrecting] = useState(false);
 
-  // 季度選擇相關狀態
+  // 季度选择相关状态
   const [selectedResult, setSelectedResult] = useState<TMDBResult | null>(null);
   const [seasons, setSeasons] = useState<TMDBSeason[]>([]);
   const [loadingSeasons, setLoadingSeasons] = useState(false);
   const [showSeasonSelection, setShowSeasonSelection] = useState(false);
 
-  // 手動輸入相關狀態
+  // 手动输入相关状态
   const [showManualInput, setShowManualInput] = useState(false);
   const [manualData, setManualData] = useState({
     title: '',
@@ -101,11 +101,11 @@ export default function CorrectDialog({
       setSeasons([]);
       setShowSeasonSelection(false);
       setShowManualInput(false);
-      // 不要在這裡重置 manualData，因為它會在 handleShowManualInput 中被設置
+      // 不要在这里重置 manualData，因为它会在 handleShowManualInput 中被设置
     }
   }, [isOpen, currentTitle]);
 
-  // 當切換到手動輸入模式時,自動填充數據
+  // 当切换到手动输入模式时,自动填充数据
   useEffect(() => {
     if (showManualInput && isOpen) {
       const newManualData = {
@@ -164,7 +164,7 @@ export default function CorrectDialog({
     }
   };
 
-  // 獲取電視劇的季度列表
+  // 获取电视剧的季度列表
   const fetchSeasons = async (tvId: number) => {
     setLoadingSeasons(true);
     setError('');
@@ -192,42 +192,42 @@ export default function CorrectDialog({
     }
   };
 
-  // 處理選擇結果（電影直接糾錯，電視劇顯示季度選擇）
+  // 处理选择结果（电影直接纠错，电视剧显示季度选择）
   const handleSelectResult = async (result: TMDBResult) => {
     if (result.media_type === 'tv') {
-      // 電視劇：先獲取季度列表
+      // 电视剧：先获取季度列表
       setSelectedResult(result);
       const seasonsList = await fetchSeasons(result.id);
 
       if (seasonsList.length === 1) {
-        // 只有一季，直接使用該季度進行糾錯
+        // 只有一季，直接使用该季度进行纠错
         await handleCorrect(result, seasonsList[0]);
       } else if (seasonsList.length > 1) {
-        // 多季，顯示選擇界面
+        // 多季，显示选择界面
         setSeasons(seasonsList);
         setShowSeasonSelection(true);
       } else {
-        // 沒有季度信息，直接使用劇集信息
+        // 没有季度信息，直接使用剧集信息
         await handleCorrect(result);
       }
     } else {
-      // 電影：直接糾錯
+      // 电影：直接纠错
       await handleCorrect(result);
     }
   };
 
-  // 處理選擇季度
+  // 处理选择季度
   const handleSelectSeason = async (season: TMDBSeason) => {
     if (!selectedResult) return;
 
     await handleCorrect(selectedResult, season);
   };
 
-  // 執行糾錯
+  // 执行纠错
   const handleCorrect = async (result: TMDBResult, season?: TMDBSeason) => {
     setCorrecting(true);
     try {
-      // 構建標題和ID：如果是第二季及以後，在標題後加上季度名稱，並使用季度ID
+      // 构建标题和ID：如果是第二季及以后，在标题后加上季度名称，并使用季度ID
       let finalTitle = result.title || result.name;
       const finalTmdbId = result.id;
 
@@ -245,15 +245,15 @@ export default function CorrectDialog({
         mediaType: result.media_type,
       };
 
-      // 如果有季度信息，添加到數據中
+      // 如果有季度信息，添加到数据中
       if (season) {
         correctionData.seasonNumber = season.season_number;
         correctionData.seasonName = season.name;
       }
 
-      // 根據源類型選擇不同的存儲方式
+      // 根据源类型选择不同的存储方式
       if (source === 'xiaoya') {
-        // 小雅源：存儲到 localStorage
+        // 小雅源：存储到 localStorage
         const storageKey = `xiaoya_correction_${videoKey}`;
         const correctionInfo = {
           ...correctionData,
@@ -262,7 +262,7 @@ export default function CorrectDialog({
         localStorage.setItem(storageKey, JSON.stringify(correctionInfo));
         console.log('小雅源糾錯信息已存儲到 localStorage:', storageKey, correctionInfo);
       } else {
-        // openlist 等其他源：調用 API
+        // openlist 等其他源：调用 API
         const body: any = {
           key: videoKey,
           ...correctionData,
@@ -289,14 +289,14 @@ export default function CorrectDialog({
     }
   };
 
-  // 返回搜索結果列表
+  // 返回搜索结果列表
   const handleBackToResults = () => {
     setShowSeasonSelection(false);
     setSelectedResult(null);
     setSeasons([]);
   };
 
-  // 切換到手動輸入模式
+  // 切换到手动输入模式
   const handleShowManualInput = () => {
     setShowManualInput(true);
     setShowSeasonSelection(false);
@@ -308,15 +308,15 @@ export default function CorrectDialog({
     setShowManualInput(false);
   };
 
-  // 處理手動提交
+  // 处理手动提交
   const handleManualSubmit = async () => {
-    // 驗證必填字段
+    // 验证必填字段
     if (!manualData.title.trim()) {
       setError('請輸入影片標題');
       return;
     }
 
-    // 如果提供了 TMDB ID，驗證其格式
+    // 如果提供了 TMDB ID，验证其格式
     if (manualData.tmdbId.trim() && isNaN(Number(manualData.tmdbId))) {
       setError('TMDB ID 必須是數字');
       return;
@@ -355,15 +355,15 @@ export default function CorrectDialog({
         correctionData.doubanId = manualData.doubanId.trim();
       }
 
-      // 如果是電視劇且有季度信息
+      // 如果是电视剧且有季度信息
       if (manualData.mediaType === 'tv' && manualData.seasonNumber) {
         correctionData.seasonNumber = Number(manualData.seasonNumber);
         correctionData.seasonName = manualData.seasonName.trim() || `第 ${manualData.seasonNumber} 季`;
       }
 
-      // 根據源類型選擇不同的存儲方式
+      // 根据源类型选择不同的存储方式
       if (source === 'xiaoya') {
-        // 小雅源：存儲到 localStorage
+        // 小雅源：存储到 localStorage
         const storageKey = `xiaoya_correction_${videoKey}`;
         const correctionInfo = {
           ...correctionData,
@@ -372,7 +372,7 @@ export default function CorrectDialog({
         localStorage.setItem(storageKey, JSON.stringify(correctionInfo));
         console.log('小雅源糾錯信息已存儲到 localStorage:', storageKey, correctionInfo);
       } else {
-        // openlist 等其他源：調用 API
+        // openlist 等其他源：调用 API
         const body: any = {
           key: videoKey,
           ...correctionData,
@@ -403,10 +403,10 @@ export default function CorrectDialog({
 
   const dialogContent = (
     <>
-      {/* 頭部 */}
+      {/* 头部 */}
       <div className='flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700'>
         <h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
-          糾錯：{currentTitle}
+          纠错：{currentTitle}
         </h2>
         <button
           onClick={onClose}
@@ -447,10 +447,10 @@ export default function CorrectDialog({
           </div>
         )}
 
-        {/* 結果列表 */}
+        {/* 结果列表 */}
         <div className='flex-1 overflow-y-auto p-4'>
           {showManualInput ? (
-            // 手動輸入界面
+            // 手动输入界面
             <div>
               <div className='mb-4 flex items-center gap-2'>
                 <button
@@ -463,10 +463,10 @@ export default function CorrectDialog({
               </div>
 
               <div className='space-y-4'>
-                {/* 標題 - 必填 */}
+                {/* 标题 - 必填 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                    影片標題 <span className='text-red-500'>*</span>
+                    影片标题 <span className='text-red-500'>*</span>
                   </label>
                   <input
                     type='text'
@@ -477,10 +477,10 @@ export default function CorrectDialog({
                   />
                 </div>
 
-                {/* TMDB ID - 可選 */}
+                {/* TMDB ID - 可选 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                    TMDB ID（可選）
+                    TMDB ID（可选）
                   </label>
                   <input
                     type='text'
@@ -490,14 +490,14 @@ export default function CorrectDialog({
                     className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                   />
                   <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                    可在 TMDB 網站查找影片對應的 ID
+                    可在 TMDB 网站查找影片对应的 ID
                   </p>
                 </div>
 
-                {/* 豆瓣 ID - 可選 */}
+                {/* 豆瓣 ID - 可选 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                    豆瓣 ID（可選）
+                    豆瓣 ID（可选）
                   </label>
                   <input
                     type='text'
@@ -507,14 +507,14 @@ export default function CorrectDialog({
                     className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                   />
                   <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                    可在豆瓣網站查找影片對應的 ID
+                    可在豆瓣网站查找影片对应的 ID
                   </p>
                 </div>
 
-                {/* 媒體類型 */}
+                {/* 媒体类型 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                    類型
+                    类型
                   </label>
                   <div className='flex gap-4'>
                     <label className='flex items-center'>
@@ -540,12 +540,12 @@ export default function CorrectDialog({
                   </div>
                 </div>
 
-                {/* 如果是電視劇，顯示季度信息 */}
+                {/* 如果是电视剧，显示季度信息 */}
                 {manualData.mediaType === 'tv' && (
                   <>
                     <div>
                       <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                        季數（可選）
+                        季数（可选）
                       </label>
                       <input
                         type='text'
@@ -557,7 +557,7 @@ export default function CorrectDialog({
                     </div>
                     <div>
                       <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                        季名稱（可選）
+                        季名称（可选）
                       </label>
                       <input
                         type='text'
@@ -570,10 +570,10 @@ export default function CorrectDialog({
                   </>
                 )}
 
-                {/* 封面圖鏈接 */}
+                {/* 封面图链接 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                    封面圖鏈接（可選）
+                    封面图链接（可选）
                   </label>
                   <input
                     type='text'
@@ -587,7 +587,7 @@ export default function CorrectDialog({
                 {/* 上映日期 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                    上映日期（可選）
+                    上映日期（可选）
                   </label>
                   <input
                     type='date'
@@ -597,10 +597,10 @@ export default function CorrectDialog({
                   />
                 </div>
 
-                {/* 評分 */}
+                {/* 评分 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                    評分（可選，0-10）
+                    评分（可选，0-10）
                   </label>
                   <input
                     type='text'
@@ -611,10 +611,10 @@ export default function CorrectDialog({
                   />
                 </div>
 
-                {/* 簡介 */}
+                {/* 简介 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                    簡介（可選）
+                    简介（可选）
                   </label>
                   <textarea
                     value={manualData.overview}
@@ -625,12 +625,12 @@ export default function CorrectDialog({
                   />
                 </div>
 
-                {/* 錯誤提示 */}
+                {/* 错误提示 */}
                 {error && (
                   <p className='text-sm text-red-600 dark:text-red-400'>{error}</p>
                 )}
 
-                {/* 提交按鈕 */}
+                {/* 提交按钮 */}
                 <button
                   onClick={handleManualSubmit}
                   disabled={correcting}
@@ -641,7 +641,7 @@ export default function CorrectDialog({
               </div>
             </div>
           ) : showSeasonSelection ? (
-            // 季度選擇界面
+            // 季度选择界面
             <div>
               <div className='mb-4 flex items-center gap-2'>
                 <button
@@ -659,14 +659,14 @@ export default function CorrectDialog({
                     {selectedResult.title || selectedResult.name}
                   </h3>
                   <p className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
-                    請選擇季度：
+                    请选择季度：
                   </p>
                 </div>
               )}
 
               {loadingSeasons ? (
                 <div className='text-center py-12 text-gray-500 dark:text-gray-400'>
-                  加載季度列表中...
+                  加载季度列表中...
                 </div>
               ) : seasons.length === 0 ? (
                 <div className='text-center py-12 text-gray-500 dark:text-gray-400'>
@@ -679,7 +679,7 @@ export default function CorrectDialog({
                       key={season.id}
                       className='flex gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'
                     >
-                      {/* 海報 */}
+                      {/* 海报 */}
                       <div className='flex-shrink-0 w-16 h-24 relative rounded overflow-hidden bg-gray-200 dark:bg-gray-700'>
                         {season.poster_path ? (
                           <Image
@@ -691,7 +691,7 @@ export default function CorrectDialog({
                           />
                         ) : (
                           <div className='w-full h-full flex items-center justify-center text-gray-400 text-xs'>
-                            無海報
+                            无海报
                           </div>
                         )}
                       </div>
@@ -710,7 +710,7 @@ export default function CorrectDialog({
                         </p>
                       </div>
 
-                      {/* 選擇按鈕 */}
+                      {/* 选择按钮 */}
                       <div className='flex-shrink-0 flex items-center'>
                         <button
                           onClick={() => handleSelectSeason(season)}
@@ -726,26 +726,26 @@ export default function CorrectDialog({
               )}
             </div>
           ) : results.length === 0 ? (
-            // 空狀態
+            // 空状态
             <>
               <div className='text-center py-12 text-gray-500 dark:text-gray-400'>
                 {searching ? '搜索中...' : '請輸入關鍵詞搜索'}
               </div>
 
-              {/* 手動糾錯入口 */}
+              {/* 手动纠错入口 */}
               {!searching && (
                 <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-center'>
                   <button
                     onClick={handleShowManualInput}
                     className='text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
                   >
-                    搜不到影片？手動糾錯
+                    搜不到影片？手动纠错
                   </button>
                 </div>
               )}
             </>
           ) : (
-            // 搜索結果列表
+            // 搜索结果列表
             <>
               <div className='space-y-3'>
                 {results.map((result) => (
@@ -753,7 +753,7 @@ export default function CorrectDialog({
                     key={result.id}
                     className='flex gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'
                   >
-                    {/* 海報 */}
+                    {/* 海报 */}
                     <div className='flex-shrink-0 w-16 h-24 relative rounded overflow-hidden bg-gray-200 dark:bg-gray-700'>
                       {result.poster_path ? (
                         <Image
@@ -765,7 +765,7 @@ export default function CorrectDialog({
                         />
                       ) : (
                         <div className='w-full h-full flex items-center justify-center text-gray-400 text-xs'>
-                          無海報
+                          无海报
                         </div>
                       )}
                     </div>
@@ -780,14 +780,14 @@ export default function CorrectDialog({
                         {result.release_date?.split('-')[0] ||
                           result.first_air_date?.split('-')[0] ||
                           '未知'}{' '}
-                        • 評分: {result.vote_average.toFixed(1)}
+                        • 评分: {result.vote_average.toFixed(1)}
                       </p>
                       <p className='text-xs text-gray-500 dark:text-gray-500 mt-1 line-clamp-2'>
                         {result.overview || '暫無簡介'}
                       </p>
                     </div>
 
-                    {/* 選擇按鈕 */}
+                    {/* 选择按钮 */}
                     <div className='flex-shrink-0 flex items-center'>
                       <button
                         onClick={() => handleSelectResult(result)}
@@ -801,13 +801,13 @@ export default function CorrectDialog({
                 ))}
               </div>
 
-              {/* 手動糾錯入口 */}
+              {/* 手动纠错入口 */}
               <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-center'>
                 <button
                   onClick={handleShowManualInput}
                   className='text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
                 >
-                  搜不到影片？手動糾錯
+                  搜不到影片？手动纠错
                 </button>
               </div>
             </>

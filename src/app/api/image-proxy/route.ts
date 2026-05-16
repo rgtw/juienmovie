@@ -37,19 +37,19 @@ export async function GET(request: Request) {
       );
     }
 
-    // 創建響應頭
+    // 创建响应头
     const headers = new Headers();
     if (contentType) {
       headers.set('Content-Type', contentType);
     }
 
-    // 設置緩存頭（可選）
-    headers.set('Cache-Control', 'public, max-age=15720000, s-maxage=15720000'); // 緩存半年
+    // 设置缓存头（可选）
+    headers.set('Cache-Control', 'public, max-age=15720000, s-maxage=15720000'); // 缓存半年
     headers.set('CDN-Cache-Control', 'public, s-maxage=15720000');
     headers.set('Vercel-CDN-Cache-Control', 'public, s-maxage=15720000');
     headers.set('Netlify-Vary', 'query');
 
-    // 直接返回圖片流
+    // 直接返回图片流
     return new Response(imageResponse.body, {
       status: 200,
       headers,

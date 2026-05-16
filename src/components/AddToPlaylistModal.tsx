@@ -91,9 +91,9 @@ export default function AddToPlaylistModal({
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [newPlaylistDescription, setNewPlaylistDescription] = useState('');
   const [creating, setCreating] = useState(false);
-  const [addingToPlaylistId, setAddingToPlaylistId] = useState<string | null>(null); // 正在添加的歌單ID
+  const [addingToPlaylistId, setAddingToPlaylistId] = useState<string | null>(null); // 正在添加的歌单ID
 
-  // 加載用戶的歌單列表
+  // 加载用户的歌单列表
   useEffect(() => {
     if (isOpen) {
       loadPlaylists();
@@ -227,7 +227,7 @@ export default function AddToPlaylistModal({
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              創建新歌單
+              创建新歌单
             </button>
           )}
 
@@ -275,7 +275,7 @@ export default function AddToPlaylistModal({
             <MusicLoadingIndicator className="py-8" />
           ) : playlists.length === 0 ? (
             <div className="text-center py-8 text-zinc-400">
-              還沒有歌單，創建一個吧
+              还没有歌单，创建一个吧
             </div>
           ) : (
             <div className="space-y-2">

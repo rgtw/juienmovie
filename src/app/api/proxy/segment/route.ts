@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     headers.set('Accept-Ranges', 'bytes');
     headers.set('Access-Control-Expose-Headers', 'Content-Length, Content-Range');
 
-    // 使用流式傳輸，避免佔用內存
+    // 使用流式传输，避免占用内存
     const stream = new ReadableStream({
       start(controller) {
         if (!response?.body) {
@@ -85,7 +85,7 @@ export async function GET(request: Request) {
             try {
               reader.releaseLock();
             } catch (e) {
-              // reader 可能已經被釋放，忽略錯誤
+              // reader 可能已经被释放，忽略错误
             }
             reader = null;
           }
@@ -94,12 +94,12 @@ export async function GET(request: Request) {
         pump();
       },
       cancel() {
-        // 當流被取消時，確保釋放所有資源
+        // 当流被取消时，确保释放所有资源
         if (reader) {
           try {
             reader.releaseLock();
           } catch (e) {
-            // reader 可能已經被釋放，忽略錯誤
+            // reader 可能已经被释放，忽略错误
           }
           reader = null;
         }
@@ -108,7 +108,7 @@ export async function GET(request: Request) {
           try {
             response.body.cancel();
           } catch (e) {
-            // 忽略取消時的錯誤
+            // 忽略取消时的错误
           }
         }
       }
@@ -116,12 +116,12 @@ export async function GET(request: Request) {
 
     return new Response(stream, { headers });
   } catch (error) {
-    // 確保在錯誤情況下也釋放資源
+    // 确保在错误情况下也释放资源
     if (reader) {
       try {
         (reader as ReadableStreamDefaultReader<Uint8Array>).releaseLock();
       } catch (e) {
-        // 忽略錯誤
+        // 忽略错误
       }
     }
 
@@ -129,7 +129,7 @@ export async function GET(request: Request) {
       try {
         response.body.cancel();
       } catch (e) {
-        // 忽略錯誤
+        // 忽略错误
       }
     }
 

@@ -141,28 +141,28 @@ export default function AdvancedRecommendationPage() {
         <div className='mb-6'>
           <h1 className='text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2'>
             <Blend className='w-6 h-6 text-green-500' />
-            高級推薦
+            高级推荐
           </h1>
           <p className='text-sm text-gray-500 dark:text-gray-400 mt-1'>
-            瀏覽視頻源腳本提供的推薦內容
+            浏览视频源脚本提供的推荐内容
           </p>
         </div>
 
         <div className='max-w-6xl mx-auto space-y-6'>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3'>
-              選擇腳本源
+              选择脚本源
             </label>
             {isLoadingSources ? (
               <div className='flex items-center justify-center h-12 bg-gray-50/80 rounded-lg border border-gray-200/50 dark:bg-gray-800 dark:border-gray-700'>
                 <Loader2 className='h-5 w-5 animate-spin text-gray-400' />
                 <span className='ml-2 text-sm text-gray-500 dark:text-gray-400'>
-                  加載腳本源中...
+                  加载脚本源中...
                 </span>
               </div>
             ) : sources.length === 0 ? (
               <div className='flex items-center justify-center h-24 rounded-xl border border-dashed border-gray-300 bg-gray-50/70 text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-400'>
-                暫無可用的視頻源腳本
+                暂无可用的视频源脚本
               </div>
             ) : (
               <div className='flex justify-center'>
@@ -210,7 +210,7 @@ export default function AdvancedRecommendationPage() {
                 </div>
               ) : !isLoadingVideos && !error ? (
                 <div className='flex items-center justify-center h-32 rounded-xl border border-dashed border-gray-300 bg-gray-50/70 text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-400'>
-                  當前腳本暫無推薦內容
+                  当前脚本暂无推荐内容
                 </div>
               ) : null}
 

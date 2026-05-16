@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   if (storageType === 'localstorage') {
     return NextResponse.json(
       {
-        error: '不支持本地存儲模式修改密碼',
+        error: '不支持本地存储模式修改密码',
       },
       { status: 400 }
     );
@@ -25,36 +25,36 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { newPassword } = body;
 
-    // 獲取認證信息
+    // 获取认证信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 驗證新密碼
+    // 验证新密码
     if (!newPassword || typeof newPassword !== 'string') {
-      return NextResponse.json({ error: '新密碼不得為空' }, { status: 400 });
+      return NextResponse.json({ error: '新密码不得为空' }, { status: 400 });
     }
 
     const username = authInfo.username;
 
-    // 不允許站長修改密碼（站長用戶名等於 process.env.USERNAME）
+    // 不允许站长修改密码（站长用户名等于 process.env.USERNAME）
     if (username === process.env.USERNAME) {
       return NextResponse.json(
-        { error: '站長不能通過此接口修改密碼' },
+        { error: '站长不能通过此接口修改密码' },
         { status: 403 }
       );
     }
 
-    // 修改密碼（只更新V2存儲）
+    // 修改密码（只更新V2存储）
     await db.changePasswordV2(username, newPassword);
 
-    // 撤銷除當前設備外的所有 Refresh Token
+    // 撤销除当前设备外的所有 Refresh Token
     try {
       const currentTokenId = authInfo.tokenId;
       const devices = await getUserDevices(username);
 
-      // 撤銷所有非當前設備的 token
+      // 撤销所有非当前设备的 token
       for (const device of devices) {
         if (device.tokenId !== currentTokenId) {
           await revokeRefreshToken(username, device.tokenId);
@@ -65,15 +65,15 @@ export async function POST(request: NextRequest) {
       console.log(`Password changed for ${username}, revoked ${devices.length - 1} other devices`);
     } catch (error) {
       console.error('Failed to revoke other devices after password change:', error);
-      // 不影響密碼修改的成功，只記錄錯誤
+      // 不影响密码修改的成功，只记录错误
     }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error('修改密碼失敗:', error);
+    console.error('修改密码失败:', error);
     return NextResponse.json(
       {
-        error: '修改密碼失敗',
+        error: '修改密码失败',
         details: (error as Error).message,
       },
       { status: 500 }

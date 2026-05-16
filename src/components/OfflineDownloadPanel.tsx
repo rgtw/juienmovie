@@ -37,14 +37,14 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
   const [tasks, setTasks] = useState<OfflineDownloadTask[]>([]);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [viewMode, setViewMode] = useState<'tasks' | 'library'>('tasks'); // 視圖模式：任務列表或視頻庫
+  const [viewMode, setViewMode] = useState<'tasks' | 'library'>('tasks'); // 视图模式：任务列表或视频库
 
-  // 確保只在客戶端渲染
+  // 确保只在客户端渲染
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // 獲取任務列表
+  // 获取任务列表
   const fetchTasks = async () => {
     try {
       const response = await fetch('/api/offline-download');
@@ -57,7 +57,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
     }
   };
 
-  // 刪除任務
+  // 删除任务
   const handleDeleteTask = async (taskId: string) => {
     try {
       const response = await fetch(`/api/offline-download?taskId=${taskId}`, {
@@ -65,7 +65,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
       });
 
       if (response.ok) {
-        // 從列表中移除
+        // 从列表中移除
         setTasks((prev) => prev.filter((t) => t.id !== taskId));
       } else {
         const data = await response.json();
@@ -77,7 +77,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
     }
   };
 
-  // 重試任務
+  // 重试任务
   const handleRetryTask = async (taskId: string) => {
     try {
       const response = await fetch(`/api/offline-download?taskId=${taskId}&action=retry`, {
@@ -86,7 +86,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
 
       if (response.ok) {
         const data = await response.json();
-        // 更新任務狀態（保留進度，只重試失敗的片段）
+        // 更新任务状态（保留进度，只重试失败的片段）
         setTasks((prev) =>
           prev.map((t) =>
             t.id === taskId
@@ -99,7 +99,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
               : t
           )
         );
-        // 立即刷新以獲取最新狀態
+        // 立即刷新以获取最新状态
         fetchTasks();
       } else {
         const data = await response.json();
@@ -111,7 +111,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
     }
   };
 
-  // 定期刷新任務列表
+  // 定期刷新任务列表
   useEffect(() => {
     if (isOpen) {
       fetchTasks();
@@ -158,9 +158,9 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
     }
   };
 
-  // 獲取視頻庫中的視頻（按videoId分組，包含已完成和有進度的任務）
+  // 获取视频库中的视频（按videoId分组，包含已完成和有进度的任务）
   const getLibraryVideos = () => {
-    // 篩選已完成或有下載進度的任務
+    // 筛选已完成或有下载进度的任务
     const libraryTasks = tasks.filter((t) => t.status === 'completed' || t.progress > 0);
     const videoMap = new Map<string, { video: OfflineDownloadTask; episodes: OfflineDownloadTask[] }>();
 
@@ -172,7 +172,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
       videoMap.get(key)!.episodes.push(task);
     });
 
-    // 按集數排序
+    // 按集数排序
     videoMap.forEach((value) => {
       value.episodes.sort((a, b) => a.episodeIndex - b.episodeIndex);
     });
@@ -185,13 +185,13 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
   const panelContent = (
     <div className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4'>
       <div className='bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-4xl max-h-[80vh] flex flex-col'>
-        {/* 標題欄 */}
+        {/* 标题栏 */}
         <div className='flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700'>
           <h2 className='text-xl font-bold text-gray-900 dark:text-white'>
             {viewMode === 'tasks' ? '離線下載任務列表' : '視頻庫'}
           </h2>
           <div className='flex items-center gap-3'>
-            {/* 視圖切換按鈕 */}
+            {/* 视图切换按钮 */}
             <div className='flex gap-2'>
               <button
                 onClick={() => setViewMode('tasks')}
@@ -201,7 +201,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
-                任務列表
+                任务列表
               </button>
               <button
                 onClick={() => setViewMode('library')}
@@ -211,10 +211,10 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
-                視頻庫 ({libraryVideos.length})
+                视频库 ({libraryVideos.length})
               </button>
             </div>
-            {/* 關閉按鈕 */}
+            {/* 关闭按钮 */}
             <button
               onClick={onClose}
               className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors'
@@ -226,14 +226,14 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
           </div>
         </div>
 
-        {/* 內容區域 */}
+        {/* 内容区域 */}
         <div className='flex-1 overflow-y-auto p-4 space-y-3'>
           {loading ? (
             <div className='flex items-center justify-center h-full'>
               <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500'></div>
             </div>
           ) : viewMode === 'library' ? (
-            // 視頻庫視圖
+            // 视频库视图
             libraryVideos.length === 0 ? (
               <div className='flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400'>
                 <svg className='w-16 h-16 mb-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -253,7 +253,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                   className='bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 border border-gray-200 dark:border-gray-600'
                 >
                   <div className='flex gap-4'>
-                    {/* 封面圖 */}
+                    {/* 封面图 */}
                     {video.metadata?.cover && (
                       <div className='flex-shrink-0'>
                         <img
@@ -263,7 +263,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                         />
                       </div>
                     )}
-                    {/* 視頻信息 */}
+                    {/* 视频信息 */}
                     <div className='flex-1 min-w-0'>
                       <h3 className='text-lg font-bold text-gray-900 dark:text-white mb-2'>
                         {video.metadata?.videoTitle || video.title}
@@ -273,7 +273,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                       )}
                       {video.metadata?.rating && (
                         <p className='text-sm text-gray-600 dark:text-gray-400 mb-1'>
-                          評分: {video.metadata.rating.toFixed(1)}
+                          评分: {video.metadata.rating.toFixed(1)}
                         </p>
                       )}
                       {video.metadata?.description && (
@@ -283,7 +283,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                       )}
                       <div className='flex items-center gap-2 mb-3'>
                         <span className='text-sm text-gray-600 dark:text-gray-400'>
-                          已下載 {episodes.length} 集
+                          已下载 {episodes.length} 集
                         </span>
                         {video.metadata?.totalEpisodes && (
                           <span className='text-sm text-gray-600 dark:text-gray-400'>
@@ -291,7 +291,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                           </span>
                         )}
                       </div>
-                      {/* 集數列表 */}
+                      {/* 集数列表 */}
                       <div className='flex flex-wrap gap-2 mb-3'>
                         {episodes.map((ep) => (
                           <div
@@ -320,7 +320,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                           </div>
                         ))}
                       </div>
-                      {/* 刪除全部按鈕 */}
+                      {/* 删除全部按钮 */}
                       <button
                         onClick={() => {
                           if (confirm(`確定要刪除《${video.metadata?.videoTitle || video.title}》的所有已下載集數嗎？`)) {
@@ -337,7 +337,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                             d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
                           />
                         </svg>
-                        刪除全部集數
+                        删除全部集数
                       </button>
                     </div>
                   </div>
@@ -345,7 +345,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
               ))
             )
           ) : tasks.length === 0 ? (
-            // 任務列表為空
+            // 任务列表为空
             <div className='flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400'>
               <svg className='w-16 h-16 mb-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path
@@ -358,20 +358,20 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
               <p className='text-lg'>暫無離線下載任務</p>
             </div>
           ) : (
-            // 任務列表視圖
+            // 任务列表视图
             tasks.map((task) => (
               <div
                 key={task.id}
                 className='bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 border border-gray-200 dark:border-gray-600'
               >
-                {/* 任務信息 */}
+                {/* 任务信息 */}
                 <div className='flex items-start justify-between mb-3'>
                   <div className='flex-1 min-w-0'>
                     <h3 className='text-sm font-medium text-gray-900 dark:text-white truncate mb-1'>
                       {task.title}
                     </h3>
                     <p className='text-xs text-gray-500 dark:text-gray-400'>
-                      來源: {task.source} | 視頻ID: {task.videoId} | 第{task.episodeIndex + 1}集
+                      来源: {task.source} | 视频ID: {task.videoId} | 第{task.episodeIndex + 1}集
                     </p>
                   </div>
                   <div className='flex items-center gap-2 ml-4'>
@@ -381,7 +381,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                   </div>
                 </div>
 
-                {/* 進度條 */}
+                {/* 进度条 */}
                 {task.totalSegments > 0 && (
                   <div className='mb-3'>
                     <div className='flex items-center justify-between text-xs text-gray-600 dark:text-gray-300 mb-1'>
@@ -407,22 +407,22 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                   </div>
                 )}
 
-                {/* 錯誤信息 */}
+                {/* 错误信息 */}
                 {task.errorMessage && (
                   <div className='mb-3'>
                     <div className='text-xs text-red-500 dark:text-red-400'>{task.errorMessage}</div>
                   </div>
                 )}
 
-                {/* 時間信息 */}
+                {/* 时间信息 */}
                 <div className='flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-3'>
                   <span>創建: {new Date(task.createdAt).toLocaleString('zh-CN')}</span>
                   <span>更新: {new Date(task.updatedAt).toLocaleString('zh-CN')}</span>
                 </div>
 
-                {/* 操作按鈕 */}
+                {/* 操作按钮 */}
                 <div className='flex items-center gap-2'>
-                  {/* 重試按鈕 - 只在錯誤或暫停狀態顯示 */}
+                  {/* 重试按钮 - 只在错误或暂停状态显示 */}
                   {(task.status === 'error' || task.status === 'paused') && (
                     <button
                       onClick={() => handleRetryTask(task.id)}
@@ -436,7 +436,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                           d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'
                         />
                       </svg>
-                      重試
+                      重试
                     </button>
                   )}
                   <button
@@ -451,7 +451,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                         d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
                       />
                     </svg>
-                    刪除
+                    删除
                   </button>
                 </div>
               </div>

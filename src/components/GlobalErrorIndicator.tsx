@@ -50,7 +50,7 @@ export function GlobalErrorIndicator() {
   }, [currentError]);
 
   useEffect(() => {
-    // 監聽自定義錯誤事件
+    // 监听自定义错误事件
     const handleError = (event: CustomEvent) => {
       const { message } = event.detail;
       const newError: ErrorInfo = {
@@ -64,22 +64,22 @@ export function GlobalErrorIndicator() {
       setIsClosing(false);
       setIsVisible(true);
 
-      // 如果已有錯誤，開始替換動畫
+      // 如果已有错误，开始替换动画
       if (currentErrorRef.current) {
         setCurrentError(newError);
         setIsReplacing(true);
 
-        // 動畫完成後恢復正常
+        // 动画完成后恢复正常
         setTimeout(() => {
           setIsReplacing(false);
         }, 200);
       } else {
-        // 第一次顯示錯誤
+        // 第一次显示错误
         setCurrentError(newError);
       }
     };
 
-    // 監聽錯誤事件
+    // 监听错误事件
     window.addEventListener('globalError', handleError as EventListener);
 
     return () => {
@@ -110,7 +110,7 @@ export function GlobalErrorIndicator() {
 
   return (
     <div className='fixed top-4 right-4 z-[2000]'>
-      {/* 錯誤卡片 */}
+      {/* 错误卡片 */}
       <div
         className={`bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between min-w-[300px] max-w-[400px] transition-all duration-300 ${
           isClosing
@@ -147,7 +147,7 @@ export function GlobalErrorIndicator() {
   );
 }
 
-// 全局錯誤觸發函數
+// 全局错误触发函数
 export function triggerGlobalError(message: string) {
   if (typeof window !== 'undefined') {
     window.dispatchEvent(

@@ -32,26 +32,26 @@ async function getBilibiliStream(roomId: string) {
     'Referer': 'https://live.bilibili.com/'
   };
 
-  // 獲取房間初始化信息
+  // 获取房间初始化信息
   const roomInitRes = await fetch(`https://api.live.bilibili.com/room/v1/Room/room_init?id=${roomId}`, {
     headers
   });
   const roomInitData = await roomInitRes.json();
 
   if (roomInitData.code !== 0) {
-    throw new Error(roomInitData.message || '獲取房間信息失敗');
+    throw new Error(roomInitData.message || '获取房间信息失败');
   }
 
   const roomData = roomInitData.data;
   const realRoomId = roomData.room_id;
-  const liveStatus = roomData.live_status; // 0=未開播, 1=直播中, 2=輪播
+  const liveStatus = roomData.live_status; // 0=未开播, 1=直播中, 2=轮播
   const uid = roomData.uid;
 
   if (liveStatus !== 1) {
-    throw new Error('直播未開啟');
+    throw new Error('直播未开启');
   }
 
-  // 獲取主播信息
+  // 获取主播信息
   let ownerName = '';
   try {
     const userRes = await fetch(`https://api.live.bilibili.com/live_user/v1/Master/info?uid=${uid}`, {
@@ -62,10 +62,10 @@ async function getBilibiliStream(roomId: string) {
       ownerName = userData.data?.info?.uname || '';
     }
   } catch (err) {
-    console.warn('獲取主播信息失敗:', err);
+    console.warn('获取主播信息失败:', err);
   }
 
-  // 獲取房間詳細信息（包含標題）
+  // 获取房间详细信息（包含标题）
   let title = '';
   try {
     const roomInfoRes = await fetch(`https://api.live.bilibili.com/room/v1/Room/get_info?room_id=${realRoomId}`, {
@@ -76,10 +76,10 @@ async function getBilibiliStream(roomId: string) {
       title = roomInfoData.data?.title || '';
     }
   } catch (err) {
-    console.warn('獲取房間標題失敗:', err);
+    console.warn('获取房间标题失败:', err);
   }
 
-  // 獲取播放地址 (原畫質量 qn=10000)
+  // 获取播放地址 (原画质量 qn=10000)
   const playInfoRes = await fetch(
     `https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo?room_id=${realRoomId}&protocol=0,1&format=0,1,2&codec=0,1&qn=10000&platform=web&ptype=8`,
     { headers }
@@ -87,7 +87,7 @@ async function getBilibiliStream(roomId: string) {
   const playInfoData = await playInfoRes.json();
 
   if (playInfoData.code !== 0) {
-    throw new Error(playInfoData.message || '獲取播放信息失敗');
+    throw new Error(playInfoData.message || '获取播放信息失败');
   }
 
   const playurl = playInfoData.data?.playurl_info?.playurl;
@@ -141,7 +141,7 @@ async function getDouyinStream(roomId: string) {
     'Cookie': cookies
   };
 
-  // 構建API參數
+  // 构建API参数
   const params = new URLSearchParams({
     aid: '6383',
     app_name: 'douyin_web',
@@ -162,14 +162,14 @@ async function getDouyinStream(roomId: string) {
   const jsonData = await response.json();
 
   if (!jsonData.data || !jsonData.data.data) {
-    throw new Error('獲取直播間信息失敗');
+    throw new Error('获取直播间信息失败');
   }
 
   const roomData = jsonData.data.data[0];
   const status = roomData.status;
 
   if (status !== 2) {
-    throw new Error('直播未開啟');
+    throw new Error('直播未开启');
   }
 
   const streamUrl = roomData.stream_url;
@@ -177,17 +177,17 @@ async function getDouyinStream(roomId: string) {
     throw new Error('未找到流地址');
   }
 
-  // 獲取m3u8地址
+  // 获取m3u8地址
   const hlsPullUrlMap = streamUrl.hls_pull_url_map;
   if (!hlsPullUrlMap) {
     throw new Error('未找到m3u8地址');
   }
 
-  // 嘗試獲取原畫質，如果沒有則獲取第一個可用的
+  // 尝试获取原画质，如果没有则获取第一个可用的
   let m3u8Url = hlsPullUrlMap.ORIGIN || hlsPullUrlMap.FULL_HD1 || hlsPullUrlMap.HD1 || hlsPullUrlMap.SD1 || hlsPullUrlMap.SD2;
 
   if (!m3u8Url) {
-    // 如果上述都沒有，獲取第一個可用的
+    // 如果上述都没有，获取第一个可用的
     const urls = Object.values(hlsPullUrlMap);
     if (urls.length > 0) {
       m3u8Url = urls[0] as string;
@@ -208,14 +208,14 @@ async function getDouyinStream(roomId: string) {
 
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'web_live', '無權限訪問網絡直播');
+    const authResult = await requireFeaturePermission(request, 'web_live', '无权限访问网络直播');
     if (authResult instanceof NextResponse) return authResult;
     const { searchParams } = new URL(request.url);
     const platform = searchParams.get('platform');
     const roomId = searchParams.get('roomId');
 
     if (!platform || !roomId) {
-      return NextResponse.json({ error: '缺少參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少参数' }, { status: 400 });
     }
 
     if (platform === 'huya') {
@@ -228,7 +228,7 @@ export async function GET(request: NextRequest) {
 
       const match = html.match(/stream:\s*(\{"data".*?),"iWebDefaultBitRate"/);
       if (!match) {
-        return NextResponse.json({ error: '未找到直播數據' }, { status: 404 });
+        return NextResponse.json({ error: '未找到直播数据' }, { status: 404 });
       }
 
       const jsonData = JSON.parse(match[1] + '}');
@@ -236,7 +236,7 @@ export async function GET(request: NextRequest) {
       const streamInfo = jsonData.data?.[0]?.gameStreamInfoList?.[0];
 
       if (!streamInfo) {
-        return NextResponse.json({ error: '直播未開啟' }, { status: 404 });
+        return NextResponse.json({ error: '直播未开启' }, { status: 404 });
       }
 
       const { sFlvUrl, sStreamName, sFlvUrlSuffix, sFlvAntiCode } = streamInfo;
@@ -276,10 +276,10 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    return NextResponse.json({ error: '不支持的平臺' }, { status: 400 });
+    return NextResponse.json({ error: '不支持的平台' }, { status: 400 });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : '獲取失敗' },
+      { error: error instanceof Error ? error.message : '获取失败' },
       { status: 500 }
     );
   }

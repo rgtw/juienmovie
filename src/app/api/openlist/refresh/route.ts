@@ -11,43 +11,43 @@ export const runtime = 'nodejs';
 
 /**
  * POST /api/openlist/refresh
- * 刷新私人影庫元數據（後臺任務模式）
+ * 刷新私人影库元数据（后台任务模式）
  */
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'private_library', '無權限訪問私人影庫');
+    const authResult = await requireFeaturePermission(request, 'private_library', '无权限访问私人影库');
     if (authResult instanceof NextResponse) return authResult;
-    // 權限檢查
+    // 权限检查
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
-    // 檢查 TMDB API Key 是否配置
+    // 检查 TMDB API Key 是否配置
     const config = await getConfig();
     if (!config.SiteConfig.TMDBApiKey || config.SiteConfig.TMDBApiKey.trim() === '') {
       return NextResponse.json(
-        { error: '請先在站點配置中配置 TMDB API Key' },
+        { error: '请先在站点配置中配置 TMDB API Key' },
         { status: 400 }
       );
     }
 
-    // 獲取請求參數
+    // 获取请求参数
     const body = await request.json().catch(() => ({}));
     const clearMetaInfo = body.clearMetaInfo === true;
 
-    // 啟動掃描任務
+    // 启动扫描任务
     const { taskId } = await startOpenListRefresh(clearMetaInfo);
 
     return NextResponse.json({
       success: true,
       taskId,
-      message: '掃描任務已啟動',
+      message: '扫描任务已启动',
     });
   } catch (error) {
-    console.error('啟動刷新任務失敗:', error);
+    console.error('启动刷新任务失败:', error);
     return NextResponse.json(
-      { error: '啟動失敗', details: (error as Error).message },
+      { error: '启动失败', details: (error as Error).message },
       { status: 500 }
     );
   }

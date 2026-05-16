@@ -10,15 +10,15 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/xiaoya/search?keyword=<keyword>&type=<type>
- * 搜索小雅視頻（使用小雅的網頁搜索引擎）
+ * 搜索小雅视频（使用小雅的网页搜索引擎）
  */
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'xiaoya', '無權限訪問小雅');
+    const authResult = await requireFeaturePermission(request, 'xiaoya', '无权限访问小雅');
     if (authResult instanceof NextResponse) return authResult;
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') || 'video'; // video, music, ebook, all
 
     if (!keyword) {
-      return NextResponse.json({ error: '缺少搜索關鍵詞' }, { status: 400 });
+      return NextResponse.json({ error: '缺少搜索关键词' }, { status: 400 });
     }
 
     const config = await getConfig();
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       !xiaoyaConfig.Enabled ||
       !xiaoyaConfig.ServerURL
     ) {
-      return NextResponse.json({ error: '小雅未配置或未啟用' }, { status: 400 });
+      return NextResponse.json({ error: '小雅未配置或未启用' }, { status: 400 });
     }
 
     // 使用小雅的搜索引擎
@@ -50,12 +50,12 @@ export async function GET(request: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new Error(`搜索請求失敗: ${response.status}`);
+      throw new Error(`搜索请求失败: ${response.status}`);
     }
 
     const html = await response.text();
 
-    // 解析 HTML 中的鏈接
+    // 解析 HTML 中的链接
     // 格式: <a href=/path/to/file>path/to/file</a>
     const linkRegex = /<a href=([^>]+)>([^<]+)<\/a>/g;
     const results: Array<{ name: string; path: string }> = [];
@@ -65,19 +65,19 @@ export async function GET(request: NextRequest) {
       let path = match[1];
       const displayText = match[2];
 
-      // 跳過返回首頁和頻道鏈接
+      // 跳过返回首页和频道链接
       if (path === '/' || path.startsWith('http')) {
         continue;
       }
 
-      // URL 解碼路徑
+      // URL 解码路径
       try {
         path = decodeURIComponent(path);
       } catch (e) {
-        console.error('URL 解碼失敗:', path, e);
+        console.error('URL 解码失败:', path, e);
       }
 
-      // 提取文件名（路徑的最後一部分）
+      // 提取文件名（路径的最后一部分）
       const pathParts = displayText.split('/');
       const fileName = pathParts[pathParts.length - 1];
 
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
       total: results.length,
     });
   } catch (error) {
-    console.error('小雅搜索失敗:', error);
+    console.error('小雅搜索失败:', error);
     return NextResponse.json(
       { error: (error as Error).message },
       { status: 500 }

@@ -10,13 +10,13 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/tmdb/detail?id=xxx&type=movie|tv
- * 獲取TMDB詳情
+ * 获取TMDB详情
  */
 export async function GET(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') || 'movie';
 
     if (!id) {
-      return NextResponse.json({ error: '缺少ID參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少ID参数' }, { status: 400 });
     }
 
     const config = await getConfig();
@@ -46,16 +46,16 @@ export async function GET(request: NextRequest) {
 
     if (response.code !== 200 || !response.details) {
       return NextResponse.json(
-        { error: 'TMDB 詳情獲取失敗', code: response.code },
+        { error: 'TMDB 详情获取失败', code: response.code },
         { status: response.code }
       );
     }
 
     return NextResponse.json(response.details);
   } catch (error) {
-    console.error('TMDB詳情獲取失敗:', error);
+    console.error('TMDB详情获取失败:', error);
     return NextResponse.json(
-      { error: '獲取詳情失敗', details: (error as Error).message },
+      { error: '获取详情失败', details: (error as Error).message },
       { status: 500 }
     );
   }

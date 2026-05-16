@@ -14,7 +14,7 @@ interface CmsClassResponse {
 }
 
 /**
- * 獲取指定視頻源的分類列表
+ * 获取指定视频源的分类列表
  */
 export async function GET(request: NextRequest) {
   const authInfo = getAuthInfoFromCookie(request);
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
   if (!sourceKey) {
     return NextResponse.json(
-      { error: '缺少參數: source' },
+      { error: '缺少参数: source' },
       { status: 400 }
     );
   }
@@ -39,12 +39,12 @@ export async function GET(request: NextRequest) {
 
     if (!targetSite) {
       return NextResponse.json(
-        { error: `未找到指定的視頻源: ${sourceKey}` },
+        { error: `未找到指定的视频源: ${sourceKey}` },
         { status: 404 }
       );
     }
 
-    // 請求分類列表
+    // 请求分类列表
     const classUrl = `${targetSite.api}?ac=list`;
     const classResponse = await fetch(classUrl, {
       headers: API_CONFIG.search.headers,
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!classResponse.ok) {
-      throw new Error('獲取分類列表失敗');
+      throw new Error('获取分类列表失败');
     }
 
     const classData: CmsClassResponse = await classResponse.json();
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // 應用黃色過濾器規則
+    // 应用黄色过滤器规则
     let filteredCategories = classData.class;
     if (!config.SiteConfig.DisableYellowFilter) {
       filteredCategories = classData.class.filter((item) => {
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Failed to get categories:', error);
     return NextResponse.json(
-      { error: '獲取分類列表失敗' },
+      { error: '获取分类列表失败' },
       { status: 500 }
     );
   }

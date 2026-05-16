@@ -137,7 +137,7 @@ export default function BooksLayout({ children }: { children: React.ReactNode })
                       className='flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-900'
                     >
                       <Settings2 className='h-4 w-4' />
-                      設置
+                      设置
                     </button>
                     <button
                       type='button'
@@ -148,7 +148,7 @@ export default function BooksLayout({ children }: { children: React.ReactNode })
                       className='flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-900'
                     >
                       <Headphones className='h-4 w-4' />
-                      聽書
+                      听书
                     </button>
                   </div>
                 ) : null}

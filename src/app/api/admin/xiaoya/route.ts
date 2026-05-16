@@ -17,14 +17,14 @@ export async function POST(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || (authInfo.role !== 'admin' && authInfo.role !== 'owner')) {
-      return NextResponse.json({ error: '無權限' }, { status: 403 });
+      return NextResponse.json({ error: '无权限' }, { status: 403 });
     }
 
     const body = await request.json();
     const { action, ...configData } = body;
 
     if (action === 'test') {
-      // 測試連接
+      // 测试连接
       try {
         const client = new XiaoyaClient(
           configData.ServerURL,
@@ -33,10 +33,10 @@ export async function POST(request: NextRequest) {
           configData.Token
         );
 
-        // 嘗試列出根目錄
+        // 尝试列出根目录
         await client.listDirectory('/');
 
-        return NextResponse.json({ success: true, message: '連接成功' });
+        return NextResponse.json({ success: true, message: '连接成功' });
       } catch (error) {
         return NextResponse.json(
           { success: false, message: (error as Error).message },
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, message: '保存成功' });
     }
 
-    return NextResponse.json({ error: '無效的操作' }, { status: 400 });
+    return NextResponse.json({ error: '无效的操作' }, { status: 400 });
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },

@@ -11,15 +11,15 @@ export const runtime = 'nodejs';
 
 /**
  * POST /api/acg/acgrip
- * 搜索 ACG.RIP 磁力資源（僅管理員和站長可用，支持分頁）
+ * 搜索 ACG.RIP 磁力资源（仅管理员和站长可用，支持分页）
  */
 export async function POST(req: NextRequest) {
   try {
-    // 檢查權限
+    // 检查权限
     const authInfo = getAuthInfoFromCookie(req);
     if (!authInfo?.username || !(await hasFeaturePermission(authInfo.username, 'magnet_search'))) {
       return NextResponse.json(
-        { error: '無權限訪問' },
+        { error: '无权限访问' },
         { status: 403 }
       );
     }
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
     if (!keyword || typeof keyword !== 'string') {
       return NextResponse.json(
-        { error: '搜索關鍵詞不能為空' },
+        { error: '搜索关键词不能为空' },
         { status: 400 }
       );
     }
@@ -36,21 +36,21 @@ export async function POST(req: NextRequest) {
     const trimmedKeyword = keyword.trim();
     if (!trimmedKeyword) {
       return NextResponse.json(
-        { error: '搜索關鍵詞不能為空' },
+        { error: '搜索关键词不能为空' },
         { status: 400 }
       );
     }
 
-    // 驗證頁碼
+    // 验证页码
     const pageNum = parseInt(String(page), 10);
     if (isNaN(pageNum) || pageNum < 1) {
       return NextResponse.json(
-        { error: '頁碼必須是大於0的整數' },
+        { error: '页码必须是大于0的整数' },
         { status: 400 }
       );
     }
 
-    // 請求 acg.rip RSS
+    // 请求 acg.rip RSS
     const config = await getConfig();
     const searchBaseUrl = getMagnetBaseUrl(
       'https://acg.rip',
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new Error(`ACG.RIP API 請求失敗: ${response.status}`);
+      throw new Error(`ACG.RIP API 请求失败: ${response.status}`);
     }
 
     const xmlData = await response.text();
@@ -85,11 +85,11 @@ export async function POST(req: NextRequest) {
 
     const items = parsed.rss.channel[0].item;
 
-    // 轉換為標準格式
+    // 转换为标准格式
     const results = items.map((item: any) => {
       const description = item.description?.[0] || '';
 
-      // 提取描述中的圖片（如果有）
+      // 提取描述中的图片（如果有）
       let images: string[] = [];
       if (description) {
         const imgMatches = description.match(/src="([^"]+)"/g);
@@ -125,9 +125,9 @@ export async function POST(req: NextRequest) {
       items: results,
     });
   } catch (error: any) {
-    console.error('ACG.RIP 搜索失敗:', error);
+    console.error('ACG.RIP 搜索失败:', error);
     return NextResponse.json(
-      { error: error.message || '搜索失敗' },
+      { error: error.message || '搜索失败' },
       { status: 500 }
     );
   }

@@ -3,14 +3,14 @@ import { NextResponse } from 'next/server';
 import { getConfig } from '@/lib/config';
 
 export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic'; // 禁用緩存
+export const dynamic = 'force-dynamic'; // 禁用缓存
 
 /**
  * GET /api/ad-filter
- * 獲取自定義去廣告代碼配置（公開接口，無需認證）
- * 支持兩種模式：
- * - 不帶參數：只返回版本號，用於檢查更新
- * - ?full=true：返回完整代碼和版本號
+ * 获取自定义去广告代码配置（公开接口，无需认证）
+ * 支持两种模式：
+ * - 不带参数：只返回版本号，用于检查更新
+ * - ?full=true：返回完整代码和版本号
  */
 export async function GET(request: Request) {
   try {
@@ -21,21 +21,21 @@ export async function GET(request: Request) {
     const version = config.SiteConfig?.CustomAdFilterVersion || 0;
 
     if (full) {
-      // 返回完整代碼和版本號
+      // 返回完整代码和版本号
       return NextResponse.json({
         code: config.SiteConfig?.CustomAdFilterCode || '',
         version,
       });
     } else {
-      // 只返回版本號
+      // 只返回版本号
       return NextResponse.json({
         version,
       });
     }
   } catch (error) {
-    console.error('獲取去廣告代碼配置失敗:', error);
+    console.error('获取去广告代码配置失败:', error);
     return NextResponse.json(
-      { error: '獲取配置失敗', details: (error as Error).message },
+      { error: '获取配置失败', details: (error as Error).message },
       { status: 500 }
     );
   }

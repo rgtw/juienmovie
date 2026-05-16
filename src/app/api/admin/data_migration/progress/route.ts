@@ -8,7 +8,7 @@ import { getProgress } from '@/lib/data-migration-progress';
 export const runtime = 'nodejs';
 
 export async function GET(req: NextRequest) {
-  // 驗證身份和權限
+  // 验证身份和权限
   const authInfo = getAuthInfoFromCookie(req);
   if (!authInfo || !authInfo.username) {
     return new Response('Unauthorized', { status: 401 });
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     return new Response('Forbidden', { status: 403 });
   }
 
-  const username = authInfo.username; // 存儲到局部變量以便 TypeScript 類型推斷
+  const username = authInfo.username; // 存储到局部变量以便 TypeScript 类型推断
 
   const { searchParams } = new URL(req.url);
   const operation = searchParams.get('operation'); // 'export' or 'import'
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     return new Response('Missing operation parameter', { status: 400 });
   }
 
-  // 創建 SSE 響應
+  // 创建 SSE 响应
   const encoder = new TextEncoder();
   let interval: NodeJS.Timeout | null = null;
   let timeout: NodeJS.Timeout | null = null;
@@ -42,30 +42,30 @@ export async function GET(req: NextRequest) {
             controller.enqueue(encoder.encode(`data: ${data}\n\n`));
           }
         } catch (error) {
-          // 如果控制器已關閉，清理定時器
+          // 如果控制器已关闭，清理定时器
           if (interval) clearInterval(interval);
           if (timeout) clearTimeout(timeout);
         }
       };
 
-      // 立即發送一次
+      // 立即发送一次
       sendProgress();
 
-      // 每秒發送一次進度更新
+      // 每秒发送一次进度更新
       interval = setInterval(sendProgress, 1000);
 
-      // 30秒後自動關閉連接
+      // 30秒后自动关闭连接
       timeout = setTimeout(() => {
         if (interval) clearInterval(interval);
         try {
           controller.close();
         } catch (error) {
-          // 控制器可能已經關閉
+          // 控制器可能已经关闭
         }
       }, 30000);
     },
     cancel() {
-      // 當客戶端斷開連接時清理
+      // 当客户端断开连接时清理
       if (interval) clearInterval(interval);
       if (timeout) clearTimeout(timeout);
     },

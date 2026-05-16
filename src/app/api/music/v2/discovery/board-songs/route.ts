@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const page = Number(searchParams.get('page') || '1');
 
     if (!isMusicSource(source)) return badRequest('不支持的音源');
-    if (!boardId) return badRequest('缺少榜單 ID');
+    if (!boardId) return badRequest('缺少榜单 ID');
 
     const payload = await lxGetJson<any>(`/api/music/leaderboard/list?source=${source}&bangid=${encodeURIComponent(boardId)}&page=${page}`, 'none');
     const list = unwrapLxArray<any>(payload);
@@ -33,6 +33,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    return internalError('獲取榜單歌曲失敗', (error as Error).message);
+    return internalError('获取榜单歌曲失败', (error as Error).message);
   }
 }

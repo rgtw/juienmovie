@@ -12,7 +12,7 @@ export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   try {
-    // 從 cookie 獲取用戶信息
+    // 从 cookie 获取用户信息
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -26,10 +26,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ suggestions: [] });
     }
 
-    // 生成建議
+    // 生成建议
     const suggestions = await generateSuggestions(config, query, authInfo.username);
 
-    // 從配置中獲取緩存時間，如果沒有配置則使用默認值300秒（5分鐘）
+    // 从配置中获取缓存时间，如果没有配置则使用默认值300秒（5分钟）
     const cacheTime = config.SiteConfig.SiteInterfaceCacheTime || 300;
 
     return NextResponse.json(
@@ -44,8 +44,8 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('獲取搜索建議失敗', error);
-    return NextResponse.json({ error: '獲取搜索建議失敗' }, { status: 500 });
+    console.error('获取搜索建议失败', error);
+    return NextResponse.json({ error: '获取搜索建议失败' }, { status: 500 });
   }
 }
 
@@ -62,7 +62,7 @@ async function generateSuggestions(config: AdminConfig, query: string, username:
   let realKeywords: string[] = [];
 
   if (apiSites.length > 0) {
-    // 取第一個可用的數據源進行搜索
+    // 取第一个可用的数据源进行搜索
     const firstSite = apiSites[0];
     const results = await searchFromApi(firstSite, query);
 
@@ -80,12 +80,12 @@ async function generateSuggestions(config: AdminConfig, query: string, username:
     ).slice(0, 8);
   }
 
-  // 根據關鍵詞與查詢的匹配程度計算分數，並動態確定類型
+  // 根据关键词与查询的匹配程度计算分数，并动态确定类型
   const realSuggestions = realKeywords.map((word) => {
     const wordLower = word.toLowerCase();
     const queryWords = queryLower.split(/[ -:：·、-]/);
 
-    // 計算匹配分數：完全匹配得分更高
+    // 计算匹配分数：完全匹配得分更高
     let score = 1.0;
     if (wordLower === queryLower) {
       score = 2.0; // 完全匹配
@@ -93,12 +93,12 @@ async function generateSuggestions(config: AdminConfig, query: string, username:
       wordLower.startsWith(queryLower) ||
       wordLower.endsWith(queryLower)
     ) {
-      score = 1.8; // 前綴或後綴匹配
+      score = 1.8; // 前缀或后缀匹配
     } else if (queryWords.some((qw) => wordLower.includes(qw))) {
-      score = 1.5; // 包含查詢詞
+      score = 1.5; // 包含查询词
     }
 
-    // 根據匹配程度確定類型
+    // 根据匹配程度确定类型
     let type: 'exact' | 'related' | 'suggestion' = 'related';
     if (score >= 2.0) {
       type = 'exact';
@@ -115,12 +115,12 @@ async function generateSuggestions(config: AdminConfig, query: string, username:
     };
   });
 
-  // 按分數降序排列，相同分數按類型優先級排列
+  // 按分数降序排列，相同分数按类型优先级排列
   const sortedSuggestions = realSuggestions.sort((a, b) => {
     if (a.score !== b.score) {
-      return b.score - a.score; // 分數高的在前
+      return b.score - a.score; // 分数高的在前
     }
-    // 分數相同時，按類型優先級：exact > related > suggestion
+    // 分数相同时，按类型优先级：exact > related > suggestion
     const typePriority = { exact: 3, related: 2, suggestion: 1 };
     return typePriority[b.type] - typePriority[a.type];
   });

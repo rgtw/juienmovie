@@ -24,7 +24,7 @@ const SCREEN_SHARE_CONSTRAINTS: Record<
   }
 > = {
   smooth: {
-    label: '流畅 720p / 15fps',
+    label: '流暢 720p / 15fps',
     frameRate: 15,
     width: 1280,
     height: 720,
@@ -172,7 +172,7 @@ export function useScreenShare(qualityPreset: ScreenShareQualityPreset = 'smooth
       });
     } catch (err) {
       console.error('[ScreenShare] Failed to send offer:', err);
-      setError('无法建立屏幕共享连接');
+      setError('無法建立屏幕共享連接');
     }
   }, [createPeerConnection, socket]);
 
@@ -226,7 +226,7 @@ export function useScreenShare(qualityPreset: ScreenShareQualityPreset = 'smooth
       );
     } catch (err: any) {
       console.error('[ScreenShare] Failed to start sharing:', err);
-      setError(err?.message || '开启屏幕共享失败');
+      setError(err?.message || '開啟屏幕共享失敗');
     } finally {
       setIsStarting(false);
     }
@@ -249,7 +249,7 @@ export function useScreenShare(qualityPreset: ScreenShareQualityPreset = 'smooth
         });
       } catch (err) {
         console.error('[ScreenShare] Failed to handle offer:', err);
-        setError('接收共享画面失败');
+        setError('接收共享畫面失敗');
       }
     };
 

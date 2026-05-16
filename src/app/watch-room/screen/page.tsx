@@ -154,10 +154,10 @@ export default function WatchRoomScreenPage() {
           <div>
             <h1 className='flex items-center gap-2 text-2xl font-semibold'>
               <Monitor className='h-6 w-6 text-blue-500' />
-              屏幕共享觀影室
+              屏幕共享观影室
             </h1>
             <p className='mt-1 text-sm text-gray-600 dark:text-gray-400'>
-              房間：{screenRoom.name} · 房主：{screenRoom.ownerName}
+              房间：{screenRoom.name} · 房主：{screenRoom.ownerName}
             </p>
           </div>
           <div className='flex items-center gap-2'>
@@ -172,14 +172,14 @@ export default function WatchRoomScreenPage() {
                 }}
                 className='rounded-lg bg-blue-500 px-4 py-2 text-white'
               >
-                新開主頁
+                新开主页
               </Link>
             )}
             <button
               onClick={handleLeave}
               className='rounded-lg bg-gray-200 px-4 py-2 text-gray-900 dark:bg-gray-700 dark:text-gray-100'
             >
-              離開房間
+              离开房间
             </button>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default function WatchRoomScreenPage() {
                 </p>
                 {isOwner && (
                   <p className='mt-2 text-sm text-white/70'>
-                    本頁不要關閉；已嘗試為你新開一個主頁標籤頁方便繼續瀏覽。
+                    本页不要关闭；已尝试为你新开一个主页标签页方便继续浏览。
                   </p>
                 )}
               </div>
@@ -230,7 +230,7 @@ export default function WatchRoomScreenPage() {
 
               {isOwner && (
                 <div className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
-                  實際採集：{captureSettingsText}
+                  实际采集：{captureSettingsText}
                 </div>
               )}
 
@@ -243,7 +243,7 @@ export default function WatchRoomScreenPage() {
               {isOwner && (
                 <div className='mt-4'>
                   <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                    共享畫質
+                    共享画质
                   </label>
                   <select
                     value={qualityPreset}
@@ -258,7 +258,7 @@ export default function WatchRoomScreenPage() {
                     ))}
                   </select>
                   <p className='mt-2 text-xs text-gray-500 dark:text-gray-400'>
-                    畫質越高越清晰，但更依賴網絡和設備性能。共享開始後不可切換。
+                    画质越高越清晰，但更依赖网络和设备性能。共享开始后不可切换。
                   </p>
                 </div>
               )}
@@ -283,7 +283,7 @@ export default function WatchRoomScreenPage() {
                   </>
                 ) : (
                   <div className='rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-700 dark:bg-blue-900/20 dark:text-blue-300'>
-                    房員無需操作，房主開始共享後會自動顯示畫面。
+                    房员无需操作，房主开始共享后会自动显示画面。
                   </div>
                 )}
               </div>
@@ -292,7 +292,7 @@ export default function WatchRoomScreenPage() {
             <div className='rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900'>
               <h2 className='mb-3 flex items-center gap-2 font-semibold'>
                 <Users className='h-4 w-4' />
-                房間成員
+                房间成员
               </h2>
               <div className='space-y-2'>
                 {members.map((member) => (
@@ -312,7 +312,7 @@ export default function WatchRoomScreenPage() {
             </div>
 
             <div className='rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-200'>
-              建議使用桌面版 Chrome / Edge，並優先共享標籤頁。
+              建议使用桌面版 Chrome / Edge，并优先共享标签页。
             </div>
           </div>
         </div>

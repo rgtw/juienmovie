@@ -9,9 +9,9 @@ import { hasFeaturePermission } from '@/lib/permissions';
 export const runtime = 'nodejs';
 
 /**
- * Emby CMS 代理接口（動態路由）
- * 將 Emby 媒體庫轉換為 TVBox 兼容的 CMS API 格式
- * 路徑格式：/api/emby/cms-proxy/{token}?ac=videolist&...
+ * Emby CMS 代理接口（动态路由）
+ * 将 Emby 媒体库转换为 TVBox 兼容的 CMS API 格式
+ * 路径格式：/api/emby/cms-proxy/{token}?ac=videolist&...
  */
 export async function GET(
   request: NextRequest,
@@ -19,10 +19,10 @@ export async function GET(
 ) {
   const { searchParams } = new URL(request.url);
   const ac = searchParams.get('ac');
-  const wd = searchParams.get('wd'); // 搜索關鍵詞
-  const ids = searchParams.get('ids'); // 視頻ID
+  const wd = searchParams.get('wd'); // 搜索关键词
+  const ids = searchParams.get('ids'); // 视频ID
 
-  // 檢查必要參數
+  // 检查必要参数
   if (ac !== 'videolist' && ac !== 'list' && ac !== 'detail') {
     return NextResponse.json(
       { code: 400, msg: '不支持的操作' },
@@ -30,21 +30,21 @@ export async function GET(
     );
   }
 
-  // 驗證 TVBox Token（從路徑中獲取）
+  // 验证 TVBox Token（从路径中获取）
   const requestToken = params.token;
   const globalToken = process.env.TVBOX_SUBSCRIBE_TOKEN;
 
-  // 檢查是否是全局token或用戶token
+  // 检查是否是全局token或用户token
   let isValidToken = false;
   if (globalToken && requestToken === globalToken) {
     // 全局token
     isValidToken = true;
   } else {
-    // 檢查是否是用戶token
+    // 检查是否是用户token
     const { db } = await import('@/lib/db');
     const username = await db.getUsernameByTvboxToken(requestToken);
     if (username) {
-      // 檢查用戶是否被封禁
+      // 检查用户是否被封禁
       const userInfo = await db.getUserInfoV2(username);
       const allowed = await hasFeaturePermission(username, 'emby');
       if (userInfo && !userInfo.banned && allowed) {
@@ -56,7 +56,7 @@ export async function GET(
   if (!isValidToken) {
     return NextResponse.json({
       code: 401,
-      msg: '無效的訪問token',
+      msg: '无效的访问token',
       page: 1,
       pagecount: 0,
       limit: 0,
@@ -68,11 +68,11 @@ export async function GET(
   try {
     const config = await getConfig();
 
-    // 驗證 Emby 配置（多源）
+    // 验证 Emby 配置（多源）
     if (!config.EmbyConfig?.Sources || config.EmbyConfig.Sources.length === 0) {
       return NextResponse.json({
         code: 0,
-        msg: 'Emby 未配置或未啟用',
+        msg: 'Emby 未配置或未启用',
         page: 1,
         pagecount: 0,
         limit: 0,
@@ -81,14 +81,14 @@ export async function GET(
       });
     }
 
-    // 獲取 embyKey 參數
+    // 获取 embyKey 参数
     const embyKey = searchParams.get('embyKey') || undefined;
 
-    // 使用 EmbyManager 獲取客戶端
+    // 使用 EmbyManager 获取客户端
     const { embyManager } = await import('@/lib/emby-manager');
     const client = await embyManager.getClient(embyKey);
 
-    // 路由處理
+    // 路由处理
     if (wd) {
       // 搜索模式
       if (ac === 'detail') {
@@ -96,11 +96,11 @@ export async function GET(
       }
       return await handleSearch(client, wd, requestToken);
     } else if (ids || ac === 'detail') {
-      // 詳情模式
+      // 详情模式
       if (!ids) {
         return NextResponse.json({
           code: 0,
-          msg: '缺少視頻ID',
+          msg: '缺少视频ID',
           page: 1,
           pagecount: 0,
           limit: 0,
@@ -114,7 +114,7 @@ export async function GET(
       return await handleSearch(client, '', requestToken);
     }
   } catch (error) {
-    console.error('[Emby CMS Proxy] 錯誤:', error);
+    console.error('[Emby CMS Proxy] 错误:', error);
     return NextResponse.json({
       code: 500,
       msg: (error as Error).message,
@@ -128,7 +128,7 @@ export async function GET(
 }
 
 /**
- * 處理搜索請求
+ * 处理搜索请求
  */
 async function handleSearch(client: EmbyClient, query: string, token: string) {
   const result = await client.getItems({
@@ -143,15 +143,15 @@ async function handleSearch(client: EmbyClient, query: string, token: string) {
     vod_id: item.Id,
     vod_name: item.Name,
     vod_pic: client.getImageUrl(item.Id, 'Primary', undefined, token),
-    vod_remarks: item.Type === 'Movie' ? '電影' : '劇集',
+    vod_remarks: item.Type === 'Movie' ? '电影' : '剧集',
     vod_year: item.ProductionYear?.toString() || '',
     vod_content: item.Overview || '',
-    type_name: item.Type === 'Movie' ? '電影' : '電視劇',
+    type_name: item.Type === 'Movie' ? '电影' : '电视剧',
   }));
 
   return NextResponse.json({
     code: 1,
-    msg: '數據列表',
+    msg: '数据列表',
     page: 1,
     pagecount: 1,
     limit: list.length,
@@ -161,7 +161,7 @@ async function handleSearch(client: EmbyClient, query: string, token: string) {
 }
 
 /**
- * 處理通過搜索關鍵詞獲取詳情的請求
+ * 处理通过搜索关键词获取详情的请求
  */
 async function handleDetailBySearch(
   client: EmbyClient,
@@ -181,7 +181,7 @@ async function handleDetailBySearch(
   if (result.Items.length === 0) {
     return NextResponse.json({
       code: 0,
-      msg: '未找到該視頻',
+      msg: '未找到该视频',
       page: 1,
       pagecount: 0,
       limit: 0,
@@ -194,7 +194,7 @@ async function handleDetailBySearch(
 }
 
 /**
- * 處理詳情請求
+ * 处理详情请求
  */
 async function handleDetail(
   client: EmbyClient,
@@ -205,7 +205,7 @@ async function handleDetail(
 ) {
   const item = await client.getItem(itemId);
 
-  // 獲取當前請求的 baseUrl
+  // 获取当前请求的 baseUrl
   const host = request.headers.get('host') || request.headers.get('x-forwarded-host');
   const proto = request.headers.get('x-forwarded-proto') ||
     (host?.includes('localhost') || host?.includes('127.0.0.1') ? 'http' : 'https');
@@ -215,11 +215,11 @@ async function handleDetail(
   let vodPlayUrl = '';
 
   if (item.Type === 'Movie') {
-    // 電影：單個播放鏈接（使用代理，添加 .mp4 擴展名）
+    // 电影：单个播放链接（使用代理，添加 .mp4 扩展名）
     const proxyUrl = `${baseUrl}/api/emby/play/${encodeURIComponent(token)}/video.mp4?itemId=${item.Id}${embyKeyParam}`;
     vodPlayUrl = `正片$${proxyUrl}`;
   } else if (item.Type === 'Series') {
-    // 劇集：獲取所有集
+    // 剧集：获取所有集
     const allEpisodes = await client.getEpisodes(itemId);
 
     const episodes = allEpisodes
@@ -240,7 +240,7 @@ async function handleDetail(
 
   return NextResponse.json({
     code: 1,
-    msg: '數據列表',
+    msg: '数据列表',
     page: 1,
     pagecount: 1,
     limit: 1,
@@ -250,10 +250,10 @@ async function handleDetail(
         vod_id: item.Id,
         vod_name: item.Name,
         vod_pic: client.getImageUrl(item.Id, 'Primary', undefined, token),
-        vod_remarks: item.Type === 'Movie' ? '電影' : '劇集',
+        vod_remarks: item.Type === 'Movie' ? '电影' : '剧集',
         vod_year: item.ProductionYear?.toString() || '',
         vod_content: item.Overview || '',
-        type_name: item.Type === 'Movie' ? '電影' : '電視劇',
+        type_name: item.Type === 'Movie' ? '电影' : '电视剧',
         vod_play_url: vodPlayUrl,
         vod_play_from: 'Emby',
       },

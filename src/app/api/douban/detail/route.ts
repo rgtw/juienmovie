@@ -34,7 +34,7 @@ interface DoubanDetailApiResponse {
   episodes_info?: string;
   cover_url?: string;
   url?: string;
-  [key: string]: any; // 允許其他字段
+  [key: string]: any; // 允许其他字段
 }
 
 export const runtime = 'nodejs';
@@ -42,13 +42,13 @@ export const runtime = 'nodejs';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  // 獲取參數
+  // 获取参数
   const id = searchParams.get('id');
 
-  // 驗證參數
+  // 验证参数
   if (!id) {
     return NextResponse.json(
-      { error: '缺少必要參數: id' },
+      { error: '缺少必要参数: id' },
       { status: 400 }
     );
   }
@@ -56,7 +56,7 @@ export async function GET(request: Request) {
   const target = `https://m.douban.com/rexxar/api/v2/subject/${id}`;
 
   try {
-    // 調用豆瓣 API
+    // 调用豆瓣 API
     const doubanData = await fetchDoubanData<DoubanDetailApiResponse>(target);
 
     const cacheTime = await getCacheTime();
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: '獲取豆瓣詳情失敗', details: (error as Error).message },
+      { error: '获取豆瓣详情失败', details: (error as Error).message },
       { status: 500 }
     );
   }

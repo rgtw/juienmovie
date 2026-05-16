@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const page = Number(searchParams.get('page') || '1');
     const limit = Number(searchParams.get('limit') || '20');
 
-    if (!q) return badRequest('缺少搜索關鍵詞');
+    if (!q) return badRequest('缺少搜索关键词');
     if (!isMusicSource(source)) return badRequest('不支持的音源');
 
     const list = await lxGetJson<LxServerSong[]>(`/api/music/search?name=${encodeURIComponent(q)}&source=${source}&page=${page}&limit=${limit}`, 'none');
@@ -28,6 +28,6 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    return internalError('搜索歌曲失敗', (error as Error).message);
+    return internalError('搜索歌曲失败', (error as Error).message);
   }
 }

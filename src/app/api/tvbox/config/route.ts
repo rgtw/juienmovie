@@ -5,10 +5,10 @@ import { getAuthInfoFromCookie } from '@/lib/auth';
 export const runtime = 'nodejs';
 
 /**
- * 獲取TVBOX訂閱配置
+ * 获取TVBOX订阅配置
  */
 export async function GET(request: NextRequest) {
-  // 驗證用戶登錄
+  // 验证用户登录
   const authInfo = getAuthInfoFromCookie(request);
   if (!authInfo || !authInfo.username) {
     return NextResponse.json(
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // 檢查是否開啟訂閱功能
+  // 检查是否开启订阅功能
   const enableSubscribe = process.env.ENABLE_TVBOX_SUBSCRIBE === 'true';
   const subscribeToken = process.env.TVBOX_SUBSCRIBE_TOKEN;
 
@@ -35,16 +35,16 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // 構建訂閱鏈接
-  // 優先使用 SITE_BASE 環境變量，如果沒有則使用前端傳來的 origin
+  // 构建订阅链接
+  // 优先使用 SITE_BASE 环境变量，如果没有则使用前端传来的 origin
   const siteBase = process.env.SITE_BASE;
   const searchParams = request.nextUrl.searchParams;
   const clientOrigin = searchParams.get('origin');
-  const adFilter = searchParams.get('adFilter') === 'true'; // 獲取去廣告參數
+  const adFilter = searchParams.get('adFilter') === 'true'; // 获取去广告参数
 
   const baseUrl = siteBase || clientOrigin || request.nextUrl.origin;
 
-  // 構建訂閱鏈接，包含 adFilter 參數
+  // 构建订阅链接，包含 adFilter 参数
   const subscribeUrl = `${baseUrl}/api/tvbox/subscribe?token=${encodeURIComponent(subscribeToken)}&adFilter=${adFilter}`;
 
   return NextResponse.json(

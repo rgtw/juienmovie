@@ -92,10 +92,10 @@ export function PersonalCenterPanel({
               </div>
               <div>
                 <div className='text-base font-semibold text-gray-900 dark:text-gray-100'>
-                  郵件通知設置
+                  邮件通知设置
                 </div>
                 <div className='mt-1 text-sm text-gray-500 dark:text-gray-400'>
-                  管理接收收藏更新通知的郵箱和開關
+                  管理接收收藏更新通知的邮箱和开关
                 </div>
               </div>
             </button>
@@ -110,10 +110,10 @@ export function PersonalCenterPanel({
                 </div>
                 <div>
                   <div className='text-base font-semibold text-gray-900 dark:text-gray-100'>
-                    設備管理
+                    设备管理
                   </div>
                   <div className='mt-1 text-sm text-gray-500 dark:text-gray-400'>
-                    查看並管理當前賬號的登錄設備
+                    查看并管理当前账号的登录设备
                   </div>
                 </div>
               </button>
@@ -129,10 +129,10 @@ export function PersonalCenterPanel({
                 </div>
                 <div>
                   <div className='text-base font-semibold text-gray-900 dark:text-gray-100'>
-                    修改密碼
+                    修改密码
                   </div>
                   <div className='mt-1 text-sm text-gray-500 dark:text-gray-400'>
-                    修改當前賬號密碼
+                    修改当前账号密码
                   </div>
                 </div>
               </button>

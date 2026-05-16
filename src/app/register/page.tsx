@@ -12,7 +12,7 @@ import { checkForUpdates, UpdateStatus } from '@/lib/version_check';
 import { useSite } from '@/components/SiteProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-// 版本顯示組件
+// 版本显示组件
 function VersionDisplay() {
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus | null>(null);
   const [isChecking, setIsChecking] = useState(true);
@@ -86,12 +86,12 @@ function RegisterPageClient() {
 
   const { siteName } = useSite();
 
-  // 在客戶端掛載後設置配置
+  // 在客户端挂载后设置配置
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const runtimeConfig = (window as any).RUNTIME_CONFIG;
 
-      // 設置背景圖（支持多張隨機選擇）
+      // 设置背景图（支持多张随机选择）
       const registerBg = runtimeConfig?.REGISTER_BACKGROUND_IMAGE;
       if (registerBg) {
         const urls = registerBg
@@ -100,13 +100,13 @@ function RegisterPageClient() {
           .filter((url: string) => url !== '');
 
         if (urls.length > 0) {
-          // 隨機選擇一張背景圖
+          // 随机选择一张背景图
           const randomIndex = Math.floor(Math.random() * urls.length);
           setBackgroundImage(urls[randomIndex]);
         }
       }
 
-      // 設置站點配置
+      // 设置站点配置
       const config = {
         EnableRegistration: runtimeConfig?.ENABLE_REGISTRATION || false,
         RequireRegistrationInviteCode: runtimeConfig?.REQUIRE_REGISTRATION_INVITE_CODE || false,
@@ -115,14 +115,14 @@ function RegisterPageClient() {
       };
       setSiteConfig(config);
 
-      // 如果未開啟註冊，重定向到登錄頁
+      // 如果未开启注册，重定向到登录页
       if (!config.EnableRegistration) {
         router.replace('/login');
       }
     }
   }, [router]);
 
-  // 加載Cloudflare Turnstile腳本
+  // 加载Cloudflare Turnstile脚本
   useEffect(() => {
     if (!siteConfig?.RegistrationRequireTurnstile || !siteConfig?.TurnstileSiteKey) {
       return;
@@ -142,7 +142,7 @@ function RegisterPageClient() {
     };
   }, [siteConfig]);
 
-  // 渲染Turnstile組件
+  // 渲染Turnstile组件
   useEffect(() => {
     if (!turnstileLoaded || !siteConfig?.TurnstileSiteKey) {
       return;
@@ -184,7 +184,7 @@ function RegisterPageClient() {
       return;
     }
 
-    // 檢查Turnstile驗證
+    // 检查Turnstile验证
     if (siteConfig?.RegistrationRequireTurnstile && !turnstileToken) {
       setError('請完成人機驗證');
       return;
@@ -204,11 +204,11 @@ function RegisterPageClient() {
       });
 
       if (res.ok) {
-        // 註冊成功，跳轉到登錄頁
+        // 注册成功，跳转到登录页
         const redirect = searchParams.get('redirect') || '/login';
         router.replace(redirect);
       } else {
-        // 註冊失敗，重置Turnstile
+        // 注册失败，重置Turnstile
         if (siteConfig?.RegistrationRequireTurnstile && turnstileWidgetId !== null && (window as any).turnstile) {
           (window as any).turnstile.reset(turnstileWidgetId);
           setTurnstileToken(null);
@@ -225,7 +225,7 @@ function RegisterPageClient() {
         }
       }
     } catch (error) {
-      // 網絡錯誤，重置Turnstile
+      // 网络错误，重置Turnstile
       if (siteConfig?.RegistrationRequireTurnstile && turnstileWidgetId !== null && (window as any).turnstile) {
         (window as any).turnstile.reset(turnstileWidgetId);
         setTurnstileToken(null);
@@ -236,7 +236,7 @@ function RegisterPageClient() {
     }
   };
 
-  // 如果配置未加載或未開啟註冊，顯示加載中
+  // 如果配置未加载或未开启注册，显示加载中
   if (!siteConfig) {
     return (
       <div className='relative min-h-screen flex items-center justify-center px-4'>
@@ -263,12 +263,12 @@ function RegisterPageClient() {
           {siteName}
         </h1>
         <p className='text-center text-sm text-gray-600 dark:text-gray-400 mb-8'>
-          創建新賬號
+          创建新账号
         </p>
         <form onSubmit={handleSubmit} className='space-y-6'>
           <div>
             <label htmlFor='username' className='sr-only'>
-              用戶名
+              用户名
             </label>
             <div className='relative'>
               <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
@@ -288,7 +288,7 @@ function RegisterPageClient() {
 
           <div>
             <label htmlFor='password' className='sr-only'>
-              密碼
+              密码
             </label>
             <div className='relative'>
               <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
@@ -319,7 +319,7 @@ function RegisterPageClient() {
 
           <div>
             <label htmlFor='confirmPassword' className='sr-only'>
-              確認密碼
+              确认密码
             </label>
             <div className='relative'>
               <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
@@ -351,7 +351,7 @@ function RegisterPageClient() {
           {siteConfig?.RequireRegistrationInviteCode && (
             <div>
               <label htmlFor='inviteCode' className='sr-only'>
-                邀請碼
+                邀请码
               </label>
               <div className='relative'>
                 <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
@@ -378,7 +378,7 @@ function RegisterPageClient() {
             <p className='text-sm text-red-600 dark:text-red-400'>{error}</p>
           )}
 
-          {/* 註冊按鈕 */}
+          {/* 注册按钮 */}
           <button
             type='submit'
             disabled={
@@ -391,20 +391,20 @@ function RegisterPageClient() {
             {loading ? '註冊中...' : '註冊'}
           </button>
 
-          {/* 返回登錄鏈接 */}
+          {/* 返回登录链接 */}
           <div className='text-center'>
             <button
               type='button'
               onClick={() => router.push('/login')}
               className='text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors'
             >
-              已有賬號？返回登錄
+              已有账号？返回登录
             </button>
           </div>
         </form>
       </div>
 
-      {/* 版本信息顯示 */}
+      {/* 版本信息显示 */}
       <VersionDisplay />
     </div>
   );

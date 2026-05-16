@@ -74,39 +74,39 @@ import CorrectDialog from '@/components/CorrectDialog';
 import DataMigration from '@/components/DataMigration';
 import PageLayout from '@/components/PageLayout';
 
-// 統一按鈕樣式系統
+// 统一按钮样式系统
 const buttonStyles = {
-  // 主要操作按鈕（藍色）- 用於配置、設置、確認等
+  // 主要操作按钮（蓝色）- 用于配置、设置、确认等
   primary:
     'px-3 py-1.5 text-sm font-medium bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors',
-  // 成功操作按鈕（綠色）- 用於添加、啟用、保存等
+  // 成功操作按钮（绿色）- 用于添加、启用、保存等
   success:
     'px-3 py-1.5 text-sm font-medium bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-lg transition-colors',
-  // 危險操作按鈕（紅色）- 用於刪除、禁用、重置等
+  // 危险操作按钮（红色）- 用于删除、禁用、重置等
   danger:
     'px-3 py-1.5 text-sm font-medium bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-lg transition-colors',
-  // 次要操作按鈕（灰色）- 用於取消、關閉等
+  // 次要操作按钮（灰色）- 用于取消、关闭等
   secondary:
     'px-3 py-1.5 text-sm font-medium bg-gray-600 hover:bg-gray-700 dark:bg-gray-600 dark:hover:bg-gray-700 text-white rounded-lg transition-colors',
-  // 警告操作按鈕（黃色）- 用於批量禁用等
+  // 警告操作按钮（黄色）- 用于批量禁用等
   warning:
     'px-3 py-1.5 text-sm font-medium bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white rounded-lg transition-colors',
-  // 小尺寸主要按鈕
+  // 小尺寸主要按钮
   primarySmall:
     'px-2 py-1 text-xs font-medium bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-md transition-colors',
-  // 小尺寸成功按鈕
+  // 小尺寸成功按钮
   successSmall:
     'px-2 py-1 text-xs font-medium bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-md transition-colors',
-  // 小尺寸危險按鈕
+  // 小尺寸危险按钮
   dangerSmall:
     'px-2 py-1 text-xs font-medium bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-md transition-colors',
-  // 小尺寸次要按鈕
+  // 小尺寸次要按钮
   secondarySmall:
     'px-2 py-1 text-xs font-medium bg-gray-600 hover:bg-gray-700 dark:bg-gray-600 dark:hover:bg-gray-700 text-white rounded-md transition-colors',
-  // 小尺寸警告按鈕
+  // 小尺寸警告按钮
   warningSmall:
     'px-2 py-1 text-xs font-medium bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white rounded-md transition-colors',
-  // 圓角小按鈕（用於表格操作）
+  // 圆角小按钮（用于表格操作）
   roundedPrimary:
     'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/40 dark:hover:bg-blue-900/60 dark:text-blue-200 transition-colors',
   roundedSuccess:
@@ -119,25 +119,25 @@ const buttonStyles = {
     'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/40 dark:hover:bg-yellow-900/60 dark:text-yellow-200 transition-colors',
   roundedPurple:
     'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 hover:bg-purple-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 dark:text-purple-200 transition-colors',
-  // 禁用狀態
+  // 禁用状态
   disabled:
     'px-3 py-1.5 text-sm font-medium bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white rounded-lg transition-colors',
   disabledSmall:
     'px-2 py-1 text-xs font-medium bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white rounded-md transition-colors',
-  // 開關按鈕樣式
+  // 开关按钮样式
   toggleOn: 'bg-green-600 dark:bg-green-600',
   toggleOff: 'bg-gray-200 dark:bg-gray-700',
   toggleThumb: 'bg-white',
   toggleThumbOn: 'translate-x-6',
   toggleThumbOff: 'translate-x-1',
-  // 快速操作按鈕樣式
+  // 快速操作按钮样式
   quickAction:
     'px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors',
 };
 
 const DEFAULT_GROUP_PERMISSIONS = [...ALL_FEATURE_PERMISSION_KEYS];
 
-// 通用彈窗組件
+// 通用弹窗组件
 interface AlertModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -226,7 +226,7 @@ const AlertModal = ({
 
           {showConfirm ? (
             onConfirm ? (
-              // 確認操作：顯示取消和確定按鈕
+              // 确认操作：显示取消和确定按钮
               <div className='flex gap-3 justify-center'>
                 <button
                   onClick={() => {
@@ -239,17 +239,17 @@ const AlertModal = ({
                 <button
                   onClick={() => {
                     if (onConfirm) onConfirm();
-                    // 不要在這裡調用onClose，讓onConfirm自己決定何時關閉
+                    // 不要在这里调用onClose，让onConfirm自己决定何时关闭
                   }}
                   className={buttonStyles.danger}
                 >
-                  確定
+                  确定
                 </button>
               </div>
             ) : (
-              // 普通提示：只顯示確定按鈕
+              // 普通提示：只显示确定按钮
               <button onClick={onClose} className={buttonStyles.primary}>
-                確定
+                确定
               </button>
             )
           ) : null}
@@ -260,7 +260,7 @@ const AlertModal = ({
   );
 };
 
-// 彈窗狀態管理
+// 弹窗状态管理
 const useAlertModal = () => {
   const [alertModal, setAlertModal] = useState<{
     isOpen: boolean;
@@ -287,7 +287,7 @@ const useAlertModal = () => {
   return { alertModal, showAlert, hideAlert };
 };
 
-// 統一彈窗方法（必須在首次使用前定義）
+// 统一弹窗方法（必须在首次使用前定义）
 const showError = (message: string, showAlert?: (config: any) => void) => {
   if (showAlert) {
     showAlert({ type: 'error', title: '錯誤', message, showConfirm: true });
@@ -304,7 +304,7 @@ const showSuccess = (message: string, showAlert?: (config: any) => void) => {
   }
 };
 
-// 通用加載狀態管理系統
+// 通用加载状态管理系统
 interface LoadingState {
   [key: string]: boolean;
 }
@@ -346,7 +346,7 @@ interface StandaloneSourceScript {
   updatedAt: number;
 }
 
-// 新增站點配置類型
+// 新增站点配置类型
 interface SiteConfig {
   SiteName: string;
   Announcement: string;
@@ -395,7 +395,7 @@ interface SiteConfig {
   OIDCButtonText?: string;
 }
 
-// 視頻源數據類型
+// 视频源数据类型
 interface DataSource {
   name: string;
   key: string;
@@ -407,7 +407,7 @@ interface DataSource {
   weight?: number;
 }
 
-// 直播源數據類型
+// 直播源数据类型
 interface LiveDataSource {
   name: string;
   key: string;
@@ -420,7 +420,7 @@ interface LiveDataSource {
   proxyMode?: 'full' | 'm3u8-only' | 'direct'; // 代理模式
 }
 
-// 自定義分類數據類型
+// 自定义分类数据类型
 interface CustomCategory {
   name?: string;
   type: 'movie' | 'tv';
@@ -429,7 +429,7 @@ interface CustomCategory {
   from: 'config' | 'custom';
 }
 
-// 可摺疊標籤組件
+// 可折叠标签组件
 interface CollapsibleTabProps {
   title: string;
   icon?: React.ReactNode;
@@ -495,7 +495,7 @@ const CollapsibleTab = ({
   );
 };
 
-// 用戶配置組件
+// 用户配置组件
 interface UserConfigProps {
   config: AdminConfig | null;
   role: 'owner' | 'admin' | null;
@@ -536,7 +536,7 @@ const UserConfig = ({
   const [newUser, setNewUser] = useState({
     username: '',
     password: '',
-    userGroup: '', // 新增用戶組字段
+    userGroup: '', // 新增用户组字段
   });
   const [changePasswordUser, setChangePasswordUser] = useState({
     username: '',
@@ -583,15 +583,15 @@ const UserConfig = ({
   const [showDeleteUserModal, setShowDeleteUserModal] = useState(false);
   const [deletingUser, setDeletingUser] = useState<string | null>(null);
 
-  // 當前登錄用戶名
+  // 当前登录用户名
   const currentUsername = getAuthInfoFromBrowserCookie()?.username || null;
 
-  // 判斷是否有舊版用戶數據需要遷移
+  // 判断是否有旧版用户数据需要迁移
   const hasOldUserData =
     config?.UserConfig?.Users?.filter((u: any) => u.role !== 'owner').length ??
     0 > 0;
 
-  // 使用新版本用戶列表（如果可用且沒有舊數據），否則使用配置中的用戶列表
+  // 使用新版本用户列表（如果可用且没有旧数据），否则使用配置中的用户列表
   const displayUsers: Array<{
     username: string;
     role: 'owner' | 'admin' | 'user';
@@ -602,7 +602,7 @@ const UserConfig = ({
     oidcSub?: string;
   }> = !hasOldUserData && usersV2 ? usersV2 : config?.UserConfig?.Users || [];
 
-  // 使用 useMemo 計算全選狀態，避免每次渲染都重新計算
+  // 使用 useMemo 计算全选状态，避免每次渲染都重新计算
   const selectAllUsers = useMemo(() => {
     const selectableUserCount =
       displayUsers?.filter(
@@ -614,10 +614,10 @@ const UserConfig = ({
     return selectedUsers.size === selectableUserCount && selectedUsers.size > 0;
   }, [selectedUsers.size, displayUsers, role, currentUsername]);
 
-  // 獲取用戶組列表
+  // 获取用户组列表
   const userGroups = config?.UserConfig?.Tags || [];
 
-  // 處理用戶組相關操作
+  // 处理用户组相关操作
   const handleUserGroupAction = async (
     action: 'add' | 'edit' | 'delete',
     groupName: string,
@@ -693,7 +693,7 @@ const UserConfig = ({
   };
 
   const handleDeleteUserGroup = (groupName: string) => {
-    // 計算會受影響的用戶數量
+    // 计算会受影响的用户数量
     const affectedUsers =
       config?.UserConfig?.Users?.filter(
         (user) => user.tags && user.tags.includes(groupName)
@@ -717,7 +717,7 @@ const UserConfig = ({
       setShowDeleteUserGroupModal(false);
       setDeletingUserGroup(null);
     } catch (err) {
-      // 錯誤處理已在 handleUserGroupAction 中處理
+      // 错误处理已在 handleUserGroupAction 中处理
     }
   };
 
@@ -734,7 +734,7 @@ const UserConfig = ({
     setShowAddUserGroupForm(false);
   };
 
-  // 為用戶分配用戶組
+  // 为用户分配用户组
   const handleAssignUserGroup = async (
     username: string,
     userGroups: string[]
@@ -820,7 +820,7 @@ const UserConfig = ({
   const handleShowChangePasswordForm = (username: string) => {
     setChangePasswordUser({ username, password: '' });
     setShowChangePasswordForm(true);
-    setShowAddUserForm(false); // 關閉添加用戶表單
+    setShowAddUserForm(false); // 关闭添加用户表单
   };
 
   const handleDeleteUser = (username: string) => {
@@ -863,13 +863,13 @@ const UserConfig = ({
           setSelectedUserForGroup(null);
           setSelectedUserGroups([]);
         } catch (err) {
-          // 錯誤處理已在 handleAssignUserGroup 中處理
+          // 错误处理已在 handleAssignUserGroup 中处理
         }
       }
     );
   };
 
-  // 處理用戶選擇
+  // 处理用户选择
   const handleSelectUser = useCallback((username: string, checked: boolean) => {
     setSelectedUsers((prev) => {
       const newSelectedUsers = new Set(prev);
@@ -885,7 +885,7 @@ const UserConfig = ({
   const handleSelectAllUsers = useCallback(
     (checked: boolean) => {
       if (checked) {
-        // 只選擇自己有權限操作的用戶
+        // 只选择自己有权限操作的用户
         const selectableUsernames =
           config?.UserConfig?.Users?.filter(
             (user) =>
@@ -901,7 +901,7 @@ const UserConfig = ({
     [config?.UserConfig?.Users, role, currentUsername]
   );
 
-  // 批量設置用戶組
+  // 批量设置用户组
   const handleBatchSetUserGroup = async (userGroup: string) => {
     if (selectedUsers.size === 0) return;
 
@@ -940,13 +940,13 @@ const UserConfig = ({
     });
   };
 
-  // 提取URL域名的輔助函數
+  // 提取URL域名的辅助函数
   const extractDomain = (url: string): string => {
     try {
       const urlObj = new URL(url);
       return urlObj.hostname;
     } catch {
-      // 如果URL格式不正確，返回原字符串
+      // 如果URL格式不正确，返回原字符串
       return url;
     }
   };
@@ -971,7 +971,7 @@ const UserConfig = ({
           throw new Error(data.error || `操作失敗: ${res.status}`);
         }
 
-        // 成功後刷新配置
+        // 成功后刷新配置
         await refreshConfig();
         setShowConfigureApisModal(false);
         setSelectedUser(null);
@@ -983,7 +983,7 @@ const UserConfig = ({
     });
   };
 
-  // 通用請求函數
+  // 通用请求函数
   const handleUserAction = async (
     action:
       | 'add'
@@ -1014,7 +1014,7 @@ const UserConfig = ({
         throw new Error(data.error || `操作失敗: ${res.status}`);
       }
 
-      // 成功後刷新配置和用戶列表（refreshConfig 已經是 refreshConfigAndUsers）
+      // 成功后刷新配置和用户列表（refreshConfig 已经是 refreshConfigAndUsers）
       await refreshConfig();
     } catch (err) {
       showError(err instanceof Error ? err.message : '操作失敗', showAlert);
@@ -1030,7 +1030,7 @@ const UserConfig = ({
         setShowDeleteUserModal(false);
         setDeletingUser(null);
       } catch (err) {
-        // 錯誤處理已在 handleUserAction 中處理
+        // 错误处理已在 handleUserAction 中处理
       }
     });
   };
@@ -1038,28 +1038,28 @@ const UserConfig = ({
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加載中...
+        加载中...
       </div>
     );
   }
 
   return (
     <div className='space-y-6'>
-      {/* 用戶統計 */}
+      {/* 用户统计 */}
       <div>
         <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300 mb-3'>
-          用戶統計
+          用户统计
         </h4>
         <div className='p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800'>
           <div className='text-2xl font-bold text-green-800 dark:text-green-300'>
             {!hasOldUserData && usersV2 ? userTotal : displayUsers.length}
           </div>
           <div className='text-sm text-green-600 dark:text-green-400'>
-            總用戶數
+            总用户数
           </div>
         </div>
 
-        {/* 數據遷移提示 */}
+        {/* 数据迁移提示 */}
         {config.UserConfig.Users &&
           config.UserConfig.Users.filter((u) => u.role !== 'owner').length >
             0 && (
@@ -1067,10 +1067,10 @@ const UserConfig = ({
               <div className='flex items-start justify-between'>
                 <div className='flex-1'>
                   <h5 className='text-sm font-medium text-yellow-800 dark:text-yellow-300 mb-1'>
-                    檢測到舊版用戶數據
+                    检测到旧版用户数据
                   </h5>
                   <p className='text-xs text-yellow-600 dark:text-yellow-400'>
-                    建議遷移到新的用戶存儲結構，以獲得更好的性能和安全性。遷移後用戶密碼將使用SHA256加密。
+                    建议迁移到新的用户存储结构，以获得更好的性能和安全性。迁移后用户密码将使用SHA256加密。
                   </p>
                 </div>
                 <button
@@ -1134,11 +1134,11 @@ const UserConfig = ({
           )}
       </div>
 
-      {/* 用戶組管理 */}
+      {/* 用户组管理 */}
       <div>
         <div className='flex items-center justify-between mb-3'>
           <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-            用戶組管理
+            用户组管理
           </h4>
           <button
             onClick={() => {
@@ -1158,19 +1158,19 @@ const UserConfig = ({
           </button>
         </div>
 
-        {/* 用戶組列表 */}
+        {/* 用户组列表 */}
         <div className='border border-gray-200 dark:border-gray-700 rounded-lg max-h-[20rem] overflow-y-auto overflow-x-auto relative'>
           <table className='min-w-full divide-y divide-gray-200 dark:divide-gray-700'>
             <thead className='bg-gray-50 dark:bg-gray-900 sticky top-0 z-10'>
               <tr>
                 <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                  用戶組名稱
+                  用户组名称
                 </th>
                 <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                  可用視頻源
+                  可用视频源
                 </th>
                 <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                  功能權限
+                  功能权限
                 </th>
                 <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                   操作
@@ -1212,13 +1212,13 @@ const UserConfig = ({
                           : ''
                       }`}
                     >
-                      編輯
+                      编辑
                     </button>
                     <button
                       onClick={() => handleDeleteUserGroup(group.name)}
                       className={buttonStyles.roundedDanger}
                     >
-                      刪除
+                      删除
                     </button>
                   </td>
                 </tr>
@@ -1229,7 +1229,7 @@ const UserConfig = ({
                     colSpan={4}
                     className='px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400'
                   >
-                    暫無用戶組，請添加用戶組來管理用戶權限
+                    暂无用户组，请添加用户组来管理用户权限
                   </td>
                 </tr>
               )}
@@ -1238,25 +1238,25 @@ const UserConfig = ({
         </div>
       </div>
 
-      {/* 用戶列表 */}
+      {/* 用户列表 */}
       <div>
         <div className='flex items-center justify-between mb-3'>
           <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-            用戶列表
+            用户列表
           </h4>
           <div className='flex items-center space-x-2'>
-            {/* 批量操作按鈕 */}
+            {/* 批量操作按钮 */}
             {selectedUsers.size > 0 && (
               <>
                 <div className='flex items-center space-x-3'>
                   <span className='text-sm text-gray-600 dark:text-gray-400'>
-                    已選擇 {selectedUsers.size} 個用戶
+                    已选择 {selectedUsers.size} 个用户
                   </span>
                   <button
                     onClick={() => setShowBatchUserGroupModal(true)}
                     className={buttonStyles.primary}
                   >
-                    批量設置用戶組
+                    批量设置用户组
                   </button>
                 </div>
                 <div className='w-px h-6 bg-gray-300 dark:bg-gray-600'></div>
@@ -1279,7 +1279,7 @@ const UserConfig = ({
           </div>
         </div>
 
-        {/* 添加用戶表單 */}
+        {/* 添加用户表单 */}
         {showAddUserForm && (
           <div className='mb-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700'>
             <div className='space-y-4'>
@@ -1311,7 +1311,7 @@ const UserConfig = ({
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  用戶組（可選）
+                  用户组（可选）
                 </label>
                 <select
                   value={newUser.userGroup}
@@ -1358,11 +1358,11 @@ const UserConfig = ({
           </div>
         )}
 
-        {/* 修改密碼錶單 */}
+        {/* 修改密码表单 */}
         {showChangePasswordForm && (
           <div className='mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700'>
             <h5 className='text-sm font-medium text-blue-800 dark:text-blue-300 mb-3'>
-              修改用戶密碼
+              修改用户密码
             </h5>
             <div className='flex flex-col sm:flex-row gap-4 sm:gap-3'>
               <input
@@ -1414,9 +1414,9 @@ const UserConfig = ({
           </div>
         )}
 
-        {/* 用戶列表 */}
+        {/* 用户列表 */}
         <div className='relative'>
-          {/* 遷移遮罩層 */}
+          {/* 迁移遮罩层 */}
           {config.UserConfig.Users &&
             config.UserConfig.Users.filter((u) => u.role !== 'owner').length >
               0 && (
@@ -1425,14 +1425,14 @@ const UserConfig = ({
                   <div className='flex items-center gap-3 mb-4'>
                     <AlertTriangle className='w-6 h-6 text-yellow-600 dark:text-yellow-400' />
                     <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
-                      需要遷移數據
+                      需要迁移数据
                     </h3>
                   </div>
                   <p className='text-sm text-gray-600 dark:text-gray-400 mb-4'>
-                    檢測到舊版用戶數據，請先遷移到新的存儲結構後再進行用戶管理操作。
+                    检测到旧版用户数据，请先迁移到新的存储结构后再进行用户管理操作。
                   </p>
                   <p className='text-xs text-gray-500 dark:text-gray-500'>
-                    請在上方的"用戶統計"區域點擊"立即遷移"按鈕完成數據遷移。
+                    请在上方的"用戶統計"区域点击"立即遷移"按钮完成数据迁移。
                   </p>
                 </div>
               </div>
@@ -1447,7 +1447,7 @@ const UserConfig = ({
                   <th className='w-4' />
                   <th className='w-10 px-1 py-3 text-center'>
                     {(() => {
-                      // 檢查是否有權限操作任何用戶
+                      // 检查是否有权限操作任何用户
                       const hasAnyPermission = config?.UserConfig?.Users?.some(
                         (user) =>
                           role === 'owner' ||
@@ -1474,7 +1474,7 @@ const UserConfig = ({
                     scope='col'
                     className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'
                   >
-                    用戶名
+                    用户名
                   </th>
                   <th
                     scope='col'
@@ -1486,19 +1486,19 @@ const UserConfig = ({
                     scope='col'
                     className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'
                   >
-                    狀態
+                    状态
                   </th>
                   <th
                     scope='col'
                     className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'
                   >
-                    用戶組
+                    用户组
                   </th>
                   <th
                     scope='col'
                     className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'
                   >
-                    採集源權限
+                    采集源权限
                   </th>
                   <th
                     scope='col'
@@ -1508,9 +1508,9 @@ const UserConfig = ({
                   </th>
                 </tr>
               </thead>
-              {/* 按規則排序用戶：自己 -> 站長(若非自己) -> 管理員 -> 其他 */}
+              {/* 按规则排序用户：自己 -> 站长(若非自己) -> 管理员 -> 其他 */}
               {(() => {
-                // 如果正在加載，顯示加載狀態
+                // 如果正在加载，显示加载状态
                 if (userListLoading) {
                   return (
                     <tbody>
@@ -1519,7 +1519,7 @@ const UserConfig = ({
                           colSpan={7}
                           className='px-6 py-8 text-center text-gray-500 dark:text-gray-400'
                         >
-                          加載中...
+                          加载中...
                         </td>
                       </tr>
                     </tbody>
@@ -1539,21 +1539,21 @@ const UserConfig = ({
                 return (
                   <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
                     {sortedUsers.map((user) => {
-                      // 修改密碼權限：站長可修改管理員和普通用戶密碼，管理員可修改普通用戶和自己的密碼，但任何人都不能修改站長密碼
+                      // 修改密码权限：站长可修改管理员和普通用户密码，管理员可修改普通用户和自己的密码，但任何人都不能修改站长密码
                       const canChangePassword =
-                        user.role !== 'owner' && // 不能修改站長密碼
-                        (role === 'owner' || // 站長可以修改管理員和普通用戶密碼
+                        user.role !== 'owner' && // 不能修改站长密码
+                        (role === 'owner' || // 站长可以修改管理员和普通用户密码
                           (role === 'admin' &&
                             (user.role === 'user' ||
-                              user.username === currentUsername))); // 管理員可以修改普通用戶和自己的密碼
+                              user.username === currentUsername))); // 管理员可以修改普通用户和自己的密码
 
-                      // 刪除用戶權限：站長可刪除除自己外的所有用戶，管理員僅可刪除普通用戶
+                      // 删除用户权限：站长可删除除自己外的所有用户，管理员仅可删除普通用户
                       const canDeleteUser =
                         user.username !== currentUsername &&
-                        (role === 'owner' || // 站長可以刪除除自己外的所有用戶
-                          (role === 'admin' && user.role === 'user')); // 管理員僅可刪除普通用戶
+                        (role === 'owner' || // 站长可以删除除自己外的所有用户
+                          (role === 'admin' && user.role === 'user')); // 管理员仅可删除普通用户
 
-                      // 其他操作權限：不能操作自己，站長可操作所有用戶，管理員可操作普通用戶
+                      // 其他操作权限：不能操作自己，站长可操作所有用户，管理员可操作普通用户
                       const canOperate =
                         user.username !== currentUsername &&
                         (role === 'owner' ||
@@ -1629,7 +1629,7 @@ const UserConfig = ({
                                   ? user.tags.join(', ')
                                   : '無用戶組'}
                               </span>
-                              {/* 配置用戶組按鈕 */}
+                              {/* 配置用户组按钮 */}
                               {(role === 'owner' ||
                                 (role === 'admin' &&
                                   (user.role === 'user' ||
@@ -1650,7 +1650,7 @@ const UserConfig = ({
                                   ? `${user.enabledApis.length} 個源`
                                   : '無限制'}
                               </span>
-                              {/* 配置採集源權限按鈕 */}
+                              {/* 配置采集源权限按钮 */}
                               {(role === 'owner' ||
                                 (role === 'admin' &&
                                   (user.role === 'user' ||
@@ -1665,7 +1665,7 @@ const UserConfig = ({
                             </div>
                           </td>
                           <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2'>
-                            {/* 修改密碼按鈕 */}
+                            {/* 修改密码按钮 */}
                             {canChangePassword && (
                               <button
                                 onClick={() =>
@@ -1673,12 +1673,12 @@ const UserConfig = ({
                                 }
                                 className={buttonStyles.roundedPrimary}
                               >
-                                修改密碼
+                                修改密码
                               </button>
                             )}
                             {canOperate && (
                               <>
-                                {/* 其他操作按鈕 */}
+                                {/* 其他操作按钮 */}
                                 {user.role === 'user' && (
                                   <button
                                     onClick={() =>
@@ -1693,7 +1693,7 @@ const UserConfig = ({
                                         : ''
                                     }`}
                                   >
-                                    設為管理
+                                    设为管理
                                   </button>
                                 )}
                                 {user.role === 'admin' && (
@@ -1755,13 +1755,13 @@ const UserConfig = ({
                                   ))}
                               </>
                             )}
-                            {/* 刪除用戶按鈕 - 放在最後，使用更明顯的紅色樣式 */}
+                            {/* 删除用户按钮 - 放在最后，使用更明显的红色样式 */}
                             {canDeleteUser && (
                               <button
                                 onClick={() => handleDeleteUser(user.username)}
                                 className={buttonStyles.roundedDanger}
                               >
-                                刪除用戶
+                                删除用户
                               </button>
                             )}
                           </td>
@@ -1774,11 +1774,11 @@ const UserConfig = ({
             </table>
           </div>
 
-          {/* 用戶列表分頁 */}
+          {/* 用户列表分页 */}
           {!hasOldUserData && usersV2 && userTotalPages > 1 && (
             <div className='mt-4 flex items-center justify-between px-4'>
               <div className='text-sm text-gray-600 dark:text-gray-400'>
-                共 {userTotal} 個用戶，第 {userPage} / {userTotalPages} 頁
+                共 {userTotal} 个用户，第 {userPage} / {userTotalPages} 页
               </div>
               <div className='flex items-center space-x-2'>
                 <button
@@ -1790,7 +1790,7 @@ const UserConfig = ({
                       : 'bg-blue-500 hover:bg-blue-600 text-white'
                   }`}
                 >
-                  首頁
+                  首页
                 </button>
                 <button
                   onClick={() => fetchUsersV2(userPage - 1)}
@@ -1801,7 +1801,7 @@ const UserConfig = ({
                       : 'bg-blue-500 hover:bg-blue-600 text-white'
                   }`}
                 >
-                  上一頁
+                  上一页
                 </button>
                 <button
                   onClick={() => fetchUsersV2(userPage + 1)}
@@ -1812,7 +1812,7 @@ const UserConfig = ({
                       : 'bg-blue-500 hover:bg-blue-600 text-white'
                   }`}
                 >
-                  下一頁
+                  下一页
                 </button>
                 <button
                   onClick={() => fetchUsersV2(userTotalPages)}
@@ -1823,7 +1823,7 @@ const UserConfig = ({
                       : 'bg-blue-500 hover:bg-blue-600 text-white'
                   }`}
                 >
-                  末頁
+                  末页
                 </button>
               </div>
             </div>
@@ -1831,7 +1831,7 @@ const UserConfig = ({
         </div>
       </div>
 
-      {/* 配置用戶採集源權限彈窗 */}
+      {/* 配置用户采集源权限弹窗 */}
       {showConfigureApisModal &&
         selectedUser &&
         createPortal(
@@ -1850,7 +1850,7 @@ const UserConfig = ({
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    配置用戶採集源權限 - {selectedUser.username}
+                    配置用户采集源权限 - {selectedUser.username}
                   </h3>
                   <button
                     onClick={() => {
@@ -1893,19 +1893,19 @@ const UserConfig = ({
                         />
                       </svg>
                       <span className='text-sm font-medium text-blue-800 dark:text-blue-300'>
-                        配置說明
+                        配置说明
                       </span>
                     </div>
                     <p className='text-sm text-blue-700 dark:text-blue-400 mt-1'>
-                      提示：全不選為無限制，選中的採集源將限制用戶只能訪問這些源
+                      提示：全不选为无限制，选中的采集源将限制用户只能访问这些源
                     </p>
                   </div>
                 </div>
 
-                {/* 採集源選擇 - 多列布局 */}
+                {/* 采集源选择 - 多列布局 */}
                 <div className='mb-6'>
                   <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300 mb-4'>
-                    選擇可用的採集源：
+                    选择可用的采集源：
                   </h4>
                   <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                     {config?.SourceConfig?.map((source) => (
@@ -1942,14 +1942,14 @@ const UserConfig = ({
                   </div>
                 </div>
 
-                {/* 快速操作按鈕 */}
+                {/* 快速操作按钮 */}
                 <div className='flex flex-wrap items-center justify-between mb-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg'>
                   <div className='flex space-x-2'>
                     <button
                       onClick={() => setSelectedApis([])}
                       className={buttonStyles.quickAction}
                     >
-                      全不選（無限制）
+                      全不选（无限制）
                     </button>
                     <button
                       onClick={() => {
@@ -1961,11 +1961,11 @@ const UserConfig = ({
                       }}
                       className={buttonStyles.quickAction}
                     >
-                      全選
+                      全选
                     </button>
                   </div>
                   <div className='text-sm text-gray-600 dark:text-gray-400'>
-                    已選擇：
+                    已选择：
                     <span className='font-medium text-blue-600 dark:text-blue-400'>
                       {selectedApis.length > 0
                         ? `${selectedApis.length} 個源`
@@ -1974,7 +1974,7 @@ const UserConfig = ({
                   </div>
                 </div>
 
-                {/* 操作按鈕 */}
+                {/* 操作按钮 */}
                 <div className='flex justify-end space-x-3'>
                   <button
                     onClick={() => {
@@ -2008,7 +2008,7 @@ const UserConfig = ({
           document.body
         )}
 
-      {/* 添加用戶組彈窗 */}
+      {/* 添加用户组弹窗 */}
       {showAddUserGroupForm &&
         createPortal(
           <div
@@ -2029,7 +2029,7 @@ const UserConfig = ({
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    添加新用戶組
+                    添加新用户组
                   </h3>
                   <button
                     onClick={() => {
@@ -2059,10 +2059,10 @@ const UserConfig = ({
                 </div>
 
                 <div className='space-y-6'>
-                  {/* 用戶組名稱 */}
+                  {/* 用户组名称 */}
                   <div>
                     <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                      用戶組名稱
+                      用户组名称
                     </label>
                     <input
                       type='text'
@@ -2080,7 +2080,7 @@ const UserConfig = ({
 
                   <div>
                     <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4'>
-                      功能權限
+                      功能权限
                     </label>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                       {FEATURE_PERMISSION_OPTIONS.map((permission) => (
@@ -2135,7 +2135,7 @@ const UserConfig = ({
                         }
                         className={buttonStyles.quickAction}
                       >
-                        全不選
+                        全不选
                       </button>
                       <button
                         type='button'
@@ -2147,15 +2147,15 @@ const UserConfig = ({
                         }
                         className={buttonStyles.quickAction}
                       >
-                        全選
+                        全选
                       </button>
                     </div>
                   </div>
 
-                  {/* 可用視頻源 */}
+                  {/* 可用视频源 */}
                   <div>
                     <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4'>
-                      可用視頻源
+                      可用视频源
                     </label>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
                       {config?.SourceConfig?.map((source) => (
@@ -2202,7 +2202,7 @@ const UserConfig = ({
                       ))}
                     </div>
 
-                    {/* 快速操作按鈕 */}
+                    {/* 快速操作按钮 */}
                     <div className='mt-4 flex space-x-2'>
                       <button
                         onClick={() =>
@@ -2213,7 +2213,7 @@ const UserConfig = ({
                         }
                         className={buttonStyles.quickAction}
                       >
-                        全不選（無限制）
+                        全不选（无限制）
                       </button>
                       <button
                         onClick={() => {
@@ -2228,12 +2228,12 @@ const UserConfig = ({
                         }}
                         className={buttonStyles.quickAction}
                       >
-                        全選
+                        全选
                       </button>
                     </div>
                   </div>
 
-                  {/* 操作按鈕 */}
+                  {/* 操作按钮 */}
                   <div className='flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700'>
                     <button
                       onClick={() => {
@@ -2273,7 +2273,7 @@ const UserConfig = ({
           document.body
         )}
 
-      {/* 編輯用戶組彈窗 */}
+      {/* 编辑用户组弹窗 */}
       {showEditUserGroupForm &&
         editingUserGroup &&
         createPortal(
@@ -2291,7 +2291,7 @@ const UserConfig = ({
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    編輯用戶組 - {editingUserGroup.name}
+                    编辑用户组 - {editingUserGroup.name}
                   </h3>
                   <button
                     onClick={() => {
@@ -2317,10 +2317,10 @@ const UserConfig = ({
                 </div>
 
                 <div className='space-y-6'>
-                  {/* 可用視頻源 */}
+                  {/* 可用视频源 */}
                   <div>
                     <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4'>
-                      可用視頻源
+                      可用视频源
                     </label>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
                       {config?.SourceConfig?.map((source) => (
@@ -2375,7 +2375,7 @@ const UserConfig = ({
                       ))}
                     </div>
 
-                    {/* 快速操作按鈕 */}
+                    {/* 快速操作按钮 */}
                     <div className='mt-4 flex space-x-2'>
                       <button
                         onClick={() =>
@@ -2385,7 +2385,7 @@ const UserConfig = ({
                         }
                         className={buttonStyles.quickAction}
                       >
-                        全不選（無限制）
+                        全不选（无限制）
                       </button>
                       <button
                         onClick={() => {
@@ -2399,14 +2399,14 @@ const UserConfig = ({
                         }}
                         className={buttonStyles.quickAction}
                       >
-                        全選
+                        全选
                       </button>
                     </div>
                   </div>
 
                   <div>
                     <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4'>
-                      功能權限
+                      功能权限
                     </label>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                       {FEATURE_PERMISSION_OPTIONS.map((permission) => (
@@ -2468,7 +2468,7 @@ const UserConfig = ({
                         }
                         className={buttonStyles.quickAction}
                       >
-                        全不選
+                        全不选
                       </button>
                       <button
                         type='button'
@@ -2484,12 +2484,12 @@ const UserConfig = ({
                         }
                         className={buttonStyles.quickAction}
                       >
-                        全選
+                        全选
                       </button>
                     </div>
                   </div>
 
-                  {/* 操作按鈕 */}
+                  {/* 操作按钮 */}
                   <div className='flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700'>
                     <button
                       onClick={() => {
@@ -2523,7 +2523,7 @@ const UserConfig = ({
           document.body
         )}
 
-      {/* 配置用戶組彈窗 */}
+      {/* 配置用户组弹窗 */}
       {showConfigureUserGroupModal &&
         selectedUserForGroup &&
         createPortal(
@@ -2542,7 +2542,7 @@ const UserConfig = ({
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    配置用戶組 - {selectedUserForGroup.username}
+                    配置用户组 - {selectedUserForGroup.username}
                   </h3>
                   <button
                     onClick={() => {
@@ -2585,19 +2585,19 @@ const UserConfig = ({
                         />
                       </svg>
                       <span className='text-sm font-medium text-blue-800 dark:text-blue-300'>
-                        配置說明
+                        配置说明
                       </span>
                     </div>
                     <p className='text-sm text-blue-700 dark:text-blue-400 mt-1'>
-                      提示：選擇"無用戶組"為無限制，選擇特定用戶組將限制用戶只能訪問該用戶組允許的採集源
+                      提示：选择"無用戶組"为无限制，选择特定用户组将限制用户只能访问该用户组允许的采集源
                     </p>
                   </div>
                 </div>
 
-                {/* 用戶組選擇 - 下拉選擇器 */}
+                {/* 用户组选择 - 下拉选择器 */}
                 <div className='mb-6'>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                    選擇用戶組：
+                    选择用户组：
                   </label>
                   <select
                     value={
@@ -2620,11 +2620,11 @@ const UserConfig = ({
                     ))}
                   </select>
                   <p className='mt-2 text-xs text-gray-500 dark:text-gray-400'>
-                    選擇"無用戶組"為無限制，選擇特定用戶組將限制用戶只能訪問該用戶組允許的採集源
+                    选择"無用戶組"为无限制，选择特定用户组将限制用户只能访问该用户组允许的采集源
                   </p>
                 </div>
 
-                {/* 操作按鈕 */}
+                {/* 操作按钮 */}
                 <div className='flex justify-end space-x-3'>
                   <button
                     onClick={() => {
@@ -2662,7 +2662,7 @@ const UserConfig = ({
           document.body
         )}
 
-      {/* 刪除用戶組確認彈窗 */}
+      {/* 删除用户组确认弹窗 */}
       {showDeleteUserGroupModal &&
         deletingUserGroup &&
         createPortal(
@@ -2680,7 +2680,7 @@ const UserConfig = ({
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    確認刪除用戶組
+                    确认删除用户组
                   </h3>
                   <button
                     onClick={() => {
@@ -2722,12 +2722,12 @@ const UserConfig = ({
                         />
                       </svg>
                       <span className='text-sm font-medium text-red-800 dark:text-red-300'>
-                        危險操作警告
+                        危险操作警告
                       </span>
                     </div>
                     <p className='text-sm text-red-700 dark:text-red-400'>
-                      刪除用戶組 <strong>{deletingUserGroup.name}</strong>{' '}
-                      將影響所有使用該組的用戶，此操作不可恢復！
+                      删除用户组 <strong>{deletingUserGroup.name}</strong>{' '}
+                      将影响所有使用该组的用户，此操作不可恢复！
                     </p>
                   </div>
 
@@ -2748,8 +2748,8 @@ const UserConfig = ({
                           />
                         </svg>
                         <span className='text-sm font-medium text-yellow-800 dark:text-yellow-300'>
-                          ⚠️ 將影響 {deletingUserGroup.affectedUsers.length}{' '}
-                          個用戶：
+                          ⚠️ 将影响 {deletingUserGroup.affectedUsers.length}{' '}
+                          个用户：
                         </span>
                       </div>
                       <div className='space-y-1'>
@@ -2763,7 +2763,7 @@ const UserConfig = ({
                         ))}
                       </div>
                       <p className='text-xs text-yellow-600 dark:text-yellow-400 mt-2'>
-                        這些用戶的用戶組將被自動移除
+                        这些用户的用户组将被自动移除
                       </p>
                     </div>
                   ) : (
@@ -2783,14 +2783,14 @@ const UserConfig = ({
                           />
                         </svg>
                         <span className='text-sm font-medium text-green-800 dark:text-green-300'>
-                          ✅ 當前沒有用戶使用此用戶組
+                          ✅ 当前没有用户使用此用户组
                         </span>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* 操作按鈕 */}
+                {/* 操作按钮 */}
                 <div className='flex justify-end space-x-3'>
                   <button
                     onClick={() => {
@@ -2823,7 +2823,7 @@ const UserConfig = ({
           document.body
         )}
 
-      {/* 刪除用戶確認彈窗 */}
+      {/* 删除用户确认弹窗 */}
       {showDeleteUserModal &&
         deletingUser &&
         createPortal(
@@ -2841,7 +2841,7 @@ const UserConfig = ({
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    確認刪除用戶
+                    确认删除用户
                   </h3>
                   <button
                     onClick={() => {
@@ -2883,16 +2883,16 @@ const UserConfig = ({
                         />
                       </svg>
                       <span className='text-sm font-medium text-red-800 dark:text-red-300'>
-                        危險操作警告
+                        危险操作警告
                       </span>
                     </div>
                     <p className='text-sm text-red-700 dark:text-red-400'>
-                      刪除用戶 <strong>{deletingUser}</strong>{' '}
-                      將同時刪除其搜索歷史、播放記錄和收藏夾，此操作不可恢復！
+                      删除用户 <strong>{deletingUser}</strong>{' '}
+                      将同时删除其搜索历史、播放记录和收藏夹，此操作不可恢复！
                     </p>
                   </div>
 
-                  {/* 操作按鈕 */}
+                  {/* 操作按钮 */}
                   <div className='flex justify-end space-x-3'>
                     <button
                       onClick={() => {
@@ -2907,7 +2907,7 @@ const UserConfig = ({
                       onClick={handleConfirmDeleteUser}
                       className={`px-6 py-2.5 text-sm font-medium ${buttonStyles.danger}`}
                     >
-                      確認刪除
+                      确认删除
                     </button>
                   </div>
                 </div>
@@ -2917,7 +2917,7 @@ const UserConfig = ({
           document.body
         )}
 
-      {/* 批量設置用戶組彈窗 */}
+      {/* 批量设置用户组弹窗 */}
       {showBatchUserGroupModal &&
         createPortal(
           <div
@@ -2934,7 +2934,7 @@ const UserConfig = ({
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    批量設置用戶組
+                    批量设置用户组
                   </h3>
                   <button
                     onClick={() => {
@@ -2976,18 +2976,18 @@ const UserConfig = ({
                         />
                       </svg>
                       <span className='text-sm font-medium text-blue-800 dark:text-blue-300'>
-                        批量操作說明
+                        批量操作说明
                       </span>
                     </div>
                     <p className='text-sm text-blue-700 dark:text-blue-400'>
-                      將為選中的 <strong>{selectedUsers.size} 個用戶</strong>{' '}
-                      設置用戶組，選擇"無用戶組"為無限制
+                      将为选中的 <strong>{selectedUsers.size} 個用戶</strong>{' '}
+                      设置用户组，选择"無用戶組"为无限制
                     </p>
                   </div>
 
                   <div>
                     <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                      選擇用戶組：
+                      选择用户组：
                     </label>
                     <select
                       onChange={(e) => setSelectedUserGroup(e.target.value)}
@@ -3005,12 +3005,12 @@ const UserConfig = ({
                       ))}
                     </select>
                     <p className='mt-2 text-xs text-gray-500 dark:text-gray-400'>
-                      選擇"無用戶組"為無限制，選擇特定用戶組將限制用戶只能訪問該用戶組允許的採集源
+                      选择"無用戶組"为无限制，选择特定用户组将限制用户只能访问该用户组允许的采集源
                     </p>
                   </div>
                 </div>
 
-                {/* 操作按鈕 */}
+                {/* 操作按钮 */}
                 <div className='flex justify-end space-x-3'>
                   <button
                     onClick={() => {
@@ -3039,7 +3039,7 @@ const UserConfig = ({
           document.body
         )}
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -3054,7 +3054,7 @@ const UserConfig = ({
   );
 };
 
-// 私人影庫配置組件
+// 私人影库配置组件
 const OpenListConfigComponent = ({
   config,
   refreshConfig,
@@ -3193,7 +3193,7 @@ const OpenListConfigComponent = ({
         throw new Error('未獲取到任務ID');
       }
 
-      // 輪詢任務進度
+      // 轮询任务进度
       const pollInterval = setInterval(async () => {
         try {
           const progressResponse = await fetch(
@@ -3218,9 +3218,9 @@ const OpenListConfigComponent = ({
               `掃描完成！新增 ${task.result.new} 個，已存在 ${task.result.existing} 個，失敗 ${task.result.errors} 個`,
               showAlert
             );
-            // 先強制從數據庫讀取視頻列表（這會更新緩存）
+            // 先强制从数据库读取视频列表（这会更新缓存）
             await fetchVideos(true);
-            // 然後再刷新配置（這會觸發 useEffect，但此時緩存已經是新的了）
+            // 然后再刷新配置（这会触发 useEffect，但此时缓存已经是新的了）
             await refreshConfig();
           } else if (task.status === 'failed') {
             clearInterval(pollInterval);
@@ -3265,7 +3265,7 @@ const OpenListConfigComponent = ({
   };
 
   const handleCorrectSuccess = () => {
-    fetchVideos(true); // 強制從數據庫重新讀取，不使用緩存
+    fetchVideos(true); // 强制从数据库重新读取，不使用缓存
   };
 
   const handleCheckConnectivity = async () => {
@@ -3299,7 +3299,7 @@ const OpenListConfigComponent = ({
   };
 
   const handleDeleteVideo = async (key: string, title: string) => {
-    // 顯示確認對話框，直接在 onConfirm 中執行刪除操作
+    // 显示确认对话框，直接在 onConfirm 中执行删除操作
     showAlert({
       type: 'warning',
       title: '確認刪除',
@@ -3319,8 +3319,8 @@ const OpenListConfigComponent = ({
           }
 
           showSuccess('刪除成功', showAlert);
-          await fetchVideos(true); // 強制從數據庫重新讀取
-          refreshConfig(); // 異步刷新配置以更新資源數量（不等待，避免重複刷新）
+          await fetchVideos(true); // 强制从数据库重新读取
+          refreshConfig(); // 异步刷新配置以更新资源数量（不等待，避免重复刷新）
         } catch (error) {
           showError(
             error instanceof Error ? error.message : '刪除失敗',
@@ -3338,7 +3338,7 @@ const OpenListConfigComponent = ({
 
   return (
     <div className='space-y-6'>
-      {/* 使用說明 */}
+      {/* 使用说明 */}
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <div className='flex items-center gap-2 mb-2'>
           <svg
@@ -3355,35 +3355,35 @@ const OpenListConfigComponent = ({
             />
           </svg>
           <span className='text-sm font-medium text-blue-800 dark:text-blue-300'>
-            使用說明
+            使用说明
           </span>
         </div>
         <div className='text-sm text-blue-700 dark:text-blue-400 space-y-1'>
           <p>
-            • 私人影庫功能需要配合 OpenList 使用，用於管理和播放您自己的視頻文件
+            • 私人影库功能需要配合 OpenList 使用，用于管理和播放您自己的视频文件
           </p>
           <p>
             • OpenList
-            是一個開源的網盤聚合程序，支持多種存儲後端（本地、阿里雲盤、OneDrive
+            是一个开源的网盘聚合程序，支持多种存储后端（本地、阿里云盘、OneDrive
             等）
           </p>
           <p>
-            • 配置後，系統會自動掃描指定目錄下的視頻文件夾，並通過 TMDB
-            匹配元數據信息
+            • 配置后，系统会自动扫描指定目录下的视频文件夹，并通过 TMDB
+            匹配元数据信息
           </p>
           <p>• 定時掃描間隔設置為 0 表示關閉自動掃描，最低間隔為 60 分鐘</p>
           <p>• 視頻文件夾名稱為影片名稱，精準命名可以提高 TMDB 匹配準確率</p>
         </div>
       </div>
 
-      {/* 功能開關 */}
+      {/* 功能开关 */}
       <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
         <div>
           <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-            啟用私人影庫功能
+            启用私人影库功能
           </h3>
           <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-            關閉後將不顯示私人影庫入口，也不會執行定時掃描
+            关闭后将不显示私人影库入口，也不会执行定时扫描
           </p>
         </div>
         <label className='relative inline-flex items-center cursor-pointer'>
@@ -3397,7 +3397,7 @@ const OpenListConfigComponent = ({
         </label>
       </div>
 
-      {/* 配置表單 */}
+      {/* 配置表单 */}
       <div className='space-y-4'>
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
@@ -3416,7 +3416,7 @@ const OpenListConfigComponent = ({
         <div className='grid grid-cols-2 gap-4'>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              賬號
+              账号
             </label>
             <input
               type='text'
@@ -3429,7 +3429,7 @@ const OpenListConfigComponent = ({
           </div>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              密碼
+              密码
             </label>
             <input
               type='password'
@@ -3444,7 +3444,7 @@ const OpenListConfigComponent = ({
 
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            根目錄列表
+            根目录列表
           </label>
           <div className='space-y-2'>
             {rootPaths.map((path, index) => (
@@ -3471,7 +3471,7 @@ const OpenListConfigComponent = ({
                     disabled={!enabled}
                     className='px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed'
                   >
-                    刪除
+                    删除
                   </button>
                 )}
               </div>
@@ -3482,17 +3482,17 @@ const OpenListConfigComponent = ({
               disabled={!enabled}
               className='w-full px-3 py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-blue-500 hover:text-blue-500 disabled:opacity-50 disabled:cursor-not-allowed'
             >
-              + 添加根目錄
+              + 添加根目录
             </button>
           </div>
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            OpenList 中的視頻文件夾路徑，可以配置多個根目錄
+            OpenList 中的视频文件夹路径，可以配置多个根目录
           </p>
         </div>
 
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            離線下載目錄
+            离线下载目录
           </label>
           <input
             type='text'
@@ -3503,13 +3503,13 @@ const OpenListConfigComponent = ({
             className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed'
           />
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            動漫磁力等離線下載任務的保存目錄，默認為根目錄 /
+            动漫磁力等离线下载任务的保存目录，默认为根目录 /
           </p>
         </div>
 
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            定時掃描間隔（分鐘）
+            定时扫描间隔（分钟）
           </label>
           <input
             type='number'
@@ -3521,13 +3521,13 @@ const OpenListConfigComponent = ({
             className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed'
           />
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            設置為 0 關閉定時掃描，最低 60 分鐘
+            设置为 0 关闭定时扫描，最低 60 分钟
           </p>
         </div>
 
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            掃描模式
+            扫描模式
           </label>
           <select
             value={scanMode}
@@ -3542,17 +3542,17 @@ const OpenListConfigComponent = ({
             <option value='name'>名字匹配</option>
           </select>
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            混合模式：先用種子庫匹配，失敗後降級為名字匹配
+            混合模式：先用种子库匹配，失败后降级为名字匹配
           </p>
         </div>
 
         <div className='flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700'>
           <div>
             <h3 className='text-sm font-medium text-gray-900 dark:text-white'>
-              禁用預覽視頻
+              禁用预览视频
             </h3>
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-              開啟後將直接返回直連鏈接，不使用視頻預覽流
+              开启后将直接返回直连链接，不使用视频预览流
             </p>
           </div>
           <button
@@ -3596,7 +3596,7 @@ const OpenListConfigComponent = ({
         </div>
       </div>
 
-      {/* 視頻列表區域 */}
+      {/* 视频列表区域 */}
       {enabled &&
         config?.OpenListConfig?.URL &&
         config?.OpenListConfig?.Username &&
@@ -3605,11 +3605,11 @@ const OpenListConfigComponent = ({
             <div className='flex items-center justify-between'>
               <div>
                 <h3 className='text-lg font-medium text-gray-900 dark:text-gray-100'>
-                  視頻列表
+                  视频列表
                 </h3>
                 <div className='mt-1 text-sm text-gray-500 dark:text-gray-400'>
                   <span>
-                    資源數: {config.OpenListConfig.ResourceCount || 0}
+                    资源数: {config.OpenListConfig.ResourceCount || 0}
                   </span>
                   <span className='mx-2'>|</span>
                   <span>
@@ -3640,7 +3640,7 @@ const OpenListConfigComponent = ({
               <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4'>
                 <div className='flex items-center justify-between mb-2'>
                   <span className='text-sm font-medium text-blue-900 dark:text-blue-100'>
-                    掃描進度: {scanProgress.current} / {scanProgress.total}
+                    扫描进度: {scanProgress.current} / {scanProgress.total}
                   </span>
                   <span className='text-sm text-blue-700 dark:text-blue-300'>
                     {scanProgress.total > 0
@@ -3665,7 +3665,7 @@ const OpenListConfigComponent = ({
                 </div>
                 {scanProgress.currentFolder && (
                   <p className='text-xs text-blue-700 dark:text-blue-300'>
-                    正在處理: {scanProgress.currentFolder}
+                    正在处理: {scanProgress.currentFolder}
                   </p>
                 )}
               </div>
@@ -3673,7 +3673,7 @@ const OpenListConfigComponent = ({
 
             {refreshing ? (
               <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-                加載中...
+                加载中...
               </div>
             ) : videos.length > 0 ? (
               <div className='overflow-x-auto'>
@@ -3681,13 +3681,13 @@ const OpenListConfigComponent = ({
                   <thead className='bg-gray-50 dark:bg-gray-800'>
                     <tr>
                       <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                        標題
+                        标题
                       </th>
                       <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                        狀態
+                        状态
                       </th>
                       <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                        類型
+                        类型
                       </th>
                       <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                         季度
@@ -3696,7 +3696,7 @@ const OpenListConfigComponent = ({
                         年份
                       </th>
                       <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                        評分
+                        评分
                       </th>
                       <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                         操作
@@ -3717,7 +3717,7 @@ const OpenListConfigComponent = ({
                         <td className='px-6 py-4 whitespace-nowrap text-sm'>
                           {video.failed ? (
                             <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200'>
-                              匹配失敗
+                              匹配失败
                             </span>
                           ) : (
                             <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200'>
@@ -3786,7 +3786,7 @@ const OpenListConfigComponent = ({
                               }
                               className={buttonStyles.dangerSmall}
                             >
-                              刪除
+                              删除
                             </button>
                           </div>
                         </td>
@@ -3797,7 +3797,7 @@ const OpenListConfigComponent = ({
               </div>
             ) : (
               <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-                暫無視頻，請點擊"立即掃描"掃描視頻庫
+                暂无视频，请点击"立即掃描"扫描视频库
               </div>
             )}
           </div>
@@ -3814,7 +3814,7 @@ const OpenListConfigComponent = ({
         onConfirm={alertModal.onConfirm}
       />
 
-      {/* 糾錯對話框 */}
+      {/* 纠错对话框 */}
       {selectedVideo && (
         <CorrectDialog
           isOpen={correctDialogOpen}
@@ -4170,16 +4170,16 @@ const NetDiskConfigComponent = ({
     <div className='space-y-6'>
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          夸克網盤
+          夸克网盘
         </summary>
         <div className='mt-4 space-y-4'>
           <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
             <div>
               <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                啟用夸克網盤
+                启用夸克网盘
               </h3>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                開啟後，網盤搜索中的夸克資源會顯示“立即播放”和“轉存”按鈕
+                开启后，网盘搜索中的夸克资源会显示“立即播放”和“转存”按钮
               </p>
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
@@ -4209,7 +4209,7 @@ const NetDiskConfigComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              轉存位置
+              转存位置
             </label>
             <input
               type='text'
@@ -4242,16 +4242,16 @@ const NetDiskConfigComponent = ({
 
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          移動雲盤
+          移动云盘
         </summary>
         <div className='mt-4 space-y-4'>
           <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
             <div>
               <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                啟用移動雲盤
+                启用移动云盘
               </h3>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                開啟後，網盤搜索中的移動雲盤資源會顯示“立即播放”按鈕
+                开启后，网盘搜索中的移动云盘资源会显示“立即播放”按钮
               </p>
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
@@ -4267,7 +4267,7 @@ const NetDiskConfigComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              驗證頭
+              验证头
             </label>
             <textarea
               value={mobileAuthorization}
@@ -4306,16 +4306,16 @@ const NetDiskConfigComponent = ({
 
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          百度網盤
+          百度网盘
         </summary>
         <div className='mt-4 space-y-4'>
           <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
             <div>
               <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                啟用百度網盤
+                启用百度网盘
               </h3>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                開啟後，網盤搜索中的百度網盤資源會顯示“立即播放”按鈕
+                开启后，网盘搜索中的百度网盘资源会显示“立即播放”按钮
               </p>
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
@@ -4370,20 +4370,20 @@ const NetDiskConfigComponent = ({
 
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          天翼雲盤
+          天翼云盘
         </summary>
         <div className='mt-4 space-y-4'>
           <div className='rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-300'>
-            使用天翼雲盤前，請先關閉賬號的設備鎖，否則可能無法登錄。
+            使用天翼云盘前，请先关闭账号的设备锁，否则可能无法登录。
           </div>
 
           <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
             <div>
               <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                啟用天翼雲盤
+                启用天翼云盘
               </h3>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                開啟後，網盤搜索中的天翼雲盤資源會顯示“立即播放”按鈕
+                开启后，网盘搜索中的天翼云盘资源会显示“立即播放”按钮
               </p>
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
@@ -4399,7 +4399,7 @@ const NetDiskConfigComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              賬號
+              账号
             </label>
             <input
               type='text'
@@ -4413,7 +4413,7 @@ const NetDiskConfigComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              密碼
+              密码
             </label>
             <input
               type='password'
@@ -4453,16 +4453,16 @@ const NetDiskConfigComponent = ({
 
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          123網盤
+          123网盘
         </summary>
         <div className='mt-4 space-y-4'>
           <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
             <div>
               <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                啟用123網盤
+                启用123网盘
               </h3>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                開啟後，網盤搜索中的123網盤資源會顯示“立即播放”按鈕
+                开启后，网盘搜索中的123网盘资源会显示“立即播放”按钮
               </p>
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
@@ -4478,7 +4478,7 @@ const NetDiskConfigComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              賬號
+              账号
             </label>
             <input
               type='text'
@@ -4492,7 +4492,7 @@ const NetDiskConfigComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              密碼
+              密码
             </label>
             <input
               type='password'
@@ -4532,16 +4532,16 @@ const NetDiskConfigComponent = ({
 
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          UC網盤
+          UC网盘
         </summary>
         <div className='mt-4 space-y-4'>
           <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
             <div>
               <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                啟用UC網盤
+                启用UC网盘
               </h3>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                開啟後，網盤搜索中的UC網盤資源會顯示“立即播放”按鈕
+                开启后，网盘搜索中的UC网盘资源会显示“立即播放”按钮
               </p>
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
@@ -4571,7 +4571,7 @@ const NetDiskConfigComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              Open API Token（可選）
+              Open API Token（可选）
             </label>
             <input
               type='text'
@@ -4585,7 +4585,7 @@ const NetDiskConfigComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              臨時轉存位置
+              临时转存位置
             </label>
             <input
               type='text'
@@ -4620,16 +4620,16 @@ const NetDiskConfigComponent = ({
 
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          115網盤
+          115网盘
         </summary>
         <div className='mt-4 space-y-4'>
           <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
             <div>
               <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-                啟用115網盤
+                启用115网盘
               </h3>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                開啟後，網盤搜索中的115網盤資源會顯示“立即播放”按鈕
+                开启后，网盘搜索中的115网盘资源会显示“立即播放”按钮
               </p>
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
@@ -4696,7 +4696,7 @@ const NetDiskConfigComponent = ({
   );
 };
 
-// Emby 媒體庫配置組件 - 多源管理版本
+// Emby 媒体库配置组件 - 多源管理版本
 const EmbyConfigComponent = ({
   config,
   refreshConfig,
@@ -4707,7 +4707,7 @@ const EmbyConfigComponent = ({
   const { alertModal, showAlert, hideAlert } = useAlertModal();
   const { isLoading, withLoading } = useLoadingState();
 
-  // 源列表狀態
+  // 源列表状态
   const [sources, setSources] = useState<any[]>([]);
   const [editingSource, setEditingSource] = useState<any | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -4715,7 +4715,7 @@ const EmbyConfigComponent = ({
     new Set()
   );
 
-  // 表單狀態
+  // 表单状态
   const [formData, setFormData] = useState({
     key: '',
     name: '',
@@ -4726,7 +4726,7 @@ const EmbyConfigComponent = ({
     Password: '',
     UserId: '',
     isDefault: false,
-    // 高級選項
+    // 高级选项
     removeEmbyPrefix: false,
     appendMediaSourceId: false,
     transcodeMp4: false,
@@ -4735,12 +4735,12 @@ const EmbyConfigComponent = ({
   });
   const [authMode, setAuthMode] = useState<'apikey' | 'password'>('apikey');
 
-  // 從配置加載源列表
+  // 从配置加载源列表
   useEffect(() => {
     if (config?.EmbyConfig?.Sources) {
       setSources(config.EmbyConfig.Sources);
     } else if (config?.EmbyConfig?.ServerURL) {
-      // 兼容舊格式
+      // 兼容旧格式
       setSources([
         {
           key: 'default',
@@ -4757,7 +4757,7 @@ const EmbyConfigComponent = ({
     }
   }, [config]);
 
-  // 重置表單
+  // 重置表单
   const resetForm = () => {
     setFormData({
       key: '',
@@ -4769,7 +4769,7 @@ const EmbyConfigComponent = ({
       Password: '',
       UserId: '',
       isDefault: false,
-      // 高級選項
+      // 高级选项
       removeEmbyPrefix: false,
       appendMediaSourceId: false,
       transcodeMp4: false,
@@ -4781,10 +4781,10 @@ const EmbyConfigComponent = ({
     setShowAddForm(false);
   };
 
-  // 開始編輯
+  // 开始编辑
   const handleEdit = (source: any) => {
     setFormData({ ...source });
-    // 根據現有配置判斷認證方式
+    // 根据现有配置判断认证方式
     if (source.ApiKey) {
       setAuthMode('apikey');
     } else if (source.Username) {
@@ -4796,7 +4796,7 @@ const EmbyConfigComponent = ({
     setShowAddForm(false);
   };
 
-  // 開始添加
+  // 开始添加
   const handleAdd = () => {
     resetForm();
     setShowAddForm(true);
@@ -4804,13 +4804,13 @@ const EmbyConfigComponent = ({
 
   // 保存源（添加或更新）
   const handleSave = async () => {
-    // 驗證必填字段
+    // 验证必填字段
     if (!formData.key || !formData.name || !formData.ServerURL) {
       showError('請填寫必填字段：標識符、名稱、服務器地址', showAlert);
       return;
     }
 
-    // 根據認證方式驗證必填字段
+    // 根据认证方式验证必填字段
     if (authMode === 'apikey') {
       if (!formData.ApiKey || !formData.UserId) {
         showError('使用密鑰認證時，API Key 和用戶 ID 為必填項', showAlert);
@@ -4823,7 +4823,7 @@ const EmbyConfigComponent = ({
       }
     }
 
-    // 驗證key唯一性
+    // 验证key唯一性
     if (!editingSource && sources.some((s) => s.key === formData.key)) {
       showError('標識符已存在，請使用其他標識符', showAlert);
       return;
@@ -4833,7 +4833,7 @@ const EmbyConfigComponent = ({
       try {
         let newSources;
         if (editingSource) {
-          // 更新現有源
+          // 更新现有源
           newSources = sources.map((s) =>
             s.key === editingSource.key ? formData : s
           );
@@ -4870,7 +4870,7 @@ const EmbyConfigComponent = ({
     });
   };
 
-  // 刪除源
+  // 删除源
   const handleDelete = async (source: any) => {
     if (!confirm(`確定要刪除 "${source.name}" 嗎？`)) {
       return;
@@ -4906,7 +4906,7 @@ const EmbyConfigComponent = ({
     });
   };
 
-  // 切換啟用狀態
+  // 切换启用状态
   const handleToggleEnabled = async (source: any) => {
     await withLoading('toggleEmbySource', async () => {
       try {
@@ -4940,7 +4940,7 @@ const EmbyConfigComponent = ({
     });
   };
 
-  // 測試連接
+  // 测试连接
   const handleTest = async (source: any) => {
     await withLoading('testEmbySource', async () => {
       try {
@@ -4972,7 +4972,7 @@ const EmbyConfigComponent = ({
     });
   };
 
-  // 清除緩存
+  // 清除缓存
   const handleClearCache = async () => {
     await withLoading('clearEmbyCache', async () => {
       try {
@@ -5000,7 +5000,7 @@ const EmbyConfigComponent = ({
     });
   };
 
-  // 導出配置
+  // 导出配置
   const handleExport = async () => {
     await withLoading('exportEmby', async () => {
       try {
@@ -5027,7 +5027,7 @@ const EmbyConfigComponent = ({
     });
   };
 
-  // 導入配置
+  // 导入配置
   const handleImport = async () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -5066,7 +5066,7 @@ const EmbyConfigComponent = ({
     input.click();
   };
 
-  // 批量啟用
+  // 批量启用
   const handleBatchEnable = async () => {
     if (selectedSources.size === 0) return;
     await withLoading('batchEnableEmby', async () => {
@@ -5124,7 +5124,7 @@ const EmbyConfigComponent = ({
     });
   };
 
-  // 批量刪除
+  // 批量删除
   const handleBatchDelete = async () => {
     if (selectedSources.size === 0) return;
     showAlert({
@@ -5190,14 +5190,14 @@ const EmbyConfigComponent = ({
         {selectedSources.size > 0 && (
           <div className='flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg'>
             <span className='text-sm text-gray-700 dark:text-gray-300'>
-              已選擇 {selectedSources.size} 項
+              已选择 {selectedSources.size} 项
             </span>
             <button
               onClick={handleBatchEnable}
               disabled={isLoading('batchEnableEmby')}
               className={buttonStyles.successSmall}
             >
-              批量啟用
+              批量启用
             </button>
             <button
               onClick={handleBatchDisable}
@@ -5211,20 +5211,20 @@ const EmbyConfigComponent = ({
               disabled={isLoading('batchDeleteEmby')}
               className={buttonStyles.dangerSmall}
             >
-              批量刪除
+              批量删除
             </button>
             <button
               onClick={() => setSelectedSources(new Set())}
               className={buttonStyles.secondarySmall}
             >
-              取消選擇
+              取消选择
             </button>
           </div>
         )}
 
         {sources.length === 0 ? (
           <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-            暫無Emby源，點擊"添加新源"開始配置
+            暂无Emby源，点击"添加新源"开始配置
           </div>
         ) : (
           sources.map((source) => (
@@ -5255,7 +5255,7 @@ const EmbyConfigComponent = ({
                       </h4>
                       {source.isDefault && (
                         <span className='px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200 rounded'>
-                          默認
+                          默认
                         </span>
                       )}
                       <span
@@ -5269,14 +5269,14 @@ const EmbyConfigComponent = ({
                       </span>
                     </div>
                     <p className='mt-1 text-sm text-gray-600 dark:text-gray-400'>
-                      標識符: {source.key}
+                      标识符: {source.key}
                     </p>
                     <p className='mt-1 text-sm text-gray-600 dark:text-gray-400'>
-                      服務器: {source.ServerURL}
+                      服务器: {source.ServerURL}
                     </p>
                     {source.UserId && (
                       <p className='mt-1 text-sm text-gray-600 dark:text-gray-400'>
-                        用戶ID: {source.UserId}
+                        用户ID: {source.UserId}
                       </p>
                     )}
                   </div>
@@ -5298,20 +5298,20 @@ const EmbyConfigComponent = ({
                     disabled={isLoading('testEmbySource')}
                     className={buttonStyles.primarySmall}
                   >
-                    測試
+                    测试
                   </button>
                   <button
                     onClick={() => handleEdit(source)}
                     className={buttonStyles.primarySmall}
                   >
-                    編輯
+                    编辑
                   </button>
                   <button
                     onClick={() => handleDelete(source)}
                     disabled={isLoading('deleteEmbySource')}
                     className={buttonStyles.dangerSmall}
                   >
-                    刪除
+                    删除
                   </button>
                 </div>
               </div>
@@ -5320,7 +5320,7 @@ const EmbyConfigComponent = ({
         )}
       </div>
 
-      {/* 添加/編輯表單 */}
+      {/* 添加/编辑表单 */}
       {(showAddForm || editingSource) && (
         <div className='border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-gray-50 dark:bg-gray-800/50'>
           <h3 className='text-lg font-medium text-gray-900 dark:text-gray-100 mb-4'>
@@ -5328,10 +5328,10 @@ const EmbyConfigComponent = ({
           </h3>
 
           <div className='space-y-4'>
-            {/* 標識符 */}
+            {/* 标识符 */}
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                標識符 *
+                标识符 *
               </label>
               <input
                 type='text'
@@ -5344,14 +5344,14 @@ const EmbyConfigComponent = ({
                 className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-gray-700'
               />
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                唯一標識符，只能包含字母、數字、下劃線，創建後不可修改
+                唯一标识符，只能包含字母、数字、下划线，创建后不可修改
               </p>
             </div>
 
-            {/* 名稱 */}
+            {/* 名称 */}
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                顯示名稱 *
+                显示名称 *
               </label>
               <input
                 type='text'
@@ -5364,10 +5364,10 @@ const EmbyConfigComponent = ({
               />
             </div>
 
-            {/* 服務器地址 */}
+            {/* 服务器地址 */}
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                Emby 服務器地址 *
+                Emby 服务器地址 *
               </label>
               <input
                 type='text'
@@ -5380,17 +5380,17 @@ const EmbyConfigComponent = ({
               />
             </div>
 
-            {/* 認證方式切換卡 */}
+            {/* 认证方式切换卡 */}
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                認證方式 *
+                认证方式 *
               </label>
               <div className='flex gap-2 mb-4'>
                 <button
                   type='button'
                   onClick={() => {
                     setAuthMode('apikey');
-                    // 切換到密鑰認證時，清空用戶名密碼
+                    // 切换到密钥认证时，清空用户名密码
                     setFormData({ ...formData, Username: '', Password: '' });
                   }}
                   className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
@@ -5399,13 +5399,13 @@ const EmbyConfigComponent = ({
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                   }`}
                 >
-                  密鑰認證
+                  密钥认证
                 </button>
                 <button
                   type='button'
                   onClick={() => {
                     setAuthMode('password');
-                    // 切換到賬號認證時，清空 API Key 和 UserId
+                    // 切换到账号认证时，清空 API Key 和 UserId
                     setFormData({ ...formData, ApiKey: '', UserId: '' });
                   }}
                   className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
@@ -5414,12 +5414,12 @@ const EmbyConfigComponent = ({
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                   }`}
                 >
-                  賬號認證
+                  账号认证
                 </button>
               </div>
             </div>
 
-            {/* 密鑰認證模式 */}
+            {/* 密钥认证模式 */}
             {authMode === 'apikey' && (
               <>
                 {/* API Key */}
@@ -5437,14 +5437,14 @@ const EmbyConfigComponent = ({
                     className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                   />
                   <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                    在 Emby 控制台的 API 密鑰頁面生成
+                    在 Emby 控制台的 API 密钥页面生成
                   </p>
                 </div>
 
-                {/* 用戶 ID */}
+                {/* 用户 ID */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                    用戶 ID *
+                    用户 ID *
                   </label>
                   <input
                     type='text'
@@ -5456,20 +5456,20 @@ const EmbyConfigComponent = ({
                     className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                   />
                   <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                    從你的 Emby 抓包數據中獲取用戶 ID，通常在 URL 中如
+                    从你的 Emby 抓包数据中获取用户 ID，通常在 URL 中如
                     /Users/[userId]/...
                   </p>
                 </div>
               </>
             )}
 
-            {/* 賬號認證模式 */}
+            {/* 账号认证模式 */}
             {authMode === 'password' && (
               <>
-                {/* 用戶名 */}
+                {/* 用户名 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                    用戶名 *
+                    用户名 *
                   </label>
                   <input
                     type='text'
@@ -5482,10 +5482,10 @@ const EmbyConfigComponent = ({
                   />
                 </div>
 
-                {/* 密碼 */}
+                {/* 密码 */}
                 <div>
                   <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                    密碼（可選）
+                    密码（可选）
                   </label>
                   <input
                     type='password'
@@ -5497,16 +5497,16 @@ const EmbyConfigComponent = ({
                     className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                   />
                   <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                    如果 Emby 賬號沒有設置密碼，可以留空
+                    如果 Emby 账号没有设置密码，可以留空
                   </p>
                 </div>
               </>
             )}
 
-            {/* 啟用開關 */}
+            {/* 启用开关 */}
             <div className='flex items-center justify-between'>
               <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                啟用此源
+                启用此源
               </label>
               <button
                 onClick={() =>
@@ -5526,20 +5526,20 @@ const EmbyConfigComponent = ({
               </button>
             </div>
 
-            {/* 高級選項 */}
+            {/* 高级选项 */}
             <div className='border-t border-gray-200 dark:border-gray-700 pt-4 mt-4'>
               <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300 mb-3'>
-                高級選項
+                高级选项
               </h4>
 
-              {/* 選項1: 播放鏈接移除/emby前綴 */}
+              {/* 选项1: 播放链接移除/emby前缀 */}
               <div className='flex items-center justify-between mb-3'>
                 <div className='flex-1'>
                   <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                    播放鏈接移除/emby前綴
+                    播放链接移除/emby前缀
                   </label>
                   <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                    啟用後將從播放鏈接中移除 /emby 前綴
+                    启用后将从播放链接中移除 /emby 前缀
                   </p>
                 </div>
                 <button
@@ -5565,15 +5565,15 @@ const EmbyConfigComponent = ({
                 </button>
               </div>
 
-              {/* 選項2: 拼接MediaSourceId參數 */}
+              {/* 选项2: 拼接MediaSourceId参数 */}
               <div className='flex items-center justify-between mb-3'>
                 <div className='flex-1'>
                   <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                    拼接MediaSourceId參數
+                    拼接MediaSourceId参数
                   </label>
                   <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                    啟用後將調用 PlaybackInfo API 獲取 MediaSourceId
-                    並添加到播放鏈接
+                    启用后将调用 PlaybackInfo API 获取 MediaSourceId
+                    并添加到播放链接
                   </p>
                 </div>
                 <button
@@ -5599,14 +5599,14 @@ const EmbyConfigComponent = ({
                 </button>
               </div>
 
-              {/* 選項3: 轉碼mp4 */}
+              {/* 选项3: 转码mp4 */}
               <div className='flex items-center justify-between mb-3'>
                 <div className='flex-1'>
                   <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                    轉碼mp4
+                    转码mp4
                   </label>
                   <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                    啟用後將使用 stream.mp4 格式並移除 Static 參數
+                    启用后将使用 stream.mp4 格式并移除 Static 参数
                   </p>
                 </div>
                 <button
@@ -5630,14 +5630,14 @@ const EmbyConfigComponent = ({
                 </button>
               </div>
 
-              {/* 視頻播放代理開關 */}
+              {/* 视频播放代理开关 */}
               <div className='flex items-center justify-between mb-3'>
                 <div className='flex-1'>
                   <h4 className='text-sm font-medium text-gray-900 dark:text-white'>
-                    視頻播放代理
+                    视频播放代理
                   </h4>
                   <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                    啟用後視頻播放將通過服務器代理
+                    启用后视频播放将通过服务器代理
                   </p>
                 </div>
                 <button
@@ -5658,10 +5658,10 @@ const EmbyConfigComponent = ({
                 </button>
               </div>
 
-              {/* 自定義User-Agent */}
+              {/* 自定义User-Agent */}
               <div className='mb-3'>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  自定義User-Agent
+                  自定义User-Agent
                 </label>
                 <input
                   type='text'
@@ -5676,12 +5676,12 @@ const EmbyConfigComponent = ({
                   className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm'
                 />
                 <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                  用於登錄、獲取影片和代理視頻時的User-Agent，留空則使用默認瀏覽器UA
+                  用于登录、获取影片和代理视频时的User-Agent，留空则使用默认浏览器UA
                 </p>
               </div>
             </div>
 
-            {/* 操作按鈕 */}
+            {/* 操作按钮 */}
             <div className='flex gap-3 pt-4'>
               <button
                 onClick={handleSave}
@@ -5726,7 +5726,7 @@ const EmbyConfigComponent = ({
   );
 };
 
-// 視頻源配置組件
+// 视频源配置组件
 const VideoSourceConfig = ({
   config,
   refreshConfig,
@@ -5748,17 +5748,17 @@ const VideoSourceConfig = ({
     from: 'config',
   });
 
-  // 批量操作相關狀態
+  // 批量操作相关状态
   const [selectedSources, setSelectedSources] = useState<Set<string>>(
     new Set()
   );
 
-  // 使用 useMemo 計算全選狀態，避免每次渲染都重新計算
+  // 使用 useMemo 计算全选状态，避免每次渲染都重新计算
   const selectAll = useMemo(() => {
     return selectedSources.size === sources.length && selectedSources.size > 0;
   }, [selectedSources.size, sources.length]);
 
-  // 確認彈窗狀態
+  // 确认弹窗状态
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -5773,7 +5773,7 @@ const VideoSourceConfig = ({
     onCancel: () => {},
   });
 
-  // 有效性檢測相關狀態
+  // 有效性检测相关状态
   const [showValidationModal, setShowValidationModal] = useState(false);
   const [showWeightModal, setShowWeightModal] = useState(false);
   const [weightDraftSources, setWeightDraftSources] = useState<DataSource[]>(
@@ -5791,16 +5791,16 @@ const VideoSourceConfig = ({
     }>
   >([]);
 
-  // dnd-kit 傳感器
+  // dnd-kit 传感器
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5, // 輕微位移即可觸發
+        distance: 5, // 轻微位移即可触发
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 150, // 長按 150ms 後觸發，避免與滾動衝突
+        delay: 150, // 长按 150ms 后触发，避免与滚动冲突
         tolerance: 5,
       },
     })
@@ -5810,14 +5810,14 @@ const VideoSourceConfig = ({
   useEffect(() => {
     if (config?.SourceConfig) {
       setSources(config.SourceConfig);
-      // 進入時重置 orderChanged
+      // 进入时重置 orderChanged
       setOrderChanged(false);
-      // 重置選擇狀態
+      // 重置选择状态
       setSelectedSources(new Set());
     }
   }, [config]);
 
-  // 通用 API 請求
+  // 通用 API 请求
   const callSourceApi = async (body: Record<string, any>) => {
     try {
       const resp = await fetch('/api/admin/source', {
@@ -5831,17 +5831,17 @@ const VideoSourceConfig = ({
         throw new Error(data.error || `操作失敗: ${resp.status}`);
       }
 
-      // 獲取響應數據
+      // 获取响应数据
       const data = await resp.json();
 
-      // 成功後刷新配置
+      // 成功后刷新配置
       await refreshConfig();
 
-      // 返回響應數據供調用者使用
+      // 返回响应数据供调用者使用
       return data;
     } catch (err) {
       showError(err instanceof Error ? err.message : '操作失敗', showAlert);
-      throw err; // 向上拋出方便調用處判斷
+      throw err; // 向上抛出方便调用处判断
     }
   };
 
@@ -5868,12 +5868,12 @@ const VideoSourceConfig = ({
     const target = sources.find((s) => s.key === key);
     if (!target) return;
 
-    // 更新本地狀態
+    // 更新本地状态
     setSources((prev) =>
       prev.map((s) => (s.key === key ? { ...s, proxyMode: !s.proxyMode } : s))
     );
 
-    // 調用API更新
+    // 调用API更新
     withLoading(`toggleProxyMode_${key}`, async () => {
       try {
         const response = await fetch('/api/admin/source', {
@@ -5892,7 +5892,7 @@ const VideoSourceConfig = ({
 
         await refreshConfig();
       } catch (error) {
-        // 失敗時回滾本地狀態
+        // 失败时回滚本地状态
         setSources((prev) =>
           prev.map((s) =>
             s.key === key ? { ...s, proxyMode: !s.proxyMode } : s
@@ -5910,12 +5910,12 @@ const VideoSourceConfig = ({
   };
 
   const handleUpdateWeight = (key: string, weight: number) => {
-    // 先樂觀更新本地狀態
+    // 先乐观更新本地状态
     setSources((prev) =>
       prev.map((s) => (s.key === key ? { ...s, weight } : s))
     );
 
-    // 調用API更新
+    // 调用API更新
     withLoading(`updateWeight_${key}`, async () => {
       try {
         const response = await fetch('/api/admin/source', {
@@ -5935,7 +5935,7 @@ const VideoSourceConfig = ({
 
         await refreshConfig();
       } catch (error) {
-        // 失敗時回滾本地狀態到配置中的值
+        // 失败时回滚本地状态到配置中的值
         const originalWeight =
           config?.SourceConfig?.find((s) => s.key === key)?.weight ?? 0;
         setSources((prev) =>
@@ -6108,7 +6108,7 @@ const VideoSourceConfig = ({
     });
   }, [callSourceApi, handleCloseWeightModal, weightDraftSources, withLoading]);
 
-  // 有效性檢測函數
+  // 有效性检测函数
   const handleValidateSources = async () => {
     if (!searchKeyword.trim()) {
       showAlert({
@@ -6121,10 +6121,10 @@ const VideoSourceConfig = ({
 
     await withLoading('validateSources', async () => {
       setIsValidating(true);
-      setValidationResults([]); // 清空之前的結果
-      setShowValidationModal(false); // 立即關閉彈窗
+      setValidationResults([]); // 清空之前的结果
+      setShowValidationModal(false); // 立即关闭弹窗
 
-      // 初始化所有視頻源為檢測中狀態
+      // 初始化所有视频源为检测中状态
       const initialResults = sources.map((source) => ({
         key: source.key,
         name: source.name,
@@ -6135,7 +6135,7 @@ const VideoSourceConfig = ({
       setValidationResults(initialResults);
 
       try {
-        // 使用EventSource接收流式數據
+        // 使用EventSource接收流式数据
         const eventSource = new EventSource(
           `/api/admin/source/validate?q=${encodeURIComponent(
             searchKeyword.trim()
@@ -6153,7 +6153,7 @@ const VideoSourceConfig = ({
 
               case 'source_result':
               case 'source_error':
-                // 更新驗證結果
+                // 更新验证结果
                 setValidationResults((prev) => {
                   const existing = prev.find((r) => r.key === data.source);
                   if (existing) {
@@ -6221,7 +6221,7 @@ const VideoSourceConfig = ({
           });
         };
 
-        // 設置超時，防止長時間等待
+        // 设置超时，防止长时间等待
         setTimeout(() => {
           if (eventSource.readyState === EventSource.OPEN) {
             eventSource.close();
@@ -6232,7 +6232,7 @@ const VideoSourceConfig = ({
               message: '檢測超時，請重試',
             });
           }
-        }, 60000); // 60秒超時
+        }, 60000); // 60秒超时
       } catch (error) {
         setIsValidating(false);
         showAlert({
@@ -6245,7 +6245,7 @@ const VideoSourceConfig = ({
     });
   };
 
-  // 獲取有效性狀態顯示
+  // 获取有效性状态显示
   const getValidationStatus = (sourceKey: string) => {
     const result = validationResults.find((r) => r.key === sourceKey);
     if (!result) return null;
@@ -6475,7 +6475,7 @@ const VideoSourceConfig = ({
             if (!status) {
               return (
                 <span className='px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-900/20 text-gray-600 dark:text-gray-400'>
-                  未檢測
+                  未检测
                 </span>
               );
             }
@@ -6515,7 +6515,7 @@ const VideoSourceConfig = ({
                   : ''
               }`}
             >
-              刪除
+              删除
             </button>
           )}
         </td>
@@ -6523,7 +6523,7 @@ const VideoSourceConfig = ({
     );
   });
 
-  // 全選/取消全選
+  // 全选/取消全选
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       if (checked) {
@@ -6536,7 +6536,7 @@ const VideoSourceConfig = ({
     [sources]
   );
 
-  // 單個選擇
+  // 单个选择
   const handleSelectSource = useCallback((key: string, checked: boolean) => {
     setSelectedSources((prev) => {
       const newSelected = new Set(prev);
@@ -6581,7 +6581,7 @@ const VideoSourceConfig = ({
         break;
     }
 
-    // 顯示確認彈窗
+    // 显示确认弹窗
     setConfirmModal({
       isOpen: true,
       title: '確認操作',
@@ -6592,7 +6592,7 @@ const VideoSourceConfig = ({
             callSourceApi({ action, keys })
           );
 
-          // 根據操作類型和結果顯示不同的消息
+          // 根据操作类型和结果显示不同的消息
           if (
             action === 'batch_delete' &&
             result?.deleted !== undefined &&
@@ -6630,7 +6630,7 @@ const VideoSourceConfig = ({
             });
           }
 
-          // 重置選擇狀態
+          // 重置选择状态
           setSelectedSources(new Set());
         } catch (err) {
           showAlert({
@@ -6662,27 +6662,27 @@ const VideoSourceConfig = ({
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加載中...
+        加载中...
       </div>
     );
   }
 
   return (
     <div className='space-y-6'>
-      {/* 添加視頻源表單 */}
+      {/* 添加视频源表单 */}
       <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
         <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-          視頻源列表
+          视频源列表
         </h4>
         <div className='flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-2'>
-          {/* 批量操作按鈕 - 移動端顯示在下一行，PC端顯示在左側 */}
+          {/* 批量操作按钮 - 移动端显示在下一行，PC端显示在左侧 */}
           {selectedSources.size > 0 && (
             <>
               <div className='flex flex-wrap items-center gap-3 order-2 sm:order-1'>
                 <span className='text-sm text-gray-600 dark:text-gray-400'>
                   <span className='sm:hidden'>已選 {selectedSources.size}</span>
                   <span className='hidden sm:inline'>
-                    已選擇 {selectedSources.size} 個視頻源
+                    已选择 {selectedSources.size} 个视频源
                   </span>
                 </span>
                 <button
@@ -6829,7 +6829,7 @@ const VideoSourceConfig = ({
         </div>
       )}
 
-      {/* 視頻源表格 */}
+      {/* 视频源表格 */}
       <div
         className='border border-gray-200 dark:border-gray-700 rounded-lg max-h-[28rem] overflow-y-auto overflow-x-auto relative'
         data-table='source-list'
@@ -6846,7 +6846,7 @@ const VideoSourceConfig = ({
                 />
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                名稱
+                名称
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                 Key
@@ -6858,7 +6858,7 @@ const VideoSourceConfig = ({
                 Detail 地址
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                狀態
+                状态
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                 代理模式
@@ -6902,7 +6902,7 @@ const VideoSourceConfig = ({
               <div className='flex items-start justify-between gap-4 border-b border-gray-200 dark:border-gray-700 px-6 py-5'>
                 <div>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    視頻源權重設置
+                    视频源权重设置
                   </h3>
                 </div>
                 <button
@@ -6931,7 +6931,7 @@ const VideoSourceConfig = ({
               >
                 <div className='flex flex-wrap items-center justify-between gap-3 px-6 py-4'>
                   <div className='text-sm text-gray-600 dark:text-gray-400'>
-                    排序越靠前，推薦權重越高；拖動後再次生成推薦值時，會把當前列表均勻映射到
+                    排序越靠前，推荐权重越高；拖动后再次生成推荐值时，会把当前列表均匀映射到
                     0~40。
                   </div>
                   <div className='flex flex-wrap items-center gap-2'>
@@ -6939,13 +6939,13 @@ const VideoSourceConfig = ({
                       onClick={handleApplyRecommendedWeights}
                       className={buttonStyles.primarySmall}
                     >
-                      按當前順序生成推薦權重
+                      按当前顺序生成推荐权重
                     </button>
                     <button
                       onClick={handleResetWeightDraft}
                       className={buttonStyles.secondarySmall}
                     >
-                      恢復當前配置
+                      恢复当前配置
                     </button>
                   </div>
                 </div>
@@ -7023,7 +7023,7 @@ const VideoSourceConfig = ({
           document.body
         )}
 
-      {/* 有效性檢測彈窗 */}
+      {/* 有效性检测弹窗 */}
       {showValidationModal &&
         createPortal(
           <div
@@ -7035,10 +7035,10 @@ const VideoSourceConfig = ({
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className='text-lg font-medium text-gray-900 dark:text-gray-100 mb-4'>
-                視頻源有效性檢測
+                视频源有效性检测
               </h3>
               <p className='text-sm text-gray-600 dark:text-gray-400 mb-4'>
-                請輸入檢測用的搜索關鍵詞
+                请输入检测用的搜索关键词
               </p>
               <div className='space-y-4'>
                 <input
@@ -7067,7 +7067,7 @@ const VideoSourceConfig = ({
                         : buttonStyles.success
                     }`}
                   >
-                    開始檢測
+                    开始检测
                   </button>
                 </div>
               </div>
@@ -7076,7 +7076,7 @@ const VideoSourceConfig = ({
           document.body
         )}
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -7088,7 +7088,7 @@ const VideoSourceConfig = ({
         onConfirm={alertModal.onConfirm}
       />
 
-      {/* 批量操作確認彈窗 */}
+      {/* 批量操作确认弹窗 */}
       {confirmModal.isOpen &&
         createPortal(
           <div
@@ -7130,7 +7130,7 @@ const VideoSourceConfig = ({
                   </p>
                 </div>
 
-                {/* 操作按鈕 */}
+                {/* 操作按钮 */}
                 <div className='flex justify-end space-x-3'>
                   <button
                     onClick={confirmModal.onCancel}
@@ -7169,7 +7169,7 @@ const VideoSourceConfig = ({
   );
 };
 
-// 分類配置組件
+// 分类配置组件
 const CategoryConfig = ({
   config,
   refreshConfig,
@@ -7190,16 +7190,16 @@ const CategoryConfig = ({
     from: 'config',
   });
 
-  // dnd-kit 傳感器
+  // dnd-kit 传感器
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5, // 輕微位移即可觸發
+        distance: 5, // 轻微位移即可触发
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 150, // 長按 150ms 後觸發，避免與滾動衝突
+        delay: 150, // 长按 150ms 后触发，避免与滚动冲突
         tolerance: 5,
       },
     })
@@ -7209,12 +7209,12 @@ const CategoryConfig = ({
   useEffect(() => {
     if (config?.CustomCategories) {
       setCategories(config.CustomCategories);
-      // 進入時重置 orderChanged
+      // 进入时重置 orderChanged
       setOrderChanged(false);
     }
   }, [config]);
 
-  // 通用 API 請求
+  // 通用 API 请求
   const callCategoryApi = async (body: Record<string, any>) => {
     try {
       const resp = await fetch('/api/admin/category', {
@@ -7228,11 +7228,11 @@ const CategoryConfig = ({
         throw new Error(data.error || `操作失敗: ${resp.status}`);
       }
 
-      // 成功後刷新配置
+      // 成功后刷新配置
       await refreshConfig();
     } catch (err) {
       showError(err instanceof Error ? err.message : '操作失敗', showAlert);
-      throw err; // 向上拋出方便調用處判斷
+      throw err; // 向上抛出方便调用处判断
     }
   };
 
@@ -7303,7 +7303,7 @@ const CategoryConfig = ({
       });
   };
 
-  // 可拖拽行封裝 (dnd-kit)
+  // 可拖拽行封装 (dnd-kit)
   const DraggableRow = ({ category }: { category: CustomCategory }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id: `${category.query}:${category.type}` });
@@ -7387,7 +7387,7 @@ const CategoryConfig = ({
                   : ''
               }`}
             >
-              刪除
+              删除
             </button>
           )}
         </td>
@@ -7398,17 +7398,17 @@ const CategoryConfig = ({
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加載中...
+        加载中...
       </div>
     );
   }
 
   return (
     <div className='space-y-6'>
-      {/* 添加分類表單 */}
+      {/* 添加分类表单 */}
       <div className='flex items-center justify-between'>
         <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-          自定義分類列表
+          自定义分类列表
         </h4>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
@@ -7477,22 +7477,22 @@ const CategoryConfig = ({
         </div>
       )}
 
-      {/* 分類表格 */}
+      {/* 分类表格 */}
       <div className='border border-gray-200 dark:border-gray-700 rounded-lg max-h-[28rem] overflow-y-auto overflow-x-auto relative'>
         <table className='min-w-full divide-y divide-gray-200 dark:divide-gray-700'>
           <thead className='bg-gray-50 dark:bg-gray-900 sticky top-0 z-10'>
             <tr>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                分類名稱
+                分类名称
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                類型
+                类型
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                搜索關鍵詞
+                搜索关键词
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                狀態
+                状态
               </th>
               <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                 操作
@@ -7523,7 +7523,7 @@ const CategoryConfig = ({
         </table>
       </div>
 
-      {/* 保存排序按鈕 */}
+      {/* 保存排序按钮 */}
       {orderChanged && (
         <div className='flex justify-end'>
           <button
@@ -7540,7 +7540,7 @@ const CategoryConfig = ({
         </div>
       )}
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -7886,7 +7886,7 @@ const VideoSourceScriptLab = () => {
         <div className='lg:w-80 space-y-4'>
           <div className='flex items-center justify-between'>
             <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-              腳本列表
+              脚本列表
             </h4>
             <div className='flex items-center gap-2'>
               <input
@@ -7905,7 +7905,7 @@ const VideoSourceScriptLab = () => {
                     : buttonStyles.primarySmall
                 }
               >
-                導入
+                导入
               </button>
               <button
                 onClick={() => loadScripts(selectedScriptId)}
@@ -7930,11 +7930,11 @@ const VideoSourceScriptLab = () => {
           <div className='space-y-3 max-h-[38rem] overflow-y-auto pr-1'>
             {loadingScripts ? (
               <div className='text-sm text-gray-500 dark:text-gray-400'>
-                加載中...
+                加载中...
               </div>
             ) : scripts.length === 0 ? (
               <div className='p-4 rounded-lg border border-dashed border-gray-300 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400'>
-                還沒有腳本，點右上角新建一個。
+                还没有脚本，点右上角新建一个。
               </div>
             ) : (
               scripts.map((script) => (
@@ -8029,7 +8029,7 @@ const VideoSourceScriptLab = () => {
           <div>
             <div className='flex items-center justify-between mb-2'>
               <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                腳本代碼
+                脚本代码
               </label>
               <div className='text-xs text-gray-500 dark:text-gray-400'>
                 {editor.version ? `當前版本: ${editor.version}` : '未保存'}
@@ -8073,7 +8073,7 @@ const VideoSourceScriptLab = () => {
               onClick={handleExportCurrent}
               className={buttonStyles.secondary}
             >
-              導出當前腳本
+              导出当前脚本
             </button>
             <button onClick={handleDelete} className={buttonStyles.danger}>
               {editor.id ? '刪除腳本' : '清空編輯器'}
@@ -8084,7 +8084,7 @@ const VideoSourceScriptLab = () => {
             <div className='space-y-3'>
               <div className='flex items-center gap-3'>
                 <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                  測試 Hook
+                  测试 Hook
                 </label>
                 <select
                   value={testHook}
@@ -8108,7 +8108,7 @@ const VideoSourceScriptLab = () => {
                 </select>
               </div>
               <p className='text-xs text-gray-500 dark:text-gray-400'>
-                現在腳本可以自己管理多個源，測試入參可傳 `sourceId`。
+                现在脚本可以自己管理多个源，测试入参可传 `sourceId`。
               </p>
               <textarea
                 value={testPayload}
@@ -8121,7 +8121,7 @@ const VideoSourceScriptLab = () => {
 
             <div className='space-y-3'>
               <div className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                測試輸出
+                测试输出
               </div>
               <pre className='w-full min-h-[16rem] whitespace-pre-wrap break-all px-3 py-3 text-xs border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-950 text-gray-100 overflow-auto'>
                 {testOutput || '運行測試後會顯示結果、日誌和錯誤信息'}
@@ -8145,7 +8145,7 @@ const VideoSourceScriptLab = () => {
   );
 };
 
-// 新增配置文件組件
+// 新增配置文件组件
 const ConfigFileComponent = ({
   config,
   refreshConfig,
@@ -8171,7 +8171,7 @@ const ConfigFileComponent = ({
     }
   }, [config]);
 
-  // 拉取訂閱配置
+  // 拉取订阅配置
   const handleFetchConfig = async () => {
     if (!subscriptionUrl.trim()) {
       showError('請輸入訂閱URL', showAlert);
@@ -8194,7 +8194,7 @@ const ConfigFileComponent = ({
         const data = await resp.json();
         if (data.configContent) {
           setConfigContent(data.configContent);
-          // 更新本地配置的最後檢查時間
+          // 更新本地配置的最后检查时间
           const currentTime = new Date().toISOString();
           setLastCheckTime(currentTime);
           showSuccess('配置拉取成功', showAlert);
@@ -8208,14 +8208,14 @@ const ConfigFileComponent = ({
     });
   };
 
-  // 處理文件上傳
+  // 处理文件上传
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // 檢查文件類型
+    // 检查文件类型
     if (!file.name.toLowerCase().endsWith('.json')) {
       showError('請上傳JSON格式的文件', showAlert);
       return;
@@ -8225,7 +8225,7 @@ const ConfigFileComponent = ({
       try {
         const fileContent = await file.text();
 
-        // 驗證JSON格式
+        // 验证JSON格式
         let parsedConfig;
         try {
           parsedConfig = JSON.parse(fileContent);
@@ -8234,26 +8234,26 @@ const ConfigFileComponent = ({
           return;
         }
 
-        // 檢查是否包含api_site字段
+        // 检查是否包含api_site字段
         if (!parsedConfig.api_site) {
           showError('配置文件必須包含api_site字段', showAlert);
           return;
         }
 
-        // 根據api字段進行去重
+        // 根据api字段进行去重
         const existingConfig = configContent
           ? JSON.parse(configContent)
           : { api_site: {} };
         const existingApis = new Set();
 
-        // 收集現有配置中的所有api
+        // 收集现有配置中的所有api
         Object.values(existingConfig.api_site || {}).forEach((site: any) => {
           if (site.api) {
             existingApis.add(site.api);
           }
         });
 
-        // 合併新配置，去重處理
+        // 合并新配置，去重处理
         const mergedApiSite = { ...existingConfig.api_site };
         let duplicateCount = 0;
 
@@ -8261,7 +8261,7 @@ const ConfigFileComponent = ({
           ([key, site]: [string, any]) => {
             if (site.api && existingApis.has(site.api)) {
               duplicateCount++;
-              // 跳過重複的api
+              // 跳过重复的api
               return;
             }
             mergedApiSite[key] = site;
@@ -8273,7 +8273,7 @@ const ConfigFileComponent = ({
           api_site: mergedApiSite,
         };
 
-        // 更新配置內容
+        // 更新配置内容
         setConfigContent(JSON.stringify(mergedConfig, null, 2));
 
         const message =
@@ -8290,7 +8290,7 @@ const ConfigFileComponent = ({
       }
     });
 
-    // 清空文件輸入
+    // 清空文件输入
     event.target.value = '';
   };
 
@@ -8326,21 +8326,21 @@ const ConfigFileComponent = ({
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加載中...
+        加载中...
       </div>
     );
   }
 
   return (
     <div className='space-y-4'>
-      {/* 配置訂閱區域 */}
+      {/* 配置订阅区域 */}
       <div className='bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 shadow-sm'>
         <div className='flex items-center justify-between mb-6'>
           <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-            配置訂閱
+            配置订阅
           </h3>
           <div className='text-sm text-gray-500 dark:text-gray-400 px-3 py-1.5 rounded-full'>
-            最後更新:{' '}
+            最后更新:{' '}
             {lastCheckTime
               ? new Date(lastCheckTime).toLocaleString('zh-CN')
               : '從未更新'}
@@ -8348,10 +8348,10 @@ const ConfigFileComponent = ({
         </div>
 
         <div className='space-y-6'>
-          {/* 訂閱URL輸入 */}
+          {/* 订阅URL输入 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3'>
-              訂閱URL
+              订阅URL
             </label>
             <input
               type='url'
@@ -8362,11 +8362,11 @@ const ConfigFileComponent = ({
               className='w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
             />
             <p className='mt-2 text-xs text-gray-500 dark:text-gray-400'>
-              輸入配置文件的訂閱地址，要求 JSON 格式，且使用 Base58 編碼
+              输入配置文件的订阅地址，要求 JSON 格式，且使用 Base58 编码
             </p>
           </div>
 
-          {/* 拉取配置按鈕 */}
+          {/* 拉取配置按钮 */}
           <div className='pt-2'>
             <button
               onClick={handleFetchConfig}
@@ -8388,14 +8388,14 @@ const ConfigFileComponent = ({
             </button>
           </div>
 
-          {/* 自動更新開關 */}
+          {/* 自动更新开关 */}
           <div className='flex items-center justify-between'>
             <div>
               <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                自動更新
+                自动更新
               </label>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                啟用後系統將定期自動拉取最新配置
+                启用后系统将定期自动拉取最新配置
               </p>
             </div>
             <button
@@ -8420,7 +8420,7 @@ const ConfigFileComponent = ({
         </div>
       </div>
 
-      {/* 配置文件編輯區域 */}
+      {/* 配置文件编辑区域 */}
       <div className='space-y-4'>
         <div className='relative'>
           <textarea
@@ -8439,14 +8439,14 @@ const ConfigFileComponent = ({
           />
         </div>
 
-        {/* 文件上傳區域 */}
+        {/* 文件上传区域 */}
         <div className='border-t border-gray-200 dark:border-gray-700 pt-4'>
           <div className='flex items-center justify-between mb-3'>
             <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-              上傳JSON配置文件
+              上传JSON配置文件
             </label>
             <div className='text-xs text-gray-500 dark:text-gray-400'>
-              支持根據API字段自動去重
+              支持根据API字段自动去重
             </div>
           </div>
           <div className='relative'>
@@ -8471,7 +8471,7 @@ const ConfigFileComponent = ({
                   <>
                     <div className='w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin'></div>
                     <span className='text-sm text-gray-600 dark:text-gray-400'>
-                      上傳中...
+                      上传中...
                     </span>
                   </>
                 ) : (
@@ -8490,7 +8490,7 @@ const ConfigFileComponent = ({
                       />
                     </svg>
                     <span className='text-sm text-gray-600 dark:text-gray-400'>
-                      點擊選擇JSON文件或拖拽到此處
+                      点击选择JSON文件或拖拽到此处
                     </span>
                   </>
                 )}
@@ -8498,13 +8498,13 @@ const ConfigFileComponent = ({
             </label>
           </div>
           <p className='mt-2 text-xs text-gray-500 dark:text-gray-400'>
-            上傳的JSON配置將自動合併到當前配置，重複的API地址將被自動過濾
+            上传的JSON配置将自动合并到当前配置，重复的API地址将被自动过滤
           </p>
         </div>
 
         <div className='flex items-center justify-between'>
           <div className='text-xs text-gray-500 dark:text-gray-400'>
-            支持 JSON 格式，用於配置視頻源和自定義分類
+            支持 JSON 格式，用于配置视频源和自定义分类
           </div>
           <button
             onClick={handleSave}
@@ -8520,7 +8520,7 @@ const ConfigFileComponent = ({
         </div>
       </div>
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -8534,7 +8534,7 @@ const ConfigFileComponent = ({
   );
 };
 
-// 個性化配置組件
+// 个性化配置组件
 const ThemeConfigComponent = ({
   config,
   refreshConfig,
@@ -8549,7 +8549,7 @@ const ThemeConfigComponent = ({
     builtInTheme: 'default',
     customCSS: '',
     enableCache: true,
-    cacheMinutes: 1440, // 默認1天（1440分鐘）
+    cacheMinutes: 1440, // 默认1天（1440分钟）
     progressThumbType: 'default' as 'default' | 'preset' | 'custom',
     progressThumbPresetId: '',
     progressThumbCustomUrl: '',
@@ -8577,7 +8577,7 @@ const ThemeConfigComponent = ({
         progressThumbCustomUrl: config.ThemeConfig.progressThumbCustomUrl || '',
       });
 
-      // 解析背景圖配置
+      // 解析背景图配置
       if (config.ThemeConfig.loginBackgroundImage) {
         const urls = config.ThemeConfig.loginBackgroundImage
           .split('\n')
@@ -8613,7 +8613,7 @@ const ThemeConfigComponent = ({
   const handleSave = async () => {
     await withLoading('saveThemeConfig', async () => {
       try {
-        // 驗證登錄背景圖URL格式
+        // 验证登录背景图URL格式
         const validLoginUrls = loginBackgroundImages
           .map((url) => url.trim())
           .filter((url) => url !== '');
@@ -8630,7 +8630,7 @@ const ThemeConfigComponent = ({
           }
         }
 
-        // 驗證註冊背景圖URL格式
+        // 验证注册背景图URL格式
         const validRegisterUrls = registerBackgroundImages
           .map((url) => url.trim())
           .filter((url) => url !== '');
@@ -8691,7 +8691,7 @@ const ThemeConfigComponent = ({
 
         await refreshConfig();
 
-        // 刷新頁面以應用新主題
+        // 刷新页面以应用新主题
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -8745,10 +8745,10 @@ const ThemeConfigComponent = ({
 
   return (
     <div className='space-y-6'>
-      {/* 主題類型選擇 */}
+      {/* 主题类型选择 */}
       <div className='bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700'>
         <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4'>
-          主題類型
+          主题类型
         </h3>
         <div className='space-y-4'>
           <label className='flex items-center space-x-3 cursor-pointer'>
@@ -8764,7 +8764,7 @@ const ThemeConfigComponent = ({
               className='w-4 h-4 text-blue-600'
             />
             <span className='text-gray-900 dark:text-gray-100'>
-              自定義CSS（使用下方的CSS編輯器）
+              自定义CSS（使用下方的CSS编辑器）
             </span>
           </label>
           <label className='flex items-center space-x-3 cursor-pointer'>
@@ -8780,17 +8780,17 @@ const ThemeConfigComponent = ({
               className='w-4 h-4 text-blue-600'
             />
             <span className='text-gray-900 dark:text-gray-100'>
-              內置主題（使用預設的主題樣式）
+              内置主题（使用预设的主题样式）
             </span>
           </label>
         </div>
       </div>
 
-      {/* 內置主題選擇 */}
+      {/* 内置主题选择 */}
       {themeSettings.enableBuiltInTheme && (
         <div className='bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700'>
           <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4'>
-            選擇內置主題
+            选择内置主题
           </h3>
           <div className='flex flex-wrap gap-3'>
             {builtInThemes.map((theme) => (
@@ -8809,12 +8809,12 @@ const ThemeConfigComponent = ({
                 }`}
               >
                 <div className='flex items-center gap-3'>
-                  {/* 圓形顏色預覽 */}
+                  {/* 圆形颜色预览 */}
                   <div
                     className='w-10 h-10 rounded-full flex-shrink-0 shadow-sm'
                     style={{ backgroundColor: theme.color }}
                   />
-                  {/* 主題名稱 */}
+                  {/* 主题名称 */}
                   <div className='flex items-center gap-2'>
                     <span className='text-sm font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap'>
                       {theme.label}
@@ -8842,16 +8842,16 @@ const ThemeConfigComponent = ({
             ))}
           </div>
           <p className='mt-4 text-sm text-gray-600 dark:text-gray-400'>
-            注意：啟用內置主題時，自定義CSS將被禁用
+            注意：启用内置主题时，自定义CSS将被禁用
           </p>
         </div>
       )}
 
-      {/* 自定義CSS編輯器 */}
+      {/* 自定义CSS编辑器 */}
       {!themeSettings.enableBuiltInTheme && (
         <div className='bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700'>
           <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4'>
-            自定義CSS
+            自定义CSS
           </h3>
           <textarea
             value={themeSettings.customCSS}
@@ -8865,15 +8865,15 @@ const ThemeConfigComponent = ({
             className='w-full h-96 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           />
           <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
-            提示：可以使用CSS變量、媒體查詢等高級特性
+            提示：可以使用CSS变量、媒体查询等高级特性
           </p>
         </div>
       )}
 
-      {/* 緩存設置 */}
+      {/* 缓存设置 */}
       <div className='bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700'>
         <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4'>
-          緩存設置
+          缓存设置
         </h3>
         <div className='space-y-4'>
           <label className='flex items-center space-x-3 cursor-pointer'>
@@ -8889,14 +8889,14 @@ const ThemeConfigComponent = ({
               className='w-4 h-4 text-blue-600 rounded'
             />
             <span className='text-gray-900 dark:text-gray-100'>
-              啟用瀏覽器緩存（推薦）
+              启用浏览器缓存（推荐）
             </span>
           </label>
 
           {themeSettings.enableCache && (
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                緩存時間（分鐘）
+                缓存时间（分钟）
               </label>
               <input
                 type='number'
@@ -8912,26 +8912,26 @@ const ThemeConfigComponent = ({
                 className='w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
               />
               <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
-                建議值：60分鐘（1小時）、1440分鐘（1天）、10080分鐘（7天）
+                建议值：60分钟（1小时）、1440分钟（1天）、10080分钟（7天）
               </p>
             </div>
           )}
         </div>
         <p className='mt-4 text-sm text-gray-600 dark:text-gray-400'>
-          啟用後，用戶瀏覽器會緩存CSS文件指定時間，減少服務器負載。啟用該項可能會導致主題更新延遲。
+          启用后，用户浏览器会缓存CSS文件指定时间，减少服务器负载。启用该项可能会导致主题更新延迟。
         </p>
       </div>
 
-      {/* 背景圖配置 */}
+      {/* 背景图配置 */}
       <div className='bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700'>
         <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4'>
-          背景圖配置
+          背景图配置
         </h3>
         <div className='space-y-6'>
-          {/* 登錄界面背景圖 */}
+          {/* 登录界面背景图 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              登錄界面背景圖
+              登录界面背景图
             </label>
             <div className='space-y-2'>
               {loginBackgroundImages.map((url, index) => (
@@ -9000,10 +9000,10 @@ const ThemeConfigComponent = ({
             </div>
           </div>
 
-          {/* 註冊界面背景圖 */}
+          {/* 注册界面背景图 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              註冊界面背景圖
+              注册界面背景图
             </label>
             <div className='space-y-2'>
               {registerBackgroundImages.map((url, index) => (
@@ -9072,10 +9072,10 @@ const ThemeConfigComponent = ({
             </div>
           </div>
 
-          {/* 首頁背景圖 */}
+          {/* 首页背景图 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              首頁背景圖
+              首页背景图
             </label>
             <div className='space-y-2'>
               {homeBackgroundImages.map((url, index) => (
@@ -9145,21 +9145,21 @@ const ThemeConfigComponent = ({
           </div>
         </div>
         <p className='mt-4 text-sm text-gray-600 dark:text-gray-400'>
-          配置登錄、註冊和首頁的背景圖鏈接，留空則使用默認樣式。支持配置多張圖片，將隨機展示其中一張
+          配置登录、注册和首页的背景图链接，留空则使用默认样式。支持配置多张图片，将随机展示其中一张
         </p>
       </div>
 
-      {/* 進度條圖標配置 */}
+      {/* 进度条图标配置 */}
       <div className='bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700'>
         <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2'>
           <Palette className='w-5 h-5' />
-          進度條圖標
+          进度条图标
         </h3>
         <p className='text-sm text-gray-600 dark:text-gray-400 mb-4'>
-          自定義視頻播放器進度條的滑塊圖標，讓播放器更具個性
+          自定义视频播放器进度条的滑块图标，让播放器更具个性
         </p>
 
-        {/* 圖標類型選擇 */}
+        {/* 图标类型选择 */}
         <div className='space-y-4 mb-6'>
           <label className='flex items-center space-x-3 cursor-pointer'>
             <input
@@ -9205,11 +9205,11 @@ const ThemeConfigComponent = ({
           </label>
         </div>
 
-        {/* 預製圖標選擇 */}
+        {/* 预制图标选择 */}
         {themeSettings.progressThumbType === 'preset' && (
           <div className='space-y-3 mb-4'>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-              選擇內置圖標
+              选择内置图标
             </label>
             <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
               {[
@@ -9277,11 +9277,11 @@ const ThemeConfigComponent = ({
           </div>
         )}
 
-        {/* 自定義圖標URL輸入 */}
+        {/* 自定义图标URL输入 */}
         {themeSettings.progressThumbType === 'custom' && (
           <div className='space-y-3'>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-              自定義圖標URL
+              自定义图标URL
             </label>
             <input
               type='text'
@@ -9296,13 +9296,13 @@ const ThemeConfigComponent = ({
               }
             />
             <p className='text-xs text-gray-500 dark:text-gray-400'>
-              支持 PNG、JPG、GIF、WebP 格式，建議尺寸
-              32x32px，圖片URL必須可公開訪問
+              支持 PNG、JPG、GIF、WebP 格式，建议尺寸
+              32x32px，图片URL必须可公开访问
             </p>
             {themeSettings.progressThumbCustomUrl && (
               <div className='mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg'>
                 <p className='text-xs text-gray-600 dark:text-gray-400 mb-2'>
-                  預覽：
+                  预览：
                 </p>
                 <img
                   src={themeSettings.progressThumbCustomUrl}
@@ -9325,7 +9325,7 @@ const ThemeConfigComponent = ({
         )}
       </div>
 
-      {/* 保存按鈕 */}
+      {/* 保存按钮 */}
       <div className='flex justify-end'>
         <button
           onClick={handleSave}
@@ -9340,7 +9340,7 @@ const ThemeConfigComponent = ({
         </button>
       </div>
 
-      {/* 彈窗 */}
+      {/* 弹窗 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -9354,10 +9354,10 @@ const ThemeConfigComponent = ({
   );
 };
 
-// 音樂配置組件（已停用）
+// 音乐配置组件（已停用）
 // const MusicConfigComponent = (...) => { ... }
 
-// 新增站點配置組件
+// 新增站点配置组件
 const SiteConfigComponent = ({
   config,
   refreshConfig,
@@ -9414,12 +9414,12 @@ const SiteConfigComponent = ({
     OIDCButtonText: '',
   });
 
-  // 豆瓣數據源相關狀態
+  // 豆瓣数据源相关状态
   const [isDoubanDropdownOpen, setIsDoubanDropdownOpen] = useState(false);
   const [isDoubanImageProxyDropdownOpen, setIsDoubanImageProxyDropdownOpen] =
     useState(false);
 
-  // 豆瓣數據源選項
+  // 豆瓣数据源选项
   const doubanDataSourceOptions = [
     { value: 'direct', label: '直連（服務器直接請求豆瓣）' },
     { value: 'cors-proxy-zwei', label: 'Cors Proxy By Zwei' },
@@ -9431,7 +9431,7 @@ const SiteConfigComponent = ({
     { value: 'custom', label: '自定義代理' },
   ];
 
-  // 豆瓣圖片代理選項
+  // 豆瓣图片代理选项
   const doubanImageProxyTypeOptions = [
     { value: 'server', label: '服務器代理（由服務器代理請求豆瓣）' },
     {
@@ -9451,7 +9451,7 @@ const SiteConfigComponent = ({
     },
   ];
 
-  // 獲取感謝信息
+  // 获取感谢信息
   const getThanksInfo = (dataSource: string) => {
     switch (dataSource) {
       case 'cors-proxy-zwei':
@@ -9509,7 +9509,7 @@ const SiteConfigComponent = ({
     }
   }, [config]);
 
-  // 點擊外部區域關閉下拉框
+  // 点击外部区域关闭下拉框
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isDoubanDropdownOpen) {
@@ -9544,7 +9544,7 @@ const SiteConfigComponent = ({
     }
   }, [isDoubanImageProxyDropdownOpen]);
 
-  // 處理豆瓣數據源變化
+  // 处理豆瓣数据源变化
   const handleDoubanDataSourceChange = (value: string) => {
     setSiteSettings((prev) => ({
       ...prev,
@@ -9552,7 +9552,7 @@ const SiteConfigComponent = ({
     }));
   };
 
-  // 處理豆瓣圖片代理變化
+  // 处理豆瓣图片代理变化
   const handleDoubanImageProxyChange = (value: string) => {
     setSiteSettings((prev) => ({
       ...prev,
@@ -9560,13 +9560,13 @@ const SiteConfigComponent = ({
     }));
   };
 
-  // 處理評論開關變化
+  // 处理评论开关变化
   const handleCommentsToggle = (checked: boolean) => {
     if (checked) {
-      // 如果要開啟評論，彈出確認框
+      // 如果要开启评论，弹出确认框
       setShowEnableCommentsModal(true);
     } else {
-      // 直接關閉評論
+      // 直接关闭评论
       setSiteSettings((prev) => ({
         ...prev,
         EnableComments: false,
@@ -9574,7 +9574,7 @@ const SiteConfigComponent = ({
     }
   };
 
-  // 確認開啟評論
+  // 确认开启评论
   const handleConfirmEnableComments = () => {
     setSiteSettings((prev) => ({
       ...prev,
@@ -9583,7 +9583,7 @@ const SiteConfigComponent = ({
     setShowEnableCommentsModal(false);
   };
 
-  // 保存站點配置
+  // 保存站点配置
   const handleSave = async () => {
     await withLoading('saveSiteConfig', async () => {
       try {
@@ -9610,17 +9610,17 @@ const SiteConfigComponent = ({
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加載中...
+        加载中...
       </div>
     );
   }
 
   return (
     <div className='space-y-6'>
-      {/* 站點名稱 */}
+      {/* 站点名称 */}
       <div>
         <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-          站點名稱
+          站点名称
         </label>
         <input
           type='text'
@@ -9632,10 +9632,10 @@ const SiteConfigComponent = ({
         />
       </div>
 
-      {/* 站點公告 */}
+      {/* 站点公告 */}
       <div>
         <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-          站點公告
+          站点公告
         </label>
         <textarea
           value={siteSettings.Announcement}
@@ -9650,14 +9650,14 @@ const SiteConfigComponent = ({
         />
       </div>
 
-      {/* 豆瓣數據源設置 */}
+      {/* 豆瓣数据源设置 */}
       <div className='space-y-3'>
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            豆瓣數據代理
+            豆瓣数据代理
           </label>
           <div className='relative' data-dropdown='douban-datasource'>
-            {/* 自定義下拉選擇框 */}
+            {/* 自定义下拉选择框 */}
             <button
               type='button'
               onClick={() => setIsDoubanDropdownOpen(!isDoubanDropdownOpen)}
@@ -9670,7 +9670,7 @@ const SiteConfigComponent = ({
               }
             </button>
 
-            {/* 下拉箭頭 */}
+            {/* 下拉箭头 */}
             <div className='absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none'>
               <ChevronDown
                 className={`w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200 ${
@@ -9679,7 +9679,7 @@ const SiteConfigComponent = ({
               />
             </div>
 
-            {/* 下拉選項列表 */}
+            {/* 下拉选项列表 */}
             {isDoubanDropdownOpen && (
               <div className='absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto'>
                 {doubanDataSourceOptions.map((option) => (
@@ -9706,10 +9706,10 @@ const SiteConfigComponent = ({
             )}
           </div>
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            選擇獲取豆瓣數據的方式
+            选择获取豆瓣数据的方式
           </p>
 
-          {/* 感謝信息 */}
+          {/* 感谢信息 */}
           {getThanksInfo(siteSettings.DoubanProxyType) && (
             <div className='mt-3'>
               <button
@@ -9731,7 +9731,7 @@ const SiteConfigComponent = ({
           )}
         </div>
 
-        {/* 豆瓣代理地址設置 - 僅在選擇自定義代理時顯示 */}
+        {/* 豆瓣代理地址设置 - 仅在选择自定义代理时显示 */}
         {siteSettings.DoubanProxyType === 'custom' && (
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
@@ -9750,20 +9750,20 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              自定義代理服務器地址
+              自定义代理服务器地址
             </p>
           </div>
         )}
       </div>
 
-      {/* 豆瓣圖片代理設置 */}
+      {/* 豆瓣图片代理设置 */}
       <div className='space-y-3'>
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            豆瓣圖片代理
+            豆瓣图片代理
           </label>
           <div className='relative' data-dropdown='douban-image-proxy'>
-            {/* 自定義下拉選擇框 */}
+            {/* 自定义下拉选择框 */}
             <button
               type='button'
               onClick={() =>
@@ -9780,7 +9780,7 @@ const SiteConfigComponent = ({
               }
             </button>
 
-            {/* 下拉箭頭 */}
+            {/* 下拉箭头 */}
             <div className='absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none'>
               <ChevronDown
                 className={`w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200 ${
@@ -9789,7 +9789,7 @@ const SiteConfigComponent = ({
               />
             </div>
 
-            {/* 下拉選項列表 */}
+            {/* 下拉选项列表 */}
             {isDoubanImageProxyDropdownOpen && (
               <div className='absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto'>
                 {doubanImageProxyTypeOptions.map((option) => (
@@ -9816,10 +9816,10 @@ const SiteConfigComponent = ({
             )}
           </div>
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            選擇獲取豆瓣圖片的方式
+            选择获取豆瓣图片的方式
           </p>
 
-          {/* 感謝信息 */}
+          {/* 感谢信息 */}
           {getThanksInfo(siteSettings.DoubanImageProxyType) && (
             <div className='mt-3'>
               <button
@@ -9841,11 +9841,11 @@ const SiteConfigComponent = ({
           )}
         </div>
 
-        {/* 豆瓣代理地址設置 - 僅在選擇自定義代理時顯示 */}
+        {/* 豆瓣代理地址设置 - 仅在选择自定义代理时显示 */}
         {siteSettings.DoubanImageProxyType === 'custom' && (
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              豆瓣圖片代理地址
+              豆瓣图片代理地址
             </label>
             <input
               type='text'
@@ -9860,16 +9860,16 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              自定義圖片代理服務器地址
+              自定义图片代理服务器地址
             </p>
           </div>
         )}
       </div>
 
-      {/* 搜索接口可拉取最大頁數 */}
+      {/* 搜索接口可拉取最大页数 */}
       <div>
         <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-          搜索接口可拉取最大頁數
+          搜索接口可拉取最大页数
         </label>
         <input
           type='number'
@@ -9885,10 +9885,10 @@ const SiteConfigComponent = ({
         />
       </div>
 
-      {/* 站點接口緩存時間 */}
+      {/* 站点接口缓存时间 */}
       <div>
         <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-          站點接口緩存時間（秒）
+          站点接口缓存时间（秒）
         </label>
         <input
           type='number'
@@ -9904,11 +9904,11 @@ const SiteConfigComponent = ({
         />
       </div>
 
-      {/* 禁用黃色過濾器 */}
+      {/* 禁用黄色过滤器 */}
       <div>
         <div className='flex items-center justify-between'>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            禁用黃色過濾器
+            禁用黄色过滤器
           </label>
           <button
             type='button'
@@ -9936,7 +9936,7 @@ const SiteConfigComponent = ({
           </button>
         </div>
         <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-          禁用黃色內容的過濾功能，允許顯示所有內容。
+          禁用黄色内容的过滤功能，允许显示所有内容。
         </p>
       </div>
 
@@ -9944,7 +9944,7 @@ const SiteConfigComponent = ({
       <div>
         <div className='flex items-center justify-between'>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            啟用流式搜索
+            启用流式搜索
           </label>
           <button
             type='button'
@@ -9972,19 +9972,19 @@ const SiteConfigComponent = ({
           </button>
         </div>
         <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-          啟用後搜索結果將實時流式返回,提升用戶體驗。
+          启用后搜索结果将实时流式返回,提升用户体验。
         </p>
       </div>
 
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          數據源配置
+          数据源配置
         </summary>
         <div className='mt-4 space-y-4'>
-          {/* 輪播圖數據源 */}
+          {/* 轮播图数据源 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              輪播圖數據源
+              轮播图数据源
             </label>
             <select
               value={siteSettings.BannerDataSource || 'Douban'}
@@ -10001,14 +10001,14 @@ const SiteConfigComponent = ({
               <option value='TX'>TX</option>
             </select>
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              選擇首頁輪播圖的數據來源
+              选择首页轮播图的数据来源
             </p>
           </div>
 
-          {/* 更多推薦數據源 */}
+          {/* 更多推荐数据源 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              更多推薦數據源
+              更多推荐数据源
             </label>
             <select
               value={siteSettings.RecommendationDataSource || 'Mixed'}
@@ -10025,16 +10025,16 @@ const SiteConfigComponent = ({
               <option value='TMDB'>TMDB</option>
             </select>
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              選擇詳情頁"更多推薦"的數據來源。混合模式會根據豆瓣ID和評論開關自動切換數據源
+              选择详情页"更多推薦"的数据来源。混合模式会根据豆瓣ID和评论开关自动切换数据源
             </p>
           </div>
         </div>
       </details>
 
-      {/* 彈幕 API 配置 */}
+      {/* 弹幕 API 配置 */}
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          彈幕配置
+          弹幕配置
         </summary>
         <div className='mt-4 space-y-4'>
           <div className='inline-flex rounded-lg bg-gray-100 p-1 dark:bg-gray-800'>
@@ -10052,7 +10052,7 @@ const SiteConfigComponent = ({
                   : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
               }`}
             >
-              內置源
+              内置源
             </button>
             <button
               type='button'
@@ -10068,23 +10068,23 @@ const SiteConfigComponent = ({
                   : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
               }`}
             >
-              自定義源
+              自定义源
             </button>
           </div>
 
           {siteSettings.DanmakuSourceType !== 'custom' && (
             <p className='text-xs text-amber-600 dark:text-amber-400'>
               ⚠️
-              內置彈幕源為多人共享服務，穩定性可能受使用高峰影響，建議自行部署後使用自定義源。
+              内置弹幕源为多人共享服务，稳定性可能受使用高峰影响，建议自行部署后使用自定义源。
             </p>
           )}
 
           {siteSettings.DanmakuSourceType === 'custom' && (
             <>
-              {/* 彈幕 API 地址 */}
+              {/* 弹幕 API 地址 */}
               <div>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  彈幕 API 地址
+                  弹幕 API 地址
                 </label>
                 <input
                   type='text'
@@ -10099,7 +10099,7 @@ const SiteConfigComponent = ({
                   className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
                 />
                 <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                  自定義彈幕服務器的 API 地址。API部署參考
+                  自定义弹幕服务器的 API 地址。API部署参考
                   <a
                     href='https://github.com/huangxd-/danmu_api.git'
                     target='_blank'
@@ -10111,10 +10111,10 @@ const SiteConfigComponent = ({
                 </p>
               </div>
 
-              {/* 彈幕 API Token */}
+              {/* 弹幕 API Token */}
               <div>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  彈幕 API Token
+                  弹幕 API Token
                 </label>
                 <input
                   type='text'
@@ -10129,7 +10129,7 @@ const SiteConfigComponent = ({
                   className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
                 />
                 <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                  自定義彈幕服務器的訪問令牌，默認為 87654321
+                  自定义弹幕服务器的访问令牌，默认为 87654321
                 </p>
               </div>
             </>
@@ -10138,10 +10138,10 @@ const SiteConfigComponent = ({
           <div className='flex items-center justify-between'>
             <div>
               <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                默認自動加載彈幕
+                默认自动加载弹幕
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                新用戶或未設置本地偏好時，播放頁是否默認自動匹配並加載彈幕。用戶仍可在個人設置中自行覆蓋。
+                新用户或未设置本地偏好时，播放页是否默认自动匹配并加载弹幕。用户仍可在个人设置中自行覆盖。
               </p>
             </div>
             <label className='flex items-center cursor-pointer'>
@@ -10172,7 +10172,7 @@ const SiteConfigComponent = ({
         </summary>
         <div className='mt-4 space-y-4'>
           <p className='text-xs text-amber-600 dark:text-amber-400'>
-            由於國內網絡環境限制，TMDB 服務通常需要配置代理後才能正常使用。
+            由于国内网络环境限制，TMDB 服务通常需要配置代理后才能正常使用。
           </p>
           {/* TMDB API Key */}
           <div>
@@ -10192,16 +10192,16 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              配置後首頁將顯示 TMDB 即將上映電影。支持配置多個 API
-              Key（用英文逗號分隔）以實現輪詢，避免單個 Key 請求限制。獲取 API
-              Key 請訪問{' '}
+              配置后首页将显示 TMDB 即将上映电影。支持配置多个 API
+              Key（用英文逗号分隔）以实现轮询，避免单个 Key 请求限制。获取 API
+              Key 请访问{' '}
               <a
                 href='https://www.themoviedb.org/settings/api'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300'
               >
-                TMDB API 設置頁面
+                TMDB API 设置页面
               </a>
             </p>
           </div>
@@ -10209,7 +10209,7 @@ const SiteConfigComponent = ({
           {/* TMDB Proxy */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              TMDB 系統代理
+              TMDB 系统代理
             </label>
             <input
               type='text'
@@ -10224,7 +10224,7 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              配置代理服務器地址，用於訪問 TMDB API（可選）
+              配置代理服务器地址，用于访问 TMDB API（可选）
             </p>
           </div>
 
@@ -10246,7 +10246,7 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              配置 TMDB 反向代理 Base URL（可選）
+              配置 TMDB 反向代理 Base URL（可选）
             </p>
           </div>
         </div>
@@ -10254,15 +10254,15 @@ const SiteConfigComponent = ({
 
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          磁鏈配置
+          磁链配置
         </summary>
         <div className='mt-4 space-y-4'>
           <p className='text-xs text-amber-600 dark:text-amber-400'>
-            由於國內網絡環境限制，部分磁鏈搜索站點通常需要配置代理後才能正常訪問。
+            由于国内网络环境限制，部分磁链搜索站点通常需要配置代理后才能正常访问。
           </p>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              系統代理
+              系统代理
             </label>
             <input
               type='text'
@@ -10277,8 +10277,8 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              用於訪問磁鏈搜索站點的系統代理。Cloudflare
-              部署環境下不會使用該代理。
+              用于访问磁链搜索站点的系统代理。Cloudflare
+              部署环境下不会使用该代理。
             </p>
           </div>
 
@@ -10299,13 +10299,13 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              配置後將使用該地址替代默認的 Mikan 域名進行請求。
+              配置后将使用该地址替代默认的 Mikan 域名进行请求。
             </p>
           </div>
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              動漫花園反代代理
+              动漫花园反代代理
             </label>
             <input
               type='text'
@@ -10320,7 +10320,7 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              配置後將使用該地址替代默認的動漫花園域名進行請求。
+              配置后将使用该地址替代默认的动漫花园域名进行请求。
             </p>
           </div>
 
@@ -10341,7 +10341,7 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              配置後將使用該地址替代默認的 ACG.RIP 域名進行請求。
+              配置后将使用该地址替代默认的 ACG.RIP 域名进行请求。
             </p>
           </div>
         </div>
@@ -10350,7 +10350,7 @@ const SiteConfigComponent = ({
       {/* Pansou 配置 */}
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          Pansou 網盤搜索配置
+          Pansou 网盘搜索配置
         </summary>
         <div className='mt-4 space-y-4'>
           {/* Pansou API 地址 */}
@@ -10371,7 +10371,7 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              配置 Pansou 服務器地址，用於網盤資源搜索。項目地址：{' '}
+              配置 Pansou 服务器地址，用于网盘资源搜索。项目地址：{' '}
               <a
                 href='https://github.com/fish2018/pansou'
                 target='_blank'
@@ -10383,10 +10383,10 @@ const SiteConfigComponent = ({
             </p>
           </div>
 
-          {/* Pansou 賬號 */}
+          {/* Pansou 账号 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              Pansou 賬號（可選）
+              Pansou 账号（可选）
             </label>
             <input
               type='text'
@@ -10401,14 +10401,14 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              如果 Pansou 服務啟用了認證功能，需要提供賬號密碼
+              如果 Pansou 服务启用了认证功能，需要提供账号密码
             </p>
           </div>
 
-          {/* Pansou 密碼 */}
+          {/* Pansou 密码 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              Pansou 密碼（可選）
+              Pansou 密码（可选）
             </label>
             <input
               type='password'
@@ -10423,14 +10423,14 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              配置賬號密碼後，系統會自動登錄並緩存 Token
+              配置账号密码后，系统会自动登录并缓存 Token
             </p>
           </div>
 
-          {/* 關鍵詞屏蔽 */}
+          {/* 关键词屏蔽 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              關鍵詞屏蔽（可選）
+              关键词屏蔽（可选）
             </label>
             <input
               type='text'
@@ -10445,23 +10445,23 @@ const SiteConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              設置後會過濾包含這些關鍵詞的搜索結果
+              设置后会过滤包含这些关键词的搜索结果
             </p>
           </div>
         </div>
       </details>
 
-      {/* 評論功能配置 */}
+      {/* 评论功能配置 */}
       <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          評論配置
+          评论配置
         </summary>
         <div className='mt-4 space-y-4'>
-          {/* 開啟評論與相似推薦 */}
+          {/* 开启评论与相似推荐 */}
           <div>
             <div className='flex items-center justify-between'>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                開啟評論與相似推薦
+                开启评论与相似推荐
               </label>
               <button
                 type='button'
@@ -10486,13 +10486,13 @@ const SiteConfigComponent = ({
               </button>
             </div>
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              開啟後將顯示豆瓣評論與相似推薦。評論為逆向抓取，請自行承擔責任。
+              开启后将显示豆瓣评论与相似推荐。评论为逆向抓取，请自行承担责任。
             </p>
           </div>
         </div>
       </details>
 
-      {/* 操作按鈕 */}
+      {/* 操作按钮 */}
       <div className='flex justify-end'>
         <button
           onClick={handleSave}
@@ -10507,7 +10507,7 @@ const SiteConfigComponent = ({
         </button>
       </div>
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -10518,7 +10518,7 @@ const SiteConfigComponent = ({
         showConfirm={alertModal.showConfirm}
       />
 
-      {/* 開啟評論確認彈窗 */}
+      {/* 开启评论确认弹窗 */}
       {showEnableCommentsModal &&
         createPortal(
           <div
@@ -10532,7 +10532,7 @@ const SiteConfigComponent = ({
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    開啟評論與相似推薦功能
+                    开启评论与相似推荐功能
                   </h3>
                   <button
                     onClick={() => setShowEnableCommentsModal(false)}
@@ -10563,12 +10563,12 @@ const SiteConfigComponent = ({
                       </span>
                     </div>
                     <p className='text-sm text-yellow-700 dark:text-yellow-400'>
-                      評論功能為逆向抓取豆瓣評論數據，此功能僅供學習，開啟後請自行承擔相關責任和風險。
+                      评论功能为逆向抓取豆瓣评论数据，此功能仅供学习，开启后请自行承担相关责任和风险。
                     </p>
                   </div>
                 </div>
 
-                {/* 操作按鈕 */}
+                {/* 操作按钮 */}
                 <div className='flex justify-end space-x-3'>
                   <button
                     onClick={() => setShowEnableCommentsModal(false)}
@@ -10580,7 +10580,7 @@ const SiteConfigComponent = ({
                     onClick={handleConfirmEnableComments}
                     className={`px-6 py-2.5 text-sm font-medium ${buttonStyles.primary}`}
                   >
-                    我已知曉，確認開啟
+                    我已知晓，确认开启
                   </button>
                 </div>
               </div>
@@ -10592,7 +10592,7 @@ const SiteConfigComponent = ({
   );
 };
 
-// 註冊配置組件
+// 注册配置组件
 const RegistrationConfigComponent = ({
   config,
   refreshConfig,
@@ -10673,7 +10673,7 @@ const RegistrationConfigComponent = ({
     }
   }, [config]);
 
-  // 處理註冊開關變化
+  // 处理注册开关变化
   const handleRegistrationToggle = (checked: boolean) => {
     if (checked) {
       setShowEnableRegistrationModal(true);
@@ -10685,7 +10685,7 @@ const RegistrationConfigComponent = ({
     }
   };
 
-  // 確認開啟註冊
+  // 确认开启注册
   const handleConfirmEnableRegistration = () => {
     setRegistrationSettings((prev) => ({
       ...prev,
@@ -10694,7 +10694,7 @@ const RegistrationConfigComponent = ({
     setShowEnableRegistrationModal(false);
   };
 
-  // 保存註冊配置
+  // 保存注册配置
   const handleSave = async () => {
     await withLoading('saveRegistrationConfig', async () => {
       try {
@@ -10709,7 +10709,7 @@ const RegistrationConfigComponent = ({
           throw new Error('已開啟註冊邀請碼時，邀請碼不能為空');
         }
 
-        // 合併站點配置和註冊配置
+        // 合并站点配置和注册配置
         const updatedSiteConfig = {
           ...config.SiteConfig,
           ...registrationSettings,
@@ -10740,17 +10740,17 @@ const RegistrationConfigComponent = ({
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加載中...
+        加载中...
       </div>
     );
   }
 
   return (
     <div className='space-y-6'>
-      {/* 註冊相關配置 */}
+      {/* 注册相关配置 */}
       <div className='space-y-4'>
         <h3 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
-          註冊配置
+          注册配置
         </h3>
 
         <details
@@ -10758,13 +10758,13 @@ const RegistrationConfigComponent = ({
           className='pt-4 border-t border-gray-200 dark:border-gray-700'
         >
           <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-            基礎註冊設置
+            基础注册设置
           </summary>
           <div className='mt-4 space-y-4'>
             <div>
               <div className='flex items-center justify-between'>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  開啟註冊
+                  开启注册
                 </label>
                 <button
                   type='button'
@@ -10791,13 +10791,13 @@ const RegistrationConfigComponent = ({
                 </button>
               </div>
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                開啟後登錄頁面將顯示註冊按鈕，允許用戶自行註冊賬號。
+                开启后登录页面将显示注册按钮，允许用户自行注册账号。
               </p>
             </div>
 
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                默認用戶組
+                默认用户组
               </label>
               <select
                 value={
@@ -10827,7 +10827,7 @@ const RegistrationConfigComponent = ({
                   ))}
               </select>
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                新註冊的用戶將自動分配到選中的用戶組，選擇"無用戶組"為無限制
+                新注册的用户将自动分配到选中的用户组，选择"無用戶組"为无限制
               </p>
             </div>
           </div>
@@ -10835,13 +10835,13 @@ const RegistrationConfigComponent = ({
 
         <details className='pt-4 border-t border-gray-200 dark:border-gray-700'>
           <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-            安全設置
+            安全设置
           </summary>
           <div className='mt-4 space-y-4'>
             <div>
               <div className='flex items-center justify-between'>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  要求註冊邀請碼
+                  要求注册邀请码
                 </label>
                 <button
                   type='button'
@@ -10870,13 +10870,13 @@ const RegistrationConfigComponent = ({
                 </button>
               </div>
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                開啟後，普通註冊必須填寫管理員設置的統一邀請碼。
+                开启后，普通注册必须填写管理员设置的统一邀请码。
               </p>
             </div>
 
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                通用註冊邀請碼
+                通用注册邀请码
               </label>
               <input
                 type='text'
@@ -10891,14 +10891,14 @@ const RegistrationConfigComponent = ({
                 className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
               />
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                僅普通註冊生效；開啟邀請碼註冊時不能為空。
+                仅普通注册生效；开启邀请码注册时不能为空。
               </p>
             </div>
 
             <div>
               <div className='flex items-center justify-between'>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  註冊啟用Cloudflare Turnstile
+                  注册启用Cloudflare Turnstile
                 </label>
                 <button
                   type='button'
@@ -10934,12 +10934,12 @@ const RegistrationConfigComponent = ({
                 </button>
               </div>
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                開啟後註冊時需要通過Cloudflare Turnstile人機驗證。
+                开启后注册时需要通过Cloudflare Turnstile人机验证。
                 {(!registrationSettings.TurnstileSiteKey ||
                   !registrationSettings.TurnstileSecretKey) && (
                   <span className='text-orange-500 dark:text-orange-400'>
                     {' '}
-                    需要先配置Site Key和Secret Key才能啟用。
+                    需要先配置Site Key和Secret Key才能启用。
                   </span>
                 )}
               </p>
@@ -10948,7 +10948,7 @@ const RegistrationConfigComponent = ({
             <div>
               <div className='flex items-center justify-between'>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  登錄啟用Cloudflare Turnstile
+                  登录启用Cloudflare Turnstile
                 </label>
                 <button
                   type='button'
@@ -10983,12 +10983,12 @@ const RegistrationConfigComponent = ({
                 </button>
               </div>
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                開啟後登錄時需要通過Cloudflare Turnstile人機驗證。
+                开启后登录时需要通过Cloudflare Turnstile人机验证。
                 {(!registrationSettings.TurnstileSiteKey ||
                   !registrationSettings.TurnstileSecretKey) && (
                   <span className='text-orange-500 dark:text-orange-400'>
                     {' '}
-                    需要先配置Site Key和Secret Key才能啟用。
+                    需要先配置Site Key和Secret Key才能启用。
                   </span>
                 )}
               </p>
@@ -11011,7 +11011,7 @@ const RegistrationConfigComponent = ({
                 className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
               />
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                在Cloudflare Dashboard中獲取的Site Key（公鑰）
+                在Cloudflare Dashboard中获取的Site Key（公钥）
               </p>
             </div>
 
@@ -11032,7 +11032,7 @@ const RegistrationConfigComponent = ({
                 className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
               />
               <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                在Cloudflare Dashboard中獲取的Secret Key（私鑰），用於服務端驗證
+                在Cloudflare Dashboard中获取的Secret Key（私钥），用于服务端验证
               </p>
             </div>
           </div>
@@ -11045,11 +11045,11 @@ const RegistrationConfigComponent = ({
           OIDC配置
         </summary>
         <div className='mt-4 space-y-4'>
-          {/* 啟用OIDC登錄 */}
+          {/* 启用OIDC登录 */}
           <div>
             <div className='flex items-center justify-between'>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                啟用OIDC登錄
+                启用OIDC登录
               </label>
               <button
                 type='button'
@@ -11077,15 +11077,15 @@ const RegistrationConfigComponent = ({
               </button>
             </div>
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              開啟後登錄頁面將顯示OIDC登錄按鈕
+              开启后登录页面将显示OIDC登录按钮
             </p>
           </div>
 
-          {/* 啟用OIDC註冊 */}
+          {/* 启用OIDC注册 */}
           <div>
             <div className='flex items-center justify-between'>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                啟用OIDC註冊
+                启用OIDC注册
               </label>
               <button
                 type='button'
@@ -11113,14 +11113,14 @@ const RegistrationConfigComponent = ({
               </button>
             </div>
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              開啟後允許通過OIDC方式註冊新用戶（需要先啟用OIDC登錄）
+              开启后允许通过OIDC方式注册新用户（需要先启用OIDC登录）
             </p>
           </div>
 
           {/* OIDC Issuer */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              OIDC Issuer URL（可選）
+              OIDC Issuer URL（可选）
             </label>
             <div className='flex flex-col sm:flex-row gap-2'>
               <input
@@ -11188,14 +11188,14 @@ const RegistrationConfigComponent = ({
               </button>
             </div>
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              OIDC提供商的Issuer URL，填寫後可點擊"自動發現"按鈕自動獲取端點配置
+              OIDC提供商的Issuer URL，填写后可点击"自動發現"按钮自动获取端点配置
             </p>
           </div>
 
           {/* Authorization Endpoint */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              Authorization Endpoint（授權端點）
+              Authorization Endpoint（授权端点）
             </label>
             <input
               type='text'
@@ -11210,14 +11210,14 @@ const RegistrationConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              用戶授權的端點URL
+              用户授权的端点URL
             </p>
           </div>
 
           {/* Token Endpoint */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              Token Endpoint（Token端點）
+              Token Endpoint（Token端点）
             </label>
             <input
               type='text'
@@ -11232,14 +11232,14 @@ const RegistrationConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              交換授權碼獲取token的端點URL
+              交换授权码获取token的端点URL
             </p>
           </div>
 
           {/* UserInfo Endpoint */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              UserInfo Endpoint（用戶信息端點）
+              UserInfo Endpoint（用户信息端点）
             </label>
             <input
               type='text'
@@ -11254,7 +11254,7 @@ const RegistrationConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              獲取用戶信息的端點URL
+              获取用户信息的端点URL
             </p>
           </div>
 
@@ -11276,7 +11276,7 @@ const RegistrationConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              在OIDC提供商處註冊應用後獲得的Client ID
+              在OIDC提供商处注册应用后获得的Client ID
             </p>
           </div>
 
@@ -11298,14 +11298,14 @@ const RegistrationConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              在OIDC提供商處註冊應用後獲得的Client Secret
+              在OIDC提供商处注册应用后获得的Client Secret
             </p>
           </div>
 
-          {/* OIDC Redirect URI - 只讀顯示 */}
+          {/* OIDC Redirect URI - 只读显示 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              OIDC Redirect URI（回調地址）
+              OIDC Redirect URI（回调地址）
             </label>
             <div className='relative'>
               <input
@@ -11333,18 +11333,18 @@ const RegistrationConfigComponent = ({
                 }}
                 className='absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors'
               >
-                複製
+                复制
               </button>
             </div>
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              這是系統自動生成的回調地址，基於環境變量SITE_BASE。請在OIDC提供商（如Keycloak、Auth0等）的應用配置中添加此地址作為允許的重定向URI
+              这是系统自动生成的回调地址，基于环境变量SITE_BASE。请在OIDC提供商（如Keycloak、Auth0等）的应用配置中添加此地址作为允许的重定向URI
             </p>
           </div>
 
-          {/* OIDC登錄按鈕文字 */}
+          {/* OIDC登录按钮文字 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              OIDC登錄按鈕文字
+              OIDC登录按钮文字
             </label>
             <input
               type='text'
@@ -11359,14 +11359,14 @@ const RegistrationConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              自定義OIDC登錄按鈕顯示的文字,如"使用企業賬號登錄"、"使用SSO登錄"等。留空則顯示默認文字"使用OIDC登錄"
+              自定义OIDC登录按钮显示的文字,如"使用企業賬號登錄"、"使用SSO登錄"等。留空则显示默认文字"使用OIDC登錄"
             </p>
           </div>
 
-          {/* OIDC最低信任等級 */}
+          {/* OIDC最低信任等级 */}
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              最低信任等級
+              最低信任等级
             </label>
             <input
               type='number'
@@ -11388,13 +11388,13 @@ const RegistrationConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-              僅LinuxDo網站有效。設置為0時不判斷，1-4表示最低信任等級要求
+              仅LinuxDo网站有效。设置为0时不判断，1-4表示最低信任等级要求
             </p>
           </div>
         </div>
       </details>
 
-      {/* 操作按鈕 */}
+      {/* 操作按钮 */}
       <div className='flex justify-end'>
         <button
           onClick={handleSave}
@@ -11409,7 +11409,7 @@ const RegistrationConfigComponent = ({
         </button>
       </div>
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -11420,7 +11420,7 @@ const RegistrationConfigComponent = ({
         showConfirm={alertModal.showConfirm}
       />
 
-      {/* 開啟註冊確認彈窗 */}
+      {/* 开启注册确认弹窗 */}
       {showEnableRegistrationModal &&
         createPortal(
           <div
@@ -11434,7 +11434,7 @@ const RegistrationConfigComponent = ({
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    開啟註冊功能
+                    开启注册功能
                   </h3>
                   <button
                     onClick={() => setShowEnableRegistrationModal(false)}
@@ -11465,12 +11465,12 @@ const RegistrationConfigComponent = ({
                       </span>
                     </div>
                     <p className='text-sm text-yellow-700 dark:text-yellow-400'>
-                      為了您的安全和避免潛在的法律風險,如果您的網站部署在公網不建議開啟。
+                      为了您的安全和避免潜在的法律风险,如果您的网站部署在公网不建议开启。
                     </p>
                   </div>
                 </div>
 
-                {/* 操作按鈕 */}
+                {/* 操作按钮 */}
                 <div className='flex justify-end space-x-3'>
                   <button
                     onClick={() => setShowEnableRegistrationModal(false)}
@@ -11482,7 +11482,7 @@ const RegistrationConfigComponent = ({
                     onClick={handleConfirmEnableRegistration}
                     className={`px-6 py-2.5 text-sm font-medium ${buttonStyles.primary}`}
                   >
-                    我已知曉，確認開啟
+                    我已知晓，确认开启
                   </button>
                 </div>
               </div>
@@ -11494,7 +11494,7 @@ const RegistrationConfigComponent = ({
   );
 };
 
-// 自定義去廣告配置組件
+// 自定义去广告配置组件
 const CustomAdFilterConfig = ({
   config,
   refreshConfig,
@@ -11506,11 +11506,11 @@ const CustomAdFilterConfig = ({
   const { isLoading, withLoading } = useLoadingState();
   const [adFilterCode, setAdFilterCode] = useState('');
 
-  // 默認去廣告代碼
+  // 默认去广告代码
   const defaultAdFilterCode = `function filterAdsFromM3U8(type: string, m3u8Content: string): string {
   if (!m3u8Content) return '';
 
-  // 廣告關鍵字列表
+  // 广告关键字列表
   const adKeywords = [
     'sponsor',
     '/ad/',
@@ -11521,7 +11521,7 @@ const CustomAdFilterConfig = ({
     'redtraffic'
   ];
 
-  // 按行分割M3U8內容
+  // 按行分割M3U8内容
   const lines = m3u8Content.split('\\n');
   const filteredLines = [];
 
@@ -11529,15 +11529,15 @@ const CustomAdFilterConfig = ({
   while (i < lines.length) {
     const line = lines[i];
 
-    // 跳過 #EXT-X-DISCONTINUITY 標識
+    // 跳过 #EXT-X-DISCONTINUITY 标识
     if (line.includes('#EXT-X-DISCONTINUITY')) {
       i++;
       continue;
     }
 
-    // 如果是 EXTINF 行，檢查下一行 URL 是否包含廣告關鍵字
+    // 如果是 EXTINF 行，检查下一行 URL 是否包含广告关键字
     if (line.includes('#EXTINF:')) {
-      // 檢查下一行 URL 是否包含廣告關鍵字
+      // 检查下一行 URL 是否包含广告关键字
       if (i + 1 < lines.length) {
         const nextLine = lines[i + 1];
         const containsAdKeyword = adKeywords.some(keyword =>
@@ -11545,14 +11545,14 @@ const CustomAdFilterConfig = ({
         );
 
         if (containsAdKeyword) {
-          // 跳過 EXTINF 行和 URL 行
+          // 跳过 EXTINF 行和 URL 行
           i += 2;
           continue;
         }
       }
     }
 
-    // 保留當前行
+    // 保留当前行
     filteredLines.push(line);
     i++;
   }
@@ -11561,31 +11561,31 @@ const CustomAdFilterConfig = ({
 }`;
 
   useEffect(() => {
-    // 從數據庫配置讀取自定義去廣告代碼
+    // 从数据库配置读取自定义去广告代码
     if (config?.SiteConfig?.CustomAdFilterCode) {
       setAdFilterCode(config.SiteConfig.CustomAdFilterCode);
     } else {
-      // 如果數據庫沒有保存的代碼，使用默認代碼
+      // 如果数据库没有保存的代码，使用默认代码
       setAdFilterCode(defaultAdFilterCode);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config]);
 
-  // 移除 TypeScript 類型註解，轉換為純 JavaScript
+  // 移除 TypeScript 类型注解，转换为纯 JavaScript
   const removeTypeAnnotations = (code: string): string => {
     return (
       code
-        // 移除函數參數的類型註解：name: type
+        // 移除函数参数的类型注解：name: type
         .replace(
           /(\w+)\s*:\s*(string|number|boolean|any|void|never|unknown|object)\s*([,)])/g,
           '$1$3'
         )
-        // 移除函數返回值類型註解：): type {
+        // 移除函数返回值类型注解：): type {
         .replace(
           /\)\s*:\s*(string|number|boolean|any|void|never|unknown|object)\s*\{/g,
           ') {'
         )
-        // 移除變量聲明的類型註解：const name: type =
+        // 移除变量声明的类型注解：const name: type =
         .replace(
           /(const|let|var)\s+(\w+)\s*:\s*(string|number|boolean|any|void|never|unknown|object)\s*=/g,
           '$1 $2 ='
@@ -11593,15 +11593,15 @@ const CustomAdFilterConfig = ({
     );
   };
 
-  // 保存自定義去廣告代碼
+  // 保存自定义去广告代码
   const handleSave = async () => {
     await withLoading('saveAdFilterCode', async () => {
       try {
-        // 驗證代碼語法
+        // 验证代码语法
         try {
-          // 移除類型註解後驗證
+          // 移除类型注解后验证
           const jsCode = removeTypeAnnotations(adFilterCode);
-          // 使用 Function 構造器驗證代碼是否可以解析
+          // 使用 Function 构造器验证代码是否可以解析
           new Function(
             'type',
             'm3u8Content',
@@ -11619,17 +11619,17 @@ const CustomAdFilterConfig = ({
           return;
         }
 
-        // 更新配置到數據庫
+        // 更新配置到数据库
         if (!config) {
           showError('配置未加載', showAlert);
           return;
         }
 
-        // 準備更新的站點配置，包含自定義去廣告代碼
+        // 准备更新的站点配置，包含自定义去广告代码
         const updatedSiteConfig = {
           ...config.SiteConfig,
           CustomAdFilterCode: adFilterCode,
-          CustomAdFilterVersion: Date.now(), // 使用時間戳作為版本號
+          CustomAdFilterVersion: Date.now(), // 使用时间戳作为版本号
         };
 
         const response = await fetch('/api/admin/site', {
@@ -11654,7 +11654,7 @@ const CustomAdFilterConfig = ({
     });
   };
 
-  // 重置為默認代碼
+  // 重置为默认代码
   const handleReset = () => {
     setAdFilterCode(defaultAdFilterCode);
     showSuccess('已重置為默認代碼', showAlert);
@@ -11663,14 +11663,14 @@ const CustomAdFilterConfig = ({
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加載中...
+        加载中...
       </div>
     );
   }
 
   return (
     <div className='space-y-4'>
-      {/* 說明區域 */}
+      {/* 说明区域 */}
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <div className='flex items-center space-x-2 mb-2'>
           <svg
@@ -11687,17 +11687,17 @@ const CustomAdFilterConfig = ({
             />
           </svg>
           <span className='text-sm font-medium text-blue-800 dark:text-blue-300'>
-            使用說明
+            使用说明
           </span>
         </div>
         <div className='text-sm text-blue-700 dark:text-blue-400 space-y-1'>
           <p>• 此功能用於自定義 M3U8 播放列表的去廣告邏輯</p>
           <p>• 配置保存到數據庫，對全平臺所有用戶生效</p>
           <p>
-            • 客戶端會自動緩存代碼，只在版本更新時重新獲取，不會頻繁請求服務器
+            • 客户端会自动缓存代码，只在版本更新时重新获取，不会频繁请求服务器
           </p>
           <p>
-            • 函數簽名必須為:{' '}
+            • 函数签名必须为:{' '}
             <code className='bg-blue-100 dark:bg-blue-900/40 px-1 rounded'>
               filterAdsFromM3U8(type, m3u8Content)
             </code>
@@ -11708,17 +11708,17 @@ const CustomAdFilterConfig = ({
         </div>
       </div>
 
-      {/* 代碼編輯區域 */}
+      {/* 代码编辑区域 */}
       <div className='space-y-3'>
         <div className='flex items-center justify-between'>
           <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-            自定義去廣告代碼
+            自定义去广告代码
           </label>
           <button
             onClick={handleReset}
             className={`${buttonStyles.secondarySmall}`}
           >
-            重置為默認
+            重置为默认
           </button>
         </div>
         <div className='relative'>
@@ -11739,7 +11739,7 @@ const CustomAdFilterConfig = ({
 
         <div className='flex items-center justify-between'>
           <div className='text-xs text-gray-500 dark:text-gray-400'>
-            修改後需保存才能生效，保存前會進行語法驗證
+            修改后需保存才能生效，保存前会进行语法验证
           </div>
           <button
             onClick={handleSave}
@@ -11755,7 +11755,7 @@ const CustomAdFilterConfig = ({
         </div>
       </div>
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -11769,7 +11769,7 @@ const CustomAdFilterConfig = ({
   );
 };
 
-// 小雅配置組件
+// 小雅配置组件
 
 const SuwayomiConfigComponent = ({
   config,
@@ -11884,16 +11884,16 @@ const SuwayomiConfigComponent = ({
     <div className='space-y-6'>
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <h3 className='text-sm font-medium text-blue-900 dark:text-blue-100 mb-2'>
-          關於漫畫展館 / Suwayomi
+          关于漫画展馆 / Suwayomi
         </h3>
         <div className='text-sm text-blue-800 dark:text-blue-200 space-y-1'>
           <p>
-            • 漫畫展館通過 Suwayomi Server 的 GraphQL
-            接口搜索、拉取章節與閱讀頁。
+            • 漫画展馆通过 Suwayomi Server 的 GraphQL
+            接口搜索、拉取章节与阅读页。
           </p>
           <p>
-            • 認證僅支持 basic_auth 與
-            simple_login；未開啟認證時請選擇“無認證”。
+            • 认证仅支持 basic_auth 与
+            simple_login；未开启认证时请选择“无认证”。
           </p>
           <p>• 可限制默認語言、可用源白名單，以及單次搜索最多查詢的源數量。</p>
           <p>• 保存後漫畫模塊會優先使用這裡的配置，環境變量只作為兜底。</p>
@@ -11904,10 +11904,10 @@ const SuwayomiConfigComponent = ({
         <div className='flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700'>
           <div>
             <h3 className='text-sm font-medium text-gray-900 dark:text-white'>
-              啟用漫畫展館
+              启用漫画展馆
             </h3>
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-              關閉後仍保留代碼，但不建議在未配置時對用戶開放入口。
+              关闭后仍保留代码，但不建议在未配置时对用户开放入口。
             </p>
           </div>
           <button
@@ -11926,7 +11926,7 @@ const SuwayomiConfigComponent = ({
 
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            Suwayomi 服務地址
+            Suwayomi 服务地址
           </label>
           <input
             type='text'
@@ -11936,13 +11936,13 @@ const SuwayomiConfigComponent = ({
             className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
           />
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            只填服務根地址，程序會自動拼接 /api/graphql。
+            只填服务根地址，程序会自动拼接 /api/graphql。
           </p>
         </div>
 
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            認證方式
+            认证方式
           </label>
           <div className='grid grid-cols-1 gap-2 md:grid-cols-3'>
             {[
@@ -11969,8 +11969,8 @@ const SuwayomiConfigComponent = ({
             ))}
           </div>
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            basic_auth 使用 Basic Authorization 頭；simple_login 會向
-            /login.html 提交表單並複用返回 Cookie。
+            basic_auth 使用 Basic Authorization 头；simple_login 会向
+            /login.html 提交表单并复用返回 Cookie。
           </p>
         </div>
 
@@ -11978,7 +11978,7 @@ const SuwayomiConfigComponent = ({
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                用戶名
+                用户名
               </label>
               <input
                 type='text'
@@ -11990,7 +11990,7 @@ const SuwayomiConfigComponent = ({
             </div>
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                密碼
+                密码
               </label>
               <input
                 type='password'
@@ -12006,7 +12006,7 @@ const SuwayomiConfigComponent = ({
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              默認語言
+              默认语言
             </label>
             <input
               type='text'
@@ -12018,7 +12018,7 @@ const SuwayomiConfigComponent = ({
           </div>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              單次搜索最大源數
+              单次搜索最大源数
             </label>
             <input
               type='number'
@@ -12032,7 +12032,7 @@ const SuwayomiConfigComponent = ({
 
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            源白名單
+            源白名单
           </label>
           <textarea
             value={sourceIds}
@@ -12232,7 +12232,7 @@ const OPDSConfigComponent = ({
         }
         const result = Array.isArray(data.results) ? data.results[0] : null;
         const summary = result
-          ? `${result.name}: 分類${
+          ? `${result.name}: 分类${
               result.capability.catalogSupported ? '√' : '×'
             } / 搜索${result.capability.searchSupported ? '√' : '×'}${
               result.capability.lastError
@@ -12255,12 +12255,12 @@ const OPDSConfigComponent = ({
     <div className='space-y-6'>
       <div className='bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4'>
         <h3 className='text-sm font-medium text-amber-900 dark:text-amber-100 mb-2'>
-          關於電子書館 / OPDS
+          关于电子书馆 / OPDS
         </h3>
         <div className='text-sm text-amber-800 dark:text-amber-200 space-y-1'>
           <p>• 支持多書源，每個源可獨立配置認證、搜索模板與默認格式偏好。</p>
           <p>
-            • 有些源只支持分類瀏覽，有些源只支持搜索，測試連接會自動探測能力。
+            • 有些源只支持分类浏览，有些源只支持搜索，测试连接会自动探测能力。
           </p>
           <p>• 目前前臺優先支持 EPUB 在線閱讀，PDF 走內嵌預覽。</p>
         </div>
@@ -12269,10 +12269,10 @@ const OPDSConfigComponent = ({
       <div className='flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700'>
         <div>
           <h3 className='text-sm font-medium text-gray-900 dark:text-white'>
-            啟用電子書館
+            启用电子书馆
           </h3>
           <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-            關閉後不會展示 OPDS 電子書入口。
+            关闭后不会展示 OPDS 电子书入口。
           </p>
         </div>
         <button
@@ -12291,7 +12291,7 @@ const OPDSConfigComponent = ({
 
       <div>
         <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-          Feed 緩存時長（毫秒）
+          Feed 缓存时长（毫秒）
         </label>
         <input
           type='number'
@@ -12307,7 +12307,7 @@ const OPDSConfigComponent = ({
       <div className='space-y-4'>
         <div className='flex items-center justify-between'>
           <h3 className='text-sm font-medium text-gray-900 dark:text-white'>
-            書源列表
+            书源列表
           </h3>
           <button
             type='button'
@@ -12315,13 +12315,13 @@ const OPDSConfigComponent = ({
             className={buttonStyles.primary}
           >
             <Plus size={16} className='inline mr-1' />
-            添加書源
+            添加书源
           </button>
         </div>
 
         {sources.length === 0 && (
           <div className='rounded-lg border border-dashed border-gray-300 dark:border-gray-600 p-4 text-sm text-gray-500 dark:text-gray-400'>
-            暫無 OPDS 書源，點擊“添加書源”開始配置。
+            暂无 OPDS 书源，点击“添加书源”开始配置。
           </div>
         )}
 
@@ -12379,7 +12379,7 @@ const OPDSConfigComponent = ({
                         </div>
                         <div className='flex items-center justify-between gap-3'>
                           <span className='text-gray-500 dark:text-gray-400'>
-                            認證
+                            认证
                           </span>
                           <span>
                             {source.authMode === 'none'
@@ -12433,7 +12433,7 @@ const OPDSConfigComponent = ({
                           ) : (
                             <>
                               <Settings size={14} className='inline mr-1' />
-                              編輯
+                              编辑
                             </>
                           )}
                         </button>
@@ -12443,7 +12443,7 @@ const OPDSConfigComponent = ({
                           className={buttonStyles.dangerSmall}
                         >
                           <Trash2 size={14} className='inline mr-1' />
-                          刪除
+                          删除
                         </button>
                       </div>
                     </div>
@@ -12451,13 +12451,13 @@ const OPDSConfigComponent = ({
                     {isEditing && (
                       <div className='space-y-4 border-t border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/40'>
                         <div className='text-sm font-medium text-gray-900 dark:text-white'>
-                          編輯書源 #{index + 1}
+                          编辑书源 #{index + 1}
                         </div>
 
                         <div className='grid grid-cols-1 gap-4'>
                           <div>
                             <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                              書源 ID
+                              书源 ID
                             </label>
                             <input
                               type='text'
@@ -12470,7 +12470,7 @@ const OPDSConfigComponent = ({
                           </div>
                           <div>
                             <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                              書源名稱
+                              书源名称
                             </label>
                             <input
                               type='text'
@@ -12501,7 +12501,7 @@ const OPDSConfigComponent = ({
                         <div className='grid grid-cols-1 gap-4'>
                           <div>
                             <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                              認證方式
+                              认证方式
                             </label>
                             <select
                               value={source.authMode || 'none'}
@@ -12520,7 +12520,7 @@ const OPDSConfigComponent = ({
                           </div>
                           <div>
                             <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                              語言
+                              语言
                             </label>
                             <input
                               type='text'
@@ -12556,7 +12556,7 @@ const OPDSConfigComponent = ({
                           <div className='grid grid-cols-1 gap-4'>
                             <div>
                               <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                用戶名
+                                用户名
                               </label>
                               <input
                                 type='text'
@@ -12571,7 +12571,7 @@ const OPDSConfigComponent = ({
                             </div>
                             <div>
                               <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                密碼
+                                密码
                               </label>
                               <input
                                 type='password'
@@ -12591,7 +12591,7 @@ const OPDSConfigComponent = ({
                           <div className='grid grid-cols-1 gap-4'>
                             <div>
                               <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                Header 名稱
+                                Header 名称
                               </label>
                               <input
                                 type='text'
@@ -12634,10 +12634,10 @@ const OPDSConfigComponent = ({
                   <thead className='bg-gray-50 dark:bg-gray-800/70'>
                     <tr>
                       <th className='px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400'>
-                        啟用
+                        启用
                       </th>
                       <th className='px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400'>
-                        名稱
+                        名称
                       </th>
                       <th className='px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400'>
                         ID
@@ -12646,7 +12646,7 @@ const OPDSConfigComponent = ({
                         地址
                       </th>
                       <th className='px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400'>
-                        認證
+                        认证
                       </th>
                       <th className='px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400'>
                         搜索
@@ -12757,7 +12757,7 @@ const OPDSConfigComponent = ({
                                         size={14}
                                         className='inline mr-1'
                                       />
-                                      編輯
+                                      编辑
                                     </>
                                   )}
                                 </button>
@@ -12767,7 +12767,7 @@ const OPDSConfigComponent = ({
                                   className={buttonStyles.dangerSmall}
                                 >
                                   <Trash2 size={14} className='inline mr-1' />
-                                  刪除
+                                  删除
                                 </button>
                               </div>
                             </td>
@@ -12783,10 +12783,10 @@ const OPDSConfigComponent = ({
                                   <div className='flex items-center justify-between gap-3'>
                                     <div>
                                       <div className='text-sm font-medium text-gray-900 dark:text-white'>
-                                        編輯書源 #{index + 1}
+                                        编辑书源 #{index + 1}
                                       </div>
                                       <div className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                                        僅展開當前書源，保存時統一提交。
+                                        仅展开当前书源，保存时统一提交。
                                       </div>
                                     </div>
                                     <button
@@ -12805,7 +12805,7 @@ const OPDSConfigComponent = ({
                                   <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                                     <div>
                                       <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                        書源 ID
+                                        书源 ID
                                       </label>
                                       <input
                                         type='text'
@@ -12820,7 +12820,7 @@ const OPDSConfigComponent = ({
                                     </div>
                                     <div>
                                       <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                        書源名稱
+                                        书源名称
                                       </label>
                                       <input
                                         type='text'
@@ -12855,7 +12855,7 @@ const OPDSConfigComponent = ({
                                   <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
                                     <div>
                                       <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                        認證方式
+                                        认证方式
                                       </label>
                                       <select
                                         value={source.authMode || 'none'}
@@ -12872,13 +12872,13 @@ const OPDSConfigComponent = ({
                                           Basic Auth
                                         </option>
                                         <option value='header'>
-                                          自定義 Header
+                                          自定义 Header
                                         </option>
                                       </select>
                                     </div>
                                     <div>
                                       <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                        語言
+                                        语言
                                       </label>
                                       <input
                                         type='text'
@@ -12914,7 +12914,7 @@ const OPDSConfigComponent = ({
                                     <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                                       <div>
                                         <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                          用戶名
+                                          用户名
                                         </label>
                                         <input
                                           type='text'
@@ -12929,7 +12929,7 @@ const OPDSConfigComponent = ({
                                       </div>
                                       <div>
                                         <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                          密碼
+                                          密码
                                         </label>
                                         <input
                                           type='password'
@@ -12949,7 +12949,7 @@ const OPDSConfigComponent = ({
                                     <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                                       <div>
                                         <label className='mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                          Header 名稱
+                                          Header 名称
                                         </label>
                                         <input
                                           type='text'
@@ -13113,12 +13113,12 @@ const XiaoyaConfigComponent = ({
     <div className='space-y-6'>
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <h3 className='text-sm font-medium text-blue-900 dark:text-blue-100 mb-2'>
-          關於小雅
+          关于小雅
         </h3>
         <div className='text-sm text-blue-800 dark:text-blue-200 space-y-1'>
           <p>• 小雅是基於 Alist 的網盤資源聚合服務</p>
           <p>
-            • 支持文件夾名自動識別 TMDb ID（格式：標題 (年份) {'{tmdb-id}'}）
+            • 支持文件夹名自动识别 TMDb ID（格式：标题 (年份) {'{tmdb-id}'}）
           </p>
           <p>• 支持 NFO 文件元數據（poster.jpg、background.jpg）</p>
           <p>• 按需加載，無需全量掃描</p>
@@ -13129,10 +13129,10 @@ const XiaoyaConfigComponent = ({
         <div className='flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700'>
           <div>
             <h3 className='text-sm font-medium text-gray-900 dark:text-white'>
-              啟用小雅功能
+              启用小雅功能
             </h3>
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-              關閉後將不顯示小雅入口
+              关闭后将不显示小雅入口
             </p>
           </div>
           <button
@@ -13151,7 +13151,7 @@ const XiaoyaConfigComponent = ({
 
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            Alist 服務器地址
+            Alist 服务器地址
           </label>
           <input
             type='text'
@@ -13161,13 +13161,13 @@ const XiaoyaConfigComponent = ({
             className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
           />
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            小雅 Alist 服務器的完整地址
+            小雅 Alist 服务器的完整地址
           </p>
         </div>
 
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            Token（推薦）
+            Token（推荐）
           </label>
           <input
             type='password'
@@ -13181,7 +13181,7 @@ const XiaoyaConfigComponent = ({
         <div className='grid grid-cols-2 gap-4'>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              用戶名
+              用户名
             </label>
             <input
               type='text'
@@ -13193,7 +13193,7 @@ const XiaoyaConfigComponent = ({
           </div>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              密碼
+              密码
             </label>
             <input
               type='password'
@@ -13208,10 +13208,10 @@ const XiaoyaConfigComponent = ({
         <div className='flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700'>
           <div>
             <h3 className='text-sm font-medium text-gray-900 dark:text-white'>
-              禁用預覽視頻
+              禁用预览视频
             </h3>
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-              開啟後將直接返回直連鏈接，不使用視頻預覽流
+              开启后将直接返回直连链接，不使用视频预览流
             </p>
           </div>
           <button
@@ -13261,7 +13261,7 @@ const XiaoyaConfigComponent = ({
   );
 };
 
-// 郵件配置組件
+// 邮件配置组件
 const EmailConfigComponent = ({
   config,
   refreshConfig,
@@ -13286,7 +13286,7 @@ const EmailConfigComponent = ({
   const [resendApiKey, setResendApiKey] = useState('');
   const [resendFrom, setResendFrom] = useState('');
 
-  // 測試郵件
+  // 测试邮件
   const [testEmail, setTestEmail] = useState('');
 
   useEffect(() => {
@@ -13423,7 +13423,7 @@ const EmailConfigComponent = ({
     <div className='space-y-6'>
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <h3 className='text-sm font-medium text-blue-900 dark:text-blue-100 mb-2'>
-          關於郵件通知
+          关于邮件通知
         </h3>
         <div className='text-sm text-blue-800 dark:text-blue-200 space-y-1'>
           <p>• 當用戶收藏的影片有更新時，自動發送郵件通知</p>
@@ -13433,14 +13433,14 @@ const EmailConfigComponent = ({
       </div>
 
       <div className='space-y-4'>
-        {/* 啟用開關 */}
+        {/* 启用开关 */}
         <div className='flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700'>
           <div>
             <h3 className='text-sm font-medium text-gray-900 dark:text-white'>
-              啟用郵件通知
+              启用邮件通知
             </h3>
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-              開啟後用戶可以接收收藏更新的郵件通知
+              开启后用户可以接收收藏更新的邮件通知
             </p>
           </div>
           <button
@@ -13457,10 +13457,10 @@ const EmailConfigComponent = ({
           </button>
         </div>
 
-        {/* 發送方式選擇 */}
+        {/* 发送方式选择 */}
         <div>
           <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-            發送方式
+            发送方式
           </label>
           <div className='flex gap-4'>
             <label className='flex items-center'>
@@ -13500,7 +13500,7 @@ const EmailConfigComponent = ({
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
               <div>
                 <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                  SMTP 主機 *
+                  SMTP 主机 *
                 </label>
                 <input
                   type='text'
@@ -13533,13 +13533,13 @@ const EmailConfigComponent = ({
                 className='mr-2'
               />
               <label className='text-sm text-gray-700 dark:text-gray-300'>
-                使用 SSL/TLS（端口 465 時啟用）
+                使用 SSL/TLS（端口 465 时启用）
               </label>
             </div>
 
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                SMTP 用戶名 *
+                SMTP 用户名 *
               </label>
               <input
                 type='text'
@@ -13552,7 +13552,7 @@ const EmailConfigComponent = ({
 
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                SMTP 密碼 *
+                SMTP 密码 *
               </label>
               <input
                 type='password'
@@ -13565,7 +13565,7 @@ const EmailConfigComponent = ({
 
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                發件人郵箱 *
+                发件人邮箱 *
               </label>
               <input
                 type='email'
@@ -13606,13 +13606,13 @@ const EmailConfigComponent = ({
                 >
                   Resend 控制台
                 </a>{' '}
-                獲取
+                获取
               </p>
             </div>
 
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                發件人郵箱 *
+                发件人邮箱 *
               </label>
               <input
                 type='email'
@@ -13622,16 +13622,16 @@ const EmailConfigComponent = ({
                 className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white'
               />
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                需要先在 Resend 中驗證域名
+                需要先在 Resend 中验证域名
               </p>
             </div>
           </div>
         )}
 
-        {/* 測試郵件 */}
+        {/* 测试邮件 */}
         <div className='p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg'>
           <h4 className='text-sm font-medium text-blue-900 dark:text-blue-100 mb-2'>
-            發送測試郵件
+            发送测试邮件
           </h4>
           <div className='flex flex-col sm:flex-row gap-2'>
             <input
@@ -13651,7 +13651,7 @@ const EmailConfigComponent = ({
           </div>
         </div>
 
-        {/* 保存按鈕 */}
+        {/* 保存按钮 */}
         <div className='flex gap-3'>
           <button
             onClick={handleSave}
@@ -13676,7 +13676,7 @@ const EmailConfigComponent = ({
   );
 };
 
-// 求片列表組件
+// 求片列表组件
 const MovieRequestsComponent = ({
   config,
   refreshConfig,
@@ -13692,7 +13692,7 @@ const MovieRequestsComponent = ({
   const [fulfilledCount, setFulfilledCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // 求片功能設置
+  // 求片功能设置
   const [enableMovieRequest, setEnableMovieRequest] = useState(
     config?.SiteConfig?.EnableMovieRequest ?? true
   );
@@ -13802,19 +13802,19 @@ const MovieRequestsComponent = ({
 
   return (
     <div className='space-y-4'>
-      {/* 求片功能設置 */}
+      {/* 求片功能设置 */}
       <div className='p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
         <h3 className='text-lg font-medium text-gray-900 dark:text-gray-100 mb-4'>
-          求片功能設置
+          求片功能设置
         </h3>
         <div className='space-y-4'>
           <div className='flex items-center justify-between'>
             <div>
               <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                啟用求片功能
+                启用求片功能
               </label>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                關閉後用戶將無法訪問求片頁面
+                关闭后用户将无法访问求片页面
               </p>
             </div>
             <label className='relative inline-flex items-center cursor-pointer'>
@@ -13830,10 +13830,10 @@ const MovieRequestsComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              求片冷卻時間（秒）
+              求片冷却时间（秒）
             </label>
             <p className='text-xs text-gray-500 dark:text-gray-400 mb-2'>
-              用戶兩次求片之間的最小間隔時間，默認3600秒（1小時）
+              用户两次求片之间的最小间隔时间，默认3600秒（1小时）
             </p>
             <input
               type='number'
@@ -13846,11 +13846,11 @@ const MovieRequestsComponent = ({
             />
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
               {movieRequestCooldown >= 3600
-                ? `約 ${Math.floor(
+                ? `约 ${Math.floor(
                     movieRequestCooldown / 3600
-                  )} 小時 ${Math.floor(
+                  )} 小时 ${Math.floor(
                     (movieRequestCooldown % 3600) / 60
-                  )} 分鐘`
+                  )} 分钟`
                 : movieRequestCooldown >= 60
                 ? `約 ${Math.floor(movieRequestCooldown / 60)} 分鐘`
                 : `${movieRequestCooldown} 秒`}
@@ -13881,7 +13881,7 @@ const MovieRequestsComponent = ({
                 : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
             }`}
           >
-            待處理 ({pendingCount})
+            待处理 ({pendingCount})
           </button>
           <button
             onClick={() => setFilter('fulfilled')}
@@ -13901,7 +13901,7 @@ const MovieRequestsComponent = ({
           </div>
         ) : requests.length === 0 ? (
           <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
-            暫無求片
+            暂无求片
           </div>
         ) : (
           <div className='space-y-3'>
@@ -13923,14 +13923,14 @@ const MovieRequestsComponent = ({
                       {req.title} {req.year && `(${req.year})`}
                     </h3>
                     <p className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
-                      求片人數: {req.requestCount} 人
+                      求片人数: {req.requestCount} 人
                     </p>
                     <p className='text-xs text-gray-500 dark:text-gray-500 mt-1'>
                       {new Date(req.createdAt).toLocaleString('zh-CN')}
                     </p>
                     {req.requestedBy && (
                       <p className='text-xs text-gray-500 dark:text-gray-500 mt-1'>
-                        求片用戶: {req.requestedBy.join(', ')}
+                        求片用户: {req.requestedBy.join(', ')}
                       </p>
                     )}
                   </div>
@@ -13974,7 +13974,7 @@ const MovieRequestsComponent = ({
   );
 };
 
-// AI配置組件
+// AI配置组件
 const AIConfigComponent = ({
   config,
   refreshConfig,
@@ -13985,18 +13985,18 @@ const AIConfigComponent = ({
   const { alertModal, showAlert, hideAlert } = useAlertModal();
   const { isLoading, withLoading } = useLoadingState();
 
-  // 狀態管理
+  // 状态管理
   const [enabled, setEnabled] = useState(false);
 
-  // 自定義配置
+  // 自定义配置
   const [customApiKey, setCustomApiKey] = useState('');
   const [customBaseURL, setCustomBaseURL] = useState('');
   const [customModel, setCustomModel] = useState('');
 
-  // 決策模型配置
+  // 决策模型配置
   const [decisionCustomModel, setDecisionCustomModel] = useState('');
 
-  // 聯網搜索配置
+  // 联网搜索配置
   const [enableWebSearch, setEnableWebSearch] = useState(false);
   const [webSearchProvider, setWebSearchProvider] = useState<
     'tavily' | 'serper' | 'serpapi'
@@ -14005,23 +14005,23 @@ const AIConfigComponent = ({
   const [serperApiKey, setSerperApiKey] = useState('');
   const [serpApiKey, setSerpApiKey] = useState('');
 
-  // 功能開關
+  // 功能开关
   const [enableHomepageEntry, setEnableHomepageEntry] = useState(true);
   const [enableVideoCardEntry, setEnableVideoCardEntry] = useState(true);
   const [enablePlayPageEntry, setEnablePlayPageEntry] = useState(true);
   const [enableAIComments, setEnableAIComments] = useState(false);
 
-  // 高級設置
+  // 高级设置
   const [temperature, setTemperature] = useState(0.7);
   const [maxTokens, setMaxTokens] = useState(1000);
   const [systemPrompt, setSystemPrompt] = useState('');
   const [enableStreaming, setEnableStreaming] = useState(true);
 
-  // AI默認消息配置
+  // AI默认消息配置
   const [defaultMessageNoVideo, setDefaultMessageNoVideo] = useState('');
   const [defaultMessageWithVideo, setDefaultMessageWithVideo] = useState('');
 
-  // 從配置加載數據
+  // 从配置加载数据
   useEffect(() => {
     if (config?.AIConfig) {
       setEnabled(config.AIConfig.Enabled || false);
@@ -14099,7 +14099,7 @@ const AIConfigComponent = ({
 
   return (
     <div className='space-y-6'>
-      {/* 使用說明 */}
+      {/* 使用说明 */}
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <div className='flex items-center gap-2 mb-2'>
           <svg
@@ -14116,7 +14116,7 @@ const AIConfigComponent = ({
             />
           </svg>
           <span className='text-sm font-medium text-blue-800 dark:text-blue-300'>
-            使用說明
+            使用说明
           </span>
         </div>
         <div className='text-sm text-blue-700 dark:text-blue-400 space-y-1'>
@@ -14128,14 +14128,14 @@ const AIConfigComponent = ({
         </div>
       </div>
 
-      {/* 功能開關 */}
+      {/* 功能开关 */}
       <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
         <div>
           <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-            啟用AI問片功能
+            启用AI问片功能
           </h3>
           <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-            關閉後所有AI問片入口將不可用
+            关闭后所有AI问片入口将不可用
           </p>
         </div>
         <label className='relative inline-flex items-center cursor-pointer'>
@@ -14155,11 +14155,11 @@ const AIConfigComponent = ({
           AI模型配置
         </h3>
         <p className='text-sm text-gray-500 dark:text-gray-400'>
-          請配置兼容OpenAI格式的API
+          请配置兼容OpenAI格式的API
         </p>
         <div className='space-y-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg'>
           <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
-            自定義 API 配置
+            自定义 API 配置
           </h4>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
@@ -14187,7 +14187,7 @@ const AIConfigComponent = ({
           </div>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              模型名稱 <span className='text-red-500'>*</span>
+              模型名称 <span className='text-red-500'>*</span>
             </label>
             <input
               type='text'
@@ -14200,21 +14200,21 @@ const AIConfigComponent = ({
         </div>
       </div>
 
-      {/* 決策模型配置 */}
+      {/* 决策模型配置 */}
       <div className='space-y-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg'>
         <div>
           <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
-            AI決策模型配置
+            AI决策模型配置
           </h4>
           <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-            使用AI智能判斷是否需要聯網搜索、豆瓣或TMDB數據,並優化搜索關鍵詞(複用主模型的API配置)
+            使用AI智能判断是否需要联网搜索、豆瓣或TMDB数据,并优化搜索关键词(复用主模型的API配置)
           </p>
         </div>
 
         <div className='space-y-3 p-3 bg-purple-50/50 dark:bg-purple-900/10 rounded-lg'>
           <div>
             <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-              決策模型名稱
+              决策模型名称
             </label>
             <input
               type='text'
@@ -14224,7 +14224,7 @@ const AIConfigComponent = ({
               className='w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
             />
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-              留空則使用傳統關鍵詞匹配方式,不進行AI決策
+              留空则使用传统关键词匹配方式,不进行AI决策
             </p>
           </div>
         </div>
@@ -14232,21 +14232,21 @@ const AIConfigComponent = ({
         <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3'>
           <p className='text-xs text-blue-700 dark:text-blue-400'>
             💡 <strong>提示:</strong>{' '}
-            決策模型用於智能判斷是否需要調用各個數據源,建議使用成本較低的小模型(如
-            gpt-4o-mini)。會複用主模型的API Key和Base URL配置。
+            决策模型用于智能判断是否需要调用各个数据源,建议使用成本较低的小模型(如
+            gpt-4o-mini)。会复用主模型的API Key和Base URL配置。
           </p>
         </div>
       </div>
 
-      {/* 聯網搜索配置 */}
+      {/* 联网搜索配置 */}
       <div className='space-y-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg'>
         <div className='flex items-center justify-between'>
           <div>
             <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100'>
-              啟用聯網搜索
+              启用联网搜索
             </h4>
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-              AI可以搜索最新的影視資訊和信息
+              AI可以搜索最新的影视资讯和信息
             </p>
           </div>
           <label className='relative inline-flex items-center cursor-pointer'>
@@ -14264,7 +14264,7 @@ const AIConfigComponent = ({
           <div className='space-y-4 mt-4'>
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                搜索服務提供商
+                搜索服务提供商
               </label>
               <select
                 value={webSearchProvider}
@@ -14298,7 +14298,7 @@ const AIConfigComponent = ({
                   >
                     tavily.com
                   </a>{' '}
-                  註冊獲取
+                  注册获取
                 </p>
               </div>
             )}
@@ -14324,7 +14324,7 @@ const AIConfigComponent = ({
                   >
                     serper.dev
                   </a>{' '}
-                  註冊獲取
+                  注册获取
                 </p>
               </div>
             )}
@@ -14350,7 +14350,7 @@ const AIConfigComponent = ({
                   >
                     serpapi.com
                   </a>{' '}
-                  註冊獲取
+                  注册获取
                 </p>
               </div>
             )}
@@ -14358,10 +14358,10 @@ const AIConfigComponent = ({
         )}
       </div>
 
-      {/* 入口開關 */}
+      {/* 入口开关 */}
       <div className='space-y-3 p-4 border border-gray-200 dark:border-gray-700 rounded-lg'>
         <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3'>
-          功能入口設置
+          功能入口设置
         </h4>
 
         {[
@@ -14419,10 +14419,10 @@ const AIConfigComponent = ({
         ))}
       </div>
 
-      {/* 高級設置 */}
+      {/* 高级设置 */}
       <details className='p-4 border border-gray-200 dark:border-gray-700 rounded-lg'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          高級設置 (可選)
+          高级设置 (可选)
         </summary>
         <div className='mt-4 space-y-4'>
           <div>
@@ -14439,13 +14439,13 @@ const AIConfigComponent = ({
               className='w-full'
             />
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-              控制回覆的創造性，0=保守，2=創造
+              控制回复的创造性，0=保守，2=创造
             </p>
           </div>
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              最大回復Token數
+              最大回复Token数
             </label>
             <input
               type='number'
@@ -14457,7 +14457,7 @@ const AIConfigComponent = ({
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              自定義系統提示詞
+              自定义系统提示词
             </label>
             <textarea
               value={systemPrompt}
@@ -14468,14 +14468,14 @@ const AIConfigComponent = ({
             />
           </div>
 
-          {/* 流式響應開關 */}
+          {/* 流式响应开关 */}
           <div className='flex items-center justify-between py-3 border-t border-gray-200 dark:border-gray-700'>
             <div className='flex-1'>
               <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                流式響應
+                流式响应
               </label>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                啟用後AI消息將實時流式顯示，關閉後將等待完整響應後一次性顯示
+                启用后AI消息将实时流式显示，关闭后将等待完整响应后一次性显示
               </p>
             </div>
             <button
@@ -14494,15 +14494,15 @@ const AIConfigComponent = ({
         </div>
       </details>
 
-      {/* AI默認消息配置 */}
+      {/* AI默认消息配置 */}
       <details className='p-4 border border-gray-200 dark:border-gray-700 rounded-lg'>
         <summary className='text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer'>
-          默認消息配置 (可選)
+          默认消息配置 (可选)
         </summary>
         <div className='mt-4 space-y-4'>
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              無視頻時的默認消息
+              无视频时的默认消息
             </label>
             <textarea
               value={defaultMessageNoVideo}
@@ -14512,13 +14512,13 @@ const AIConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
             />
             <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
-              當用戶在首頁或沒有視頻上下文時打開AI問片，將顯示此默認消息
+              当用户在首页或没有视频上下文时打开AI问片，将显示此默认消息
             </p>
           </div>
 
           <div>
             <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-              有視頻時的默認消息
+              有视频时的默认消息
             </label>
             <textarea
               value={defaultMessageWithVideo}
@@ -14528,17 +14528,17 @@ const AIConfigComponent = ({
               className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
             />
             <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
-              當用戶在視頻卡片或播放頁打開AI問片時，將顯示此默認消息。支持使用{' '}
+              当用户在视频卡片或播放页打开AI问片时，将显示此默认消息。支持使用{' '}
               <code className='px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs font-mono'>
                 {'{title}'}
               </code>{' '}
-              替換符來顯示片名
+              替换符来显示片名
             </p>
           </div>
         </div>
       </details>
 
-      {/* 保存按鈕 */}
+      {/* 保存按钮 */}
       <div className='flex justify-end'>
         <button
           onClick={handleSave}
@@ -14553,7 +14553,7 @@ const AIConfigComponent = ({
         </button>
       </div>
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -14567,7 +14567,7 @@ const AIConfigComponent = ({
   );
 };
 
-// 音樂配置組件
+// 音乐配置组件
 const MusicConfigComponent = ({
   config,
   refreshConfig,
@@ -14646,19 +14646,19 @@ const MusicConfigComponent = ({
             />
           </svg>
           <span className='text-sm font-medium text-blue-800 dark:text-blue-300'>
-            使用說明
+            使用说明
           </span>
         </div>
         <div className='text-sm text-blue-700 dark:text-blue-400 space-y-1'>
           <p>
-            • 音樂功能基於 lxserver 提供搜索、熱搜、榜單、歌詞與播放解析能力
+            • 音乐功能基于 lxserver 提供搜索、热搜、榜单、歌词与播放解析能力
           </p>
           <p>
-            • 建議填寫服務端 Base URL 與持久 Token，由 MoonTV 服務端代為訪問
+            • 建议填写服务端 Base URL 与持久 Token，由 MoonTV 服务端代为访问
             lxserver
           </p>
           <p>
-            • 項目地址：
+            • 项目地址：
             <a
               href='https://github.com/XCQ0607/lxserver'
               target='_blank'
@@ -14674,10 +14674,10 @@ const MusicConfigComponent = ({
       <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
         <div>
           <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-            啟用音樂功能
+            启用音乐功能
           </h3>
           <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-            關閉後不顯示音樂入口，前端音樂頁與接口將不可用
+            关闭后不显示音乐入口，前端音乐页与接口将不可用
           </p>
         </div>
         <label className='relative inline-flex items-center cursor-pointer'>
@@ -14695,10 +14695,10 @@ const MusicConfigComponent = ({
         <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700'>
           <div>
             <h3 className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-              啟用播放代理
+              启用播放代理
             </h3>
             <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-              開啟後走服務器代理並設置瀏覽器永久緩存，關閉後將每次都解析播放鏈接
+              开启后走服务器代理并设置浏览器永久缓存，关闭后将每次都解析播放链接
             </p>
           </div>
           <label className='relative inline-flex items-center cursor-pointer'>
@@ -14740,7 +14740,7 @@ const MusicConfigComponent = ({
             className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
           />
           <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-            推薦填寫 lxserver 持久 Token；留空則按匿名訪問處理
+            推荐填写 lxserver 持久 Token；留空则按匿名访问处理
           </p>
         </div>
       </div>
@@ -14772,7 +14772,7 @@ const MusicConfigComponent = ({
   );
 };
 
-// 直播源配置組件
+// 直播源配置组件
 const LiveSourceConfig = ({
   config,
   refreshConfig,
@@ -14799,16 +14799,16 @@ const LiveSourceConfig = ({
     from: 'custom',
   });
 
-  // dnd-kit 傳感器
+  // dnd-kit 传感器
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5, // 輕微位移即可觸發
+        distance: 5, // 轻微位移即可触发
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 150, // 長按 150ms 後觸發，避免與滾動衝突
+        delay: 150, // 长按 150ms 后触发，避免与滚动冲突
         tolerance: 5,
       },
     })
@@ -14819,12 +14819,12 @@ const LiveSourceConfig = ({
     if (config?.LiveConfig) {
       setLiveSources(config.LiveConfig);
       setRefreshIntervalHours(config.LiveRefreshIntervalHours || 12);
-      // 進入時重置 orderChanged
+      // 进入时重置 orderChanged
       setOrderChanged(false);
     }
   }, [config]);
 
-  // 通用 API 請求
+  // 通用 API 请求
   const callLiveSourceApi = async (body: Record<string, any>) => {
     try {
       const resp = await fetch('/api/admin/live', {
@@ -14838,11 +14838,11 @@ const LiveSourceConfig = ({
         throw new Error(data.error || `操作失敗: ${resp.status}`);
       }
 
-      // 成功後刷新配置
+      // 成功后刷新配置
       await refreshConfig();
     } catch (err) {
       showError(err instanceof Error ? err.message : '操作失敗', showAlert);
-      throw err; // 向上拋出方便調用處判斷
+      throw err; // 向上抛出方便调用处判断
     }
   };
 
@@ -14862,10 +14862,10 @@ const LiveSourceConfig = ({
     mode: 'full' | 'm3u8-only' | 'direct'
   ) => {
     withLoading(`setLiveProxyMode_${key}`, async () => {
-      // 保存舊值用於回滾
+      // 保存旧值用于回滚
       const oldMode = liveSources.find((s) => s.key === key)?.proxyMode;
 
-      // 樂觀更新本地狀態
+      // 乐观更新本地状态
       setLiveSources((prev) =>
         prev.map((s) => (s.key === key ? { ...s, proxyMode: mode } : s))
       );
@@ -14885,10 +14885,10 @@ const LiveSourceConfig = ({
           throw new Error('設置代理模式失敗');
         }
 
-        // 成功後刷新配置
+        // 成功后刷新配置
         await refreshConfig();
       } catch (error) {
-        // 失敗時回滾本地狀態
+        // 失败时回滚本地状态
         setLiveSources((prev) =>
           prev.map((s) => (s.key === key ? { ...s, proxyMode: oldMode } : s))
         );
@@ -14958,7 +14958,7 @@ const LiveSourceConfig = ({
           throw new Error(data.error || `刷新失敗: ${response.status}`);
         }
 
-        // 刷新成功後重新獲取配置
+        // 刷新成功后重新获取配置
         await refreshConfig();
         showAlert({
           type: 'success',
@@ -15045,7 +15045,7 @@ const LiveSourceConfig = ({
       });
   };
 
-  // 可拖拽行封裝 (dnd-kit)
+  // 可拖拽行封装 (dnd-kit)
   const DraggableRow = ({ liveSource }: { liveSource: LiveDataSource }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id: liveSource.key });
@@ -15157,7 +15157,7 @@ const LiveSourceConfig = ({
                     : ''
                 }`}
               >
-                編輯
+                编辑
               </button>
               <button
                 onClick={() => handleDelete(liveSource.key)}
@@ -15168,7 +15168,7 @@ const LiveSourceConfig = ({
                     : ''
                 }`}
               >
-                刪除
+                删除
               </button>
             </>
           )}
@@ -15180,20 +15180,20 @@ const LiveSourceConfig = ({
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加載中...
+        加载中...
       </div>
     );
   }
 
   return (
     <div className='space-y-6'>
-      {/* 添加直播源表單 */}
+      {/* 添加直播源表单 */}
       <div className='space-y-4'>
         <div className='flex items-end justify-between gap-3'>
           <div className='flex items-end gap-2 flex-nowrap'>
             <div className='min-w-0'>
               <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 whitespace-nowrap'>
-                刷新間隔（小時）
+                刷新间隔（小时）
               </label>
               <input
                 type='number'
@@ -15325,12 +15325,12 @@ const LiveSourceConfig = ({
         </div>
       )}
 
-      {/* 編輯直播源表單 */}
+      {/* 编辑直播源表单 */}
       {editingLiveSource && (
         <div className='p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 space-y-4'>
           <div className='flex items-center justify-between'>
             <h5 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-              編輯直播源: {editingLiveSource.name}
+              编辑直播源: {editingLiveSource.name}
             </h5>
             <button
               onClick={handleCancelEdit}
@@ -15342,7 +15342,7 @@ const LiveSourceConfig = ({
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
             <div>
               <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                名稱
+                名称
               </label>
               <input
                 type='text'
@@ -15357,7 +15357,7 @@ const LiveSourceConfig = ({
             </div>
             <div>
               <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                Key (不可編輯)
+                Key (不可编辑)
               </label>
               <input
                 type='text'
@@ -15383,7 +15383,7 @@ const LiveSourceConfig = ({
             </div>
             <div>
               <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                節目單地址（選填）
+                节目单地址（选填）
               </label>
               <input
                 type='text'
@@ -15398,7 +15398,7 @@ const LiveSourceConfig = ({
             </div>
             <div>
               <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                自定義 UA（選填）
+                自定义 UA（选填）
               </label>
               <input
                 type='text'
@@ -15449,7 +15449,7 @@ const LiveSourceConfig = ({
           <thead className='bg-gray-50 dark:bg-gray-900 sticky top-0 z-10'>
             <tr>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                名稱
+                名称
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                 Key
@@ -15458,16 +15458,16 @@ const LiveSourceConfig = ({
                 M3U 地址
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                節目單地址
+                节目单地址
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                自定義 UA
+                自定义 UA
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                頻道數
+                频道数
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                狀態
+                状态
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
                 代理模式
@@ -15498,7 +15498,7 @@ const LiveSourceConfig = ({
         </table>
       </div>
 
-      {/* 保存排序按鈕 */}
+      {/* 保存排序按钮 */}
       {orderChanged && (
         <div className='flex justify-end'>
           <button
@@ -15515,7 +15515,7 @@ const LiveSourceConfig = ({
         </div>
       )}
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -15529,7 +15529,7 @@ const LiveSourceConfig = ({
   );
 };
 
-// 網絡直播配置組件
+// 网络直播配置组件
 const WebLiveConfig = ({
   config,
   refreshConfig,
@@ -15655,22 +15655,22 @@ const WebLiveConfig = ({
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加載中...
+        加载中...
       </div>
     );
   }
 
   return (
     <div className='space-y-6'>
-      {/* 功能總開關 */}
+      {/* 功能总开关 */}
       <div className='p-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg border-2 border-orange-300 dark:border-orange-700'>
         <div className='flex items-center justify-between'>
           <div className='flex-1'>
             <h4 className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1'>
-              網絡直播功能總開關
+              网络直播功能总开关
             </h4>
             <p className='text-xs text-gray-600 dark:text-gray-400'>
-              關閉後，側邊欄和底部導航欄的網絡直播入口將被隱藏，用戶無法訪問網絡直播頁面
+              关闭后，侧边栏和底部导航栏的网络直播入口将被隐藏，用户无法访问网络直播页面
             </p>
           </div>
           <button
@@ -15699,7 +15699,7 @@ const WebLiveConfig = ({
         </div>
       </div>
 
-      {/* 免責聲明彈窗 */}
+      {/* 免责声明弹窗 */}
       {showDisclaimerModal &&
         createPortal(
           <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4'>
@@ -15710,14 +15710,14 @@ const WebLiveConfig = ({
                 </div>
 
                 <h3 className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 text-center'>
-                  免責聲明
+                  免责声明
                 </h3>
 
                 <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6'>
                   <p className='text-sm text-gray-700 dark:text-gray-300 leading-relaxed'>
-                    本功能僅供個人學習和技術研究使用，請勿將其部署在公網環境中，更不得用於任何違法違規行為。
-                    使用本功能所產生的一切法律責任由使用者自行承擔，與開發者無關。
-                    啟用此功能即表示您已充分理解並同意承擔相應風險。
+                    本功能仅供个人学习和技术研究使用，请勿将其部署在公网环境中，更不得用于任何违法违规行为。
+                    使用本功能所产生的一切法律责任由使用者自行承担，与开发者无关。
+                    启用此功能即表示您已充分理解并同意承担相应风险。
                   </p>
                 </div>
 
@@ -15756,7 +15756,7 @@ const WebLiveConfig = ({
 
       <div className='flex items-center justify-between'>
         <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-          網絡直播列表
+          网络直播列表
         </h4>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
@@ -15829,7 +15829,7 @@ const WebLiveConfig = ({
         <div className='p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 space-y-4'>
           <div className='flex items-center justify-between'>
             <h5 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-              編輯: {editingSource.name}
+              编辑: {editingSource.name}
             </h5>
             <button
               onClick={() => setEditingSource(null)}
@@ -15841,7 +15841,7 @@ const WebLiveConfig = ({
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
             <div>
               <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                名稱
+                名称
               </label>
               <input
                 type='text'
@@ -15856,7 +15856,7 @@ const WebLiveConfig = ({
             </div>
             <div>
               <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                直播類型
+                直播类型
               </label>
               <select
                 value={editingSource.platform}
@@ -15874,7 +15874,7 @@ const WebLiveConfig = ({
             </div>
             <div>
               <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                房間ID
+                房间ID
               </label>
               <input
                 type='text'
@@ -15921,16 +15921,16 @@ const WebLiveConfig = ({
           <thead className='bg-gray-50 dark:bg-gray-900'>
             <tr>
               <th className='px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase'>
-                名稱
+                名称
               </th>
               <th className='hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase'>
-                直播類型
+                直播类型
               </th>
               <th className='hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase'>
-                房間ID
+                房间ID
               </th>
               <th className='px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase'>
-                狀態
+                状态
               </th>
               <th className='px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase'>
                 操作
@@ -16007,7 +16007,7 @@ const WebLiveConfig = ({
                               : ''
                           }`}
                         >
-                          編輯
+                          编辑
                         </button>
                         <button
                           onClick={() => handleDelete(source.key)}
@@ -16018,7 +16018,7 @@ const WebLiveConfig = ({
                               : ''
                           }`}
                         >
-                          刪除
+                          删除
                         </button>
                       </>
                     )}
@@ -16077,8 +16077,8 @@ function AdminPageClient() {
     emailConfig: false,
   });
 
-  // 獲取管理員配置
-  // showLoading 用於控制是否在請求期間顯示整體加載骨架。
+  // 获取管理员配置
+  // showLoading 用于控制是否在请求期间显示整体加载骨架。
   const fetchConfig = useCallback(async (showLoading = false) => {
     try {
       if (showLoading) {
@@ -16097,7 +16097,7 @@ function AdminPageClient() {
       setRole(data.Role);
     } catch (err) {
       const msg = err instanceof Error ? err.message : '獲取配置失敗';
-      // 只在首次加載時設置錯誤狀態，避免彈窗和錯誤頁面同時顯示
+      // 只在首次加载时设置错误状态，避免弹窗和错误页面同时显示
       if (showLoading) {
         setError(msg);
       } else {
@@ -16110,7 +16110,7 @@ function AdminPageClient() {
     }
   }, []);
 
-  // 新版本用戶列表狀態
+  // 新版本用户列表状态
   const [usersV2, setUsersV2] = useState<Array<{
     username: string;
     role: 'owner' | 'admin' | 'user';
@@ -16120,14 +16120,14 @@ function AdminPageClient() {
     created_at: number;
   }> | null>(null);
 
-  // 用戶列表分頁狀態
+  // 用户列表分页状态
   const [userPage, setUserPage] = useState(1);
   const [userTotalPages, setUserTotalPages] = useState(1);
   const [userTotal, setUserTotal] = useState(0);
   const [userListLoading, setUserListLoading] = useState(false);
   const userLimit = 10;
 
-  // 獲取新版本用戶列表
+  // 获取新版本用户列表
   const fetchUsersV2 = useCallback(async (page = 1) => {
     try {
       setUserListLoading(true);
@@ -16148,19 +16148,19 @@ function AdminPageClient() {
     }
   }, []);
 
-  // 刷新配置和用戶列表
+  // 刷新配置和用户列表
   const refreshConfigAndUsers = useCallback(async () => {
     await fetchConfig();
-    await fetchUsersV2(userPage); // 保持當前頁碼
+    await fetchUsersV2(userPage); // 保持当前页码
   }, [fetchConfig, fetchUsersV2, userPage]);
 
   useEffect(() => {
-    // 首次加載時顯示骨架
+    // 首次加载时显示骨架
     fetchConfig(true);
-    // 不再自動獲取用戶列表，等用戶打開用戶管理選項卡時再獲取
+    // 不再自动获取用户列表，等用户打开用户管理选项卡时再获取
   }, [fetchConfig]);
 
-  // 切換標籤展開狀態
+  // 切换标签展开状态
   const toggleTab = (tabKey: string) => {
     const wasExpanded = expandedTabs[tabKey];
 
@@ -16169,13 +16169,13 @@ function AdminPageClient() {
       [tabKey]: !prev[tabKey],
     }));
 
-    // 當打開用戶管理選項卡時，如果還沒有加載用戶列表，則加載
+    // 当打开用户管理选项卡时，如果还没有加载用户列表，则加载
     if (tabKey === 'userConfig' && !wasExpanded && !usersV2) {
       fetchUsersV2();
     }
   };
 
-  // 新增: 重置配置處理函數
+  // 新增: 重置配置处理函数
   const handleResetConfig = () => {
     setShowResetConfigModal(true);
   };
@@ -16197,7 +16197,7 @@ function AdminPageClient() {
     });
   };
 
-  // 新增: 重載配置處理函數
+  // 新增: 重载配置处理函数
   const handleReloadConfig = async () => {
     await withLoading('reloadConfig', async () => {
       try {
@@ -16220,7 +16220,7 @@ function AdminPageClient() {
         <div className='px-2 sm:px-10 py-4 sm:py-8'>
           <div className='max-w-[95%] mx-auto'>
             <h1 className='text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8'>
-              管理員設置
+              管理员设置
             </h1>
             <div className='space-y-4'>
               {Array.from({ length: 3 }).map((_, index) => (
@@ -16237,7 +16237,7 @@ function AdminPageClient() {
   }
 
   if (error) {
-    // 顯示無權限提示頁面
+    // 显示无权限提示页面
     return (
       <PageLayout activePath='/admin'>
         <div className='min-h-screen flex items-center justify-center px-4'>
@@ -16249,7 +16249,7 @@ function AdminPageClient() {
                 </div>
               </div>
               <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4'>
-                無權限訪問
+                无权限访问
               </h2>
               <p className='text-gray-600 dark:text-gray-400 mb-6'>{error}</p>
               <div className='space-y-3'>
@@ -16257,13 +16257,13 @@ function AdminPageClient() {
                   onClick={() => (window.location.href = '/')}
                   className='w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg font-medium transition-colors'
                 >
-                  返回首頁
+                  返回首页
                 </button>
                 <button
                   onClick={() => (window.location.href = '/login')}
                   className='w-full px-6 py-3 bg-gray-600 hover:bg-gray-700 dark:bg-gray-600 dark:hover:bg-gray-700 text-white rounded-lg font-medium transition-colors'
                 >
-                  重新登錄
+                  重新登录
                 </button>
               </div>
             </div>
@@ -16277,10 +16277,10 @@ function AdminPageClient() {
     <PageLayout activePath='/admin'>
       <div className='px-2 sm:px-10 py-4 sm:py-8'>
         <div className='max-w-[95%] mx-auto'>
-          {/* 標題 + 重置配置按鈕 */}
+          {/* 标题 + 重置配置按钮 */}
           <div className='flex items-center gap-2 mb-8'>
             <h1 className='text-2xl font-bold text-gray-900 dark:text-gray-100'>
-              管理員設置
+              管理员设置
             </h1>
             {config && role === 'owner' && (
               <>
@@ -16294,7 +16294,7 @@ function AdminPageClient() {
                   onClick={handleReloadConfig}
                   className={`px-3 py-1 text-xs rounded-md transition-colors ${buttonStyles.primarySmall}`}
                 >
-                  重載配置
+                  重载配置
                 </button>
               </>
             )}
@@ -16319,14 +16319,14 @@ function AdminPageClient() {
                 </div>
                 <div className='flex-1'>
                   <p className='text-sm font-medium text-blue-800 dark:text-blue-300'>
-                    未配置 TMDB API Key，配置後可獲得更豐富的影視信息和推薦內容
+                    未配置 TMDB API Key，配置后可获得更丰富的影视信息和推荐内容
                   </p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* 視頻源過多提示 */}
+          {/* 视频源过多提示 */}
           {config && (config.SourceConfig?.length ?? 0) > 50 && (
             <div className='bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-4'>
               <div className='flex items-start gap-3'>
@@ -16345,14 +16345,14 @@ function AdminPageClient() {
                 </div>
                 <div className='flex-1'>
                   <p className='text-sm font-medium text-amber-800 dark:text-amber-300'>
-                    當前視頻源數量較多，可能會拖慢搜索與優選速度，建議適當精簡
+                    当前视频源数量较多，可能会拖慢搜索与优选速度，建议适当精简
                   </p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* 配置文件標籤 - 僅站長可見 */}
+          {/* 配置文件标签 - 仅站长可见 */}
           {role === 'owner' && (
             <CollapsibleTab
               title='配置文件'
@@ -16372,7 +16372,7 @@ function AdminPageClient() {
             </CollapsibleTab>
           )}
 
-          {/* 站點配置標籤 */}
+          {/* 站点配置标签 */}
           <CollapsibleTab
             title='站點配置'
             icon={
@@ -16387,7 +16387,7 @@ function AdminPageClient() {
             <SiteConfigComponent config={config} refreshConfig={fetchConfig} />
           </CollapsibleTab>
 
-          {/* 註冊配置標籤 */}
+          {/* 注册配置标签 */}
           <CollapsibleTab
             title='註冊配置'
             icon={
@@ -16405,7 +16405,7 @@ function AdminPageClient() {
             />
           </CollapsibleTab>
 
-          {/* 個性化配置標籤 */}
+          {/* 个性化配置标签 */}
           <CollapsibleTab
             title='個性化配置'
             icon={
@@ -16418,7 +16418,7 @@ function AdminPageClient() {
           </CollapsibleTab>
 
           <div className='space-y-4'>
-            {/* 用戶配置標籤 */}
+            {/* 用户配置标签 */}
             <CollapsibleTab
               title='用戶配置'
               icon={
@@ -16440,7 +16440,7 @@ function AdminPageClient() {
               />
             </CollapsibleTab>
 
-            {/* 視頻源配置標籤 */}
+            {/* 视频源配置标签 */}
             <CollapsibleTab
               title='視頻源配置'
               icon={
@@ -16525,7 +16525,7 @@ function AdminPageClient() {
               />
             </CollapsibleTab>
 
-            {/* 電視直播源配置標籤 */}
+            {/* 电视直播源配置标签 */}
             <CollapsibleTab
               title='電視直播源配置'
               icon={
@@ -16537,7 +16537,7 @@ function AdminPageClient() {
               <LiveSourceConfig config={config} refreshConfig={fetchConfig} />
             </CollapsibleTab>
 
-            {/* 網絡直播配置標籤 */}
+            {/* 网络直播配置标签 */}
             <CollapsibleTab
               title='網絡直播配置'
               icon={
@@ -16549,7 +16549,7 @@ function AdminPageClient() {
               <WebLiveConfig config={config} refreshConfig={fetchConfig} />
             </CollapsibleTab>
 
-            {/* 私人影庫大類 */}
+            {/* 私人影库大类 */}
             <CollapsibleTab
               title='私人影庫'
               icon={
@@ -16563,7 +16563,7 @@ function AdminPageClient() {
               isParent={true}
             >
               <div className='space-y-4'>
-                {/* Openlist配置子標籤 */}
+                {/* Openlist配置子标签 */}
                 <CollapsibleTab
                   title='Openlist配置'
                   icon={
@@ -16581,7 +16581,7 @@ function AdminPageClient() {
                   />
                 </CollapsibleTab>
 
-                {/* Emby 媒體庫子標籤 */}
+                {/* Emby 媒体库子标签 */}
                 <CollapsibleTab
                   title='Emby 媒體庫'
                   icon={
@@ -16599,7 +16599,7 @@ function AdminPageClient() {
                   />
                 </CollapsibleTab>
 
-                {/* 小雅配置子標籤 */}
+                {/* 小雅配置子标签 */}
                 <CollapsibleTab
                   title='小雅配置'
                   icon={
@@ -16616,7 +16616,7 @@ function AdminPageClient() {
                     refreshConfig={fetchConfig}
                   />
                 </CollapsibleTab>
-                {/* 求片管理子標籤 */}
+                {/* 求片管理子标签 */}
                 <CollapsibleTab
                   title='求片管理'
                   icon={
@@ -16634,7 +16634,7 @@ function AdminPageClient() {
                   />
                 </CollapsibleTab>
 
-                {/* 追番訂閱子標籤 */}
+                {/* 追番订阅子标签 */}
                 <CollapsibleTab
                   title='追番訂閱'
                   icon={
@@ -16671,7 +16671,7 @@ function AdminPageClient() {
               </div>
             </CollapsibleTab>
 
-            {/* AI配置標籤 */}
+            {/* AI配置标签 */}
             <CollapsibleTab
               title='AI設定'
               icon={
@@ -16683,7 +16683,7 @@ function AdminPageClient() {
               <AIConfigComponent config={config} refreshConfig={fetchConfig} />
             </CollapsibleTab>
 
-            {/* 郵件配置標籤 */}
+            {/* 邮件配置标签 */}
             <CollapsibleTab
               title='郵件配置'
               icon={
@@ -16698,7 +16698,7 @@ function AdminPageClient() {
               />
             </CollapsibleTab>
 
-            {/* 分類配置標籤 */}
+            {/* 分类配置标签 */}
             <CollapsibleTab
               title='分類配置'
               icon={
@@ -16713,7 +16713,7 @@ function AdminPageClient() {
               <CategoryConfig config={config} refreshConfig={fetchConfig} />
             </CollapsibleTab>
 
-            {/* 自定義去廣告標籤 */}
+            {/* 自定义去广告标签 */}
             <CollapsibleTab
               title='自定義去廣告'
               icon={
@@ -16741,7 +16741,7 @@ function AdminPageClient() {
               />
             </CollapsibleTab>
 
-            {/* 數據遷移標籤 - 僅站長可見 */}
+            {/* 数据迁移标签 - 仅站长可见 */}
             {role === 'owner' && (
               <CollapsibleTab
                 title='數據遷移'
@@ -16761,7 +16761,7 @@ function AdminPageClient() {
         </div>
       </div>
 
-      {/* 通用彈窗組件 */}
+      {/* 通用弹窗组件 */}
       <AlertModal
         isOpen={alertModal.isOpen}
         onClose={hideAlert}
@@ -16772,7 +16772,7 @@ function AdminPageClient() {
         showConfirm={alertModal.showConfirm}
       />
 
-      {/* 重置配置確認彈窗 */}
+      {/* 重置配置确认弹窗 */}
       {showResetConfigModal &&
         createPortal(
           <div
@@ -16786,7 +16786,7 @@ function AdminPageClient() {
               <div className='p-6'>
                 <div className='flex items-center justify-between mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    確認重置配置
+                    确认重置配置
                   </h3>
                   <button
                     onClick={() => setShowResetConfigModal(false)}
@@ -16825,16 +16825,16 @@ function AdminPageClient() {
                         />
                       </svg>
                       <span className='text-sm font-medium text-yellow-800 dark:text-yellow-300'>
-                        ⚠️ 危險操作警告
+                        ⚠️ 危险操作警告
                       </span>
                     </div>
                     <p className='text-sm text-yellow-700 dark:text-yellow-400'>
-                      此操作將重置用戶封禁和管理員設置、自定義視頻源，站點配置將重置為默認值，是否繼續？
+                      此操作将重置用户封禁和管理员设置、自定义视频源，站点配置将重置为默认值，是否继续？
                     </p>
                   </div>
                 </div>
 
-                {/* 操作按鈕 */}
+                {/* 操作按钮 */}
                 <div className='flex justify-end space-x-3'>
                   <button
                     onClick={() => setShowResetConfigModal(false)}

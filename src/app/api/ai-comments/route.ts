@@ -20,50 +20,50 @@ export async function GET(request: NextRequest) {
     const movieInfo = searchParams.get('info');
     const count = parseInt(searchParams.get('count') || '10');
 
-    // 參數驗證
+    // 参数验证
     if (!movieName) {
       return NextResponse.json(
-        { error: '缺少影片名稱參數' },
+        { error: '缺少影片名称参数' },
         { status: 400 }
       );
     }
 
     if (count < 1 || count > 50) {
       return NextResponse.json(
-        { error: '評論數量必須在1-50之間' },
+        { error: '评论数量必须在1-50之间' },
         { status: 400 }
       );
     }
 
-    // 讀取AI配置
+    // 读取AI配置
     const config = await getConfig();
     const aiConfig = config.AIConfig;
 
-    // 檢查AI功能是否啟用
+    // 检查AI功能是否启用
     if (!aiConfig?.Enabled) {
       return NextResponse.json(
-        { error: 'AI功能未啟用' },
+        { error: 'AI功能未启用' },
         { status: 403 }
       );
     }
 
-    // 檢查AI評論功能是否啟用
+    // 检查AI评论功能是否启用
     if (!aiConfig?.EnableAIComments) {
       return NextResponse.json(
-        { error: 'AI評論功能未啟用' },
+        { error: 'AI评论功能未启用' },
         { status: 403 }
       );
     }
 
-    // 檢查必要的配置
+    // 检查必要的配置
     if (!aiConfig.CustomApiKey || !aiConfig.CustomBaseURL || !aiConfig.CustomModel) {
       return NextResponse.json(
-        { error: 'AI配置不完整，請在管理面板配置' },
+        { error: 'AI配置不完整，请在管理面板配置' },
         { status: 500 }
       );
     }
 
-    // 生成AI評論
+    // 生成AI评论
     const comments = await generateAIComments({
       movieName,
       movieInfo: movieInfo || undefined,
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // 返回結果
+    // 返回结果
     const response: AICommentsResponse = {
       comments,
       total: comments.length,
@@ -93,10 +93,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('AI評論生成失敗:', error);
+    console.error('AI评论生成失败:', error);
 
-    // 返回友好的錯誤信息
-    const errorMessage = error instanceof Error ? error.message : 'AI評論生成失敗';
+    // 返回友好的错误信息
+    const errorMessage = error instanceof Error ? error.message : 'AI评论生成失败';
 
     return NextResponse.json(
       {

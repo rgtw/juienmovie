@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
   if (!sourceKey) {
     return NextResponse.json(
-      { code: 400, message: '缺少參數: source', data: [] },
+      { code: 400, message: '缺少参数: source', data: [] },
       { status: 400 }
     );
   }
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
 
     if (!targetSource) {
       return NextResponse.json(
-        { code: 404, message: `未找到短劇採集源: ${sourceKey}`, data: [] },
+        { code: 404, message: `未找到短剧采集源: ${sourceKey}`, data: [] },
         { status: 404 }
       );
     }
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new Error('獲取分類列表失敗');
+      throw new Error('获取分类列表失败');
     }
 
     const data: CmsClassResponse = await response.json();
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
 
     const cacheTime = await getCacheTime();
     return NextResponse.json(
-      { code: 200, message: '獲取成功', data: categories, defaultCategory },
+      { code: 200, message: '获取成功', data: categories, defaultCategory },
       {
         headers: {
           'Cache-Control': `public, max-age=${cacheTime}, s-maxage=${cacheTime}`,
@@ -75,11 +75,11 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('獲取短劇分類失敗:', error);
+    console.error('获取短剧分类失败:', error);
     return NextResponse.json(
       {
         code: 500,
-        message: '獲取短劇分類失敗',
+        message: '获取短剧分类失败',
         data: [],
         error: (error as Error).message,
       },

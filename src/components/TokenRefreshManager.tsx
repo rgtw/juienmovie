@@ -6,16 +6,16 @@ import { getAuthInfoFromBrowserCookie, clearAuthCookie } from '@/lib/auth';
 import { TOKEN_CONFIG } from '@/lib/refresh-token';
 
 /**
- * Token 自動刷新管理器
+ * Token 自动刷新管理器
  *
  * 功能：
- * 1. 攔截所有 fetch 請求
- * 2. 檢測到 401 錯誤時自動刷新 Token 並重試
- * 3. 在請求前檢查 Token 是否即將過期，主動刷新
+ * 1. 拦截所有 fetch 请求
+ * 2. 检测到 401 错误时自动刷新 Token 并重试
+ * 3. 在请求前检查 Token 是否即将过期，主动刷新
  *
  * 策略：
- * - 響應攔截：401 錯誤 → 刷新 Token → 重試請求
- * - 請求攔截：剩餘時間 < 10 分鐘 → 主動刷新
+ * - 响应拦截：401 错误 → 刷新 Token → 重试请求
+ * - 请求拦截：剩余时间 < 10 分钟 → 主动刷新
  */
 export function TokenRefreshManager() {
   useEffect(() => {
@@ -25,13 +25,13 @@ export function TokenRefreshManager() {
       return;
     }
 
-    // 刷新狀態管理
+    // 刷新状态管理
     let isRefreshing = false;
     let refreshPromise: Promise<boolean> | null = null;
 
-    // Token 刷新函數
+    // Token 刷新函数
     const refreshToken = async (): Promise<boolean> => {
-      // 如果正在刷新，返回現有的 Promise
+      // 如果正在刷新，返回现有的 Promise
       if (isRefreshing && refreshPromise) {
         return refreshPromise;
       }
@@ -39,7 +39,7 @@ export function TokenRefreshManager() {
       isRefreshing = true;
       refreshPromise = (async () => {
         try {
-          // 使用原始 fetch 避免遞歸
+          // 使用原始 fetch 避免递归
           const response = await window.fetch('/api/auth/refresh', {
             method: 'POST',
             credentials: 'include',
@@ -51,9 +51,9 @@ export function TokenRefreshManager() {
           } else {
             console.error('[Token] Refresh failed:', response.status);
 
-            // 刷新失敗，先登出再跳轉登錄
+            // 刷新失败，先登出再跳转登录
             if (response.status === 401 || response.status === 403) {
-              // 如果在登錄頁面，跳過登出和跳轉邏輯
+              // 如果在登录页面，跳过登出和跳转逻辑
               if (window.location.pathname === '/login') {
                 console.log('[Token] On login page, skipping logout and redirect');
                 return false;
@@ -66,7 +66,7 @@ export function TokenRefreshManager() {
                 });
               } catch (error) {
                 console.error('[Token] Logout error:', error);
-                // 登出失敗時清除前端cookie
+                // 登出失败时清除前端cookie
                 clearAuthCookie();
               }
               window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
@@ -85,7 +85,7 @@ export function TokenRefreshManager() {
       return refreshPromise;
     };
 
-    // 檢查 Token 是否需要刷新
+    // 检查 Token 是否需要刷新
     const shouldRefreshToken = (): boolean => {
       const authInfo = getAuthInfoFromBrowserCookie();
       if (!authInfo || !authInfo.timestamp || !authInfo.refreshExpires) {
@@ -94,16 +94,16 @@ export function TokenRefreshManager() {
 
       const now = Date.now();
 
-      // Refresh Token 已過期
+      // Refresh Token 已过期
       if (now >= authInfo.refreshExpires) {
         console.log('[Token] Refresh token expired, redirecting to login');
-        // 先登出再跳轉登錄
+        // 先登出再跳转登录
         window.fetch('/api/logout', {
           method: 'POST',
           credentials: 'include',
         }).catch(error => {
           console.error('[Token] Logout error:', error);
-          // 登出失敗時清除前端cookie
+          // 登出失败时清除前端cookie
           clearAuthCookie();
         }).finally(() => {
           window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
@@ -111,12 +111,12 @@ export function TokenRefreshManager() {
         return false;
       }
 
-      // 計算 Access Token 剩餘時間
+      // 计算 Access Token 剩余时间
       const ACCESS_TOKEN_AGE = TOKEN_CONFIG.ACCESS_TOKEN_AGE;
       const age = now - authInfo.timestamp;
       const remaining = ACCESS_TOKEN_AGE - age;
 
-      // 剩餘時間 < 刷新閾值時需要刷新（包括已過期的情況）
+      // 剩余时间 < 刷新阈值时需要刷新（包括已过期的情况）
       const REFRESH_THRESHOLD = TOKEN_CONFIG.RENEWAL_THRESHOLD;
       return remaining < REFRESH_THRESHOLD;
     };
@@ -124,12 +124,12 @@ export function TokenRefreshManager() {
     // 保存原始 fetch
     const originalFetch = window.fetch;
 
-    // 攔截 fetch
+    // 拦截 fetch
     window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-      // 跳過不需要 Token 刷新的 API
+      // 跳过不需要 Token 刷新的 API
       const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
 
-      // 跳過：刷新 API、登錄、登出、註冊等認證相關接口
+      // 跳过：刷新 API、登录、登出、注册等认证相关接口
       if (
         url.includes('/api/auth/refresh') ||
         url.includes('/api/login') ||
@@ -140,44 +140,44 @@ export function TokenRefreshManager() {
         return originalFetch(input, init);
       }
 
-      // 請求前檢查：Token 即將過期時主動刷新
+      // 请求前检查：Token 即将过期时主动刷新
       if (shouldRefreshToken()) {
         console.log('[Token] Expiring soon, refreshing proactively...');
         await refreshToken();
       }
 
-      // 發送請求
+      // 发送请求
       let response = await originalFetch(input, init);
 
-      // 響應攔截：401 錯誤時刷新 Token 並重試（僅重試一次）
+      // 响应拦截：401 错误时刷新 Token 并重试（仅重试一次）
       if (response.status === 401) {
-        // 如果在登錄頁面，跳過刷新邏輯
+        // 如果在登录页面，跳过刷新逻辑
         if (window.location.pathname === '/login') {
           console.log('[Token] On login page, skipping refresh logic');
           return response;
         }
 
-        // 克隆響應以便讀取響應體
+        // 克隆响应以便读取响应体
         const clonedResponse = response.clone();
 
         try {
           const responseText = await clonedResponse.text();
 
-          // 只有當響應體包含 "Unauthorized" 或 "Refresh token expired" 或 "Access token expired" 時才刷新
+          // 只有当响应体包含 "Unauthorized" 或 "Refresh token expired" 或 "Access token expired" 时才刷新
           if (responseText.includes('Unauthorized') || responseText.includes('Refresh token expired') || responseText.includes('Access token expired')) {
             console.log('[Token] Received 401 with auth error, attempting refresh and retry...');
 
             const refreshed = await refreshToken();
 
             if (refreshed) {
-              // 刷新成功，重試原請求（僅此一次）
+              // 刷新成功，重试原请求（仅此一次）
               response = await originalFetch(input, init);
 
-              // 如果重試後仍然是 401，說明有問題，先登出再跳轉登錄
+              // 如果重试后仍然是 401，说明有问题，先登出再跳转登录
               if (response.status === 401) {
                 console.error('[Token] Still 401 after refresh, redirecting to login');
 
-                // 如果在登錄頁面，跳過登出和跳轉邏輯
+                // 如果在登录页面，跳过登出和跳转逻辑
                 if (window.location.pathname === '/login') {
                   console.log('[Token] On login page, skipping logout and redirect');
                   return response;
@@ -190,7 +190,7 @@ export function TokenRefreshManager() {
                   });
                 } catch (error) {
                   console.error('[Token] Logout error:', error);
-                  // 登出失敗時清除前端cookie
+                  // 登出失败时清除前端cookie
                   clearAuthCookie();
                 }
                 window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
@@ -207,12 +207,12 @@ export function TokenRefreshManager() {
       return response;
     };
 
-    // 清理：恢復原始 fetch
+    // 清理：恢复原始 fetch
     return () => {
       window.fetch = originalFetch;
     };
   }, []);
 
-  // 這是一個純邏輯組件，不渲染任何內容
+  // 这是一个纯逻辑组件，不渲染任何内容
   return null;
 }

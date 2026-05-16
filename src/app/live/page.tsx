@@ -20,7 +20,7 @@ import { useLiveSync } from '@/hooks/useLiveSync';
 import EpgScrollableRow from '@/components/EpgScrollableRow';
 import PageLayout from '@/components/PageLayout';
 
-// 擴展 HTMLVideoElement 類型以支持 hls 和 flv 屬性
+// 扩展 HTMLVideoElement 类型以支持 hls 和 flv 属性
 declare global {
   interface HTMLVideoElement {
     hls?: any;
@@ -28,12 +28,12 @@ declare global {
   }
 }
 
-// 動態導入瀏覽器專用庫
+// 动态导入浏览器专用库
 let Artplayer: any = null;
 let Hls: any = null;
 let flvjs: any = null;
 
-// 直播頻道接口
+// 直播频道接口
 interface LiveChannel {
   id: string;
   tvgId: string;
@@ -64,7 +64,7 @@ interface LiveSource {
   name: string;
   url: string;  // m3u 地址
   ua?: string;
-  epg?: string; // 節目單
+  epg?: string; // 节目单
   from: 'config' | 'custom';
   channelNumber?: number;
   disabled?: boolean;
@@ -75,7 +75,7 @@ function LivePageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // 動態加載瀏覽器專用庫
+  // 动态加载浏览器专用库
   useEffect(() => {
     if (typeof window !== 'undefined') {
       import('artplayer').then(mod => { Artplayer = mod.default; });
@@ -90,7 +90,7 @@ function LivePageClient() {
   }, [router]);
 
   // -----------------------------------------------------------------------------
-  // 狀態變量（State）
+  // 状态变量（State）
   // -----------------------------------------------------------------------------
   const [loading, setLoading] = useState(true);
   const [loadingStage, setLoadingStage] = useState<
@@ -99,7 +99,7 @@ function LivePageClient() {
   const [loadingMessage, setLoadingMessage] = useState('正在加載直播源...');
   const [error, setError] = useState<string | null>(null);
 
-  // 直播源相關
+  // 直播源相关
   const [liveSources, setLiveSources] = useState<LiveSource[]>([]);
   const [currentSource, setCurrentSource] = useState<LiveSource | null>(null);
   const currentSourceRef = useRef<LiveSource | null>(null);
@@ -107,7 +107,7 @@ function LivePageClient() {
     currentSourceRef.current = currentSource;
   }, [currentSource]);
 
-  // 頻道相關
+  // 频道相关
   const [currentChannels, setCurrentChannels] = useState<LiveChannel[]>([]);
   const [currentChannel, setCurrentChannel] = useState<LiveChannel | null>(null);
   useEffect(() => {
@@ -117,32 +117,32 @@ function LivePageClient() {
   const [needLoadSource] = useState(searchParams.get('source'));
   const [needLoadChannel] = useState(searchParams.get('id'));
 
-  // 播放器相關
+  // 播放器相关
   const [videoUrl, setVideoUrl] = useState('');
   const [isVideoLoading, setIsVideoLoading] = useState(false);
   const [unsupportedType, setUnsupportedType] = useState<string | null>(null);
 
-  // 切換直播源狀態
+  // 切换直播源状态
   const [isSwitchingSource, setIsSwitchingSource] = useState(false);
 
-  // 分組相關
+  // 分组相关
   const [groupedChannels, setGroupedChannels] = useState<{ [key: string]: LiveChannel[] }>({});
   const [selectedGroup, setSelectedGroup] = useState<string>('');
 
-  // Tab 切換
+  // Tab 切换
   const [activeTab, setActiveTab] = useState<'channels' | 'sources'>('channels');
 
-  // 頻道列表收起狀態
+  // 频道列表收起状态
   const [isChannelListCollapsed, setIsChannelListCollapsed] = useState(false);
 
-  // 過濾後的頻道列表
+  // 过滤后的频道列表
   const [filteredChannels, setFilteredChannels] = useState<LiveChannel[]>([]);
 
-  // 搜索關鍵詞
+  // 搜索关键词
   const [searchKeyword, setSearchKeyword] = useState('');
   const [expandedMergedChannels, setExpandedMergedChannels] = useState<string[]>([]);
 
-  // 節目單信息
+  // 节目单信息
   const [epgData, setEpgData] = useState<{
     tvgId: string;
     source: string;
@@ -154,21 +154,21 @@ function LivePageClient() {
     }>;
   } | null>(null);
 
-  // EPG 數據加載狀態
+  // EPG 数据加载状态
   const [isEpgLoading, setIsEpgLoading] = useState(false);
 
-  // 收藏狀態
+  // 收藏状态
   const [favorited, setFavorited] = useState(false);
   const favoritedRef = useRef(false);
   const currentChannelRef = useRef<LiveChannel | null>(null);
 
-  // 觀影室同步功能
+  // 观影室同步功能
   const liveSync = useLiveSync({
     currentChannelId: currentChannel?.id || '',
     currentChannelName: currentChannel?.name || '',
     currentChannelUrl: currentChannel?.url || '',
     onChannelChange: (channelId, channelUrl) => {
-      // 房員接收到頻道切換指令
+      // 房员接收到频道切换指令
       if (!currentChannels || !Array.isArray(currentChannels)) return;
       const channel = currentChannels.find(c => c.id === channelId);
       if (channel) {
@@ -177,42 +177,42 @@ function LivePageClient() {
     },
   });
 
-  // EPG數據清洗函數 - 去除重疊的節目，保留時間較短的，顯示今日節目（18點後包含明天10點前的節目）
+  // EPG数据清洗函数 - 去除重叠的节目，保留时间较短的，显示今日节目（18点后包含明天10点前的节目）
   const cleanEpgData = (programs: Array<{ start: string; end: string; title: string }>) => {
     if (!programs || programs.length === 0) return programs;
 
-    // 獲取當前時間
+    // 获取当前时间
     const now = new Date();
     const currentHour = now.getHours();
 
-    // 獲取今日日期（只考慮年月日，忽略時間）
+    // 获取今日日期（只考虑年月日，忽略时间）
     const today = new Date();
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
-    // 如果當前時間超過18點，擴展到明天10點
+    // 如果当前时间超过18点，扩展到明天10点
     let endTime = todayEnd;
     if (currentHour >= 18) {
-      // 明天10點
+      // 明天10点
       endTime = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 10, 0, 0);
     }
 
-    // 首先過濾出符合時間範圍的節目（包括跨天節目）
+    // 首先过滤出符合时间范围的节目（包括跨天节目）
     const filteredPrograms = programs.filter(program => {
       const programStart = parseCustomTimeFormat(program.start);
       const programEnd = parseCustomTimeFormat(program.end);
 
-      // 使用時間戳進行比較
+      // 使用时间戳进行比较
       const programStartTime = programStart.getTime();
       const programEndTime = programEnd.getTime();
       const todayStartTime = todayStart.getTime();
       const endTimeValue = endTime.getTime();
 
-      // 節目的開始時間在範圍內，或者節目在範圍內播放（開始時間早於範圍開始，但結束時間在範圍內）
+      // 节目的开始时间在范围内，或者节目在范围内播放（开始时间早于范围开始，但结束时间在范围内）
       return programStartTime < endTimeValue && programEndTime > todayStartTime;
     });
 
-    // 按開始時間排序
+    // 按开始时间排序
     const sortedPrograms = [...filteredPrograms].sort((a, b) => {
       const startA = parseCustomTimeFormat(a.start).getTime();
       const startB = parseCustomTimeFormat(b.start).getTime();
@@ -226,45 +226,45 @@ function LivePageClient() {
       const currentStart = parseCustomTimeFormat(currentProgram.start);
       const currentEnd = parseCustomTimeFormat(currentProgram.end);
 
-      // 檢查是否與已添加的節目重疊
+      // 检查是否与已添加的节目重叠
       let hasOverlap = false;
 
       for (const existingProgram of cleanedPrograms) {
         const existingStart = parseCustomTimeFormat(existingProgram.start);
         const existingEnd = parseCustomTimeFormat(existingProgram.end);
 
-        // 檢查時間重疊（考慮完整的日期和時間）
+        // 检查时间重叠（考虑完整的日期和时间）
         if (
-          (currentStart >= existingStart && currentStart < existingEnd) || // 當前節目開始時間在已存在節目時間段內
-          (currentEnd > existingStart && currentEnd <= existingEnd) || // 當前節目結束時間在已存在節目時間段內
-          (currentStart <= existingStart && currentEnd >= existingEnd) // 當前節目完全包含已存在節目
+          (currentStart >= existingStart && currentStart < existingEnd) || // 当前节目开始时间在已存在节目时间段内
+          (currentEnd > existingStart && currentEnd <= existingEnd) || // 当前节目结束时间在已存在节目时间段内
+          (currentStart <= existingStart && currentEnd >= existingEnd) // 当前节目完全包含已存在节目
         ) {
           hasOverlap = true;
           break;
         }
       }
 
-      // 如果沒有重疊，則添加該節目
+      // 如果没有重叠，则添加该节目
       if (!hasOverlap) {
         cleanedPrograms.push(currentProgram);
       } else {
-        // 如果有重疊，檢查是否需要替換已存在的節目
+        // 如果有重叠，检查是否需要替换已存在的节目
         for (let j = 0; j < cleanedPrograms.length; j++) {
           const existingProgram = cleanedPrograms[j];
           const existingStart = parseCustomTimeFormat(existingProgram.start);
           const existingEnd = parseCustomTimeFormat(existingProgram.end);
 
-          // 檢查是否與當前節目重疊（考慮完整的日期和時間）
+          // 检查是否与当前节目重叠（考虑完整的日期和时间）
           if (
             (currentStart >= existingStart && currentStart < existingEnd) ||
             (currentEnd > existingStart && currentEnd <= existingEnd) ||
             (currentStart <= existingStart && currentEnd >= existingEnd)
           ) {
-            // 計算節目時長
+            // 计算节目时长
             const currentDuration = currentEnd.getTime() - currentStart.getTime();
             const existingDuration = existingEnd.getTime() - existingStart.getTime();
 
-            // 如果當前節目時間更短，則替換已存在的節目
+            // 如果当前节目时间更短，则替换已存在的节目
             if (currentDuration < existingDuration) {
               cleanedPrograms[j] = currentProgram;
             }
@@ -277,7 +277,7 @@ function LivePageClient() {
     return cleanedPrograms;
   };
 
-  // Anime4K超分相關狀態
+  // Anime4K超分相关状态
   const [webGPUSupported, setWebGPUSupported] = useState<boolean>(false);
   const [anime4kEnabled, setAnime4kEnabled] = useState<boolean>(false);
   const [anime4kMode, setAnime4kMode] = useState<string>(() => {
@@ -308,28 +308,28 @@ function LivePageClient() {
   const artPlayerRef = useRef<any>(null);
   const artRef = useRef<HTMLDivElement | null>(null);
 
-  // 分組標籤滾動相關
+  // 分组标签滚动相关
   const groupContainerRef = useRef<HTMLDivElement>(null);
   const groupButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const channelListRef = useRef<HTMLDivElement>(null);
 
   // -----------------------------------------------------------------------------
-  // 工具函數（Utils）
+  // 工具函数（Utils）
   // -----------------------------------------------------------------------------
 
-  // 獲取 logo URL（始終使用代理）
+  // 获取 logo URL（始终使用代理）
   const getLogoUrl = (logoUrl: string, sourceKey: string) => {
     if (!logoUrl) return '';
     return `/api/proxy/logo?url=${encodeURIComponent(logoUrl)}&source=${sourceKey}`;
   };
 
-  // 獲取直播源列表
+  // 获取直播源列表
   const fetchLiveSources = async () => {
     try {
       setLoadingStage('fetching');
       setLoadingMessage('正在獲取直播源...');
 
-      // 獲取 AdminConfig 中的直播源信息
+      // 获取 AdminConfig 中的直播源信息
       const response = await fetch('/api/live/sources');
       if (!response.ok) {
         throw new Error('獲取直播源失敗');
@@ -344,7 +344,7 @@ function LivePageClient() {
       setLiveSources(sources);
 
       if (sources.length > 0) {
-        // 默認選中第一個源
+        // 默认选中第一个源
         const firstSource = sources[0];
         if (needLoadSource) {
           const foundSource = sources.find((s: LiveSource) => s.key === needLoadSource);
@@ -369,18 +369,18 @@ function LivePageClient() {
       }, 1000);
     } catch (err) {
       console.error('獲取直播源失敗:', err);
-      // 不設置錯誤，而是顯示空狀態
+      // 不设置错误，而是显示空状态
       setLiveSources([]);
       setLoading(false);
     }
   };
 
-  // 獲取頻道列表
+  // 获取频道列表
   const fetchChannels = async (source: LiveSource) => {
     try {
       setIsVideoLoading(true);
 
-      // 從 cachedLiveChannels 獲取頻道信息
+      // 从 cachedLiveChannels 获取频道信息
       const response = await fetch(`/api/live/channels?source=${source.key}`);
       if (!response.ok) {
         throw new Error('獲取頻道列表失敗');
@@ -393,12 +393,12 @@ function LivePageClient() {
 
       const channelsData = result.data;
       if (!channelsData || channelsData.length === 0) {
-        // 不拋出錯誤，而是設置空頻道列表
+        // 不抛出错误，而是设置空频道列表
         setCurrentChannels([]);
         setGroupedChannels({});
         setFilteredChannels([]);
 
-        // 更新直播源的頻道數為 0
+        // 更新直播源的频道数为 0
         setLiveSources(prevSources =>
           prevSources.map(s =>
             s.key === source.key ? { ...s, channelNumber: 0 } : s
@@ -409,7 +409,7 @@ function LivePageClient() {
         return;
       }
 
-      // 轉換頻道數據格式
+      // 转换频道数据格式
       const channels: LiveChannel[] = channelsData.map((channel: any) => ({
         id: channel.id,
         tvgId: channel.tvgId || channel.name,
@@ -421,14 +421,14 @@ function LivePageClient() {
 
       setCurrentChannels(channels);
 
-      // 更新直播源的頻道數
+      // 更新直播源的频道数
       setLiveSources(prevSources =>
         prevSources.map(s =>
           s.key === source.key ? { ...s, channelNumber: channels.length } : s
         )
       );
 
-      // 默認選中第一個頻道
+      // 默认选中第一个频道
       if (channels.length > 0) {
         let selectedChannel: LiveChannel | null = null;
 
@@ -438,7 +438,7 @@ function LivePageClient() {
             selectedChannel = foundChannel;
             setCurrentChannel(foundChannel);
             setVideoUrl(foundChannel.url);
-            // 延遲滾動到選中的頻道
+            // 延迟滚动到选中的频道
             setTimeout(() => {
               scrollToChannel(foundChannel);
             }, 200);
@@ -453,11 +453,11 @@ function LivePageClient() {
           setVideoUrl(channels[0].url);
         }
 
-        // 異步獲取初始頻道的節目單（不阻塞頁面加載）
+        // 异步获取初始频道的节目单（不阻塞页面加载）
         if (selectedChannel) {
           fetchEpgData(selectedChannel, source);
 
-          // 保存播放記錄
+          // 保存播放记录
           try {
             await savePlayRecord(`live_${source.key}`, `live_${selectedChannel.id}`, {
               title: selectedChannel.name,
@@ -476,7 +476,7 @@ function LivePageClient() {
             console.error('保存播放記錄失敗:', err);
           }
 
-          // 更新URL參數
+          // 更新URL参数
           const newSearchParams = new URLSearchParams(searchParams.toString());
           newSearchParams.set('source', source.key);
           newSearchParams.set('id', selectedChannel.id);
@@ -486,7 +486,7 @@ function LivePageClient() {
         }
       }
 
-      // 按分組組織頻道
+      // 按分组组织频道
       const grouped = channels.reduce((acc, channel) => {
         const group = channel.group || '其他';
         if (!acc[group]) {
@@ -498,7 +498,7 @@ function LivePageClient() {
 
       setGroupedChannels(grouped);
 
-      // 默認選中當前加載的channel所在的分組，如果沒有則選中第一個分組
+      // 默认选中当前加载的channel所在的分组，如果没有则选中第一个分组
       let targetGroup = '';
       if (needLoadChannel) {
         const foundChannel = channels.find((c: LiveChannel) => c.id === needLoadChannel);
@@ -507,34 +507,34 @@ function LivePageClient() {
         }
       }
 
-      // 如果目標分組不存在，則使用第一個分組
+      // 如果目标分组不存在，则使用第一个分组
       if (!targetGroup || !grouped[targetGroup]) {
         targetGroup = Object.keys(grouped)[0] || '';
       }
 
-      // 先設置過濾後的頻道列表，但不設置選中的分組
+      // 先设置过滤后的频道列表，但不设置选中的分组
       setFilteredChannels(targetGroup ? grouped[targetGroup] : channels);
 
-      // 觸發模擬點擊分組，讓模擬點擊來設置分組狀態和觸發滾動
+      // 触发模拟点击分组，让模拟点击来设置分组状态和触发滚动
       if (targetGroup) {
-        // 確保切換到頻道tab
+        // 确保切换到频道tab
         setActiveTab('channels');
 
-        // 使用更長的延遲，確保狀態更新和DOM渲染完成
+        // 使用更长的延迟，确保状态更新和DOM渲染完成
         setTimeout(() => {
           simulateGroupClick(targetGroup);
-        }, 500); // 增加延遲時間，確保狀態更新和DOM渲染完成
+        }, 500); // 增加延迟时间，确保状态更新和DOM渲染完成
       }
 
       setIsVideoLoading(false);
     } catch (err) {
       console.error('獲取頻道列表失敗:', err);
-      // 不設置錯誤，而是設置空頻道列表
+      // 不设置错误，而是设置空频道列表
       setCurrentChannels([]);
       setGroupedChannels({});
       setFilteredChannels([]);
 
-      // 更新直播源的頻道數為 0
+      // 更新直播源的频道数为 0
       setLiveSources(prevSources =>
         prevSources.map(s =>
           s.key === source.key ? { ...s, channelNumber: 0 } : s
@@ -545,55 +545,55 @@ function LivePageClient() {
     }
   };
 
-  // 切換直播源
+  // 切换直播源
   const handleSourceChange = async (source: LiveSource) => {
     try {
-      // 設置切換狀態，鎖住頻道切換器
+      // 设置切换状态，锁住频道切换器
       setIsSwitchingSource(true);
 
-      // 首先銷燬當前播放器
+      // 首先销毁当前播放器
       cleanupPlayer();
 
-      // 重置不支持的類型狀態
+      // 重置不支持的类型状态
       setUnsupportedType(null);
 
-      // 清空節目單信息
+      // 清空节目单信息
       setEpgData(null);
 
-      // 清空搜索關鍵詞
+      // 清空搜索关键词
       setSearchKeyword('');
 
       setCurrentSource(source);
       await fetchChannels(source);
 
-      // 更新URL參數 - 切換直播源時清除頻道id，因為新的直播源會有不同的頻道列表
+      // 更新URL参数 - 切换直播源时清除频道id，因为新的直播源会有不同的频道列表
       const newSearchParams = new URLSearchParams(searchParams.toString());
       newSearchParams.set('source', source.key);
-      newSearchParams.delete('id'); // 清除頻道id
+      newSearchParams.delete('id'); // 清除频道id
 
       const newUrl = `?${newSearchParams.toString()}`;
       router.replace(newUrl);
     } catch (err) {
       console.error('切換直播源失敗:', err);
-      // 不設置錯誤，保持當前狀態
+      // 不设置错误，保持当前状态
     } finally {
-      // 切換完成，解鎖頻道切換器
+      // 切换完成，解锁频道切换器
       setIsSwitchingSource(false);
-      // 自動切換到頻道 tab
+      // 自动切换到频道 tab
       setActiveTab('channels');
     }
   };
 
-  // 獲取節目單信息的輔助函數
+  // 获取节目单信息的辅助函数
   const fetchEpgData = async (channel: LiveChannel, source: LiveSource) => {
     if (channel.tvgId && source) {
       try {
-        setIsEpgLoading(true); // 開始加載 EPG 數據
+        setIsEpgLoading(true); // 开始加载 EPG 数据
         const response = await fetch(`/api/live/epg?source=${source.key}&tvgId=${channel.tvgId}`);
         if (response.ok) {
           const result = await response.json();
           if (result.success) {
-            // 清洗EPG數據，去除重疊的節目
+            // 清洗EPG数据，去除重叠的节目
             const cleanedData = {
               ...result.data,
               programs: cleanEpgData(result.data.programs)
@@ -604,30 +604,30 @@ function LivePageClient() {
       } catch (error) {
         console.error('獲取節目單信息失敗:', error);
       } finally {
-        setIsEpgLoading(false); // 無論成功失敗都結束加載狀態
+        setIsEpgLoading(false); // 无论成功失败都结束加载状态
       }
     } else {
-      // 如果沒有 tvgId 或 source，清空 EPG 數據
+      // 如果没有 tvgId 或 source，清空 EPG 数据
       setEpgData(null);
       setIsEpgLoading(false);
     }
   };
 
-  // 切換頻道
+  // 切换频道
   const handleChannelChange = async (channel: LiveChannel) => {
-    // 如果正在切換直播源，則禁用頻道切換
+    // 如果正在切换直播源，则禁用频道切换
     if (isSwitchingSource) return;
 
-    // 首先銷燬當前播放器
+    // 首先销毁当前播放器
     cleanupPlayer();
 
-    // 重置不支持的類型狀態
+    // 重置不支持的类型状态
     setUnsupportedType(null);
 
     setCurrentChannel(channel);
     setVideoUrl(channel.url);
 
-    // 更新URL參數
+    // 更新URL参数
     if (currentSource) {
       const newSearchParams = new URLSearchParams(searchParams.toString());
       newSearchParams.set('source', currentSource.key);
@@ -637,17 +637,17 @@ function LivePageClient() {
       router.replace(newUrl);
     }
 
-    // 自動滾動到選中的頻道位置
+    // 自动滚动到选中的频道位置
     setTimeout(() => {
       scrollToChannel(channel);
     }, 100);
 
-    // 獲取節目單信息
+    // 获取节目单信息
     if (currentSource) {
       await fetchEpgData(channel, currentSource);
     }
 
-    // 保存播放記錄
+    // 保存播放记录
     if (currentSource) {
       try {
         await savePlayRecord(`live_${currentSource.key}`, `live_${channel.id}`, {
@@ -669,23 +669,23 @@ function LivePageClient() {
     }
   };
 
-  // 滾動到指定頻道位置的函數
+  // 滚动到指定频道位置的函数
   const scrollToChannel = (channel: LiveChannel) => {
     if (!channelListRef.current) return;
 
-    // 使用 data 屬性來查找頻道元素
+    // 使用 data 属性来查找频道元素
     const targetElement = channelListRef.current.querySelector(`[data-channel-id="${channel.id}"]`) as HTMLButtonElement;
 
     if (targetElement) {
-      // 計算滾動位置，使頻道居中顯示
+      // 计算滚动位置，使频道居中显示
       const container = channelListRef.current;
       const containerRect = container.getBoundingClientRect();
       const elementRect = targetElement.getBoundingClientRect();
 
-      // 計算目標滾動位置
+      // 计算目标滚动位置
       const scrollTop = container.scrollTop + (elementRect.top - containerRect.top) - (containerRect.height / 2) + (elementRect.height / 2);
 
-      // 平滑滾動到目標位置
+      // 平滑滚动到目标位置
       container.scrollTo({
         top: Math.max(0, scrollTop),
         behavior: 'smooth'
@@ -693,7 +693,7 @@ function LivePageClient() {
     }
   };
 
-  // 模擬點擊分組的函數
+  // 模拟点击分组的函数
   const simulateGroupClick = (group: string, retryCount = 0) => {
     if (!groupContainerRef.current) {
       if (retryCount < 10) {
@@ -706,14 +706,14 @@ function LivePageClient() {
       }
     }
 
-    // 直接通過 data-group 屬性查找目標按鈕
+    // 直接通过 data-group 属性查找目标按钮
     const targetButton = groupContainerRef.current.querySelector(`[data-group="${group}"]`) as HTMLButtonElement;
 
     if (targetButton) {
-      // 手動設置分組狀態，確保狀態一致性
+      // 手动设置分组状态，确保状态一致性
       setSelectedGroup(group);
 
-      // 觸發點擊事件
+      // 触发点击事件
       (targetButton as HTMLButtonElement).click();
     }
   };
@@ -733,7 +733,7 @@ function LivePageClient() {
 
       const video = artPlayerRef.current.video as HTMLVideoElement;
 
-      // 等待視頻元數據加載完成
+      // 等待视频元数据加载完成
       if (!video.videoWidth || !video.videoHeight) {
         console.warn('視頻尺寸未就緒，等待loadedmetadata事件');
         await new Promise<void>((resolve) => {
@@ -753,10 +753,10 @@ function LivePageClient() {
         throw new Error('無法獲取視頻尺寸');
       }
 
-      // 檢測是否為Firefox
+      // 检测是否为Firefox
       const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
 
-      // 創建輸出canvas
+      // 创建输出canvas
       outputCanvas = document.createElement('canvas');
       const container = artPlayerRef.current.template.$video.parentElement;
 
@@ -779,7 +779,7 @@ function LivePageClient() {
       outputCanvas.style.zIndex = '1';
       outputCanvas.style.backgroundColor = 'transparent';
 
-      // Firefox兼容性處理
+      // Firefox兼容性处理
       let sourceCanvas: HTMLCanvasElement | null = null;
       let sourceCtx: CanvasRenderingContext2D | null = null;
 
@@ -808,7 +808,7 @@ function LivePageClient() {
         }
       }
 
-      // 監聽點擊和雙擊事件
+      // 监听点击和双击事件
       const handleCanvasClick = () => {
         if (artPlayerRef.current) {
           artPlayerRef.current.toggle();
@@ -822,7 +822,7 @@ function LivePageClient() {
       outputCanvas.addEventListener('click', handleCanvasClick);
       outputCanvas.addEventListener('dblclick', handleCanvasDblClick);
 
-      // 隱藏原始video
+      // 隐藏原始video
       video.style.opacity = '0';
       video.style.pointerEvents = 'none';
       video.style.position = 'absolute';
@@ -830,7 +830,7 @@ function LivePageClient() {
 
       container.insertBefore(outputCanvas, video);
 
-      // Firefox視頻幀捕獲
+      // Firefox视频帧捕获
       if (isFirefox && sourceCtx && sourceCanvas) {
         const captureVideoFrame = () => {
           if (sourceCtx && sourceCanvas && video.readyState >= video.HAVE_CURRENT_DATA) {
@@ -841,7 +841,7 @@ function LivePageClient() {
         captureVideoFrame();
       }
 
-      // 動態導入anime4k-webgpu
+      // 动态导入anime4k-webgpu
       const { render: anime4kRender, ModeA, ModeB, ModeC, ModeAA, ModeBB, ModeCA } = await import(
         /* webpackChunkName: "anime4k-webgpu" */
         /* webpackMode: "lazy" */
@@ -902,7 +902,7 @@ function LivePageClient() {
     } catch (err) {
       console.error('初始化Anime4K失敗:', err);
 
-      // 清理已創建的資源
+      // 清理已创建的资源
       if (frameRequestId) {
         cancelAnimationFrame(frameRequestId);
       }
@@ -918,13 +918,13 @@ function LivePageClient() {
         artPlayerRef.current.video.style.zIndex = '';
       }
 
-      // 顯示錯誤信息
+      // 显示错误信息
       if (artPlayerRef.current) {
         const errorMsg = err instanceof Error ? err.message : '未知錯誤';
         artPlayerRef.current.notice.show = '超分啟用失敗：' + errorMsg;
       }
 
-      // 重新拋出錯誤，讓調用者知道失敗了
+      // 重新抛出错误，让调用者知道失败了
       throw err;
     }
   };
@@ -975,11 +975,11 @@ function LivePageClient() {
     }
   };
 
-  // 切換Anime4K狀態
+  // 切换Anime4K状态
   const toggleAnime4K = async (enabled: boolean) => {
     try {
       if (enabled) {
-        // 檢查視頻是否準備好
+        // 检查视频是否准备好
         if (!artPlayerRef.current?.video) {
           if (artPlayerRef.current) {
             artPlayerRef.current.notice.show = '視頻未準備好，請稍後再試';
@@ -998,7 +998,7 @@ function LivePageClient() {
       if (artPlayerRef.current) {
         artPlayerRef.current.notice.show = '切換超分狀態失敗';
       }
-      return !enabled; // 返回原來的狀態
+      return !enabled; // 返回原来的状态
     }
   };
 
@@ -1009,7 +1009,7 @@ function LivePageClient() {
       localStorage.setItem('anime4k_mode', mode);
 
       if (anime4kEnabledRef.current) {
-        // 檢查視頻是否準備好
+        // 检查视频是否准备好
         if (!artPlayerRef.current?.video) {
           if (artPlayerRef.current) {
             artPlayerRef.current.notice.show = '視頻未準備好，請稍後再試';
@@ -1027,14 +1027,14 @@ function LivePageClient() {
     }
   };
 
-  // 更改Anime4K分辨率倍數
+  // 更改Anime4K分辨率倍数
   const changeAnime4KScale = async (scale: number) => {
     try {
       setAnime4kScale(scale);
       localStorage.setItem('anime4k_scale', scale.toString());
 
       if (anime4kEnabledRef.current) {
-        // 檢查視頻是否準備好
+        // 检查视频是否准备好
         if (!artPlayerRef.current?.video) {
           if (artPlayerRef.current) {
             artPlayerRef.current.notice.show = '視頻未準備好，請稍後再試';
@@ -1052,9 +1052,9 @@ function LivePageClient() {
     }
   };
 
-  // 清理播放器資源的統一函數
+  // 清理播放器资源的统一函数
   const cleanupPlayer = () => {
-    // 重置不支持的類型狀態
+    // 重置不支持的类型状态
     setUnsupportedType(null);
 
     // 清理Anime4K
@@ -1062,38 +1062,38 @@ function LivePageClient() {
 
     if (artPlayerRef.current) {
       try {
-        // 先暫停播放
+        // 先暂停播放
         if (artPlayerRef.current.video) {
           artPlayerRef.current.video.pause();
           artPlayerRef.current.video.src = '';
           artPlayerRef.current.video.load();
         }
 
-        // 銷燬 HLS 實例
+        // 销毁 HLS 实例
         if (artPlayerRef.current.video && artPlayerRef.current.video.hls) {
           artPlayerRef.current.video.hls.destroy();
           artPlayerRef.current.video.hls = null;
         }
 
-        // 銷燬 FLV 實例 - 增強清理邏輯
+        // 销毁 FLV 实例 - 增强清理逻辑
         if (artPlayerRef.current.video && artPlayerRef.current.video.flv) {
           try {
-            // 先停止加載
+            // 先停止加载
             if (artPlayerRef.current.video.flv.unload) {
               artPlayerRef.current.video.flv.unload();
             }
-            // 銷燬播放器
+            // 销毁播放器
             artPlayerRef.current.video.flv.destroy();
-            // 確保引用被清空
+            // 确保引用被清空
             artPlayerRef.current.video.flv = null;
           } catch (flvError) {
             console.warn('FLV實例銷燬時出錯:', flvError);
-            // 強制清空引用
+            // 强制清空引用
             artPlayerRef.current.video.flv = null;
           }
         }
 
-        // 移除所有事件監聽器
+        // 移除所有事件监听器
         artPlayerRef.current.off('ready');
         artPlayerRef.current.off('loadstart');
         artPlayerRef.current.off('loadeddata');
@@ -1101,7 +1101,7 @@ function LivePageClient() {
         artPlayerRef.current.off('waiting');
         artPlayerRef.current.off('error');
 
-        // 銷燬 ArtPlayer 實例
+        // 销毁 ArtPlayer 实例
         artPlayerRef.current.destroy();
         artPlayerRef.current = null;
       } catch (err) {
@@ -1111,34 +1111,34 @@ function LivePageClient() {
     }
   };
 
-  // 確保視頻源正確設置
+  // 确保视频源正确设置
   const ensureVideoSource = (video: HTMLVideoElement | null, url: string) => {
     if (!video || !url) return;
     const sources = Array.from(video.getElementsByTagName('source'));
     const existed = sources.some((s) => s.src === url);
     if (!existed) {
-      // 移除舊的 source，保持唯一
+      // 移除旧的 source，保持唯一
       sources.forEach((s) => s.remove());
       const sourceEl = document.createElement('source');
       sourceEl.src = url;
       video.appendChild(sourceEl);
     }
 
-    // 始終允許遠程播放（AirPlay / Cast）
+    // 始终允许远程播放（AirPlay / Cast）
     video.disableRemotePlayback = false;
-    // 如果曾經有禁用屬性，移除之
+    // 如果曾经有禁用属性，移除之
     if (video.hasAttribute('disableRemotePlayback')) {
       video.removeAttribute('disableRemotePlayback');
     }
   };
 
-  // 過濾頻道（根據分組和搜索關鍵詞）
+  // 过滤频道（根据分组和搜索关键词）
   const filterChannels = (group: string, keyword: string) => {
     if (!currentChannels || !Array.isArray(currentChannels)) return [];
 
     let filtered = currentChannels.filter(channel => channel.group === group);
 
-    // 如果有搜索關鍵詞，進一步過濾
+    // 如果有搜索关键词，进一步过滤
     if (keyword.trim()) {
       filtered = filtered.filter(channel =>
         channel.name.toLowerCase().includes(keyword.toLowerCase())
@@ -1211,22 +1211,22 @@ function LivePageClient() {
     ));
   };
 
-  // 切換分組
+  // 切换分组
   const handleGroupChange = (group: string) => {
-    // 如果正在切換直播源，則禁用分組切換
+    // 如果正在切换直播源，则禁用分组切换
     if (isSwitchingSource) return;
 
     setSelectedGroup(group);
     const filtered = filterChannels(group, searchKeyword);
     setFilteredChannels(filtered);
 
-    // 如果當前選中的頻道在新的分組中，自動滾動到該頻道位置
+    // 如果当前选中的频道在新的分组中，自动滚动到该频道位置
     if (currentChannel && filtered.some(channel => channel.id === currentChannel.id)) {
       setTimeout(() => {
         scrollToChannel(currentChannel);
       }, 100);
     } else {
-      // 否則滾動到頻道列表頂端
+      // 否则滚动到频道列表顶端
       if (channelListRef.current) {
         channelListRef.current.scrollTo({
           top: 0,
@@ -1236,28 +1236,28 @@ function LivePageClient() {
     }
   };
 
-  // 處理搜索
+  // 处理搜索
   const handleSearch = (keyword: string) => {
     setSearchKeyword(keyword);
 
     if (!selectedGroup) return;
 
-    // 先在當前分組搜索
+    // 先在当前分组搜索
     const filtered = filterChannels(selectedGroup, keyword);
 
-    // 如果當前分組沒有匹配的頻道，且有搜索關鍵詞，輪詢所有分組
+    // 如果当前分组没有匹配的频道，且有搜索关键词，轮询所有分组
     if (filtered.length === 0 && keyword.trim() && groupedChannels) {
       const groups = Object.keys(groupedChannels);
 
-      // 輪詢所有分組，找到第一個有匹配頻道的分組
+      // 轮询所有分组，找到第一个有匹配频道的分组
       for (const group of groups) {
         const groupFiltered = filterChannels(group, keyword);
         if (groupFiltered.length > 0) {
-          // 找到有匹配頻道的分組，自動切換
+          // 找到有匹配频道的分组，自动切换
           setSelectedGroup(group);
           setFilteredChannels(groupFiltered);
 
-          // 滾動到頻道列表頂端
+          // 滚动到频道列表顶端
           if (channelListRef.current) {
             channelListRef.current.scrollTo({
               top: 0,
@@ -1270,11 +1270,11 @@ function LivePageClient() {
       }
     }
 
-    // 如果當前分組有匹配的頻道，或者所有分組都沒有匹配的頻道，使用當前分組的結果
+    // 如果当前分组有匹配的频道，或者所有分组都没有匹配的频道，使用当前分组的结果
     setFilteredChannels(filtered);
   };
 
-  // 切換收藏
+  // 切换收藏
   const handleToggleFavorite = async () => {
     if (!currentSourceRef.current || !currentChannelRef.current) return;
 
@@ -1282,11 +1282,11 @@ function LivePageClient() {
       const currentFavorited = favoritedRef.current;
       const newFavorited = !currentFavorited;
 
-      // 立即更新狀態
+      // 立即更新状态
       setFavorited(newFavorited);
       favoritedRef.current = newFavorited;
 
-      // 異步執行收藏操作
+      // 异步执行收藏操作
       try {
         if (newFavorited) {
           // 如果未收藏，添加收藏
@@ -1301,12 +1301,12 @@ function LivePageClient() {
             origin: 'live',
           });
         } else {
-          // 如果已收藏，刪除收藏
+          // 如果已收藏，删除收藏
           await deleteFavorite(`live_${currentSourceRef.current.key}`, `live_${currentChannelRef.current.id}`);
         }
       } catch (err) {
         console.error('收藏操作失敗:', err);
-        // 如果操作失敗，回滾狀態
+        // 如果操作失败，回滚状态
         setFavorited(currentFavorited);
         favoritedRef.current = currentFavorited;
       }
@@ -1315,7 +1315,7 @@ function LivePageClient() {
     }
   };
 
-  // 檢測WebGPU支持
+  // 检测WebGPU支持
   useEffect(() => {
     const checkWebGPUSupport = async () => {
       if (typeof navigator === 'undefined' || !('gpu' in navigator)) {
@@ -1348,7 +1348,7 @@ function LivePageClient() {
     fetchLiveSources();
   }, []);
 
-  // 檢查收藏狀態
+  // 检查收藏状态
   useEffect(() => {
     if (!currentSource || !currentChannel) return;
     (async () => {
@@ -1362,7 +1362,7 @@ function LivePageClient() {
     })();
   }, [currentSource, currentChannel]);
 
-  // 監聽收藏數據更新事件
+  // 监听收藏数据更新事件
   useEffect(() => {
     if (!currentSource || !currentChannel) return;
 
@@ -1379,7 +1379,7 @@ function LivePageClient() {
     return unsubscribe;
   }, [currentSource, currentChannel]);
 
-  // 當分組切換時，將激活的分組標籤滾動到視口中間
+  // 当分组切换时，将激活的分组标签滚动到视口中间
   useEffect(() => {
     if (!selectedGroup || !groupContainerRef.current || !groupedChannels) return;
 
@@ -1390,20 +1390,20 @@ function LivePageClient() {
     const btn = groupButtonRefs.current?.[groupIndex];
     const container = groupContainerRef.current;
     if (btn && container) {
-      // 手動計算滾動位置，只滾動分組標籤容器
+      // 手动计算滚动位置，只滚动分组标签容器
       const containerRect = container.getBoundingClientRect();
       const btnRect = btn.getBoundingClientRect();
       const scrollLeft = container.scrollLeft;
 
-      // 計算按鈕相對於容器的位置
+      // 计算按钮相对于容器的位置
       const btnLeft = btnRect.left - containerRect.left + scrollLeft;
       const btnWidth = btnRect.width;
       const containerWidth = containerRect.width;
 
-      // 計算目標滾動位置，使按鈕居中
+      // 计算目标滚动位置，使按钮居中
       const targetScrollLeft = btnLeft - (containerWidth - btnWidth) / 2;
 
-      // 平滑滾動到目標位置
+      // 平滑滚动到目标位置
       container.scrollTo({
         left: targetScrollLeft,
         behavior: 'smooth',
@@ -1422,19 +1422,19 @@ function LivePageClient() {
         super(config);
         const load = this.load.bind(this);
         this.load = function (context: any, config: any, callbacks: any) {
-          // 判斷當前直播源的代理模式
+          // 判断当前直播源的代理模式
           const currentLiveSource = currentSourceRef.current;
           const proxyMode = currentLiveSource?.proxyMode || 'full';
 
-          // 攔截manifest和level請求
+          // 拦截manifest和level请求
           if (
             (context as any).type === 'manifest' ||
             (context as any).type === 'level'
           ) {
-            // manifest 請求處理
+            // manifest 请求处理
             if ((context as any).type === 'manifest') {
               if (proxyMode === 'full') {
-                // 全量代理：添加 source 參數
+                // 全量代理：添加 source 参数
                 try {
                   const url = new URL(context.url);
                   url.searchParams.set('moontv-source', currentSourceRef.current?.key || '');
@@ -1443,7 +1443,7 @@ function LivePageClient() {
                   // ignore
                 }
               } else if (proxyMode === 'm3u8-only') {
-                // 僅代理m3u8模式：添加 source 參數和 allowCORS 參數
+                // 仅代理m3u8模式：添加 source 参数和 allowCORS 参数
                 try {
                   const url = new URL(context.url);
                   url.searchParams.set('moontv-source', currentSourceRef.current?.key || '');
@@ -1453,13 +1453,13 @@ function LivePageClient() {
                   context.url = context.url + '&allowCORS=true';
                 }
               }
-              // direct 模式：直接使用原始 URL，不添加任何參數
+              // direct 模式：直接使用原始 URL，不添加任何参数
             }
 
-            // level 請求（ts 分片）處理
+            // level 请求（ts 分片）处理
             if ((context as any).type === 'level') {
               if (proxyMode === 'full') {
-                // 全量代理：添加 source 參數
+                // 全量代理：添加 source 参数
                 try {
                   const url = new URL(context.url);
                   url.searchParams.set('moontv-source', currentSourceRef.current?.key || '');
@@ -1468,17 +1468,17 @@ function LivePageClient() {
                   // ignore
                 }
               }
-              // m3u8-only 模式：ts 分片 URL 已經被代理服務器重寫為原始 URL，不需要添加參數
-              // direct 模式：ts 分片直接使用原始 URL，不添加任何參數
+              // m3u8-only 模式：ts 分片 URL 已经被代理服务器重写为原始 URL，不需要添加参数
+              // direct 模式：ts 分片直接使用原始 URL，不添加任何参数
             }
           }
-          // 執行原始load方法
+          // 执行原始load方法
           load(context, config, callbacks);
         };
       }
     }
 
-    // 清理之前的 HLS 實例
+    // 清理之前的 HLS 实例
     if (video.hls) {
       try {
         video.hls.destroy();
@@ -1527,7 +1527,7 @@ function LivePageClient() {
       return;
     }
 
-    // 清理之前的 FLV 實例
+    // 清理之前的 FLV 实例
     if (video.flv) {
       try {
         if (video.flv.unload) {
@@ -1569,7 +1569,7 @@ function LivePageClient() {
 
       console.log('視頻URL:', videoUrl);
 
-      // 銷燬之前的播放器實例並創建新的
+      // 销毁之前的播放器实例并创建新的
       if (artPlayerRef.current) {
         cleanupPlayer();
       }
@@ -1578,11 +1578,11 @@ function LivePageClient() {
       let type = 'm3u8';
       const proxyMode = currentSourceRef.current?.proxyMode || 'full';
 
-      // 直連模式：跳過服務器預檢查，直接使用 m3u8
+      // 直连模式：跳过服务器预检查，直接使用 m3u8
       if (proxyMode === 'direct') {
         type = 'm3u8';
       } else {
-        // 全量代理或僅代理m3u8：通過服務器預檢查
+        // 全量代理或仅代理m3u8：通过服务器预检查
         try {
           const precheckUrl = `/api/live/precheck?url=${encodeURIComponent(videoUrl)}&moontv-source=${currentSourceRef.current?.key || ''}`;
           const precheckResponse = await fetch(precheckUrl);
@@ -1606,32 +1606,32 @@ function LivePageClient() {
         }
       }
 
-      // 如果不是 m3u8、flv 或 mp4 類型，設置不支持的類型並返回
+      // 如果不是 m3u8、flv 或 mp4 类型，设置不支持的类型并返回
       if (type !== 'm3u8' && type !== 'flv' && type !== 'mp4') {
         setUnsupportedType(type);
         setIsVideoLoading(false);
         return;
       }
 
-      // 重置不支持的類型
+      // 重置不支持的类型
       setUnsupportedType(null);
 
       const customType = { m3u8: m3u8Loader, flv: flvLoader };
 
-      // 根據代理模式決定 URL
+      // 根据代理模式决定 URL
       let targetUrl = videoUrl;
       if (type === 'm3u8') {
         if (proxyMode === 'direct') {
-          // 直連模式：直接使用原始 URL
+          // 直连模式：直接使用原始 URL
           targetUrl = videoUrl;
         } else {
-          // 全量代理或僅代理m3u8：使用代理 URL
+          // 全量代理或仅代理m3u8：使用代理 URL
           targetUrl = `/api/proxy/m3u8?url=${encodeURIComponent(videoUrl)}&moontv-source=${currentSourceRef.current?.key || ''}`;
         }
       }
 
       try {
-        // 創建新的播放器實例
+        // 创建新的播放器实例
         Artplayer.USE_RAF = true;
 
         artPlayerRef.current = new Artplayer({
@@ -1639,14 +1639,14 @@ function LivePageClient() {
           url: targetUrl,
           poster: currentChannel.logo,
           volume: 0.7,
-          isLive: true, // 設置為直播模式
+          isLive: true, // 设置为直播模式
           muted: false,
           autoplay: true,
           pip: true,
           autoSize: false,
           autoMini: false,
           screenshot: false,
-          setting: webGPUSupported, // 只有支持WebGPU時才顯示設置按鈕
+          setting: webGPUSupported, // 只有支持WebGPU时才显示设置按钮
           loop: false,
           flip: false,
           playbackRate: false,
@@ -1662,7 +1662,7 @@ function LivePageClient() {
           theme: '#22c55e',
           lang: 'zh-cn',
           hotkey: false,
-          fastForward: false, // 直播不需要快進
+          fastForward: false, // 直播不需要快进
           autoOrientation: true,
           lock: true,
           moreVideoAttr: {
@@ -1762,7 +1762,7 @@ function LivePageClient() {
           ],
         });
 
-        // 監聽播放器事件
+        // 监听播放器事件
         artPlayerRef.current.on('ready', () => {
           setError(null);
           setIsVideoLoading(false);
@@ -1798,20 +1798,20 @@ function LivePageClient() {
 
       } catch (err) {
         console.error('創建播放器失敗:', err);
-        // 不設置錯誤，只記錄日誌
+        // 不设置错误，只记录日志
       }
     }
     preload();
   }, [Artplayer, Hls, videoUrl, currentChannel, loading]);
 
-  // 清理播放器資源
+  // 清理播放器资源
   useEffect(() => {
     return () => {
       cleanupPlayer();
     };
   }, []);
 
-  // 頁面卸載時的額外清理
+  // 页面卸载时的额外清理
   useEffect(() => {
     const handleBeforeUnload = () => {
       cleanupPlayer();
@@ -1825,17 +1825,17 @@ function LivePageClient() {
     };
   }, []);
 
-  // 全局快捷鍵處理
+  // 全局快捷键处理
   useEffect(() => {
     const handleKeyboardShortcuts = (e: KeyboardEvent) => {
-      // 忽略輸入框中的按鍵事件
+      // 忽略输入框中的按键事件
       if (
         (e.target as HTMLElement).tagName === 'INPUT' ||
         (e.target as HTMLElement).tagName === 'TEXTAREA'
       )
         return;
 
-      // 上箭頭 = 音量+
+      // 上箭头 = 音量+
       if (e.key === 'ArrowUp') {
         if (artPlayerRef.current && artPlayerRef.current.volume < 1) {
           artPlayerRef.current.volume =
@@ -1847,7 +1847,7 @@ function LivePageClient() {
         }
       }
 
-      // 下箭頭 = 音量-
+      // 下箭头 = 音量-
       if (e.key === 'ArrowDown') {
         if (artPlayerRef.current && artPlayerRef.current.volume > 0) {
           artPlayerRef.current.volume =
@@ -1859,7 +1859,7 @@ function LivePageClient() {
         }
       }
 
-      // 空格 = 播放/暫停
+      // 空格 = 播放/暂停
       if (e.key === ' ') {
         if (artPlayerRef.current) {
           artPlayerRef.current.toggle();
@@ -1867,7 +1867,7 @@ function LivePageClient() {
         }
       }
 
-      // f 鍵 = 切換全屏
+      // f 键 = 切换全屏
       if (e.key === 'f' || e.key === 'F') {
         if (artPlayerRef.current) {
           artPlayerRef.current.fullscreen = !artPlayerRef.current.fullscreen;
@@ -1887,15 +1887,15 @@ function LivePageClient() {
       <PageLayout activePath='/live'>
         <div className='flex items-center justify-center min-h-screen bg-transparent'>
           <div className='text-center max-w-md mx-auto px-6'>
-            {/* 動畫直播圖標 */}
+            {/* 动画直播图标 */}
             <div className='relative mb-8'>
               <div className='relative mx-auto w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-2xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300'>
                 <div className='text-white text-4xl'>📺</div>
-                {/* 旋轉光環 */}
+                {/* 旋转光环 */}
                 <div className='absolute -inset-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl opacity-20 animate-spin'></div>
               </div>
 
-              {/* 浮動粒子效果 */}
+              {/* 浮动粒子效果 */}
               <div className='absolute top-0 left-0 w-full h-full pointer-events-none'>
                 <div className='absolute top-2 left-2 w-2 h-2 bg-green-400 rounded-full animate-bounce'></div>
                 <div
@@ -1909,7 +1909,7 @@ function LivePageClient() {
               </div>
             </div>
 
-            {/* 進度指示器 */}
+            {/* 进度指示器 */}
             <div className='mb-6 w-80 mx-auto'>
               <div className='flex justify-center space-x-2 mb-4'>
                 <div
@@ -1926,7 +1926,7 @@ function LivePageClient() {
                 ></div>
               </div>
 
-              {/* 進度條 */}
+              {/* 进度条 */}
               <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden'>
                 <div
                   className='h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-1000 ease-out'
@@ -1938,7 +1938,7 @@ function LivePageClient() {
               </div>
             </div>
 
-            {/* 加載消息 */}
+            {/* 加载消息 */}
             <div className='space-y-2'>
               <p className='text-xl font-semibold text-gray-800 dark:text-gray-200 animate-pulse'>
                 {loadingMessage}
@@ -1955,19 +1955,19 @@ function LivePageClient() {
       <PageLayout activePath='/live'>
         <div className='flex items-center justify-center min-h-screen bg-transparent'>
           <div className='text-center max-w-md mx-auto px-6'>
-            {/* 錯誤圖標 */}
+            {/* 错误图标 */}
             <div className='relative mb-8'>
               <div className='relative mx-auto w-24 h-24 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl shadow-2xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300'>
                 <div className='text-white text-4xl'>😵</div>
-                {/* 脈衝效果 */}
+                {/* 脉冲效果 */}
                 <div className='absolute -inset-2 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl opacity-20 animate-pulse'></div>
               </div>
             </div>
 
-            {/* 錯誤信息 */}
+            {/* 错误信息 */}
             <div className='space-y-4 mb-8'>
               <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-200'>
-                哎呀，出現了一些問題
+                哎呀，出现了一些问题
               </h2>
               <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4'>
                 <p className='text-red-600 dark:text-red-400 font-medium'>
@@ -1975,17 +1975,17 @@ function LivePageClient() {
                 </p>
               </div>
               <p className='text-sm text-gray-500 dark:text-gray-400'>
-                請檢查網絡連接或嘗試刷新頁面
+                请检查网络连接或尝试刷新页面
               </p>
             </div>
 
-            {/* 操作按鈕 */}
+            {/* 操作按钮 */}
             <div className='space-y-3'>
               <button
                 onClick={() => window.location.reload()}
                 className='w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-cyan-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl'
               >
-                🔄 重新嘗試
+                🔄 重新尝试
               </button>
             </div>
           </div>
@@ -1997,7 +1997,7 @@ function LivePageClient() {
   return (
     <PageLayout activePath='/live'>
       <div className='flex flex-col gap-3 py-4 px-5 lg:px-[3rem] 2xl:px-20'>
-        {/* 第一行：頁面標題 */}
+        {/* 第一行：页面标题 */}
         <div className='py-1'>
           <h1 className='text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2 max-w-[80%]'>
             <Radio className='w-5 h-5 text-blue-500 flex-shrink-0' />
@@ -2019,9 +2019,9 @@ function LivePageClient() {
           </h1>
         </div>
 
-        {/* 第二行：播放器和頻道列表 */}
+        {/* 第二行：播放器和频道列表 */}
         <div className='space-y-2'>
-          {/* 摺疊控制 - 僅在 lg 及以上屏幕顯示 */}
+          {/* 折叠控制 - 仅在 lg 及以上屏幕显示 */}
           <div className='hidden lg:flex justify-end'>
             <button
               onClick={() =>
@@ -2050,7 +2050,7 @@ function LivePageClient() {
                 {isChannelListCollapsed ? '顯示' : '隱藏'}
               </span>
 
-              {/* 精緻的狀態指示點 */}
+              {/* 精致的状态指示点 */}
               <div
                 className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full transition-all duration-200 ${isChannelListCollapsed
                   ? 'bg-orange-400 animate-pulse'
@@ -2072,7 +2072,7 @@ function LivePageClient() {
                   className='bg-black w-full h-full rounded-xl overflow-hidden shadow-lg border border-white/0 dark:border-white/30'
                 ></div>
 
-                {/* 不支持的直播類型提示 */}
+                {/* 不支持的直播类型提示 */}
                 {unsupportedType && (
                   <div className='absolute inset-0 bg-black/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-white/0 dark:border-white/30 flex items-center justify-center z-[600] transition-all duration-300'>
                     <div className='text-center max-w-md mx-auto px-6'>
@@ -2084,25 +2084,25 @@ function LivePageClient() {
                       </div>
                       <div className='space-y-4'>
                         <h3 className='text-xl font-semibold text-white'>
-                          暫不支持的直播流類型
+                          暂不支持的直播流类型
                         </h3>
                         <div className='bg-orange-500/20 border border-orange-500/30 rounded-lg p-4'>
                           <p className='text-orange-300 font-medium'>
-                            當前頻道直播流類型：<span className='text-white font-bold'>{unsupportedType.toUpperCase()}</span>
+                            当前频道直播流类型：<span className='text-white font-bold'>{unsupportedType.toUpperCase()}</span>
                           </p>
                           <p className='text-sm text-orange-200 mt-2'>
-                            目前僅支持 M3U8 格式的直播流
+                            目前仅支持 M3U8 格式的直播流
                           </p>
                         </div>
                         <p className='text-sm text-gray-300'>
-                          請嘗試其他頻道
+                          请尝试其他频道
                         </p>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* 視頻加載蒙層 */}
+                {/* 视频加载蒙层 */}
                 {isVideoLoading && (
                   <div className='absolute inset-0 bg-black/85 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-white/0 dark:border-white/30 flex items-center justify-center z-[500] transition-all duration-300'>
                     <div className='text-center max-w-md mx-auto px-6'>
@@ -2114,7 +2114,7 @@ function LivePageClient() {
                       </div>
                       <div className='space-y-2'>
                         <p className='text-xl font-semibold text-white animate-pulse'>
-                          🔄 IPTV 加載中...
+                          🔄 IPTV 加载中...
                         </p>
                       </div>
                     </div>
@@ -2122,16 +2122,16 @@ function LivePageClient() {
                 )}
               </div>
 
-              {/* 外部播放器按鈕 - 觀影室同步狀態下隱藏 */}
+              {/* 外部播放器按钮 - 观影室同步状态下隐藏 */}
               {videoUrl && !liveSync.isInRoom && (
                 <div className='mt-3 px-2 lg:flex-shrink-0 flex justify-end'>
                   <div className='bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 border border-gray-200/50 dark:border-gray-700/50 w-full lg:w-auto overflow-x-auto'>
                     <div className='flex gap-1.5 justify-end lg:flex-wrap items-center'>
-                      {/* 網頁播放 */}
+                      {/* 网页播放 */}
                       <button
                         onClick={(e) => {
                           e.preventDefault();
-                          // 在新標籤頁打開視頻URL
+                          // 在新标签页打开视频URL
                           window.open(videoUrl, '_blank');
                         }}
                         className='group relative flex items-center justify-center gap-1 w-8 h-8 lg:w-auto lg:h-auto lg:px-2 lg:py-1.5 bg-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 text-xs font-medium rounded-md transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer overflow-hidden border border-gray-300 dark:border-gray-600 flex-shrink-0'
@@ -2158,7 +2158,7 @@ function LivePageClient() {
                           />
                         </svg>
                         <span className='hidden lg:inline max-w-0 group-hover:max-w-[100px] overflow-hidden whitespace-nowrap transition-all duration-200 ease-in-out text-gray-700 dark:text-gray-200'>
-                          網頁播放
+                          网页播放
                         </span>
                       </button>
 
@@ -2295,13 +2295,13 @@ function LivePageClient() {
               )}
             </div>
 
-            {/* 頻道列表 */}
+            {/* 频道列表 */}
             <div className={`h-[330px] lg:h-full md:overflow-hidden transition-all duration-300 ease-in-out ${isChannelListCollapsed
               ? 'md:col-span-1 lg:hidden lg:opacity-0 lg:scale-95'
               : 'md:col-span-1 lg:opacity-100 lg:scale-100'
               }`}>
               <div className='md:ml-2 px-4 py-0 h-full rounded-xl bg-black/10 dark:bg-white/5 flex flex-col border border-white/0 dark:border-white/30 overflow-hidden'>
-                {/* 主要的 Tab 切換 */}
+                {/* 主要的 Tab 切换 */}
                 <div className='flex mb-1 -mx-6 flex-shrink-0'>
                   <div
                     onClick={() => setActiveTab('channels')}
@@ -2312,7 +2312,7 @@ function LivePageClient() {
                       }
                     `.trim()}
                   >
-                    頻道
+                    频道
                   </div>
                   <div
                     onClick={() => setActiveTab('sources')}
@@ -2327,7 +2327,7 @@ function LivePageClient() {
                   </div>
                 </div>
 
-                {/* 頻道 Tab 內容 */}
+                {/* 频道 Tab 内容 */}
                 {activeTab === 'channels' && (
                   <>
                     {/* 搜索框 */}
@@ -2379,13 +2379,13 @@ function LivePageClient() {
                       </div>
                     </div>
 
-                    {/* 分組標籤 */}
+                    {/* 分组标签 */}
                     <div className='flex items-center gap-4 mb-4 border-b border-gray-300 dark:border-gray-700 -mx-6 px-6 flex-shrink-0'>
-                      {/* 切換狀態提示 */}
+                      {/* 切换状态提示 */}
                       {isSwitchingSource && (
                         <div className='flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400'>
                           <div className='w-2 h-2 bg-amber-500 rounded-full animate-pulse'></div>
-                          切換直播源中...
+                          切换直播源中...
                         </div>
                       )}
 
@@ -2393,7 +2393,7 @@ function LivePageClient() {
                         className='flex-1 overflow-x-auto'
                         ref={groupContainerRef}
                         onMouseEnter={() => {
-                          // 鼠標進入分組標籤區域時，添加滾輪事件監聽
+                          // 鼠标进入分组标签区域时，添加滚轮事件监听
                           const container = groupContainerRef.current;
                           if (container) {
                             const handleWheel = (e: WheelEvent) => {
@@ -2403,12 +2403,12 @@ function LivePageClient() {
                               }
                             };
                             container.addEventListener('wheel', handleWheel, { passive: false });
-                            // 將事件處理器存儲在容器上，以便後續移除
+                            // 将事件处理器存储在容器上，以便后续移除
                             (container as any)._wheelHandler = handleWheel;
                           }
                         }}
                         onMouseLeave={() => {
-                          // 鼠標離開分組標籤區域時，移除滾輪事件監聽
+                          // 鼠标离开分组标签区域时，移除滚轮事件监听
                           const container = groupContainerRef.current;
                           if (container && (container as any)._wheelHandler) {
                             container.removeEventListener('wheel', (container as any)._wheelHandler);
@@ -2447,7 +2447,7 @@ function LivePageClient() {
                       </div>
                     </div>
 
-                    {/* 頻道列表 */}
+                    {/* 频道列表 */}
                     <div ref={channelListRef} className='flex-1 overflow-y-auto space-y-2 pb-4'>
                       {mergedChannelItems?.length > 0 ? (
                         mergedChannelItems.map(item => {
@@ -2584,7 +2584,7 @@ function LivePageClient() {
                                           </span>
                                           {isActive && (
                                             <span className='text-xs text-green-600 dark:text-green-400'>
-                                              當前播放
+                                              当前播放
                                             </span>
                                           )}
                                         </div>
@@ -2629,7 +2629,7 @@ function LivePageClient() {
                   </>
                 )}
 
-                {/* 直播源 Tab 內容 */}
+                {/* 直播源 Tab 内容 */}
                 {activeTab === 'sources' && (
                   <div className='flex flex-col h-full mt-4'>
                     <div className='flex-1 overflow-y-auto space-y-2 pb-20'>
@@ -2646,7 +2646,7 @@ function LivePageClient() {
                                   : 'hover:bg-gray-200/50 dark:hover:bg-white/10 hover:scale-[1.02] cursor-pointer'
                                 }`.trim()}
                             >
-                              {/* 圖標 */}
+                              {/* 图标 */}
                               <div className='w-12 h-12 bg-gray-200 dark:bg-gray-600 rounded-lg flex items-center justify-center flex-shrink-0'>
                                 <Radio className='w-6 h-6 text-gray-500' />
                               </div>
@@ -2661,7 +2661,7 @@ function LivePageClient() {
                                 </div>
                               </div>
 
-                              {/* 當前標識 */}
+                              {/* 当前标识 */}
                               {isCurrentSource && (
                                 <div className='absolute top-2 right-2 w-2 h-2 bg-green-500 rounded-full'></div>
                               )}
@@ -2674,10 +2674,10 @@ function LivePageClient() {
                             <Radio className='w-8 h-8 text-gray-400 dark:text-gray-600' />
                           </div>
                           <p className='text-gray-500 dark:text-gray-400 font-medium'>
-                            暫無可用直播源
+                            暂无可用直播源
                           </p>
                           <p className='text-sm text-gray-400 dark:text-gray-500 mt-1'>
-                            請檢查網絡連接或聯繫管理員添加直播源
+                            请检查网络连接或联系管理员添加直播源
                           </p>
                         </div>
                       )}
@@ -2689,11 +2689,11 @@ function LivePageClient() {
           </div>
         </div>
 
-        {/* 當前頻道信息 */}
+        {/* 当前频道信息 */}
         {currentChannel && (
           <div className='pt-4'>
             <div className='flex flex-col lg:flex-row gap-4'>
-              {/* 頻道圖標+名稱 - 在小屏幕上佔100%，大屏幕佔20% */}
+              {/* 频道图标+名称 - 在小屏幕上占100%，大屏幕占20% */}
               <div className='w-full flex-shrink-0'>
                 <div className='flex items-center gap-4'>
                   <div className='w-20 h-20 bg-gray-300 dark:bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden'>
@@ -2732,7 +2732,7 @@ function LivePageClient() {
               </div>
             </div>
 
-            {/* EPG節目單 */}
+            {/* EPG节目单 */}
             <EpgScrollableRow
               programs={epgData?.programs || []}
               currentTime={new Date()}
@@ -2745,7 +2745,7 @@ function LivePageClient() {
   );
 }
 
-// FavoriteIcon 組件
+// FavoriteIcon 组件
 const FavoriteIcon = ({ filled }: { filled: boolean }) => {
   if (filled) {
     return (

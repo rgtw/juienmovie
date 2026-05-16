@@ -23,12 +23,12 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // 確保組件在客戶端掛載後才渲染 Portal
+  // 确保组件在客户端挂载后才渲染 Portal
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // 控制動畫狀態
+  // 控制动画状态
   useEffect(() => {
     let animationId: number;
     let timer: NodeJS.Timeout;
@@ -57,7 +57,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
     };
   }, [isOpen]);
 
-  // 阻止背景滾動
+  // 阻止背景滚动
   useEffect(() => {
     if (isVisible) {
       const scrollY = window.scrollY;
@@ -101,7 +101,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
     }
   }, [isVisible]);
 
-  // ESC鍵關閉
+  // ESC键关闭
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -131,7 +131,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
         }}
       />
 
-      {/* 關閉按鈕 */}
+      {/* 关闭按钮 */}
       <button
         onClick={onClose}
         className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors duration-150"
@@ -140,7 +140,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
         <X size={24} className="text-white" />
       </button>
 
-      {/* 圖片容器 */}
+      {/* 图片容器 */}
       <div
         className="relative max-w-[100vw] max-h-[100vh] sm:max-w-[90vw] sm:max-h-[90vh] transition-all duration-200 ease-out"
         style={{

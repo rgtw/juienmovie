@@ -10,13 +10,13 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/tmdb/images?id=xxx&type=movie|tv&page=1&pageSize=24
- * 獲取 TMDB 照片牆數據，並在服務端分頁
+ * 获取 TMDB 照片墙数据，并在服务端分页
  */
 export async function GET(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -28,11 +28,11 @@ export async function GET(request: NextRequest) {
     const pageSize = pageSizeParam ? Math.min(Math.max(parseInt(pageSizeParam, 10), 1), 60) : null;
 
     if (!id) {
-      return NextResponse.json({ error: '缺少ID參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少ID参数' }, { status: 400 });
     }
 
     if (type !== 'movie' && type !== 'tv') {
-      return NextResponse.json({ error: '類型參數必須是movie或tv' }, { status: 400 });
+      return NextResponse.json({ error: '类型参数必须是movie或tv' }, { status: 400 });
     }
 
     const config = await getConfig();
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 
     if (response.code !== 200 || !response.images) {
       return NextResponse.json(
-        { error: 'TMDB 圖片信息獲取失敗', code: response.code },
+        { error: 'TMDB 图片信息获取失败', code: response.code },
         { status: response.code }
       );
     }
@@ -96,9 +96,9 @@ export async function GET(request: NextRequest) {
       list,
     });
   } catch (error) {
-    console.error('TMDB圖片信息獲取失敗:', error);
+    console.error('TMDB图片信息获取失败:', error);
     return NextResponse.json(
-      { error: '獲取圖片信息失敗', details: (error as Error).message },
+      { error: '获取图片信息失败', details: (error as Error).message },
       { status: 500 }
     );
   }

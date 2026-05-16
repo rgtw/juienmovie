@@ -21,8 +21,8 @@ export default function ScrollableRow({
     if (containerRef.current) {
       const { scrollWidth, clientWidth, scrollLeft } = containerRef.current;
 
-      // 計算是否需要左右滾動按鈕
-      const threshold = 1; // 容差值，避免浮點誤差
+      // 计算是否需要左右滚动按钮
+      const threshold = 1; // 容差值，避免浮点误差
       const canScrollRight =
         scrollWidth - (scrollLeft + clientWidth) > threshold;
       const canScrollLeft = scrollLeft > threshold;
@@ -33,15 +33,15 @@ export default function ScrollableRow({
   };
 
   useEffect(() => {
-    // 多次延遲檢查，確保內容已完全渲染
+    // 多次延迟检查，确保内容已完全渲染
     checkScroll();
 
-    // 監聽窗口大小變化
+    // 监听窗口大小变化
     window.addEventListener('resize', checkScroll);
 
-    // 創建一個 ResizeObserver 來監聽容器大小變化
+    // 创建一个 ResizeObserver 来监听容器大小变化
     const resizeObserver = new ResizeObserver(() => {
-      // 延遲執行檢查
+      // 延迟执行检查
       checkScroll();
     });
 
@@ -53,12 +53,12 @@ export default function ScrollableRow({
       window.removeEventListener('resize', checkScroll);
       resizeObserver.disconnect();
     };
-  }, [children]); // 依賴 children，當子組件變化時重新檢查
+  }, [children]); // 依赖 children，当子组件变化时重新检查
 
-  // 添加一個額外的效果來監聽子組件的變化
+  // 添加一个额外的效果来监听子组件的变化
   useEffect(() => {
     if (containerRef.current) {
-      // 監聽 DOM 變化
+      // 监听 DOM 变化
       const observer = new MutationObserver(() => {
         setTimeout(checkScroll, 100);
       });
@@ -97,7 +97,7 @@ export default function ScrollableRow({
       className='relative'
       onMouseEnter={() => {
         setIsHovered(true);
-        // 當鼠標進入時重新檢查一次
+        // 当鼠标进入时重新检查一次
         checkScroll();
       }}
       onMouseLeave={() => setIsHovered(false)}
@@ -116,7 +116,7 @@ export default function ScrollableRow({
           }`}
           style={{
             background: 'transparent',
-            pointerEvents: 'none', // 允許點擊穿透
+            pointerEvents: 'none', // 允许点击穿透
           }}
         >
           <div
@@ -145,7 +145,7 @@ export default function ScrollableRow({
           }`}
           style={{
             background: 'transparent',
-            pointerEvents: 'none', // 允許點擊穿透
+            pointerEvents: 'none', // 允许点击穿透
           }}
         >
           <div

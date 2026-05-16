@@ -13,13 +13,13 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const { playlistId } = await params;
     const playlist = await db.getMusicV2Playlist(playlistId);
-    if (!playlist) return NextResponse.json({ success: false, error: { code: 'NOT_FOUND', message: '歌單不存在' } }, { status: 404 });
-    if (playlist.username !== username) return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: '無權限訪問此歌單' } }, { status: 403 });
+    if (!playlist) return NextResponse.json({ success: false, error: { code: 'NOT_FOUND', message: '歌单不存在' } }, { status: 404 });
+    if (playlist.username !== username) return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: '无权限访问此歌单' } }, { status: 403 });
 
     const songs = await db.listMusicV2PlaylistItems(playlistId);
     return NextResponse.json({ success: true, data: { songs } });
   } catch (error) {
-    return internalError('獲取歌單歌曲失敗', (error as Error).message);
+    return internalError('获取歌单歌曲失败', (error as Error).message);
   }
 }
 
@@ -30,14 +30,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   try {
     const { playlistId } = await params;
     const playlist = await db.getMusicV2Playlist(playlistId);
-    if (!playlist) return NextResponse.json({ success: false, error: { code: 'NOT_FOUND', message: '歌單不存在' } }, { status: 404 });
-    if (playlist.username !== username) return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: '無權限操作此歌單' } }, { status: 403 });
+    if (!playlist) return NextResponse.json({ success: false, error: { code: 'NOT_FOUND', message: '歌单不存在' } }, { status: 404 });
+    if (playlist.username !== username) return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: '无权限操作此歌单' } }, { status: 403 });
 
     const body = await request.json();
     const song = normalizeSong(body?.song || {});
     if (!song.songId || !song.source || !song.name || !song.artist) return badRequest('歌曲信息不完整');
     const exists = await db.hasMusicV2PlaylistItem(playlistId, song.songId);
-    if (exists) return badRequest('歌曲已在歌單中', 'DUPLICATE_SONG');
+    if (exists) return badRequest('歌曲已在歌单中', 'DUPLICATE_SONG');
 
     const item: MusicV2PlaylistItem = {
       ...song,
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     await db.addMusicV2PlaylistItem(playlistId, item);
     return NextResponse.json({ success: true });
   } catch (error) {
-    return internalError('添加歌曲失敗', (error as Error).message);
+    return internalError('添加歌曲失败', (error as Error).message);
   }
 }
 
@@ -60,8 +60,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   try {
     const { playlistId } = await params;
     const playlist = await db.getMusicV2Playlist(playlistId);
-    if (!playlist) return NextResponse.json({ success: false, error: { code: 'NOT_FOUND', message: '歌單不存在' } }, { status: 404 });
-    if (playlist.username !== username) return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: '無權限操作此歌單' } }, { status: 403 });
+    if (!playlist) return NextResponse.json({ success: false, error: { code: 'NOT_FOUND', message: '歌单不存在' } }, { status: 404 });
+    if (playlist.username !== username) return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: '无权限操作此歌单' } }, { status: 403 });
 
     const { searchParams } = new URL(request.url);
     const songId = searchParams.get('songId');
@@ -70,6 +70,6 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     await db.removeMusicV2PlaylistItem(playlistId, songId);
     return NextResponse.json({ success: true });
   } catch (error) {
-    return internalError('刪除歌曲失敗', (error as Error).message);
+    return internalError('删除歌曲失败', (error as Error).message);
   }
 }

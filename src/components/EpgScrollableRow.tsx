@@ -31,15 +31,15 @@ export default function EpgScrollableRow({
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number>(-1);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
 
-  // 處理滾輪事件，實現橫向滾動
+  // 处理滚轮事件，实现横向滚动
   const handleWheel = (e: WheelEvent) => {
     if (isHovered && containerRef.current) {
-      e.preventDefault(); // 阻止默認的豎向滾動
+      e.preventDefault(); // 阻止默认的竖向滚动
 
       const container = containerRef.current;
-      const scrollAmount = e.deltaY * 4; // 增加滾動速度
+      const scrollAmount = e.deltaY * 4; // 增加滚动速度
 
-      // 根據滾輪方向進行橫向滾動
+      // 根据滚轮方向进行横向滚动
       container.scrollBy({
         left: scrollAmount,
         behavior: 'smooth'
@@ -47,14 +47,14 @@ export default function EpgScrollableRow({
     }
   };
 
-  // 阻止頁面豎向滾動
+  // 阻止页面竖向滚动
   const preventPageScroll = (e: WheelEvent) => {
     if (isHovered) {
       e.preventDefault();
     }
   };
 
-  // 自動滾動到正在播放的節目（列表視圖）
+  // 自动滚动到正在播放的节目（列表视图）
   const scrollToCurrentProgram = () => {
     if (containerRef.current) {
       const currentProgramIndex = programs.findIndex(program => isCurrentlyPlaying(program));
@@ -66,7 +66,7 @@ export default function EpgScrollableRow({
           const containerWidth = container.clientWidth;
           const programWidth = programElement.offsetWidth;
 
-          // 計算滾動位置，使正在播放的節目居中顯示
+          // 计算滚动位置，使正在播放的节目居中显示
           const scrollLeft = programLeft - (containerWidth / 2) + (programWidth / 2);
 
           container.scrollTo({
@@ -78,12 +78,12 @@ export default function EpgScrollableRow({
     }
   };
 
-  // 自動滾動到正在播放的節目（時間線視圖）
+  // 自动滚动到正在播放的节目（时间线视图）
   const scrollToCurrentProgramTimeline = () => {
     const currentProgramIndex = programs.findIndex(program => isCurrentlyPlaying(program));
     if (currentProgramIndex === -1) return;
 
-    // 橫向時間線
+    // 横向时间线
     if (timelineHorizontalRef.current && window.innerWidth >= 768) {
       const programElement = timelineHorizontalRef.current.children[currentProgramIndex] as HTMLElement;
       if (programElement) {
@@ -100,11 +100,11 @@ export default function EpgScrollableRow({
         });
       }
     }
-    // 豎向時間線
+    // 竖向时间线
     else if (timelineVerticalRef.current) {
       const programElement = timelineVerticalRef.current.children[currentProgramIndex] as HTMLElement;
       if (programElement) {
-        // 找到包含滾動的父容器
+        // 找到包含滚动的父容器
         const scrollContainer = timelineVerticalRef.current.parentElement;
         if (scrollContainer) {
           const programTop = programElement.offsetTop;
@@ -124,11 +124,11 @@ export default function EpgScrollableRow({
 
   useEffect(() => {
     if (isHovered) {
-      // 鼠標懸停時阻止頁面滾動
+      // 鼠标悬停时阻止页面滚动
       document.addEventListener('wheel', preventPageScroll, { passive: false });
       document.addEventListener('wheel', handleWheel, { passive: false });
     } else {
-      // 鼠標離開時恢復頁面滾動
+      // 鼠标离开时恢复页面滚动
       document.removeEventListener('wheel', preventPageScroll);
       document.removeEventListener('wheel', handleWheel);
     }
@@ -139,11 +139,11 @@ export default function EpgScrollableRow({
     };
   }, [isHovered]);
 
-  // 組件加載後自動滾動到正在播放的節目
+  // 组件加载后自动滚动到正在播放的节目
   useEffect(() => {
-    // 延遲執行，確保DOM完全渲染
+    // 延迟执行，确保DOM完全渲染
     const timer = setTimeout(() => {
-      // 初始化當前正在播放的節目索引
+      // 初始化当前正在播放的节目索引
       const initialPlayingIndex = programs.findIndex(program => isCurrentlyPlaying(program));
       setCurrentPlayingIndex(initialPlayingIndex);
       scrollToCurrentProgram();
@@ -152,11 +152,11 @@ export default function EpgScrollableRow({
     return () => clearTimeout(timer);
   }, [programs, currentTime]);
 
-  // 定時刷新正在播放狀態
+  // 定时刷新正在播放状态
   useEffect(() => {
-    // 每分鐘刷新一次正在播放狀態
+    // 每分钟刷新一次正在播放状态
     const interval = setInterval(() => {
-      // 更新當前正在播放的節目索引
+      // 更新当前正在播放的节目索引
       const newPlayingIndex = programs.findIndex(program => {
         try {
           const start = parseCustomTimeFormat(program.start);
@@ -169,17 +169,17 @@ export default function EpgScrollableRow({
 
       if (newPlayingIndex !== currentPlayingIndex) {
         setCurrentPlayingIndex(newPlayingIndex);
-        // 如果正在播放的節目發生變化，自動滾動到新位置
+        // 如果正在播放的节目发生变化，自动滚动到新位置
         scrollToCurrentProgram();
       }
-    }, 60000); // 60秒 = 1分鐘
+    }, 60000); // 60秒 = 1分钟
 
     return () => clearInterval(interval);
   }, [programs, currentTime, currentPlayingIndex]);
 
-  // 切換視圖時自動跳轉到當前播放位置
+  // 切换视图时自动跳转到当前播放位置
   useEffect(() => {
-    // 延遲執行，確保DOM完全渲染
+    // 延迟执行，确保DOM完全渲染
     const timer = setTimeout(() => {
       if (viewMode === 'list') {
         scrollToCurrentProgram();
@@ -191,12 +191,12 @@ export default function EpgScrollableRow({
     return () => clearTimeout(timer);
   }, [viewMode]);
 
-  // 格式化時間顯示
+  // 格式化时间显示
   const formatTime = (timeString: string) => {
     return formatTimeToHHMM(timeString);
   };
 
-  // 判斷節目是否正在播放
+  // 判断节目是否正在播放
   const isCurrentlyPlaying = (program: EpgProgram) => {
     try {
       const start = parseCustomTimeFormat(program.start);
@@ -207,18 +207,18 @@ export default function EpgScrollableRow({
     }
   };
 
-  // 計算節目時長（分鐘）
+  // 计算节目时长（分钟）
   const getProgramDuration = (program: EpgProgram) => {
     try {
       const start = parseCustomTimeFormat(program.start);
       const end = parseCustomTimeFormat(program.end);
-      return (end.getTime() - start.getTime()) / (1000 * 60); // 轉換為分鐘
+      return (end.getTime() - start.getTime()) / (1000 * 60); // 转换为分钟
     } catch {
-      return 30; // 默認30分鐘
+      return 30; // 默认30分钟
     }
   };
 
-  // 計算當前時間在時間線上的位置百分比
+  // 计算当前时间在时间线上的位置百分比
   const getCurrentTimePosition = () => {
     if (programs.length === 0) return 0;
 
@@ -238,14 +238,14 @@ export default function EpgScrollableRow({
     }
   };
 
-  // 加載中狀態
+  // 加载中状态
   if (isLoading) {
     return (
       <div className="pt-4">
         <div className="mb-3 flex items-center justify-between">
           <h4 className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
             <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-            今日節目單
+            今日节目单
           </h4>
           <div className="w-16 sm:w-20"></div>
         </div>
@@ -259,14 +259,14 @@ export default function EpgScrollableRow({
     );
   }
 
-  // 無節目單狀態
+  // 无节目单状态
   if (!programs || programs.length === 0) {
     return (
       <div className="pt-4">
         <div className="mb-3 flex items-center justify-between">
           <h4 className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
             <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-            今日節目單
+            今日节目单
           </h4>
           <div className="w-16 sm:w-20"></div>
         </div>
@@ -285,10 +285,10 @@ export default function EpgScrollableRow({
       <div className="mb-3 flex items-center justify-between">
         <h4 className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
           <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-          今日節目單
+          今日节目单
         </h4>
         <div className="flex items-center gap-2">
-          {/* 視圖切換按鈕 */}
+          {/* 视图切换按钮 */}
           <div className="flex items-center gap-1 bg-gray-200 dark:bg-gray-800 rounded-lg p-0.5">
             <button
               onClick={() => setViewMode('list')}
@@ -316,7 +316,7 @@ export default function EpgScrollableRow({
             </button>
           </div>
 
-          {/* 當前播放按鈕 */}
+          {/* 当前播放按钮 */}
           {currentPlayingIndex !== -1 && (
             <button
               onClick={viewMode === 'list' ? scrollToCurrentProgram : scrollToCurrentProgramTimeline}
@@ -331,7 +331,7 @@ export default function EpgScrollableRow({
         </div>
       </div>
 
-      {/* 列表視圖 */}
+      {/* 列表视图 */}
       {viewMode === 'list' && (
         <div
           className='relative'
@@ -343,7 +343,7 @@ export default function EpgScrollableRow({
             className='flex overflow-x-auto scrollbar-hide py-2 pb-4 px-2 sm:px-4 min-h-[100px] sm:min-h-[120px]'
           >
             {programs.map((program, index) => {
-            // 使用 currentPlayingIndex 來判斷播放狀態，確保樣式能正確更新
+            // 使用 currentPlayingIndex 来判断播放状态，确保样式能正确更新
             const isPlaying = index === currentPlayingIndex;
             const isFinishedProgram = index < currentPlayingIndex;
             const isUpcomingProgram = index > currentPlayingIndex;
@@ -360,7 +360,7 @@ export default function EpgScrollableRow({
                       : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
               >
-                {/* 時間顯示在頂部 */}
+                {/* 时间显示在顶部 */}
                 <div className="flex items-center justify-between mb-2 sm:mb-3 flex-shrink-0">
                   <span className={`text-xs font-medium ${isPlaying
                     ? 'text-green-600 dark:text-green-400'
@@ -377,7 +377,7 @@ export default function EpgScrollableRow({
                   </span>
                 </div>
 
-                {/* 標題在中間，佔據剩餘空間 */}
+                {/* 标题在中间，占据剩余空间 */}
                 <div
                   className={`text-xs sm:text-sm font-medium flex-1 ${isPlaying
                     ? 'text-green-900 dark:text-green-100'
@@ -401,7 +401,7 @@ export default function EpgScrollableRow({
                   {program.title}
                 </div>
 
-                {/* 正在播放狀態在底部 */}
+                {/* 正在播放状态在底部 */}
                 {isPlaying && (
                   <div className="mt-auto pt-1 sm:pt-2 flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
                     <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -417,13 +417,13 @@ export default function EpgScrollableRow({
       </div>
       )}
 
-      {/* 時間線視圖 */}
+      {/* 时间线视图 */}
       {viewMode === 'timeline' && (
         <div className='relative'>
-          {/* 電腦端：橫向時間線 */}
+          {/* 电脑端：横向时间线 */}
           <div className='hidden md:block'>
             <div className='bg-gray-100 dark:bg-gray-800 rounded-lg p-4'>
-              {/* 時間線容器 - 可橫向滾動 */}
+              {/* 时间线容器 - 可横向滚动 */}
               <div
                 className='relative'
                 onMouseEnter={(e) => {
@@ -458,7 +458,7 @@ export default function EpgScrollableRow({
 
                   return (
                     <div key={index} className='flex flex-col items-center flex-shrink-0'>
-                      {/* 節目信息卡片 */}
+                      {/* 节目信息卡片 */}
                       <div className={`w-48 p-3 rounded-lg border transition-all duration-200 mb-3 h-[110px] flex flex-col ${
                         isPlaying
                           ? 'bg-green-500/10 dark:bg-green-500/20 border-green-500/30'
@@ -477,7 +477,7 @@ export default function EpgScrollableRow({
                             {formatTime(program.start)}
                           </span>
                           <span className='text-xs text-gray-400 dark:text-gray-500'>
-                            {Math.round(duration)}分鐘
+                            {Math.round(duration)}分钟
                           </span>
                         </div>
                         <div
@@ -509,9 +509,9 @@ export default function EpgScrollableRow({
                         )}
                       </div>
 
-                      {/* 時間線軸 */}
+                      {/* 时间线轴 */}
                       <div className='flex items-center flex-shrink-0'>
-                        {/* 時間點 */}
+                        {/* 时间点 */}
                         <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${
                           isPlaying
                             ? 'bg-green-500 border-green-500 animate-pulse'
@@ -520,7 +520,7 @@ export default function EpgScrollableRow({
                             : 'bg-blue-500 border-blue-500'
                         }`}></div>
 
-                        {/* 右側連接線 */}
+                        {/* 右侧连接线 */}
                         {index < programs.length - 1 && (
                           <div className={`h-0.5 w-48 ${
                             isFinished
@@ -539,10 +539,10 @@ export default function EpgScrollableRow({
             </div>
           </div>
 
-          {/* 手機端：豎向時間線 */}
+          {/* 手机端：竖向时间线 */}
           <div className='md:hidden'>
             <div className='relative bg-gray-100 dark:bg-gray-800 rounded-lg p-4 max-h-[500px] overflow-y-auto'>
-              {/* 時間線容器 */}
+              {/* 时间线容器 */}
               <div ref={timelineVerticalRef} className='relative'>
                 {programs.map((program, index) => {
                   const isPlaying = index === currentPlayingIndex;
@@ -551,9 +551,9 @@ export default function EpgScrollableRow({
 
                   return (
                     <div key={index} className='relative flex gap-3 mb-3 last:mb-0'>
-                      {/* 時間線軸 */}
+                      {/* 时间线轴 */}
                       <div className='relative flex flex-col items-center flex-shrink-0' style={{ paddingTop: '0.375rem' }}>
-                        {/* 時間點 */}
+                        {/* 时间点 */}
                         <div className={`w-3 h-3 rounded-full border-2 z-10 ${
                           isPlaying
                             ? 'bg-green-500 border-green-500 animate-pulse'
@@ -562,7 +562,7 @@ export default function EpgScrollableRow({
                             : 'bg-blue-500 border-blue-500'
                         }`}></div>
 
-                        {/* 連接線 - 根據狀態顯示不同顏色 */}
+                        {/* 连接线 - 根据状态显示不同颜色 */}
                         {index < programs.length - 1 && (
                           <div
                             className={`absolute w-0.5 ${
@@ -582,7 +582,7 @@ export default function EpgScrollableRow({
                         )}
                       </div>
 
-                      {/* 節目信息 */}
+                      {/* 节目信息 */}
                       <div className={`flex-1 p-3 rounded-lg border transition-all duration-200 ${
                         isPlaying
                           ? 'bg-green-500/10 dark:bg-green-500/20 border-green-500/30'
@@ -601,7 +601,7 @@ export default function EpgScrollableRow({
                             {formatTime(program.start)}
                           </span>
                           <span className='text-xs text-gray-400 dark:text-gray-500'>
-                            {Math.round(duration)}分鐘
+                            {Math.round(duration)}分钟
                           </span>
                         </div>
                         <div className={`text-sm font-medium ${

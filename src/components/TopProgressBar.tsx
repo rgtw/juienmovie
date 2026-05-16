@@ -4,7 +4,7 @@ import { usePathname, useRouter,useSearchParams } from 'next/navigation';
 import NProgress from 'nprogress';
 import { useEffect, useRef } from 'react';
 
-// 創建全局鉤子來攔截 router
+// 创建全局钩子来拦截 router
 let globalRouterRef: any = null;
 
 export default function TopProgressBar() {
@@ -31,14 +31,14 @@ export default function TopProgressBar() {
     const originalBack = router.back;
     const originalForward = router.forward;
 
-    // 攔截 router.push
+    // 拦截 router.push
     router.push = function (...args: Parameters<typeof originalPush>) {
       const targetUrl = args[0] as string;
       const targetPathname = new URL(targetUrl, window.location.href).pathname;
       const currentPathname = window.location.pathname;
 
-      // /play 和 /live 頁面：參數變化也顯示進度條
-      // 其他頁面：僅路徑變化時顯示進度條
+      // /play 和 /live 页面：参数变化也显示进度条
+      // 其他页面：仅路径变化时显示进度条
       if (currentPathname === '/play' || currentPathname === '/live' || targetPathname !== previousPathnameRef.current) {
         isNavigatingRef.current = true;
         NProgress.start();
@@ -46,14 +46,14 @@ export default function TopProgressBar() {
       return originalPush.apply(this, args);
     };
 
-    // 攔截 router.replace
+    // 拦截 router.replace
     router.replace = function (...args: Parameters<typeof originalReplace>) {
       const targetUrl = args[0] as string;
       const targetPathname = new URL(targetUrl, window.location.href).pathname;
       const currentPathname = window.location.pathname;
 
-      // /play 和 /live 頁面：參數變化也顯示進度條
-      // 其他頁面：僅路徑變化時顯示進度條
+      // /play 和 /live 页面：参数变化也显示进度条
+      // 其他页面：仅路径变化时显示进度条
       if (currentPathname === '/play' || currentPathname === '/live' || targetPathname !== previousPathnameRef.current) {
         isNavigatingRef.current = true;
         NProgress.start();
@@ -61,21 +61,21 @@ export default function TopProgressBar() {
       return originalReplace.apply(this, args);
     };
 
-    // 攔截 router.back
+    // 拦截 router.back
     router.back = function () {
       isNavigatingRef.current = true;
       NProgress.start();
       return originalBack.apply(this);
     };
 
-    // 攔截 router.forward
+    // 拦截 router.forward
     router.forward = function () {
       isNavigatingRef.current = true;
       NProgress.start();
       return originalForward.apply(this);
     };
 
-    // 監聽所有鏈接點擊事件
+    // 监听所有链接点击事件
     const handleAnchorClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       const anchor = target.closest('a');
@@ -94,13 +94,13 @@ export default function TopProgressBar() {
               NProgress.start();
             }
           } catch (e) {
-            // URL 解析失敗，忽略
+            // URL 解析失败，忽略
           }
         }
       }
     };
 
-    // 監聽瀏覽器前進後退按鈕
+    // 监听浏览器前进后退按钮
     const handlePopState = () => {
       isNavigatingRef.current = true;
       NProgress.start();
@@ -110,7 +110,7 @@ export default function TopProgressBar() {
     window.addEventListener('popstate', handlePopState);
 
     return () => {
-      // 恢復原始方法
+      // 恢复原始方法
       if (globalRouterRef) {
         globalRouterRef.push = originalPush;
         globalRouterRef.replace = originalReplace;
@@ -124,7 +124,7 @@ export default function TopProgressBar() {
   }, [router]);
 
   useEffect(() => {
-    // 僅在頁面路徑變化時結束進度條，參數變化不觸發
+    // 仅在页面路径变化时结束进度条，参数变化不触发
     if (isNavigatingRef.current) {
       NProgress.done();
       isNavigatingRef.current = false;

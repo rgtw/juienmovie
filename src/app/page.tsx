@@ -26,7 +26,7 @@ import { useSite } from '@/components/SiteProvider';
 import Toast, { ToastProps } from '@/components/Toast';
 import VideoCard from '@/components/VideoCard';
 
-// 首頁模塊配置接口
+// 首页模块配置接口
 interface HomeModule {
   id: string;
   name: string;
@@ -35,7 +35,7 @@ interface HomeModule {
 }
 
 function HomeClient() {
-  // 移除了 activeTab 狀態，收藏夾功能已移到 UserMenu
+  // 移除了 activeTab 状态，收藏夹功能已移到 UserMenu
   const [hotMovies, setHotMovies] = useState<DoubanItem[]>([]);
   const [hotTvShows, setHotTvShows] = useState<DoubanItem[]>([]);
   const [hotVarietyShows, setHotVarietyShows] = useState<DoubanItem[]>([]);
@@ -46,13 +46,13 @@ function HomeClient() {
   >([]);
   const [loading, setLoading] = useState(true);
   const { announcement } = useSite();
-  // 首頁模塊配置狀態
+  // 首页模块配置状态
   const [homeModules, setHomeModules] = useState<HomeModule[]>([
-    { id: 'hotMovies', name: '热门電影', enabled: true, order: 0 },
+    { id: 'hotMovies', name: '熱門電影', enabled: true, order: 0 },
     { id: 'hotDuanju', name: '熱播短劇', enabled: true, order: 1 },
     { id: 'bangumiCalendar', name: '新番放送', enabled: true, order: 2 },
-    { id: 'hotTvShows', name: '热门劇集', enabled: true, order: 3 },
-    { id: 'hotVarietyShows', name: '热门綜藝', enabled: true, order: 4 },
+    { id: 'hotTvShows', name: '熱門劇集', enabled: true, order: 3 },
+    { id: 'hotVarietyShows', name: '熱門綜藝', enabled: true, order: 4 },
     { id: 'upcomingContent', name: '即將上映', enabled: true, order: 5 },
   ]);
   const [homeBannerEnabled, setHomeBannerEnabled] = useState(true);
@@ -84,7 +84,7 @@ function HomeClient() {
 
     const inlinePasscode = (text: string) =>
       pickPasscode(
-        text.match(/(?:提取碼|訪問碼|密碼)\s*[:：=]?\s*([a-zA-Z0-9]{4,8})/i)?.[1],
+        text.match(/(?:提取码|访问码|密码)\s*[:：=]?\s*([a-zA-Z0-9]{4,8})/i)?.[1],
         text.match(/[?&](?:pwd|passcode|accessCode)=([^&\s]+)/i)?.[1]
       );
 
@@ -243,12 +243,12 @@ function HomeClient() {
     }
   };
 
-  // 加載首頁模塊配置
+  // 加载首页模块配置
   useEffect(() => {
     loadHomeLayoutSettings();
   }, []);
 
-  // 監聽首頁模塊配置更新事件
+  // 监听首页模块配置更新事件
   useEffect(() => {
     const handleHomeModulesUpdated = () => {
       loadHomeLayoutSettings();
@@ -260,7 +260,7 @@ function HomeClient() {
     };
   }, []);
 
-  // 檢查AI功能是否啟用
+  // 检查AI功能是否启用
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const enabled =
@@ -268,7 +268,7 @@ function HomeClient() {
         (window as any).RUNTIME_CONFIG?.AI_ENABLE_HOMEPAGE_ENTRY;
       setAiEnabled(enabled);
 
-      // 加載AI默認消息配置
+      // 加载AI默认消息配置
       const defaultMsg = (window as any).RUNTIME_CONFIG?.AI_DEFAULT_MESSAGE_NO_VIDEO;
       if (defaultMsg) {
         setAiDefaultMessageNoVideo(defaultMsg);
@@ -276,7 +276,7 @@ function HomeClient() {
     }
   }, []);
 
-  // 檢查源站尋片功能是否啟用
+  // 检查源站寻片功能是否启用
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const enabled = (window as any).RUNTIME_CONFIG?.ENABLE_SOURCE_SEARCH !== false;
@@ -284,7 +284,7 @@ function HomeClient() {
     }
   }, []);
 
-  // 檢查音樂功能是否啟用
+  // 检查音乐功能是否启用
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const enabled = !!(window as any).RUNTIME_CONFIG?.MUSIC_ENABLED;
@@ -292,7 +292,7 @@ function HomeClient() {
     }
   }, []);
 
-  // 檢查漫畫功能是否啟用
+  // 检查漫画功能是否启用
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const enabled = !!(window as any).RUNTIME_CONFIG?.SUWAYOMI_ENABLED;
@@ -300,7 +300,7 @@ function HomeClient() {
     }
   }, []);
 
-  // 檢查電子書功能是否啟用
+  // 检查电子书功能是否启用
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const enabled = !!(window as any).RUNTIME_CONFIG?.BOOKS_ENABLED;
@@ -308,7 +308,7 @@ function HomeClient() {
     }
   }, []);
 
-  // 檢查公告彈窗狀態
+  // 检查公告弹窗状态
   useEffect(() => {
     if (typeof window !== 'undefined' && announcement) {
       const hasSeenAnnouncement = localStorage.getItem('hasSeenAnnouncement');
@@ -321,7 +321,7 @@ function HomeClient() {
   }, [announcement]);
 
   useEffect(() => {
-    const CACHE_DURATION = 60 * 60 * 1000; // 1小時
+    const CACHE_DURATION = 60 * 60 * 1000; // 1小时
 
     const getCache = (key: string) => {
       try {
@@ -367,7 +367,7 @@ function HomeClient() {
       (async () => {
         try {
           const [moviesData, tvShowsData, varietyShowsData, bangumiCalendarData] = await Promise.all([
-            getDoubanCategories({ kind: 'movie', category: '热门', type: '全部' }),
+            getDoubanCategories({ kind: 'movie', category: '熱門', type: '全部' }),
             getDoubanCategories({ kind: 'tv', category: 'tv', type: 'tv' }),
             getDoubanCategories({ kind: 'tv', category: 'show', type: 'show' }),
             GetBangumiCalendarData(),
@@ -440,18 +440,18 @@ function HomeClient() {
 
   const handleCloseAnnouncement = (announcement: string) => {
     setShowAnnouncement(false);
-    localStorage.setItem('hasSeenAnnouncement', announcement); // 記錄已查看彈窗
+    localStorage.setItem('hasSeenAnnouncement', announcement); // 记录已查看弹窗
   };
 
-  // 渲染模塊的函數
+  // 渲染模块的函数
   const renderModule = (moduleId: string) => {
     switch (moduleId) {
       case 'hotMovies':
         return (
           <section key="hotMovies" className='mb-8'>
             <div className='mb-4 flex items-center justify-between'>
-              <h2 className='text-xl md:text-2xl font-bold text-white transition-colors'>
-                热门電影
+              <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
+                热门电影
               </h2>
               <Link
                 href='/douban?type=movie'
@@ -498,8 +498,8 @@ function HomeClient() {
         return (
           <section key="hotDuanju" className='mb-8'>
             <div className='mb-4 flex items-center justify-between'>
-              <h2 className='text-xl md:text-2xl font-bold text-white transition-colors'>
-                熱播短劇
+              <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
+                热播短剧
               </h2>
               <Link
                 href='/duanju'
@@ -552,7 +552,7 @@ function HomeClient() {
         return (
           <section key="bangumiCalendar" className='mb-8'>
             <div className='mb-4 flex items-center justify-between'>
-              <h2 className='text-xl md:text-2xl font-bold text-white transition-colors'>
+              <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
                 新番放送
               </h2>
               <Link
@@ -617,8 +617,8 @@ function HomeClient() {
         return (
           <section key="hotTvShows" className='mb-8'>
             <div className='mb-4 flex items-center justify-between'>
-              <h2 className='text-xl md:text-2xl font-bold text-white transition-colors'>
-                热门劇集
+              <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
+                热门剧集
               </h2>
               <Link
                 href='/douban?type=tv'
@@ -664,8 +664,8 @@ function HomeClient() {
         return (
           <section key="hotVarietyShows" className='mb-8'>
             <div className='mb-4 flex items-center justify-between'>
-              <h2 className='text-xl md:text-2xl font-bold text-white transition-colors'>
-                热门綜藝
+              <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
+                热门综艺
               </h2>
               <Link
                 href='/douban?type=tv&category=show'
@@ -712,8 +712,8 @@ function HomeClient() {
         return (
           <section key="upcomingContent" className='mb-8'>
             <div className='mb-4 flex items-center justify-between'>
-              <h2 className='text-xl md:text-2xl font-bold text-white transition-colors'>
-                即將上映
+              <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
+                即将上映
               </h2>
             </div>
             <ScrollableRow>
@@ -750,7 +750,7 @@ function HomeClient() {
   return (
     <PageLayout>
       <FireworksCanvas />
-      {/* TMDB 热门輪播圖 */}
+      {/* TMDB 热门轮播图 */}
       {homeBannerEnabled && (
         <div className='w-full mb-4'>
           <BannerCarousel delayLoad={true} />
@@ -759,9 +759,9 @@ function HomeClient() {
 
       <div className='px-2 sm:px-10 pb-4 sm:pb-8 overflow-visible'>
         <div className='max-w-[95%] mx-auto'>
-          {/* 首頁內容 */}
+          {/* 首页内容 */}
           <>
-            {/* 源站尋片和AI問片入口 */}
+            {/* 源站寻片和AI问片入口 */}
             <div className={`flex items-center justify-end gap-2 mb-4 ${homeBannerEnabled ? '' : 'mt-[30px]'}`}>
               <button
                 onClick={handleDirectPlay}
@@ -804,7 +804,7 @@ function HomeClient() {
                 </Link>
               )}
 
-              {/* 源站尋片入口 */}
+              {/* 源站寻片入口 */}
               {sourceSearchEnabled && (
                 <Link href='/source-search'>
                   <button
@@ -816,7 +816,7 @@ function HomeClient() {
                 </Link>
               )}
 
-              {/* AI問片入口 */}
+              {/* AI问片入口 */}
               {aiEnabled && (
                 <button
                   onClick={() => setShowAIChat(true)}
@@ -828,10 +828,10 @@ function HomeClient() {
               )}
             </div>
 
-            {/* 繼續觀看 */}
+            {/* 继续观看 */}
             {homeContinueWatchingEnabled && <ContinueWatching />}
 
-            {/* 根據配置動態渲染首頁模塊 */}
+            {/* 根据配置动态渲染首页模块 */}
             {homeModules
               .filter(module => module.enabled)
               .sort((a, b) => a.order - b.order)
@@ -840,12 +840,12 @@ function HomeClient() {
         </div>
       </div>
 
-      {/* HTTP 環境警告彈窗 */}
+      {/* HTTP 环境警告弹窗 */}
       {showHttpWarning && (
         <HttpWarningDialog onClose={() => setShowHttpWarning(false)} />
       )}
 
-      {/* AI問片面板 */}
+      {/* AI问片面板 */}
       {aiEnabled && (
         <AIChatPanel
           isOpen={showAIChat}
@@ -854,7 +854,7 @@ function HomeClient() {
         />
       )}
 
-      {/* 公告彈窗 */}
+      {/* 公告弹窗 */}
       {showAnnouncement && (
         <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4'>
           <div className='bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6'>
@@ -885,7 +885,7 @@ function HomeClient() {
           >
             <div className='flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700'>
               <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
-                直鏈播放
+                直链播放
               </h3>
               <button
                 onClick={() => setShowDirectPlayDialog(false)}
@@ -897,10 +897,10 @@ function HomeClient() {
             </div>
             <div className='p-4 space-y-4'>
               <div className='text-sm text-gray-600 dark:text-gray-300'>
-                請輸入可直接播放的視頻鏈接。
+                请输入可直接播放的视频链接。
               </div>
               <div className='text-xs text-gray-500 dark:text-gray-400'>
-                支持夸克、UC、百度、天翼、移動、123、115 網盤在線播放。
+                支持夸克、UC、百度、天翼、移动、123、115 网盘在线播放。
               </div>
               <input
                 value={directPlayUrl}

@@ -7,38 +7,38 @@ import { generateTvboxToken } from '@/lib/tvbox-token';
 export const runtime = 'nodejs';
 
 /**
- * 獲取用戶的TVBox訂閱token
- * 如果用戶沒有token，自動生成一個
+ * 获取用户的TVBox订阅token
+ * 如果用户没有token，自动生成一个
  */
 export async function GET(request: NextRequest) {
   try {
-    // 驗證用戶登錄
+    // 验证用户登录
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo?.username) {
       return NextResponse.json(
-        { error: '未登錄' },
+        { error: '未登录' },
         { status: 401 }
       );
     }
 
     const username = authInfo.username;
 
-    // 獲取token，如果沒有則生成
+    // 获取token，如果没有则生成
     let token = await db.getTvboxSubscribeToken(username);
 
     if (!token) {
-      // 懶加載：首次訪問時生成token
+      // 懒加载：首次访问时生成token
       token = generateTvboxToken();
       await db.setTvboxSubscribeToken(username, token);
-      console.log(`為用戶 ${username} 生成TVBox訂閱token`);
+      console.log(`为用户 ${username} 生成TVBox订阅token`);
     }
 
     return NextResponse.json({ token });
   } catch (error) {
-    console.error('獲取TVBox訂閱token失敗:', error);
+    console.error('获取TVBox订阅token失败:', error);
     return NextResponse.json(
       {
-        error: '獲取訂閱token失敗',
+        error: '获取订阅token失败',
         details: (error as Error).message,
       },
       { status: 500 }

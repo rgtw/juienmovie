@@ -50,7 +50,7 @@ function getMeta(pathname: string, searchParams: ReturnType<typeof useSearchPara
       backHref: `/manga/detail?mangaId=${encodeURIComponent(mangaId)}&sourceId=${encodeURIComponent(sourceId)}&title=${encodeURIComponent(title)}&cover=${encodeURIComponent(cover)}&sourceName=${encodeURIComponent(sourceName)}&returnTo=${encodeURIComponent(returnTo)}`,
     };
   }
-  return { title: '漫畫推薦', subtitle: '按來源查看热门與最新漫畫' };
+  return { title: '漫畫推薦', subtitle: '按來源查看熱門與最新漫畫' };
 }
 
 export default function MangaLayout({ children }: MangaLayoutProps) {

@@ -50,7 +50,7 @@ export function DownloadPanel() {
   return (
     <div className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm'>
       <div className='bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-4xl max-h-[80vh] flex flex-col'>
-        {/* 標題欄 */}
+        {/* 标题栏 */}
         <div className='flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700'>
           <h2 className='text-xl font-bold text-gray-900 dark:text-white'>下載任務列表</h2>
           <button
@@ -63,7 +63,7 @@ export function DownloadPanel() {
           </button>
         </div>
 
-        {/* 任務列表 */}
+        {/* 任务列表 */}
         <div className='flex-1 overflow-y-auto p-4 space-y-3'>
           {tasks.length === 0 ? (
             <div className='flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400'>
@@ -85,7 +85,7 @@ export function DownloadPanel() {
                   key={task.id}
                   className='bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 border border-gray-200 dark:border-gray-600'
                 >
-                  {/* 任務信息 */}
+                  {/* 任务信息 */}
                   <div className='flex items-start justify-between mb-3'>
                     <div className='flex-1 min-w-0'>
                       <h3 className='text-sm font-medium text-gray-900 dark:text-white truncate mb-1'>
@@ -103,7 +103,7 @@ export function DownloadPanel() {
                     </div>
                   </div>
 
-                  {/* 進度條 */}
+                  {/* 进度条 */}
                   <div className='mb-3'>
                     <div className='flex items-center justify-between text-xs text-gray-600 dark:text-gray-300 mb-1'>
                       <span>
@@ -127,22 +127,22 @@ export function DownloadPanel() {
                     </div>
                   </div>
 
-                  {/* 錯誤信息 */}
+                  {/* 错误信息 */}
                   {task.errorNum > 0 && (
                     <div className='mb-3 flex items-center justify-between'>
                       <div className='text-xs text-red-500 dark:text-red-400'>
-                        {task.errorNum} 個片段下載失敗
+                        {task.errorNum} 个片段下载失败
                       </div>
                       <button
                         onClick={() => retryFailedSegments(task.id)}
                         className='text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline'
                       >
-                        重試失敗片段
+                        重试失败片段
                       </button>
                     </div>
                   )}
 
-                  {/* 操作按鈕 */}
+                  {/* 操作按钮 */}
                   <div className='flex items-center gap-2'>
                     {task.status === 'downloading' && (
                       <button
@@ -152,7 +152,7 @@ export function DownloadPanel() {
                         <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                           <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M10 9v6m4-6v6' />
                         </svg>
-                        暫停
+                        暂停
                       </button>
                     )}
 
@@ -176,7 +176,7 @@ export function DownloadPanel() {
                       <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
                       </svg>
-                      刪除
+                      删除
                     </button>
                   </div>
                 </div>
@@ -185,7 +185,7 @@ export function DownloadPanel() {
           )}
         </div>
 
-        {/* 底部統計 */}
+        {/* 底部统计 */}
         {tasks.length > 0 && (
           <div className='p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30'>
             <div className='flex items-center justify-between text-sm text-gray-600 dark:text-gray-300'>

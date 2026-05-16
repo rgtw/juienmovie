@@ -12,7 +12,7 @@ import {
 
 export const runtime = 'nodejs';
 
-// 生成簽名
+// 生成签名
 async function generateSignature(
   data: string,
   secret: string
@@ -36,16 +36,16 @@ async function generateSignature(
     .join('');
 }
 
-// 獲取設備信息
+// 获取设备信息
 function getDeviceInfo(userAgent: string): string {
   const ua = userAgent.toLowerCase();
 
-  // 檢查是否為 MoonTVPlus APP
+  // 检查是否为 MoonTVPlus APP
   if (ua.includes('moontvplus')) {
     return 'MoonTVPlus APP';
   }
 
-  // 檢查是否為 OrionTV
+  // 检查是否为 OrionTV
   if (ua.includes('oriontv')) {
     return 'OrionTV';
   }
@@ -67,7 +67,7 @@ function getDeviceInfo(userAgent: string): string {
   return 'Unknown Device';
 }
 
-// 生成認證Cookie
+// 生成认证Cookie
 async function generateAuthCookie(
   username: string,
   role: 'owner' | 'admin' | 'user',
@@ -79,7 +79,7 @@ async function generateAuthCookie(
     authData.username = username;
     authData.timestamp = Date.now();
 
-    // 生成簽名（包含 username, role, timestamp）
+    // 生成签名（包含 username, role, timestamp）
     const dataToSign = JSON.stringify({
       username: authData.username,
       role: authData.role,
@@ -88,7 +88,7 @@ async function generateAuthCookie(
     const signature = await generateSignature(dataToSign, process.env.PASSWORD);
     authData.signature = signature;
 
-    // 生成雙 Token
+    // 生成双 Token
     const tokenId = generateTokenId();
     const refreshToken = generateRefreshToken();
     const now = Date.now();
@@ -98,7 +98,7 @@ async function generateAuthCookie(
     authData.refreshToken = refreshToken;
     authData.refreshExpires = refreshExpires;
 
-    // 存儲 Refresh Token
+    // 存储 Refresh Token
     await storeRefreshToken(username, tokenId, {
       token: refreshToken,
       deviceInfo,
@@ -115,24 +115,24 @@ export async function POST(request: NextRequest) {
   try {
     const { username } = await request.json();
 
-    // 驗證用戶名
+    // 验证用户名
     if (!username || typeof username !== 'string') {
-      return NextResponse.json({ error: '用戶名不能為空' }, { status: 400 });
+      return NextResponse.json({ error: '用户名不能为空' }, { status: 400 });
     }
 
-    // 驗證用戶名格式
+    // 验证用户名格式
     if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
       return NextResponse.json(
-        { error: '用戶名只能包含字母、數字、下劃線，長度3-20位' },
+        { error: '用户名只能包含字母、数字、下划线，长度3-20位' },
         { status: 400 }
       );
     }
 
-    // 獲取OIDC session
+    // 获取OIDC session
     const oidcSessionCookie = request.cookies.get('oidc_session')?.value;
     if (!oidcSessionCookie) {
       return NextResponse.json(
-        { error: 'OIDC會話已過期，請重新登錄' },
+        { error: 'OIDC会话已过期，请重新登录' },
         { status: 400 }
       );
     }
@@ -142,15 +142,15 @@ export async function POST(request: NextRequest) {
       oidcSession = JSON.parse(oidcSessionCookie);
     } catch {
       return NextResponse.json(
-        { error: 'OIDC會話無效' },
+        { error: 'OIDC会话无效' },
         { status: 400 }
       );
     }
 
-    // 檢查session是否過期(10分鐘)
+    // 检查session是否过期(10分钟)
     if (Date.now() - oidcSession.timestamp > 600000) {
       return NextResponse.json(
-        { error: 'OIDC會話已過期，請重新登錄' },
+        { error: 'OIDC会话已过期，请重新登录' },
         { status: 400 }
       );
     }
@@ -158,67 +158,67 @@ export async function POST(request: NextRequest) {
     const config = await getConfig();
     const siteConfig = config.SiteConfig;
 
-    // 檢查是否啟用OIDC註冊
+    // 检查是否启用OIDC注册
     if (!siteConfig.EnableOIDCRegistration) {
       return NextResponse.json(
-        { error: 'OIDC註冊未啟用' },
+        { error: 'OIDC注册未启用' },
         { status: 403 }
       );
     }
 
-    // 檢查最低信任等級
+    // 检查最低信任等级
     const minTrustLevel = siteConfig.OIDCMinTrustLevel || 0;
     if (minTrustLevel > 0) {
       const userTrustLevel = oidcSession.trust_level ?? 0;
       if (userTrustLevel < minTrustLevel) {
         return NextResponse.json(
-          { error: `您的信任等級(${userTrustLevel})不滿足最低要求(${minTrustLevel})` },
+          { error: `您的信任等级(${userTrustLevel})不满足最低要求(${minTrustLevel})` },
           { status: 403 }
         );
       }
     }
 
-    // 檢查是否與站長同名
+    // 检查是否与站长同名
     if (username === process.env.USERNAME) {
       return NextResponse.json(
-        { error: '該用戶名不可用' },
+        { error: '该用户名不可用' },
         { status: 409 }
       );
     }
 
-    // 檢查用戶名是否已存在
+    // 检查用户名是否已存在
     const userExists = await db.checkUserExistV2(username);
     if (userExists) {
       return NextResponse.json(
-        { error: '用戶名已存在' },
+        { error: '用户名已存在' },
         { status: 409 }
       );
     }
 
-    // 檢查OIDC sub是否已被使用
+    // 检查OIDC sub是否已被使用
     const existingOIDCUsername = await db.getUserByOidcSub(oidcSession.sub);
     if (existingOIDCUsername) {
       return NextResponse.json(
-        { error: '該OIDC賬號已被註冊' },
+        { error: '该OIDC账号已被注册' },
         { status: 409 }
       );
     }
 
-    // 創建用戶
+    // 创建用户
     try {
-      // 生成隨機密碼(OIDC用戶不需要密碼登錄)
+      // 生成随机密码(OIDC用户不需要密码登录)
       const randomPassword = crypto.randomUUID();
 
-      // 獲取默認用戶組
+      // 获取默认用户组
       const defaultTags = siteConfig.DefaultUserTags && siteConfig.DefaultUserTags.length > 0
         ? siteConfig.DefaultUserTags
         : undefined;
 
-      // 使用新版本創建用戶（帶SHA256加密和OIDC綁定）
+      // 使用新版本创建用户（带SHA256加密和OIDC绑定）
       await db.createUserV2(username, randomPassword, 'user', defaultTags, oidcSession.sub);
 
-      // 設置認證cookie
-      const response = NextResponse.json({ ok: true, message: '註冊成功' });
+      // 设置认证cookie
+      const response = NextResponse.json({ ok: true, message: '注册成功' });
       const userAgent = request.headers.get('user-agent') || 'Unknown';
       const deviceInfo = getDeviceInfo(userAgent);
       const cookieValue = await generateAuthCookie(username, 'user', deviceInfo);
@@ -237,11 +237,11 @@ export async function POST(request: NextRequest) {
 
       return response;
     } catch (err) {
-      console.error('創建用戶失敗', err);
-      return NextResponse.json({ error: '註冊失敗，請稍後重試' }, { status: 500 });
+      console.error('创建用户失败', err);
+      return NextResponse.json({ error: '注册失败，请稍后重试' }, { status: 500 });
     }
   } catch (error) {
-    console.error('OIDC註冊完成失敗:', error);
-    return NextResponse.json({ error: '服務器錯誤' }, { status: 500 });
+    console.error('OIDC注册完成失败:', error);
+    return NextResponse.json({ error: '服务器错误' }, { status: 500 });
   }
 }

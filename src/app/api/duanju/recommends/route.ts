@@ -9,7 +9,7 @@ import { cleanHtmlTags } from '@/lib/utils';
 
 export const runtime = 'nodejs';
 
-// 服務端內存緩存
+// 服务端内存缓存
 let cachedRecommends: {
   timestamp: number;
   data: SearchResult[];
@@ -36,21 +36,21 @@ interface CmsClassResponse {
 }
 
 /**
- * 獲取熱播短劇推薦視頻
+ * 获取热播短剧推荐视频
  */
 export async function GET() {
   try {
-    // 檢查內存緩存
+    // 检查内存缓存
     const now = Date.now();
-    const CACHE_DURATION = 60 * 60 * 1000; // 1小時
+    const CACHE_DURATION = 60 * 60 * 1000; // 1小时
 
     if (cachedRecommends && now - cachedRecommends.timestamp < CACHE_DURATION) {
-      console.log('使用緩存的短劇推薦數據');
+      console.log('使用缓存的短剧推荐数据');
       const cacheTime = await getCacheTime();
       return NextResponse.json(
         {
           code: 200,
-          message: '獲取成功',
+          message: '获取成功',
           data: cachedRecommends.data,
         },
         {
@@ -61,42 +61,42 @@ export async function GET() {
       );
     }
 
-    // 獲取短劇視頻源列表
+    // 获取短剧视频源列表
     const sources = await getDuanjuSources();
 
     if (!sources || sources.length === 0) {
       return NextResponse.json({
         code: 200,
-        message: '暫無短劇視頻源',
+        message: '暂无短剧视频源',
         data: [],
       });
     }
 
-    // 取第一個視頻源
+    // 取第一个视频源
     const firstSource = sources[0];
-    console.log(`使用視頻源: ${firstSource.name}`);
+    console.log(`使用视频源: ${firstSource.name}`);
 
-    // 獲取該視頻源的分類列表，找到短劇分類的ID
+    // 获取该视频源的分类列表，找到短剧分类的ID
     const classUrl = `${firstSource.api}?ac=list`;
     const classResponse = await fetch(classUrl, {
       headers: API_CONFIG.search.headers,
     });
 
     if (!classResponse.ok) {
-      throw new Error('獲取分類列表失敗');
+      throw new Error('获取分类列表失败');
     }
 
     const classData: CmsClassResponse = await classResponse.json();
 
-    // 找到短劇分類的ID
+    // 找到短剧分类的ID
     let duanjuTypeId: string | number | null = null;
     if (classData.class && Array.isArray(classData.class)) {
       const duanjuClass = classData.class.find((item) => {
         const typeName = item.type_name?.toLowerCase() || '';
         return (
-          typeName.includes('短劇') ||
-          typeName.includes('短視頻') ||
-          typeName.includes('微短劇')
+          typeName.includes('短剧') ||
+          typeName.includes('短视频') ||
+          typeName.includes('微短剧')
         );
       });
 
@@ -108,21 +108,21 @@ export async function GET() {
     if (!duanjuTypeId) {
       return NextResponse.json({
         code: 200,
-        message: '未找到短劇分類',
+        message: '未找到短剧分类',
         data: [],
       });
     }
 
-    console.log(`短劇分類ID: ${duanjuTypeId}`);
+    console.log(`短剧分类ID: ${duanjuTypeId}`);
 
-    // 請求該分類下的視頻列表
+    // 请求该分类下的视频列表
     const videoListUrl = `${firstSource.api}?ac=videolist&t=${duanjuTypeId}&pg=1`;
     const videoListResponse = await fetch(videoListUrl, {
       headers: API_CONFIG.search.headers,
     });
 
     if (!videoListResponse.ok) {
-      throw new Error('獲取視頻列表失敗');
+      throw new Error('获取视频列表失败');
     }
 
     const videoListData = await videoListResponse.json();
@@ -135,21 +135,21 @@ export async function GET() {
     ) {
       return NextResponse.json({
         code: 200,
-        message: '暫無短劇視頻',
+        message: '暂无短剧视频',
         data: [],
       });
     }
 
-    // 處理視頻數據
+    // 处理视频数据
     const videos: SearchResult[] = videoListData.list.map((item: ApiSearchItem) => {
       let episodes: string[] = [];
       let titles: string[] = [];
 
-      // 使用正則表達式從 vod_play_url 提取 m3u8 鏈接
+      // 使用正则表达式从 vod_play_url 提取 m3u8 链接
       if (item.vod_play_url) {
         // 先用 $$$ 分割
         const vod_play_url_array = item.vod_play_url.split('$$$');
-        // 分集之間#分割，標題和播放鏈接 $ 分割
+        // 分集之间#分割，标题和播放链接 $ 分割
         vod_play_url_array.forEach((url: string) => {
           const matchEpisodes: string[] = [];
           const matchTitles: string[] = [];
@@ -187,14 +187,14 @@ export async function GET() {
       };
     });
 
-    // 過濾掉集數為 0 的結果，並限制返回數量
+    // 过滤掉集数为 0 的结果，并限制返回数量
     const filteredVideos = videos
       .filter((video) => video.episodes.length > 0)
       .slice(0, 20);
 
-    console.log(`返回 ${filteredVideos.length} 個短劇視頻`);
+    console.log(`返回 ${filteredVideos.length} 个短剧视频`);
 
-    // 保存到內存緩存
+    // 保存到内存缓存
     cachedRecommends = {
       timestamp: Date.now(),
       data: filteredVideos,
@@ -204,7 +204,7 @@ export async function GET() {
     return NextResponse.json(
       {
         code: 200,
-        message: '獲取成功',
+        message: '获取成功',
         data: filteredVideos,
       },
       {
@@ -214,11 +214,11 @@ export async function GET() {
       }
     );
   } catch (error) {
-    console.error('獲取熱播短劇推薦失敗:', error);
+    console.error('获取热播短剧推荐失败:', error);
     return NextResponse.json(
       {
         code: 500,
-        message: '獲取熱播短劇推薦失敗',
+        message: '获取热播短剧推荐失败',
         error: (error as Error).message,
       },
       { status: 500 }

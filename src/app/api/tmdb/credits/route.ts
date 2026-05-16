@@ -10,13 +10,13 @@ export const runtime = 'nodejs';
 
 /**
  * GET /api/tmdb/credits?id=xxx&type=movie|tv
- * 獲取TMDB演職人員信息
+ * 获取TMDB演职人员信息
  */
 export async function GET(request: NextRequest) {
   try {
     const authInfo = getAuthInfoFromCookie(request);
     if (!authInfo || !authInfo.username) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
+      return NextResponse.json({ error: '未授权' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -24,11 +24,11 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') || 'movie';
 
     if (!id) {
-      return NextResponse.json({ error: '缺少ID參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少ID参数' }, { status: 400 });
     }
 
     if (type !== 'movie' && type !== 'tv') {
-      return NextResponse.json({ error: '類型參數必須是movie或tv' }, { status: 400 });
+      return NextResponse.json({ error: '类型参数必须是movie或tv' }, { status: 400 });
     }
 
     const config = await getConfig();
@@ -53,16 +53,16 @@ export async function GET(request: NextRequest) {
 
     if (response.code !== 200 || !response.credits) {
       return NextResponse.json(
-        { error: 'TMDB 演職人員信息獲取失敗', code: response.code },
+        { error: 'TMDB 演职人员信息获取失败', code: response.code },
         { status: response.code }
       );
     }
 
     return NextResponse.json(response.credits);
   } catch (error) {
-    console.error('TMDB演職人員信息獲取失敗:', error);
+    console.error('TMDB演职人员信息获取失败:', error);
     return NextResponse.json(
-      { error: '獲取演職人員信息失敗', details: (error as Error).message },
+      { error: '获取演职人员信息失败', details: (error as Error).message },
       { status: 500 }
     );
   }

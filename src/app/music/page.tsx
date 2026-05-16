@@ -32,9 +32,9 @@ interface Song {
 interface PlayRecord {
   platform: MusicSource;
   id: string;
-  playTime: number; // 播放時間（秒）
-  duration: number; // 總時長（秒）
-  timestamp: number; // 添加時間戳
+  playTime: number; // 播放时间（秒）
+  duration: number; // 总时长（秒）
+  timestamp: number; // 添加时间戳
 }
 
 interface LyricLine {
@@ -183,7 +183,7 @@ function AudioSpectrumCanvas({
   );
 }
 
-// 擴展 Window 接口以支持 Document PiP API
+// 扩展 Window 接口以支持 Document PiP API
 declare global {
   interface Window {
     documentPictureInPicture?: {
@@ -219,27 +219,27 @@ export default function MusicPage() {
   const [lyrics, setLyrics] = useState<LyricLine[]>([]);
   const [currentLyricIndex, setCurrentLyricIndex] = useState(-1);
   const [currentSongUrl, setCurrentSongUrl] = useState('');
-  const [playRecords, setPlayRecords] = useState<PlayRecord[]>([]); // 播放記錄（只存平臺和ID）
-  const [playlist, setPlaylist] = useState<Song[]>([]); // 完整歌曲信息（用於顯示）
+  const [playRecords, setPlayRecords] = useState<PlayRecord[]>([]); // 播放记录（只存平台和ID）
+  const [playlist, setPlaylist] = useState<Song[]>([]); // 完整歌曲信息（用于显示）
   const [showPlaylist, setShowPlaylist] = useState(false);
-  const [playlistIndex, setPlaylistIndex] = useState(-1); // 當前在播放列表中的索引
-  const [showQualityMenu, setShowQualityMenu] = useState(false); // 音質選擇菜單
-  const [showSourceMenu, setShowSourceMenu] = useState(false); // 移動端音源菜單
-  const [showVolumeSlider, setShowVolumeSlider] = useState(false); // 音量滑塊顯示狀態
+  const [playlistIndex, setPlaylistIndex] = useState(-1); // 当前在播放列表中的索引
+  const [showQualityMenu, setShowQualityMenu] = useState(false); // 音质选择菜单
+  const [showSourceMenu, setShowSourceMenu] = useState(false); // 移动端音源菜单
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false); // 音量滑块显示状态
   const [pendingSongToPlay, setPendingSongToPlay] = useState<{ platform: string; id: string } | null>(null); // 待播放的歌曲信息
-  const [resolvingCount, setResolvingCount] = useState(0); // 當前解析中的歌曲數量
-  const [showAddToPlaylistModal, setShowAddToPlaylistModal] = useState(false); // 添加到歌單彈窗
-  const [songToAddToPlaylist, setSongToAddToPlaylist] = useState<Song | null>(null); // 要添加到歌單的歌曲
+  const [resolvingCount, setResolvingCount] = useState(0); // 当前解析中的歌曲数量
+  const [showAddToPlaylistModal, setShowAddToPlaylistModal] = useState(false); // 添加到歌单弹窗
+  const [songToAddToPlaylist, setSongToAddToPlaylist] = useState<Song | null>(null); // 要添加到歌单的歌曲
 
-  // 我的歌單相關狀態
+  // 我的歌单相关状态
   const [userPlaylists, setUserPlaylists] = useState<any[]>([]);
   const [selectedUserPlaylist, setSelectedUserPlaylist] = useState<any | null>(null);
   const [userPlaylistSongs, setUserPlaylistSongs] = useState<any[]>([]);
   const [loadingUserPlaylists, setLoadingUserPlaylists] = useState(false);
   const [loadingUserPlaylistSongs, setLoadingUserPlaylistSongs] = useState(false);
-  const [loadingPlayAll, setLoadingPlayAll] = useState(false); // 播放全部加載狀態
-  const [loadingCurrentPlayAll, setLoadingCurrentPlayAll] = useState(false); // 當前排行榜/詳情頁播放全部加載狀態
-  const [deletingPlaylistId, setDeletingPlaylistId] = useState<string | null>(null); // 正在刪除的歌單ID
+  const [loadingPlayAll, setLoadingPlayAll] = useState(false); // 播放全部加载状态
+  const [loadingCurrentPlayAll, setLoadingCurrentPlayAll] = useState(false); // 当前排行榜/详情页播放全部加载状态
+  const [deletingPlaylistId, setDeletingPlaylistId] = useState<string | null>(null); // 正在删除的歌单ID
 
   useEffect(() => {
     if (typeof window !== 'undefined' && !(window as any).RUNTIME_CONFIG?.MUSIC_ENABLED) {
@@ -247,7 +247,7 @@ export default function MusicPage() {
     }
   }, [router]);
 
-  // Toast 和 Confirm Modal 狀態
+  // Toast 和 Confirm Modal 状态
   const [toast, setToast] = useState<ToastProps | null>(null);
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
@@ -263,7 +263,7 @@ export default function MusicPage() {
     onCancel: () => {},
   });
 
-  // PiP 相關狀態
+  // PiP 相关状态
   const [showPiPLyrics, setShowPiPLyrics] = useState(false);
   const [pipOpacity, setPipOpacity] = useState(0.9);
   const [pipMinimized, setPipMinimized] = useState(false);
@@ -279,7 +279,7 @@ export default function MusicPage() {
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
   const lastSaveTimeRef = useRef<number>(0);
   const restoredTimeRef = useRef<number>(0);
-  const songStartTimeRef = useRef<number>(0); // 歌曲開始播放的時間戳
+  const songStartTimeRef = useRef<number>(0); // 歌曲开始播放的时间戳
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const mediaSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
@@ -423,7 +423,7 @@ export default function MusicPage() {
     });
   };
 
-  // 保存播放狀態到 localStorage
+  // 保存播放状态到 localStorage
   const savePlayState = () => {
     if (!currentSong) return;
 
@@ -440,15 +440,15 @@ export default function MusicPage() {
       currentTime: audioRef.current?.currentTime || 0,
       currentSongUrl,
       lyrics,
-      playRecords, // 只保存播放記錄（平臺+ID+播放信息）
-      playlist, // 保存完整歌曲信息（用於顯示）
+      playRecords, // 只保存播放记录（平台+ID+播放信息）
+      playlist, // 保存完整歌曲信息（用于显示）
       playlistIndex,
     };
 
     localStorage.setItem('musicPlayState', JSON.stringify(playState));
   };
 
-  // 清空當前播放狀態，並在需要時停止正在播放的音頻
+  // 清空当前播放状态，并在需要时停止正在播放的音频
   const clearCurrentPlaybackState = () => {
     const audio = audioRef.current;
 
@@ -477,16 +477,16 @@ export default function MusicPage() {
     localStorage.removeItem('musicPlayState');
   };
 
-  // 從 localStorage 恢復播放狀態（已廢棄，現在統一使用數據庫）
+  // 从 localStorage 恢复播放状态（已废弃，现在统一使用数据库）
   const restorePlayState = async () => {
-    // 此函數已不再使用，所有狀態恢復都在 initializePlayState 中完成
+    // 此函数已不再使用，所有状态恢复都在 initializePlayState 中完成
   };
 
   useEffect(() => {
     setMusicProxyEnabled(getMusicProxyEnabled());
   }, []);
 
-  // 頁面加載時恢復播放狀態和數據庫記錄
+  // 页面加载时恢复播放状态和数据库记录
   useEffect(() => {
     const initializePlayState = async () => {
       try {
@@ -522,11 +522,11 @@ export default function MusicPage() {
           setPlaylist(sortedSongs);
         }
 
-        // 3. 獲取 localStorage 配置（只獲取配置，不獲取歌曲信息）
+        // 3. 获取 localStorage 配置（只获取配置，不获取歌曲信息）
         const savedPlayState = localStorage.getItem('musicPlayState');
         const playState = savedPlayState ? JSON.parse(savedPlayState) : {};
 
-        // 恢復配置狀態（不包括歌曲）
+        // 恢复配置状态（不包括歌曲）
         setSongs(playState.songs || []);
         setCurrentPlaylistTitle(playState.currentPlaylistTitle || '');
         setCurrentSource(normalizeSource(playState.currentSource));
@@ -535,7 +535,7 @@ export default function MusicPage() {
         setPlayMode(playState.playMode || 'loop');
         setVolume(playState.volume || 100);
 
-        // 4. 使用數據庫的最新記錄（歌曲和進度都從數據庫獲取）
+        // 4. 使用数据库的最新记录（歌曲和进度都从数据库获取）
         if (sortedRecords.length > 0) {
           const proxyEnabled = getMusicProxyEnabled();
           setMusicProxyEnabled(proxyEnabled);
@@ -547,12 +547,12 @@ export default function MusicPage() {
           const latestDbRecord = sortedRecords[activeIndex];
           const latestDbSong = sortedSongs[activeIndex];
 
-          // 使用數據庫的歌曲信息
+          // 使用数据库的歌曲信息
           setCurrentSong(latestDbSong);
           setPlaylistIndex(activeIndex);
           setShowPlayer(true);
 
-          // 從數據庫恢復播放進度
+          // 从数据库恢复播放进度
           const dbPlayTime = latestDbRecord.playTime || 0;
           songStartTimeRef.current = Date.now();
 
@@ -608,7 +608,7 @@ export default function MusicPage() {
     initializePlayState();
   }, []);
 
-  // 恢復 PiP 偏好設置
+  // 恢复 PiP 偏好设置
   useEffect(() => {
     const savedOpacity = localStorage.getItem('lyricsPiPOpacity');
     const savedMinimized = localStorage.getItem('lyricsPiPMinimized');
@@ -616,7 +616,7 @@ export default function MusicPage() {
     if (savedMinimized) setPipMinimized(savedMinimized === 'true');
   }, []);
 
-  // 監聽來自 PiP 窗口的消息
+  // 监听来自 PiP 窗口的消息
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       switch (event.data.type) {
@@ -638,14 +638,14 @@ export default function MusicPage() {
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
-  // 監聽播放狀態變化，自動保存
+  // 监听播放状态变化，自动保存
   useEffect(() => {
     if (currentSong) {
       savePlayState();
     }
   }, [currentSong, currentSongIndex, songs, currentPlaylistTitle, currentSource, currentView, quality, playMode, volume, currentSongUrl, lyrics, playRecords, playlistIndex]);
 
-  // 監聽 playRecords 變化，更新 playlistIndex
+  // 监听 playRecords 变化，更新 playlistIndex
   useEffect(() => {
     if (pendingSongToPlay) {
       const index = playRecords.findIndex(
@@ -656,7 +656,7 @@ export default function MusicPage() {
     }
   }, [playRecords, pendingSongToPlay]);
 
-  // 同步音量狀態到 audio 元素
+  // 同步音量状态到 audio 元素
   useEffect(() => {
     volumeRef.current = volume;
     if (audioRef.current) {
@@ -664,7 +664,7 @@ export default function MusicPage() {
     }
   }, [volume]);
 
-  // 加載排行榜列表
+  // 加载排行榜列表
   const loadPlaylists = async (source: string) => {
     setLoading(true);
     try {
@@ -690,7 +690,7 @@ export default function MusicPage() {
     }
   };
 
-  // 加載歌單詳情
+  // 加载歌单详情
   const loadPlaylist = async (playlistId: string, playlistName: string, playlistSource?: MusicSource) => {
     setLoading(true);
     try {
@@ -710,7 +710,7 @@ export default function MusicPage() {
     }
   };
 
-  // 當前排行榜歌單：播放全部
+  // 当前排行榜歌单：播放全部
   const handlePlayAllCurrentSongs = async () => {
     setLoadingCurrentPlayAll(true);
 
@@ -802,14 +802,14 @@ export default function MusicPage() {
     }
   };
 
-  // 打開添加到歌單彈窗
+  // 打开添加到歌单弹窗
   const handleAddToPlaylist = (song: Song, e: React.MouseEvent) => {
-    e.stopPropagation(); // 阻止事件冒泡，避免觸發播放
+    e.stopPropagation(); // 阻止事件冒泡，避免触发播放
     setSongToAddToPlaylist(song);
     setShowAddToPlaylistModal(true);
   };
 
-  // 稍後播放：追加到當前播放列表末尾，不立即播放
+  // 稍后播放：追加到当前播放列表末尾，不立即播放
   const handlePlayLater = (song: Song, e: React.MouseEvent) => {
     e.stopPropagation();
 
@@ -848,7 +848,7 @@ export default function MusicPage() {
     });
   };
 
-  // 加載用戶歌單列表
+  // 加载用户歌单列表
   const loadUserPlaylists = async () => {
     try {
       setLoadingUserPlaylists(true);
@@ -864,7 +864,7 @@ export default function MusicPage() {
     }
   };
 
-  // 加載歌單中的歌曲
+  // 加载歌单中的歌曲
   const loadUserPlaylistSongs = async (playlistId: string) => {
     try {
       setLoadingUserPlaylistSongs(true);
@@ -886,13 +886,13 @@ export default function MusicPage() {
     }
   };
 
-  // 選擇歌單
+  // 选择歌单
   const handleSelectUserPlaylist = (playlist: any) => {
     setSelectedUserPlaylist(playlist);
     loadUserPlaylistSongs(playlist.id);
   };
 
-  // 播放全部歌單歌曲
+  // 播放全部歌单歌曲
   const handlePlayAllPlaylist = async () => {
     if (!selectedUserPlaylist || userPlaylistSongs.length === 0) {
       setToast({
@@ -905,14 +905,14 @@ export default function MusicPage() {
 
     setLoadingPlayAll(true);
     try {
-      // 1. 清空所有播放歷史
+      // 1. 清空所有播放历史
       await fetch('/api/music/v2/history', { method: 'DELETE' });
 
-      // 2. 清空本地狀態
+      // 2. 清空本地状态
       setPlayRecords([]);
       setPlaylist([]);
 
-      // 3. 批量添加歌單中的所有歌曲到播放歷史
+      // 3. 批量添加歌单中的所有歌曲到播放历史
       const baseTime = Date.now();
       const recordsToAdd = userPlaylistSongs.map((song, i) => ({
         song: {
@@ -945,7 +945,7 @@ export default function MusicPage() {
         throw new Error('批量添加歌曲失敗');
       }
 
-      // 4. 立即更新本地狀態
+      // 4. 立即更新本地状态
       const newRecords: PlayRecord[] = userPlaylistSongs.map((song, i) => ({
         platform: song.platform,
         id: song.id,
@@ -992,14 +992,14 @@ export default function MusicPage() {
     }
   };
 
-  // 刪除歌單
+  // 删除歌单
   const handleDeleteUserPlaylist = async (playlistId: string) => {
     setConfirmModal({
       isOpen: true,
       title: '確認刪除',
       message: '確定要刪除這個歌單嗎？',
       onConfirm: async () => {
-        // 先關閉確認框
+        // 先关闭确认框
         setConfirmModal({
           isOpen: false,
           title: '',
@@ -1008,7 +1008,7 @@ export default function MusicPage() {
           onCancel: () => {},
         });
 
-        // 然後執行刪除
+        // 然后执行删除
         setDeletingPlaylistId(playlistId);
         try {
           const response = await fetch(`/api/music/v2/playlists/${playlistId}`, { method: 'DELETE' });
@@ -1055,7 +1055,7 @@ export default function MusicPage() {
     });
   };
 
-  // 從歌單中移除歌曲
+  // 从歌单中移除歌曲
   const handleRemoveSongFromUserPlaylist = async (song: any) => {
     if (!selectedUserPlaylist) return;
 
@@ -1117,36 +1117,36 @@ export default function MusicPage() {
   const playSong = async (song: Song, index: number) => {
     beginResolving();
     try {
-      // 使用歌曲自己的平臺信息，如果沒有則使用當前選擇的平臺
+      // 使用歌曲自己的平台信息，如果没有则使用当前选择的平台
           const platform = song.platform || currentSource;
           const proxyEnabled = getMusicProxyEnabled();
           setMusicProxyEnabled(proxyEnabled);
 
-      // 記錄歌曲開始播放的時間
+      // 记录歌曲开始播放的时间
       songStartTimeRef.current = Date.now();
 
-      // 先設置當前歌曲和顯示播放器
+      // 先设置当前歌曲和显示播放器
       setCurrentSong(song);
       setCurrentSongIndex(index);
       setShowPlayer(true);
-      setLyrics([]); // 清空舊歌詞
+      setLyrics([]); // 清空旧歌词
 
-      // 添加到播放記錄和播放列表
+      // 添加到播放记录和播放列表
       const record: PlayRecord = {
         platform: platform,
         id: song.id,
-        playTime: 0, // 初始播放時間
-        duration: song.duration || 0, // 將在音頻加載後更新
+        playTime: 0, // 初始播放时间
+        duration: song.duration || 0, // 将在音频加载后更新
         timestamp: Date.now(),
       };
 
-      // 設置待播放歌曲信息，用於在 playRecords 更新後找到索引
+      // 设置待播放歌曲信息，用于在 playRecords 更新后找到索引
       setPendingSongToPlay({ platform, id: song.id });
 
       setPlayRecords(prev => {
         const existingIndex = prev.findIndex(r => r.platform === record.platform && r.id === record.id);
         if (existingIndex >= 0) {
-          // 記錄已存在，更新時間戳但不重置播放時間
+          // 记录已存在，更新时间戳但不重置播放时间
           const updated = [...prev];
           updated[existingIndex] = {
             ...updated[existingIndex],
@@ -1154,7 +1154,7 @@ export default function MusicPage() {
           };
           return updated;
         } else {
-          // 新記錄，添加到列表末尾
+          // 新记录，添加到列表末尾
           return [...prev, record];
         }
       });
@@ -1242,7 +1242,7 @@ export default function MusicPage() {
     }
   };
 
-  // 解析歌詞文本
+  // 解析歌词文本
   const parseLyric = (lyricText: string, tlyricText?: string): LyricLine[] => {
     if (!lyricText && !tlyricText) return [];
 
@@ -1287,21 +1287,21 @@ export default function MusicPage() {
       .filter(line => line.text || line.translation);
   };
 
-  // 切換播放/暫停
+  // 切换播放/暂停
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
         setIsPlaying(false);
-        // 暫停時保存狀態到 localStorage 和數據庫
+        // 暂停时保存状态到 localStorage 和数据库
         savePlayState();
 
-        // 前5秒不保存（避免加載時的跳轉觸發保存）
+        // 前5秒不保存（避免加载时的跳转触发保存）
         if (Date.now() - songStartTimeRef.current < 5000) {
           return;
         }
 
-        // 保存到數據庫
+        // 保存到数据库
         if (currentSong && playlistIndex >= 0 && playRecords[playlistIndex]) {
           const record = playRecords[playlistIndex];
           saveHistoryRecord(record, currentSong, audioRef.current.currentTime, audioRef.current.duration || 0).catch(err => {
@@ -1319,9 +1319,9 @@ export default function MusicPage() {
 
   // 上一曲
   const playPrev = () => {
-    // 優先從播放列表切換
+    // 优先从播放列表切换
     if (playlist.length > 0) {
-      // 如果已經是第一首，循環到最後一首
+      // 如果已经是第一首，循环到最后一首
       const prevIndex = playlistIndex > 0 ? playlistIndex - 1 : playlist.length - 1;
       setPlaylistIndex(prevIndex);
       playSong(playlist[prevIndex], -1);
@@ -1332,9 +1332,9 @@ export default function MusicPage() {
 
   // 下一曲
   const playNext = () => {
-    // 優先從播放列表切換
+    // 优先从播放列表切换
     if (playlist.length > 0) {
-      // 如果已經是最後一首，循環到第一首
+      // 如果已经是最后一首，循环到第一首
       const nextIndex = playlistIndex < playlist.length - 1 ? playlistIndex + 1 : 0;
       setPlaylistIndex(nextIndex);
       playSong(playlist[nextIndex], -1);
@@ -1343,7 +1343,7 @@ export default function MusicPage() {
     }
   };
 
-  // 切換音質
+  // 切换音质
   const cycleQuality = () => {
     const qualities: Array<'128k' | '320k' | 'flac' | 'flac24bit'> = ['128k', '320k', 'flac', 'flac24bit'];
     const currentIndex = qualities.indexOf(quality);
@@ -1351,7 +1351,7 @@ export default function MusicPage() {
     setQuality(qualities[nextIndex]);
   };
 
-  // 清空播放記錄
+  // 清空播放记录
   const handleClearPlayRecords = () => {
     setConfirmModal({
       isOpen: true,
@@ -1398,7 +1398,7 @@ export default function MusicPage() {
     });
   };
 
-  // 切換播放模式
+  // 切换播放模式
   const toggleMode = () => {
     const modes: Array<'loop' | 'single' | 'random'> = ['loop', 'single', 'random'];
     const currentIndex = modes.indexOf(playMode);
@@ -1420,11 +1420,11 @@ export default function MusicPage() {
     }
   };
 
-  // 下載歌曲
+  // 下载歌曲
   const downloadSong = () => {
     if (!currentSongUrl || !currentSong) return;
 
-    // 創建一個臨時的 a 標籤來觸發下載
+    // 创建一个临时的 a 标签来触发下载
     const link = document.createElement('a');
     link.href = currentSongUrl;
     link.download = `${currentSong.name} - ${currentSong.artist}.mp3`;
@@ -1433,7 +1433,7 @@ export default function MusicPage() {
     document.body.removeChild(link);
   };
 
-  // 切換平臺
+  // 切换平台
   const switchSource = (source: MusicSource) => {
     setCurrentSource(source);
     setCurrentView('playlists');
@@ -1441,7 +1441,7 @@ export default function MusicPage() {
     setSearchKeyword('');
   };
 
-  // 音頻事件監聽
+  // 音频事件监听
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -1449,7 +1449,7 @@ export default function MusicPage() {
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
 
-      // 更新當前歌詞索引
+      // 更新当前歌词索引
       if (lyrics.length > 0) {
         let index = -1;
         for (let i = 0; i < lyrics.length; i++) {
@@ -1462,17 +1462,17 @@ export default function MusicPage() {
         setCurrentLyricIndex(index);
       }
 
-      // 每20秒保存一次播放進度和播放時間
+      // 每20秒保存一次播放进度和播放时间
       const now = Date.now();
       if (now - lastSaveTimeRef.current > 20000) {
         lastSaveTimeRef.current = now;
 
-        // 前5秒不保存（避免加載時的跳轉觸發保存）
+        // 前5秒不保存（避免加载时的跳转触发保存）
         if (Date.now() - songStartTimeRef.current < 5000) {
           return;
         }
 
-        // 更新當前播放記錄的播放時間
+        // 更新当前播放记录的播放时间
         if (currentSong && playlistIndex >= 0) {
           setPlayRecords(prev => {
             const updated = [...prev];
@@ -1482,7 +1482,7 @@ export default function MusicPage() {
                 playTime: audio.currentTime,
               };
 
-              // 保存到數據庫
+              // 保存到数据库
               const record = updated[playlistIndex];
               saveHistoryRecord(record, currentSong, audio.currentTime, audio.duration || 0).catch(err => {
                 console.error('保存播放記錄到數據庫失敗:', err);
@@ -1497,22 +1497,22 @@ export default function MusicPage() {
     };
 
     const handleLoadedMetadata = () => {
-      // 恢復播放進度
+      // 恢复播放进度
       if (restoredTimeRef.current > 0) {
         audio.currentTime = restoredTimeRef.current;
-        restoredTimeRef.current = 0; // 清除標記
+        restoredTimeRef.current = 0; // 清除标记
       }
     };
 
     const handleDurationChange = () => {
       setDuration(audio.duration);
 
-      // 前5秒不保存（避免加載時的跳轉觸發保存）
+      // 前5秒不保存（避免加载时的跳转触发保存）
       if (Date.now() - songStartTimeRef.current < 5000) {
         return;
       }
 
-      // 更新當前播放記錄的總時長
+      // 更新当前播放记录的总时长
       if (currentSong && playlistIndex >= 0) {
         setPlayRecords(prev => {
           const updated = [...prev];
@@ -1522,7 +1522,7 @@ export default function MusicPage() {
               duration: audio.duration,
             };
 
-            // 保存到數據庫（包含時長信息）
+            // 保存到数据库（包含时长信息）
             const record = updated[playlistIndex];
             saveHistoryRecord(record, currentSong, record.playTime, audio.duration).catch(err => {
               console.error('保存播放記錄到數據庫失敗:', err);
@@ -1537,7 +1537,7 @@ export default function MusicPage() {
         audio.currentTime = 0;
         audio.play();
       } else if (playMode === 'random') {
-        // 優先從播放列表中隨機選擇
+        // 优先从播放列表中随机选择
         if (playlist.length > 0) {
           const randomIndex = Math.floor(Math.random() * playlist.length);
           setPlaylistIndex(randomIndex);
@@ -1564,19 +1564,19 @@ export default function MusicPage() {
     };
   }, [playMode, songs, currentSongIndex, lyrics, currentSong, playlistIndex, playRecords]);
 
-  // 初始加載
+  // 初始加载
   useEffect(() => {
     loadPlaylists(currentSource);
   }, [currentSource]);
 
-  // 當切換到我的歌單視圖時加載歌單列表
+  // 当切换到我的歌单视图时加载歌单列表
   useEffect(() => {
     if (currentView === 'myPlaylists') {
       loadUserPlaylists();
     }
   }, [currentView]);
 
-  // 歌詞自動滾動
+  // 歌词自动滚动
   useEffect(() => {
     if (lyricsContainerRef.current && currentLyricIndex >= 0) {
       const container = lyricsContainerRef.current;
@@ -1590,14 +1590,14 @@ export default function MusicPage() {
     }
   }, [currentLyricIndex]);
 
-  // 搜索框回車
+  // 搜索框回车
   const handleSearchKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       searchSongs();
     }
   };
 
-  // 進度條拖動
+  // 进度条拖动
   const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = (parseFloat(e.target.value) / 100) * duration;
     if (audioRef.current) {
@@ -1605,7 +1605,7 @@ export default function MusicPage() {
     }
   };
 
-  // 音量調節
+  // 音量调节
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(e.target.value);
     setVolume(newVolume);
@@ -1614,7 +1614,7 @@ export default function MusicPage() {
     }
   };
 
-  // 觸摸/鼠標滑動音量調節（移動端兼容）
+  // 触摸/鼠标滑动音量调节（移动端兼容）
   const handleVolumeSliderInteraction = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -1623,11 +1623,11 @@ export default function MusicPage() {
     const rect = slider.getBoundingClientRect();
 
     const updateVolume = (clientY: number) => {
-      // 計算相對於滑塊頂部的位置
+      // 计算相对于滑块顶部的位置
       const y = clientY - rect.top;
-      // 限制在滑塊範圍內
+      // 限制在滑块范围内
       const clampedY = Math.max(0, Math.min(rect.height, y));
-      // 從上到下：0% -> 100%，從下到上：100% -> 0%
+      // 从上到下：0% -> 100%，从下到上：100% -> 0%
       const percentage = 100 - (clampedY / rect.height) * 100;
       const newVolume = Math.round(percentage);
 
@@ -1637,7 +1637,7 @@ export default function MusicPage() {
       }
     };
 
-    // 獲取初始觸摸/點擊位置
+    // 获取初始触摸/点击位置
     const clientY = 'touches' in e ? e.touches[0]?.clientY || 0 : e.clientY;
     updateVolume(clientY);
 
@@ -1667,7 +1667,7 @@ export default function MusicPage() {
         message: '您的瀏覽器不支持畫中畫功能，請使用 Chrome 116+ 版本',
         type: 'error',
       });
-      // 降級方案：打開全屏歌詞
+      // 降级方案：打开全屏歌词
       setShowLyrics(true);
       return;
     }
@@ -2022,7 +2022,7 @@ export default function MusicPage() {
                 <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center text-zinc-400">
                   <div className="text-base font-medium text-white/80 mb-2">當前音源暫無排行榜</div>
                   <div className="text-sm text-zinc-500">
-                    你可以切換其它音源，或使用上方搜索繼續找歌。
+                    你可以切换其它音源，或使用上方搜索继续找歌。
                   </div>
                 </div>
               )}
@@ -2131,7 +2131,7 @@ export default function MusicPage() {
                     <MusicLoadingIndicator className="py-8" />
                   ) : userPlaylists.length === 0 ? (
                     <div className="text-center py-8 text-zinc-400">
-                      還沒有歌單
+                      还没有歌单
                       <br />
                       <button
                         onClick={() => setCurrentView('playlists')}
@@ -2219,7 +2219,7 @@ export default function MusicPage() {
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                               </svg>
-                              刪除中...
+                              删除中...
                             </>
                           ) : (
                             '刪除歌單'
@@ -2329,7 +2329,7 @@ export default function MusicPage() {
                       alt={currentSong.name}
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        // 圖片加載失敗時顯示默認圖標
+                        // 图片加载失败时显示默认图标
                         e.currentTarget.style.display = 'none';
                       }}
                     />
@@ -2445,7 +2445,7 @@ export default function MusicPage() {
         <div
           className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
           onClick={(e) => {
-            // 點擊背景關閉音量條
+            // 点击背景关闭音量条
             if (e.target === e.currentTarget) {
               setShowVolumeSlider(false);
             }
@@ -2538,7 +2538,7 @@ export default function MusicPage() {
 
             {/* Mini Player Controls */}
             <div className="border-t border-white/5 p-3 md:p-4 shrink-0">
-              {/* 上排：播放控制按鈕 */}
+              {/* 上排：播放控制按钮 */}
               <div className="flex items-center justify-center gap-4 md:gap-6 mb-2 md:mb-3">
                 <button onClick={playPrev} className="text-zinc-500 hover:text-white transition-colors">
                   <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -2566,7 +2566,7 @@ export default function MusicPage() {
                 </button>
               </div>
 
-              {/* 下排：其他按鈕（小一號） */}
+              {/* 下排：其他按钮（小一号） */}
               <div className="flex items-center justify-center gap-3 md:gap-4 mb-2 md:mb-3">
                 <button
                   onClick={() => setShowPlaylist(true)}
@@ -2640,7 +2640,7 @@ export default function MusicPage() {
                       <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clipRule="evenodd" />
                     </svg>
                   </button>
-                  {/* 垂直音量條 - 桌面懸浮/移動端點擊 */}
+                  {/* 垂直音量条 - 桌面悬浮/移动端点击 */}
                   <div
                     className={`absolute bottom-full left-1/2 -translate-x-1/2 pb-2 transition-opacity ${showVolumeSlider ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                     onClick={(e) => e.stopPropagation()}
@@ -2662,7 +2662,7 @@ export default function MusicPage() {
                     </div>
                   </div>
                 </div>
-                {/* PiP 歌詞按鈕 */}
+                {/* PiP 歌词按钮 */}
                 <button
                   onClick={toggleSpectrum}
                   className={`transition-colors ${
@@ -2698,7 +2698,7 @@ export default function MusicPage() {
                     <path d="M19 7h-8v6h8V7zm2-4H3c-1.1 0-2 .9-2 2v14c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98V5c0-1.1-.9-2-2-2zm0 16.01H3V4.98h18v14.03z"/>
                   </svg>
                 </button>
-                {/* 添加到歌單按鈕 */}
+                {/* 添加到歌单按钮 */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -2716,7 +2716,7 @@ export default function MusicPage() {
                 </button>
               </div>
 
-              {/* 進度條 */}
+              {/* 进度条 */}
               <div>
                 {showSpectrum && (
                   <div className="mb-3 flex items-center gap-2 text-xs">
@@ -2842,13 +2842,13 @@ export default function MusicPage() {
                           try {
                             await fetch(`/api/music/v2/history?songId=${encodeURIComponent(song.id)}`, { method: 'DELETE' });
 
-                            // 更新本地狀態
+                            // 更新本地状态
                             const newPlaylist = playlist.filter((_, i) => i !== index);
                             const newRecords = playRecords.filter((_, i) => i !== index);
                             setPlaylist(newPlaylist);
                             setPlayRecords(newRecords);
 
-                            // 如果刪除的是當前播放的歌曲，調整索引
+                            // 如果删除的是当前播放的歌曲，调整索引
                             if (index === playlistIndex) {
                               setPlaylistIndex(-1);
                             } else if (index < playlistIndex) {
@@ -3157,7 +3157,7 @@ export default function MusicPage() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        刪除中...
+                        删除中...
                       </>
                     ) : (
                       '確定'

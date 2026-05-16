@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: '獲取高級推薦腳本失敗' },
+      { error: '获取高级推荐脚本失败' },
       { status: 500 }
     );
   }

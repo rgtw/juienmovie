@@ -10,7 +10,7 @@ export const runtime = 'nodejs';
 export async function GET(request: NextRequest) {
   console.log(request.url)
   try {
-    const authResult = await requireFeaturePermission(request, 'live', '無權限訪問電視直播');
+    const authResult = await requireFeaturePermission(request, 'live', '无权限访问电视直播');
     if (authResult instanceof NextResponse) return authResult;
     const config = await getConfig();
 
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: '配置未找到' }, { status: 404 });
     }
 
-    // 過濾出所有非 disabled 的直播源
+    // 过滤出所有非 disabled 的直播源
     const liveSources = (config.LiveConfig || []).filter(source => !source.disabled);
 
     return NextResponse.json({
@@ -26,9 +26,9 @@ export async function GET(request: NextRequest) {
       data: liveSources
     });
   } catch (error) {
-    console.error('獲取直播源失敗:', error);
+    console.error('获取直播源失败:', error);
     return NextResponse.json(
-      { error: '獲取直播源失敗' },
+      { error: '获取直播源失败' },
       { status: 500 }
     );
   }

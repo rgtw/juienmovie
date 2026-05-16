@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     if (username !== process.env.USERNAME) {
       const userInfo = await db.getUserInfoV2(username || '');
       if (!userInfo || userInfo.role !== 'admin' || userInfo.banned) {
-        return NextResponse.json({ error: '權限不足' }, { status: 401 });
+        return NextResponse.json({ error: '权限不足' }, { status: 401 });
       }
     }
 
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       case 'add': {
         const { name, platform, roomId } = body;
         if (!name || !platform || !roomId) {
-          return NextResponse.json({ error: '缺少必要參數' }, { status: 400 });
+          return NextResponse.json({ error: '缺少必要参数' }, { status: 400 });
         }
 
         const key = `web_${Date.now()}`;
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: '源不存在' }, { status: 404 });
         }
         if (source.from === 'config') {
-          return NextResponse.json({ error: '無法刪除配置文件中的源' }, { status: 400 });
+          return NextResponse.json({ error: '无法删除配置文件中的源' }, { status: 400 });
         }
         config.WebLiveConfig = config.WebLiveConfig.filter((s) => s.key !== key);
         break;
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: '源不存在' }, { status: 404 });
         }
         if (source.from === 'config') {
-          return NextResponse.json({ error: '無法編輯配置文件中的源' }, { status: 400 });
+          return NextResponse.json({ error: '无法编辑配置文件中的源' }, { status: 400 });
         }
         source.name = name;
         source.platform = platform;
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
       case 'sort': {
         const { keys } = body;
         if (!Array.isArray(keys)) {
-          return NextResponse.json({ error: '無效的排序數據' }, { status: 400 });
+          return NextResponse.json({ error: '无效的排序数据' }, { status: 400 });
         }
         const sortedSources = keys
           .map((key) => config.WebLiveConfig!.find((s) => s.key === key))
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : '操作失敗' },
+      { error: error instanceof Error ? error.message : '操作失败' },
       { status: 500 }
     );
   }

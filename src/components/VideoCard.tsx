@@ -58,12 +58,12 @@ export interface VideoCardProps {
   isAggregate?: boolean;
   origin?: 'vod' | 'live';
   releaseDate?: string; // 上映日期，格式：YYYY-MM-DD
-  isUpcoming?: boolean; // 是否為即將上映
-  seasonNumber?: number; // 季度編號
-  seasonName?: string; // 季度名稱
+  isUpcoming?: boolean; // 是否为即将上映
+  seasonNumber?: number; // 季度编号
+  seasonName?: string; // 季度名称
   orientation?: 'vertical' | 'horizontal'; // 卡片方向
-  playTime?: number; // 當前播放時間（秒）
-  totalTime?: number; // 總時長（秒）
+  playTime?: number; // 当前播放时间（秒）
+  totalTime?: number; // 总时长（秒）
   cmsData?: {
     desc?: string;
     episodes?: string[];
@@ -135,17 +135,17 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
   const [favorited, setFavorited] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showMobileActions, setShowMobileActions] = useState(false);
-  const [searchFavorited, setSearchFavorited] = useState<boolean | null>(null); // 搜索結果的收藏狀態
+  const [searchFavorited, setSearchFavorited] = useState<boolean | null>(null); // 搜索结果的收藏状态
   const [showAIChat, setShowAIChat] = useState(false);
   const [isAIStreaming, setIsAIStreaming] = useState(false);
   const [aiEnabled, setAiEnabled] = useState(false);
   const [aiDefaultMessageWithVideo, setAiDefaultMessageWithVideo] = useState('');
   const [showDetailPanel, setShowDetailPanel] = useState(false);
   const [showImageViewer, setShowImageViewer] = useState(false);
-  const [showUpcomingInfo, setShowUpcomingInfo] = useState(false); // 控制即將上映倒計時的顯示
+  const [showUpcomingInfo, setShowUpcomingInfo] = useState(false); // 控制即将上映倒计时的显示
   const [displayPoster, setDisplayPoster] = useState(processedPoster);
 
-  // 檢查AI功能是否啟用
+  // 检查AI功能是否启用
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const enabled =
@@ -153,7 +153,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         (window as any).RUNTIME_CONFIG?.AI_ENABLE_VIDEOCARD_ENTRY;
       setAiEnabled(enabled);
 
-      // 加載AI默認消息配置
+      // 加载AI默认消息配置
       const defaultMsg = (window as any).RUNTIME_CONFIG?.AI_DEFAULT_MESSAGE_WITH_VIDEO;
       if (defaultMsg) {
         setAiDefaultMessageWithVideo(defaultMsg);
@@ -219,7 +219,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
     return digits.slice(-2).padStart(2, '0');
   }, [actualYear]);
 
-  // 獲取收藏狀態（搜索結果頁面不檢查）
+  // 获取收藏状态（搜索结果页面不检查）
   useEffect(() => {
     if (from === 'douban' || from === 'search' || !actualSource || !actualId) return;
 
@@ -234,12 +234,12 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
 
     fetchFavoriteStatus();
 
-    // 監聽收藏狀態更新事件
+    // 监听收藏状态更新事件
     const storageKey = generateStorageKey(actualSource, actualId);
     const unsubscribe = subscribeToDataUpdates(
       'favoritesUpdated',
       (newFavorites: Record<string, any>) => {
-        // 檢查當前項目是否在新的收藏列表中
+        // 检查当前项目是否在新的收藏列表中
         const isNowFavorited = !!newFavorites[storageKey];
         setFavorited(isNowFavorited);
       }
@@ -255,11 +255,11 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
       if (from === 'douban' || !actualSource || !actualId) return;
 
       try {
-        // 確定當前收藏狀態
+        // 确定当前收藏状态
         const currentFavorited = from === 'search' ? searchFavorited : favorited;
 
         if (currentFavorited) {
-          // 如果已收藏，刪除收藏
+          // 如果已收藏，删除收藏
           await deleteFavorite(actualSource, actualId);
           if (from === 'search') {
             setSearchFavorited(false);
@@ -316,10 +316,10 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
   );
 
   const handleClick = useCallback(() => {
-    // 即將上映的電影：單擊顯示上映倒計時提示，不跳轉
+    // 即将上映的电影：单击显示上映倒计时提示，不跳转
     if (isUpcoming) {
       setShowUpcomingInfo(true);
-      // 2秒後自動隱藏
+      // 2秒后自动隐藏
       setTimeout(() => {
         setShowUpcomingInfo(false);
       }, 2000);
@@ -327,26 +327,26 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
     }
 
     if (origin === 'live' && actualSource && actualId) {
-      // 直播內容跳轉到直播頁面
+      // 直播内容跳转到直播页面
       const url = `/live?source=${actualSource.replace('live_', '')}&id=${actualId.replace('live_', '')}`;
       router.push(url);
     } else if (from === 'douban' || from === 'tmdb' || (isAggregate && !actualSource && !actualId)) {
-      // 檢測當前是否在 play 頁面
+      // 检测当前是否在 play 页面
       const isCurrentlyOnPlayPage = typeof window !== 'undefined' && window.location.pathname === '/play';
 
       let url = `/play?title=${encodeURIComponent(actualTitle.trim())}${actualYear ? `&year=${actualYear}` : ''
         }${actualSearchType ? `&stype=${actualSearchType}` : ''}${isAggregate ? '&prefer=true' : ''}${actualQuery ? `&stitle=${encodeURIComponent(actualQuery.trim())}` : ''}`;
 
       if (isCurrentlyOnPlayPage) {
-        // 在 play 頁面內，添加 _reload 參數強制刷新
+        // 在 play 页面内，添加 _reload 参数强制刷新
         url += `&_reload=${Date.now()}`;
         window.location.href = url;
       } else {
-        // 不在 play 頁面，正常跳轉
+        // 不在 play 页面，正常跳转
         router.push(url);
       }
     } else if (actualSource && actualId) {
-      // 檢測當前是否在 play 頁面
+      // 检测当前是否在 play 页面
       const isCurrentlyOnPlayPage = typeof window !== 'undefined' && window.location.pathname === '/play';
 
       let url = `/play?source=${actualSource}&id=${actualId}&title=${encodeURIComponent(
@@ -356,11 +356,11 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         }${actualSearchType ? `&stype=${actualSearchType}` : ''}`;
 
       if (isCurrentlyOnPlayPage) {
-        // 在 play 頁面內，添加 _reload 參數強制刷新
+        // 在 play 页面内，添加 _reload 参数强制刷新
         url += `&_reload=${Date.now()}`;
         window.location.href = url;
       } else {
-        // 不在 play 頁面，正常跳轉
+        // 不在 play 页面，正常跳转
         router.push(url);
       }
     }
@@ -378,15 +378,15 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
     actualSearchType,
   ]);
 
-  // 新標籤頁播放處理函數
+  // 新标签页播放处理函数
   const handlePlayInNewTab = useCallback(() => {
-    // 即將上映的電影不跳轉
+    // 即将上映的电影不跳转
     if (isUpcoming) {
       return;
     }
 
     if (origin === 'live' && actualSource && actualId) {
-      // 直播內容跳轉到直播頁面
+      // 直播内容跳转到直播页面
       const url = `/live?source=${actualSource.replace('live_', '')}&id=${actualId.replace('live_', '')}`;
       window.open(url, '_blank');
     } else if (from === 'douban' || from === 'tmdb' || (isAggregate && !actualSource && !actualId)) {
@@ -413,7 +413,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
     actualSearchType,
   ]);
 
-  // 檢查搜索結果的收藏狀態
+  // 检查搜索结果的收藏状态
   const checkSearchFavoriteStatus = useCallback(async () => {
     if (from === 'search' && !isAggregate && actualSource && actualId && searchFavorited === null) {
       try {
@@ -425,36 +425,36 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
     }
   }, [from, isAggregate, actualSource, actualId, searchFavorited]);
 
-  // 長按操作
+  // 长按操作
   const handleLongPress = useCallback(() => {
-    if (!showMobileActions) { // 防止重複觸發
-      // 立即顯示菜單，避免等待數據加載導致動畫卡頓
+    if (!showMobileActions) { // 防止重复触发
+      // 立即显示菜单，避免等待数据加载导致动画卡顿
       setShowMobileActions(true);
 
-      // 異步檢查收藏狀態，不阻塞菜單顯示
+      // 异步检查收藏状态，不阻塞菜单显示
       if (from === 'search' && !isAggregate && actualSource && actualId && searchFavorited === null) {
         checkSearchFavoriteStatus();
       }
     }
   }, [showMobileActions, from, isAggregate, actualSource, actualId, searchFavorited, checkSearchFavoriteStatus]);
 
-  // 長按手勢hook
+  // 长按手势hook
   const longPressProps = useLongPress({
     onLongPress: handleLongPress,
-    onClick: handleClick, // 保持點擊播放功能
+    onClick: handleClick, // 保持点击播放功能
     longPressDelay: 500,
   });
 
-  // 計算距離上映的天數（使用本地時區）
+  // 计算距离上映的天数（使用本地时区）
   const daysUntilRelease = useMemo(() => {
     if (!isUpcoming || !releaseDate) return null;
 
-    // 獲取今天的本地日期（午夜）
+    // 获取今天的本地日期（午夜）
     const today = new Date();
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-    // 將日期字符串解析為本地時區的日期對象
-    // 使用 'YYYY-MM-DD' 格式直接構造，避免 UTC 解析問題
+    // 将日期字符串解析为本地时区的日期对象
+    // 使用 'YYYY-MM-DD' 格式直接构造，避免 UTC 解析问题
     const [releaseYear, releaseMonth, releaseDay] = releaseDate.split('-').map(Number);
     const release = new Date(releaseYear, releaseMonth - 1, releaseDay);
 
@@ -493,16 +493,16 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         showSourceName: true,
         showProgress: false,
         showPlayButton: true,
-        showHeart: true, // 移動端菜單中需要顯示收藏選項
+        showHeart: true, // 移动端菜单中需要显示收藏选项
         showCheckCircle: false,
-        showDoubanLink: true, // 移動端菜單中顯示豆瓣鏈接
+        showDoubanLink: true, // 移动端菜单中显示豆瓣链接
         showRating: !!rate,
         showYear: true,
       },
       douban: {
         showSourceName: false,
         showProgress: false,
-        showPlayButton: !isUpcoming, // 即將上映不顯示播放按鈕
+        showPlayButton: !isUpcoming, // 即将上映不显示播放按钮
         showHeart: false,
         showCheckCircle: false,
         showDoubanLink: false,
@@ -512,7 +512,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
       tmdb: {
         showSourceName: false,
         showProgress: false,
-        showPlayButton: !isUpcoming, // 即將上映不顯示播放按鈕
+        showPlayButton: !isUpcoming, // 即将上映不显示播放按钮
         showHeart: false,
         showCheckCircle: false,
         showDoubanLink: false,
@@ -533,7 +533,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
     return configs[from] || configs.search;
   }, [from, isAggregate, douban_id, rate, isUpcoming]);
 
-  // 移動端操作菜單配置
+  // 移动端操作菜单配置
   const mobileActions = useMemo(() => {
     const actions = [];
 
@@ -547,7 +547,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         color: 'primary' as const,
       });
 
-      // 新標籤頁播放
+      // 新标签页播放
       actions.push({
         id: 'play-new-tab',
         label: origin === 'live' ? '新標籤頁觀看' : '新標籤頁播放',
@@ -557,16 +557,16 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
       });
     }
 
-    // 聚合源信息 - 直接在菜單中展示，不需要單獨的操作項
+    // 聚合源信息 - 直接在菜单中展示，不需要单独的操作项
 
     // 收藏/取消收藏操作
     if (config.showHeart && from !== 'douban' && from !== 'tmdb' && actualSource && actualId) {
       const currentFavorited = from === 'search' ? searchFavorited : favorited;
 
       if (from === 'search') {
-        // 搜索結果：根據加載狀態顯示不同的選項
+        // 搜索结果：根据加载状态显示不同的选项
         if (searchFavorited !== null) {
-          // 已加載完成，顯示實際的收藏狀態
+          // 已加载完成，显示实际的收藏状态
           actions.push({
             id: 'favorite',
             label: currentFavorited ? '取消收藏' : '添加收藏',
@@ -585,17 +585,17 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
             color: currentFavorited ? ('danger' as const) : ('default' as const),
           });
         } else {
-          // 正在加載中，顯示佔位項
+          // 正在加载中，显示占位项
           actions.push({
             id: 'favorite-loading',
             label: '收藏加載中...',
             icon: <Heart size={20} />,
-            onClick: () => { }, // 加載中時不響應點擊
+            onClick: () => { }, // 加载中时不响应点击
             disabled: true,
           });
         }
       } else {
-        // 非搜索結果：直接顯示收藏選項
+        // 非搜索结果：直接显示收藏选项
         actions.push({
           id: 'favorite',
           label: currentFavorited ? '取消收藏' : '添加收藏',
@@ -616,7 +616,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
       }
     }
 
-    // 刪除播放記錄操作
+    // 删除播放记录操作
     if (config.showCheckCircle && from === 'playrecord' && actualSource && actualId) {
       actions.push({
         id: 'delete',
@@ -633,7 +633,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
       });
     }
 
-    // 豆瓣鏈接操作
+    // 豆瓣链接操作
     if (config.showDoubanLink && actualDoubanId && actualDoubanId !== 0) {
       actions.push({
         id: 'douban',
@@ -649,7 +649,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
       });
     }
 
-    // 詳情頁面按鈕（直播源不顯示詳情）
+    // 详情页面按钮（直播源不显示详情）
     if (origin !== 'live') {
       actions.push({
         id: 'detail',
@@ -657,7 +657,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         icon: <Info size={20} />,
         onClick: () => {
           setShowMobileActions(false);
-          // 延遲打開 DetailPanel，確保 MobileActionSheet 完全清理完成
+          // 延迟打开 DetailPanel，确保 MobileActionSheet 完全清理完成
           setTimeout(() => {
             setShowDetailPanel(true);
           }, 250);
@@ -666,7 +666,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
       });
     }
 
-    // AI問片功能
+    // AI问片功能
     if (aiEnabled && actualTitle) {
       actions.push({
         id: 'ai-chat',
@@ -674,7 +674,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         icon: <Sparkles size={20} />,
         onClick: () => {
           setShowMobileActions(false);
-          // 延遲打開 AIChatPanel，確保 MobileActionSheet 完全清理完成
+          // 延迟打开 AIChatPanel，确保 MobileActionSheet 完全清理完成
           setTimeout(() => {
             setShowAIChat(true);
           }, 250);
@@ -712,24 +712,24 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         onClick={handleClick}
         {...longPressProps}
         style={{
-          // 禁用所有默認的長按和選擇效果
+          // 禁用所有默认的长按和选择效果
           WebkitUserSelect: 'none',
           userSelect: 'none',
           WebkitTouchCallout: 'none',
           WebkitTapHighlightColor: 'transparent',
           touchAction: 'manipulation',
-          // 禁用右鍵菜單和長按菜單
+          // 禁用右键菜单和长按菜单
           pointerEvents: 'auto',
         } as React.CSSProperties}
         onContextMenu={(e) => {
-          // 阻止默認右鍵菜單
+          // 阻止默认右键菜单
           e.preventDefault();
           e.stopPropagation();
 
-          // 右鍵彈出操作菜單
+          // 右键弹出操作菜单
           setShowMobileActions(true);
 
-          // 異步檢查收藏狀態，不阻塞菜單顯示
+          // 异步检查收藏状态，不阻塞菜单显示
           if (from === 'search' && !isAggregate && actualSource && actualId && searchFavorited === null) {
             checkSearchFavoriteStatus();
           }
@@ -743,7 +743,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
           return false;
         }}
       >
-        {/* 海報容器 */}
+        {/* 海报容器 */}
         <div
           className={`relative overflow-hidden rounded-lg ${origin === 'live' ? 'ring-1 ring-gray-300/80 dark:ring-gray-600/80' : ''} ${
             orientation === 'horizontal'
@@ -791,7 +791,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                   return;
                 }
 
-                // 圖片加載失敗時的重試機制
+                // 图片加载失败时的重试机制
                 if (!img.dataset.retried) {
                   img.dataset.retried = 'true';
                   setTimeout(() => {
@@ -801,12 +801,12 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                 }
               }}
               style={{
-                // 禁用圖片的默認長按效果
+                // 禁用图片的默认长按效果
                 WebkitUserSelect: 'none',
                 userSelect: 'none',
                 WebkitTouchCallout: 'none',
-                pointerEvents: 'auto', // 改為auto以響應點擊事件
-                cursor: 'pointer', // 添加指針樣式
+                pointerEvents: 'auto', // 改为auto以响应点击事件
+                cursor: 'pointer', // 添加指针样式
               } as React.CSSProperties}
               onContextMenu={(e) => {
                 e.preventDefault();
@@ -819,7 +819,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
             />
           )}
 
-          {/* 懸浮遮罩 */}
+          {/* 悬浮遮罩 */}
           <div
             className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100'
             style={{
@@ -833,7 +833,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
             }}
           />
 
-          {/* 播放按鈕或上映倒計時 */}
+          {/* 播放按钮或上映倒计时 */}
           {isUpcoming && daysUntilRelease !== null ? (
             <div
               data-button="true"
@@ -896,7 +896,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
             </div>
           )}
 
-          {/* 操作按鈕 - 繼續觀看不顯示桌面端懸停按鈕 */}
+          {/* 操作按钮 - 继续观看不显示桌面端悬停按钮 */}
           {(config.showHeart || config.showCheckCircle) && from !== 'playrecord' && (
             <div
               data-button="true"
@@ -987,7 +987,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
             </div>
           )}
 
-          {/* 豎向模式：頂部直鏈地址顯示 */}
+          {/* 竖向模式：顶部直链地址显示 */}
           {orientation === 'vertical' && isDirectPlaySource && directLinkUrl && (
             <div
               className='absolute top-1 left-1 right-1 sm:top-2 sm:left-2 sm:right-2 pt-1 px-1 sm:pt-2 sm:px-2'
@@ -1032,7 +1032,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                 return false;
               }}
             >
-              {/* 集數顯示 */}
+              {/* 集数显示 */}
               <div
                 className='bg-black/60 text-white text-[9px] sm:text-xs font-medium px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-md transition-all duration-300 ease-out group-hover:scale-110 backdrop-blur-sm flex items-center justify-center'
                 style={{
@@ -1048,7 +1048,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                 共{actualEpisodes}集
               </div>
 
-              {/* 年份顯示 */}
+              {/* 年份显示 */}
               {displayYear && (
                 <div
                   className='bg-black/60 text-white text-[9px] sm:text-xs font-medium px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-md transition-all duration-300 ease-out group-hover:scale-110 backdrop-blur-sm flex items-center justify-center'
@@ -1068,7 +1068,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
             </div>
           )}
 
-          {/* 豎向模式：來源名稱顯示在海報右下角 */}
+          {/* 竖向模式：来源名称显示在海报右下角 */}
           {orientation === 'vertical' && config.showSourceName && source_name && !cmsData && (
             <div
               className='absolute bottom-1 right-1 sm:bottom-2 sm:right-2'
@@ -1104,7 +1104,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
             </div>
           )}
 
-          {/* 豆瓣鏈接 */}
+          {/* 豆瓣链接 */}
           {config.showDoubanLink && actualDoubanId && actualDoubanId !== 0 && (
             <a
               href={
@@ -1194,12 +1194,12 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                     {sourceCount}
                   </div>
 
-                  {/* 播放源詳情懸浮框 */}
+                  {/* 播放源详情悬浮框 */}
                   {(() => {
-                    // 優先顯示的播放源（常見的主流平臺）
+                    // 优先显示的播放源（常见的主流平台）
                     const prioritySources = ['愛奇藝', '騰訊視頻', '優酷', '芒果TV', '嗶哩嗶哩', 'Netflix', 'Disney+'];
 
-                    // 按優先級排序播放源
+                    // 按优先级排序播放源
                     const sortedSources = uniqueSources.sort((a, b) => {
                       const aIndex = prioritySources.indexOf(a);
                       const bIndex = prioritySources.indexOf(b);
@@ -1209,7 +1209,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                       return a.localeCompare(b);
                     });
 
-                    const maxDisplayCount = 6; // 最多顯示6個
+                    const maxDisplayCount = 6; // 最多显示6个
                     const displaySources = sortedSources.slice(0, maxDisplayCount);
                     const hasMore = sortedSources.length > maxDisplayCount;
                     const remainingCount = sortedSources.length - maxDisplayCount;
@@ -1239,7 +1239,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                             return false;
                           }}
                         >
-                          {/* 單列布局 */}
+                          {/* 单列布局 */}
                           <div className='space-y-0.5 sm:space-y-1'>
                             {displaySources.map((sourceName, index) => (
                               <div key={index} className='flex items-center gap-1 sm:gap-1.5'>
@@ -1251,7 +1251,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                             ))}
                           </div>
 
-                          {/* 顯示更多提示 */}
+                          {/* 显示更多提示 */}
                           {hasMore && (
                             <div className='mt-1 sm:mt-2 pt-1 sm:pt-1.5 border-t border-gray-700/50'>
                               <div className='flex items-center justify-center text-gray-400'>
@@ -1260,7 +1260,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                             </div>
                           )}
 
-                          {/* 小箭頭 */}
+                          {/* 小箭头 */}
                           <div className='absolute top-full right-2 sm:right-3 w-0 h-0 border-l-[4px] border-r-[4px] border-t-[4px] sm:border-l-[6px] sm:border-r-[6px] sm:border-t-[6px] border-transparent border-t-gray-800/90'></div>
                         </div>
                       </div>
@@ -1271,10 +1271,10 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
             );
           })()}
 
-          {/* 橫向模式：標題和進度條在海報上 */}
+          {/* 横向模式：标题和进度条在海报上 */}
           {orientation === 'horizontal' && (
             <>
-              {/* 頂部漸變遮罩 - 用於標題背景 */}
+              {/* 顶部渐变遮罩 - 用于标题背景 */}
               <div
                 className='absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent pt-2 pb-8 px-2'
                 style={{
@@ -1287,7 +1287,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                   return false;
                 }}
               >
-                {/* 標題 */}
+                {/* 标题 */}
                 <div
                   className='mb-1'
                   style={{
@@ -1313,7 +1313,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                   </span>
                 </div>
 
-                {/* 集數信息 - 只有超過1集時才顯示 */}
+                {/* 集数信息 - 只有超过1集时才显示 */}
                 {currentEpisode && actualEpisodes && actualEpisodes > 1 && (
                   <div
                     className='text-xs text-white/90'
@@ -1331,7 +1331,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                   </div>
                 )}
 
-                {/* 直鏈地址 */}
+                {/* 直链地址 */}
                 {isDirectPlaySource && directLinkUrl && (
                   <div
                     className='text-[10px] text-white/75 truncate'
@@ -1351,7 +1351,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                 )}
               </div>
 
-              {/* 底部漸變遮罩 - 用於進度條背景 */}
+              {/* 底部渐变遮罩 - 用于进度条背景 */}
               <div
                 className='absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-8 pb-2 px-2'
                 style={{
@@ -1364,7 +1364,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                   return false;
                 }}
               >
-                {/* 進度條 */}
+                {/* 进度条 */}
                 {config.showProgress && progress !== undefined && origin !== 'live' && (
                   <div
                     style={{
@@ -1373,9 +1373,9 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                       WebkitTouchCallout: 'none',
                     } as React.CSSProperties}
                   >
-                    {/* 來源和時長顯示 - 在進度條上方 */}
+                    {/* 来源和时长显示 - 在进度条上方 */}
                     <div className='flex items-center justify-between mb-1'>
-                      {/* 時長顯示 - 左側 */}
+                      {/* 时长显示 - 左侧 */}
                       {from === 'playrecord' && playTime !== undefined && totalTime !== undefined && (
                         <div
                           className='text-[10px] text-white/80'
@@ -1393,7 +1393,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                             const formatTime = (seconds: number) => {
                               const mins = Math.floor(seconds / 60);
                               const secs = Math.floor(seconds % 60);
-                              // 0分鐘時不顯示分鐘
+                              // 0分钟时不显示分钟
                               if (mins === 0) {
                                 return `${secs}秒`;
                               }
@@ -1404,7 +1404,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                         </div>
                       )}
 
-                      {/* 來源 - 右側 */}
+                      {/* 来源 - 右侧 */}
                       {config.showSourceName && source_name && !cmsData && (
                         <span
                           className={`inline-block border rounded px-1 py-0.5 text-[8px] text-white/90 bg-black/30 backdrop-blur-sm ${
@@ -1453,7 +1453,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                   </div>
                 )}
 
-                {/* 直播時只顯示來源 */}
+                {/* 直播时只显示来源 */}
                 {origin === 'live' && config.showSourceName && source_name && !cmsData && (
                   <div className='flex items-center justify-end'>
                     <span
@@ -1480,10 +1480,10 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
           )}
         </div>
 
-        {/* 豎向模式：進度條和標題在海報下方 */}
+        {/* 竖向模式：进度条和标题在海报下方 */}
         {orientation === 'vertical' && (
           <>
-            {/* 進度條 */}
+            {/* 进度条 */}
             {config.showProgress && progress !== undefined && (
               <div
                 className='mt-1 h-1 w-full bg-gray-200 rounded-full overflow-hidden'
@@ -1513,7 +1513,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
               </div>
             )}
 
-            {/* 標題 */}
+            {/* 标题 */}
             <div
               className='mt-2 text-center'
               style={{
@@ -1548,7 +1548,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                 >
                   {actualTitle}
                 </span>
-                {/* 自定義 tooltip */}
+                {/* 自定义 tooltip */}
                 <div
                   className='absolute bottom-full left-1/2 z-10 mb-2 w-max max-w-[min(20rem,calc(100vw-2rem))] -translate-x-1/2 rounded-md bg-gray-800 px-3 py-1 text-center text-xs text-white shadow-lg opacity-0 invisible peer-hover:opacity-100 peer-hover:visible transition-all duration-200 ease-out delay-100 whitespace-normal break-words pointer-events-none'
                   style={{
@@ -1577,7 +1577,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         )}
       </div>
 
-      {/* 操作菜單 - 支持右鍵和長按觸發 */}
+      {/* 操作菜单 - 支持右键和长按触发 */}
       <MobileActionSheet
         isOpen={showMobileActions}
         onClose={() => setShowMobileActions(false)}
@@ -1596,7 +1596,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         }}
       />
 
-      {/* AI問片面板 - 只在打開或正在流式響應時渲染 */}
+      {/* AI问片面板 - 只在打开或正在流式响应时渲染 */}
       {aiEnabled && (showAIChat || isAIStreaming) && (
         <AIChatPanel
           isOpen={showAIChat}
@@ -1614,7 +1614,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         />
       )}
 
-      {/* 詳情面板 */}
+      {/* 详情面板 */}
       {showDetailPanel && (
         <DetailPanel
           isOpen={showDetailPanel}
@@ -1634,7 +1634,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
         />
       )}
 
-      {/* 圖片查看器 */}
+      {/* 图片查看器 */}
       {showImageViewer && (
         <ImageViewer
           isOpen={showImageViewer}

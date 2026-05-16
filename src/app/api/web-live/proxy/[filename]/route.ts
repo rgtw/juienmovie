@@ -14,23 +14,23 @@ function processM3u8Content(content: string, baseUrl: string): string {
   const processedLines = lines.map(line => {
     const trimmedLine = line.trim();
 
-    // 跳過註釋行和空行
+    // 跳过注释行和空行
     if (trimmedLine.startsWith('#') || trimmedLine === '') {
       return line;
     }
 
-    // 如果已經是完整URL，不處理
+    // 如果已经是完整URL，不处理
     if (trimmedLine.startsWith('http://') || trimmedLine.startsWith('https://')) {
       return line;
     }
 
-    // 處理相對路徑
+    // 处理相对路径
     if (trimmedLine.startsWith('/')) {
-      // 絕對路徑（相對於域名）
+      // 绝对路径（相对于域名）
       const urlObj = new URL(baseUrl);
       return `${urlObj.protocol}//${urlObj.host}${trimmedLine}`;
     } else {
-      // 相對路徑
+      // 相对路径
       return `${baseUrl}/${trimmedLine}`;
     }
   });
@@ -40,16 +40,16 @@ function processM3u8Content(content: string, baseUrl: string): string {
 
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireFeaturePermission(request, 'web_live', '無權限訪問網絡直播');
+    const authResult = await requireFeaturePermission(request, 'web_live', '无权限访问网络直播');
     if (authResult instanceof NextResponse) return authResult;
     const { searchParams } = new URL(request.url);
     const url = searchParams.get('url');
 
     if (!url) {
-      return NextResponse.json({ error: '缺少URL參數' }, { status: 400 });
+      return NextResponse.json({ error: '缺少URL参数' }, { status: 400 });
     }
 
-    // 根據URL判斷Referer
+    // 根据URL判断Referer
     let referer = 'https://www.huya.com/';
     if (url.includes('bilivideo.com') || url.includes('bilibili.com')) {
       referer = 'https://live.bilibili.com/';
@@ -65,18 +65,18 @@ export async function GET(request: NextRequest) {
     });
 
     if (!streamRes.ok) {
-      return NextResponse.json({ error: '無法獲取直播流' }, { status: 404 });
+      return NextResponse.json({ error: '无法获取直播流' }, { status: 404 });
     }
 
     const contentType = streamRes.headers.get('Content-Type') || '';
 
-    // 檢測是否為m3u8文件
+    // 检测是否为m3u8文件
     const isM3u8 = url.endsWith('.m3u8') ||
                    contentType.includes('application/vnd.apple.mpegurl') ||
                    contentType.includes('application/x-mpegURL');
 
     if (isM3u8) {
-      // 讀取m3u8內容
+      // 读取m3u8内容
       const content = await streamRes.text();
       const baseUrl = getBaseUrl(url);
       const processedContent = processM3u8Content(content, baseUrl);
@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : '代理失敗' },
+      { error: error instanceof Error ? error.message : '代理失败' },
       { status: 500 }
     );
   }

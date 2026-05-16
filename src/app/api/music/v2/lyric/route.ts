@@ -18,6 +18,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, data: { lyric: data.lyric || '', tlyric: data.tlyric || '' } });
   } catch (error) {
     console.error('[music-v2] lyric route error:', error);
-    return internalError('獲取歌詞失敗', (error as Error).message);
+    return internalError('获取歌词失败', (error as Error).message);
   }
 }
