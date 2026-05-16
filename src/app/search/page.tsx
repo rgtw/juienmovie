@@ -1621,7 +1621,7 @@ function SearchPageClient() {
                       <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
                         搜索结果
                         {isFromCache ? (
-                          <span className='ml-2 rounded-md bg-green-50 px-2 py-0.5 text-xs font-medium text-green-600 dark:bg-green-900/30 dark:text-green-400'>
+                          <span className='ml-2 rounded-md bg-green-50 px-2 py-0.5 text-xs font-medium text-primary-600 dark:bg-green-900/30 dark:text-green-400'>
                             缓存
                           </span>
                         ) : (
@@ -1660,7 +1660,7 @@ function SearchPageClient() {
                           setForceRefresh(true);
                         }}
                         disabled={isLoading}
-                        className='flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-green-50 hover:text-green-600 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-green-400'
+                        className='flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-green-50 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-green-400'
                         aria-label='強制刷新搜索結果'
                       >
                         <RefreshCw
@@ -1702,7 +1702,7 @@ function SearchPageClient() {
                               setViewMode(viewMode === 'agg' ? 'all' : 'agg')
                             }
                           />
-                          <div className='h-5 w-9 rounded-full bg-gray-300 transition-colors peer-checked:bg-green-500 dark:bg-gray-600'></div>
+                          <div className='h-5 w-9 rounded-full bg-gray-300 transition-colors peer-checked:bg-primary-500 dark:bg-gray-600'></div>
                           <div className='absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-4'></div>
                         </div>
                       </label>
@@ -1715,7 +1715,7 @@ function SearchPageClient() {
                         onClick={() => setResultDisplayMode('card')}
                         className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm transition-colors ${
                           resultDisplayMode === 'card'
-                            ? 'bg-green-500 text-white'
+                            ? 'bg-primary-500 text-white'
                             : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
                         }`}
                         aria-label='切換為卡片視圖'
@@ -1728,7 +1728,7 @@ function SearchPageClient() {
                         onClick={() => setResultDisplayMode('list')}
                         className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm transition-colors ${
                           resultDisplayMode === 'list'
-                            ? 'bg-green-500 text-white'
+                            ? 'bg-primary-500 text-white'
                             : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
                         }`}
                         aria-label='切換為列表視圖'
@@ -1741,7 +1741,7 @@ function SearchPageClient() {
                   {searchResults.length === 0 ? (
                     isLoading ? (
                       <div className='flex justify-center items-center h-40'>
-                        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-green-500'></div>
+                        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500'></div>
                       </div>
                     ) : (
                       <div className='text-center text-gray-500 py-8 dark:text-gray-400'>
@@ -2028,7 +2028,7 @@ function SearchPageClient() {
       {/* 返回顶部悬浮按钮 */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-20 md:bottom-6 right-6 z-[500] w-12 h-12 bg-green-500/90 hover:bg-green-500 text-white rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out flex items-center justify-center group ${
+        className={`fixed bottom-20 md:bottom-6 right-6 z-[500] w-12 h-12 bg-primary-500/90 hover:bg-primary-500 text-white rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out flex items-center justify-center group ${
           showBackToTop
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 translate-y-4 pointer-events-none'

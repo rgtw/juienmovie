@@ -55,7 +55,7 @@ const AlertModal = ({
   const getIcon = () => {
     switch (type) {
       case 'success':
-        return <CheckCircle className="w-12 h-12 text-green-500" />;
+        return <CheckCircle className="w-12 h-12 text-primary-500" />;
       case 'error':
         return <AlertCircle className="w-12 h-12 text-red-500" />;
       case 'warning':
@@ -396,7 +396,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 hover:shadow-sm transition-shadow flex flex-col">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
-                <Download className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <Download className="w-4 h-4 text-primary-600 dark:text-blue-400" />
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 dark:text-gray-100">數據導出</h3>
@@ -417,7 +417,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                     value={exportPassword}
                     onChange={(e) => setExportPassword(e.target.value)}
                     placeholder="設置強密碼保護備份文件"
-                    className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-primary-500 transition-colors"
                     disabled={isExporting}
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -433,7 +433,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                       checked={includeMangaExport}
                       onChange={(e) => setIncludeMangaExport(e.target.checked)}
                       disabled={isExporting}
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-blue-500"
                     />
                     漫画数据（书架 + 阅读记录）
                   </label>
@@ -443,7 +443,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                       checked={includeBooksExport}
                       onChange={(e) => setIncludeBooksExport(e.target.checked)}
                       disabled={isExporting}
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-blue-500"
                     />
                     电子书数据（书架 + 阅读记录）
                   </label>
@@ -522,7 +522,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
                     <FileCheck className="w-4 h-4" />
                     备份文件
                     {selectedFile && (
-                      <span className="ml-auto text-xs text-green-600 dark:text-green-400 font-normal">
+                      <span className="ml-auto text-xs text-primary-600 dark:text-green-400 font-normal">
                         {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
                       </span>
                     )}

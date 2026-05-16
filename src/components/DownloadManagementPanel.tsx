@@ -236,7 +236,7 @@ export function DownloadManagementPanel({ isOpen, onClose }: DownloadManagementP
                   key={task.id}
                   className={`p-4 border rounded-lg transition-colors cursor-pointer ${
                     selectedIds.has(task.id)
-                      ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                      ? 'border-primary-500 bg-green-50 dark:bg-green-900/20'
                       : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
                   }`}
                   onClick={() => handleToggleSelect(task.id)}
@@ -245,7 +245,7 @@ export function DownloadManagementPanel({ isOpen, onClose }: DownloadManagementP
                     <div className='flex-shrink-0 mt-1'>
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                         selectedIds.has(task.id)
-                          ? 'border-green-500 bg-green-500'
+                          ? 'border-primary-500 bg-primary-500'
                           : 'border-gray-300 dark:border-gray-600'
                       }`}>
                         {selectedIds.has(task.id) && (

@@ -1884,7 +1884,7 @@ export default function MusicPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </button>
-              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 text-green-500">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 text-primary-500">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
                 </svg>
@@ -1898,7 +1898,7 @@ export default function MusicPage() {
               >
                 <div className="absolute inset-0 flex items-center justify-between px-3">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-6 h-6 rounded-full bg-green-500/15 text-green-400 flex items-center justify-center shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-primary-500/15 text-green-400 flex items-center justify-center shrink-0">
                       <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
                       </svg>
@@ -1925,7 +1925,7 @@ export default function MusicPage() {
                   onClick={() => switchSource(source.key)}
                   className={`px-3 py-1 md:px-4 rounded text-[10px] font-bold tracking-wider transition-all ${
                     currentSource === source.key
-                      ? 'bg-green-500 text-white border border-white/30 shadow-lg shadow-green-500/50'
+                      ? 'bg-primary-500 text-white border border-white/30 shadow-lg shadow-green-500/50'
                       : 'text-zinc-400 border border-transparent'
                   }`}
                 >
@@ -1949,7 +1949,7 @@ export default function MusicPage() {
               className="relative group w-full h-full rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
             >
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                <svg className="w-4 h-4 text-zinc-500 transition-colors group-focus-within:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-zinc-500 transition-colors group-focus-within:text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
@@ -2064,7 +2064,7 @@ export default function MusicPage() {
                     key={`${song.id}-${index}`}
                     className={`grid grid-cols-[40px_1fr_auto_auto] md:grid-cols-[50px_2fr_1fr_auto_auto] gap-2 px-3 py-3 rounded-lg cursor-pointer transition-all ${
                       currentSongIndex === index
-                        ? 'bg-white/12 border-l-2 border-green-500'
+                        ? 'bg-white/12 border-l-2 border-primary-500'
                         : 'hover:bg-white/5'
                     }`}
                   >
@@ -2105,7 +2105,7 @@ export default function MusicPage() {
                       </button>
                       <button
                         onClick={(e) => handlePlayLater(song, e)}
-                        className="text-zinc-500 hover:text-green-500 transition-colors p-0.5"
+                        className="text-zinc-500 hover:text-primary-500 transition-colors p-0.5"
                         title="稍後播放"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2147,7 +2147,7 @@ export default function MusicPage() {
                           key={playlist.id}
                           className={`p-3 rounded-lg cursor-pointer transition-colors ${
                             selectedUserPlaylist?.id === playlist.id
-                              ? 'bg-green-600/20 border border-green-500'
+                              ? 'bg-green-600/20 border border-primary-500'
                               : 'bg-white/5 hover:bg-white/10'
                           }`}
                           onClick={() => handleSelectUserPlaylist(playlist)}
@@ -2253,7 +2253,7 @@ export default function MusicPage() {
                             </div>
                             <button
                               onClick={() => playSong(song, index)}
-                              className="text-zinc-500 hover:text-green-500 transition-colors p-2"
+                              className="text-zinc-500 hover:text-primary-500 transition-colors p-2"
                               title="播放"
                             >
                               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -2303,7 +2303,7 @@ export default function MusicPage() {
             {/* Progress Bar */}
             <div className="absolute left-0 right-0 top-0 h-1 bg-white/10 rounded-t-xl overflow-hidden">
               <div
-                className="h-full bg-green-500 transition-all pointer-events-none"
+                className="h-full bg-primary-500 transition-all pointer-events-none"
                 style={{ width: `${progress}%` }}
               />
               <input
@@ -2354,7 +2354,7 @@ export default function MusicPage() {
                 </button>
                 <button
                   onClick={togglePlay}
-                  className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors"
+                  className="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors"
                 >
                   {isPlaying ? (
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -2547,7 +2547,7 @@ export default function MusicPage() {
                 </button>
                 <button
                   onClick={togglePlay}
-                  className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors"
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors"
                 >
                   {isPlaying ? (
                     <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -2577,7 +2577,7 @@ export default function MusicPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                   </svg>
                   {playlist.length > 0 && (
-                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full text-[8px] text-white flex items-center justify-center font-bold">
+                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-primary-500 rounded-full text-[8px] text-white flex items-center justify-center font-bold">
                       {playlist.length > 9 ? '9+' : playlist.length}
                     </span>
                   )}
@@ -2654,7 +2654,7 @@ export default function MusicPage() {
                           onTouchStart={handleVolumeSliderInteraction}
                         >
                           <div
-                            className="absolute bottom-0 left-0 right-0 bg-green-500 rounded-full transition-all pointer-events-none"
+                            className="absolute bottom-0 left-0 right-0 bg-primary-500 rounded-full transition-all pointer-events-none"
                             style={{ height: `${volume}%` }}
                           />
                         </div>
@@ -2666,7 +2666,7 @@ export default function MusicPage() {
                 <button
                   onClick={toggleSpectrum}
                   className={`transition-colors ${
-                    showSpectrum ? 'text-green-500 hover:text-green-400' : 'text-zinc-500 hover:text-white'
+                    showSpectrum ? 'text-primary-500 hover:text-green-400' : 'text-zinc-500 hover:text-white'
                   }`}
                   title={showSpectrum ? '隱藏音譜圖' : '顯示音譜圖'}
                 >
@@ -2688,7 +2688,7 @@ export default function MusicPage() {
                   }}
                   className={`transition-colors ${
                     showPiPLyrics
-                      ? 'text-green-500 hover:text-green-400'
+                      ? 'text-primary-500 hover:text-green-400'
                       : 'text-zinc-500 hover:text-white'
                   }`}
                   title={showPiPLyrics ? '關閉畫中畫歌詞' : '畫中畫歌詞'}
@@ -2731,7 +2731,7 @@ export default function MusicPage() {
                   <span>{formatTime(currentTime)}</span>
                   <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden relative">
                     <div
-                      className="h-full bg-green-500 transition-all pointer-events-none"
+                      className="h-full bg-primary-500 transition-all pointer-events-none"
                       style={{ width: `${progress}%` }}
                     />
                     <input
@@ -2791,7 +2791,7 @@ export default function MusicPage() {
                       key={`${song.id}-${index}`}
                       className={`flex items-center gap-3 p-3 rounded-lg transition-colors group ${
                         index === playlistIndex
-                          ? 'bg-green-500/20 border border-green-500/50'
+                          ? 'bg-primary-500/20 border border-primary-500/50'
                           : 'bg-white/5 hover:bg-white/10'
                       }`}
                     >
@@ -3035,12 +3035,12 @@ export default function MusicPage() {
                     }}
                     className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition-all ${
                       active
-                        ? 'border-green-500/50 bg-green-500/12 text-white'
+                        ? 'border-primary-500/50 bg-primary-500/12 text-white'
                         : 'border-white/8 bg-white/5 text-zinc-200'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`flex h-9 w-9 items-center justify-center rounded-full ${active ? 'bg-green-500/20 text-green-400' : 'bg-white/8 text-zinc-400'}`}>
+                      <div className={`flex h-9 w-9 items-center justify-center rounded-full ${active ? 'bg-primary-500/20 text-green-400' : 'bg-white/8 text-zinc-400'}`}>
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
                         </svg>
@@ -3048,7 +3048,7 @@ export default function MusicPage() {
                       <div className="text-base font-medium">{source.label}</div>
                     </div>
                     {active ? (
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-500 text-white">
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                         </svg>

@@ -706,8 +706,8 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
   return (
     <>
       <div
-        className={`group relative w-full rounded-lg bg-transparent transition-all duration-300 ease-in-out hover:scale-[1.05] hover:z-[500] ${isUpcoming ? 'cursor-default' : 'cursor-pointer'} ${
-          showUpcomingInfo ? 'scale-[1.05] z-[500]' : ''
+        className={`group relative w-full rounded-md bg-transparent transition-all duration-300 ease-out hover:scale-[1.08] hover:-translate-y-1 hover:z-[500] hover:shadow-2xl hover:shadow-black/60 ${isUpcoming ? 'cursor-default' : 'cursor-pointer'} ${
+          showUpcomingInfo ? 'scale-[1.08] -translate-y-1 z-[500] shadow-2xl shadow-black/60' : ''
         }`}
         onClick={handleClick}
         {...longPressProps}
@@ -764,7 +764,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
           {!isLoading && !isDirectPlaySource && <ImagePlaceholder aspectRatio={orientation === 'horizontal' ? 'aspect-[3/2]' : 'aspect-[2/3]'} />}
           {isDirectPlaySource ? (
             <div className='absolute inset-0 flex items-center justify-center bg-gray-200/80 dark:bg-gray-700/80'>
-              <Link className='w-8 h-8 text-blue-500' />
+              <Link className='w-8 h-8 text-primary-500' />
             </div>
           ) : (isNetdiskSource(actualSource) && !actualPoster && displayPoster === netdiskPosterPlaceholder) ? (
             <div className='absolute inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'>
@@ -953,7 +953,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
           {/* 季度徽章 */}
           {seasonNumber && (
             <div
-              className="absolute top-2 left-2 bg-blue-500/80 text-white text-xs font-medium px-2 py-1 rounded backdrop-blur-sm shadow-sm transition-all duration-300 ease-out group-hover:opacity-90"
+              className="absolute top-2 left-2 bg-primary-500/80 text-white text-xs font-medium px-2 py-1 rounded backdrop-blur-sm shadow-sm transition-all duration-300 ease-out group-hover:opacity-90"
               style={{
                 WebkitUserSelect: 'none',
                 userSelect: 'none',
@@ -1084,7 +1084,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
             >
               <span
                 className={`inline-block border rounded px-1 py-0.5 text-[8px] text-white/90 bg-black/60 ${
-                  actualSource === 'xiaoya' ? 'border-blue-500' : isNetdiskSource(actualSource) ? 'border-purple-500' : actualSource === 'openlist' || actualSource === 'emby' || actualSource?.startsWith('emby_') ? 'border-yellow-500' : origin === 'live' ? 'border-red-500' : 'border-white/60'
+                  actualSource === 'xiaoya' ? 'border-primary-500' : isNetdiskSource(actualSource) ? 'border-purple-500' : actualSource === 'openlist' || actualSource === 'emby' || actualSource?.startsWith('emby_') ? 'border-yellow-500' : origin === 'live' ? 'border-red-500' : 'border-white/60'
                 }`}
                 style={{
                   WebkitUserSelect: 'none',
@@ -1127,7 +1127,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
               }}
             >
               <div
-                className='bg-green-500 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-md hover:bg-green-600 hover:scale-[1.1] transition-all duration-300 ease-out'
+                className='bg-primary-500 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-md hover:bg-green-600 hover:scale-[1.1] transition-all duration-300 ease-out'
                 style={{
                   WebkitUserSelect: 'none',
                   userSelect: 'none',
@@ -1408,7 +1408,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                       {config.showSourceName && source_name && !cmsData && (
                         <span
                           className={`inline-block border rounded px-1 py-0.5 text-[8px] text-white/90 bg-black/30 backdrop-blur-sm ${
-                            actualSource === 'xiaoya' ? 'border-blue-500' : isNetdiskSource(actualSource) ? 'border-purple-500' : actualSource === 'openlist' || actualSource === 'emby' || actualSource?.startsWith('emby_') ? 'border-yellow-500' : 'border-white/60'
+                            actualSource === 'xiaoya' ? 'border-primary-500' : isNetdiskSource(actualSource) ? 'border-purple-500' : actualSource === 'openlist' || actualSource === 'emby' || actualSource?.startsWith('emby_') ? 'border-yellow-500' : 'border-white/60'
                           }`}
                           style={{
                             WebkitUserSelect: 'none',
@@ -1498,7 +1498,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                 }}
               >
                 <div
-                  className='h-full bg-green-500 transition-all duration-500 ease-out'
+                  className='h-full bg-primary-500 transition-all duration-500 ease-out'
                   style={{
                     width: `${progress}%`,
                     WebkitUserSelect: 'none',
@@ -1535,7 +1535,7 @@ const VideoCard = forwardRef<VideoCardHandle, VideoCardProps>(function VideoCard
                 } as React.CSSProperties}
               >
                 <span
-                  className='block text-sm font-semibold truncate text-gray-900 dark:text-gray-100 transition-colors duration-300 ease-in-out group-hover:text-green-600 dark:group-hover:text-green-400 peer'
+                  className='block text-sm font-semibold truncate text-gray-900 dark:text-gray-100 transition-colors duration-300 ease-in-out group-hover:text-primary-600 dark:group-hover:text-green-400 peer'
                   style={{
                     WebkitUserSelect: 'none',
                     userSelect: 'none',

@@ -36,8 +36,8 @@ export function ConfirmDialog({
       button: 'bg-yellow-500 hover:bg-yellow-600',
     },
     info: {
-      icon: 'text-blue-500',
-      button: 'bg-blue-500 hover:bg-blue-600',
+      icon: 'text-primary-500',
+      button: 'bg-primary-500 hover:bg-blue-600',
     },
   };
 

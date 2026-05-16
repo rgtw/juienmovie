@@ -153,7 +153,7 @@ export default function WatchRoomScreenPage() {
         <div className='flex items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white/90 px-5 py-4 shadow-sm dark:border-gray-800 dark:bg-gray-900/80'>
           <div>
             <h1 className='flex items-center gap-2 text-2xl font-semibold'>
-              <Monitor className='h-6 w-6 text-blue-500' />
+              <Monitor className='h-6 w-6 text-primary-500' />
               屏幕共享观影室
             </h1>
             <p className='mt-1 text-sm text-gray-600 dark:text-gray-400'>
@@ -170,7 +170,7 @@ export default function WatchRoomScreenPage() {
                   event.preventDefault();
                   openDetachedPage();
                 }}
-                className='rounded-lg bg-blue-500 px-4 py-2 text-white'
+                className='rounded-lg bg-primary-500 px-4 py-2 text-white'
               >
                 新开主页
               </Link>
@@ -269,7 +269,7 @@ export default function WatchRoomScreenPage() {
                     <button
                       onClick={() => startSharing()}
                       disabled={isStarting || isSharing}
-                      className='flex-1 rounded-lg bg-blue-500 px-4 py-2 text-white disabled:bg-gray-400'
+                      className='flex-1 rounded-lg bg-primary-500 px-4 py-2 text-white disabled:bg-gray-400'
                     >
                       {isStarting ? '啟動中...' : isSharing ? '共享中' : '開始共享'}
                     </button>

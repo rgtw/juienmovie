@@ -38,9 +38,9 @@ export default function Toast({ message, type = 'info', duration = 3000, onClose
   };
 
   const colors = {
-    success: 'bg-green-500/90',
+    success: 'bg-primary-500/90',
     error: 'bg-red-500/90',
-    info: 'bg-blue-500/90',
+    info: 'bg-primary-500/90',
   };
 
   return (

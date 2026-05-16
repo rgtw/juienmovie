@@ -987,7 +987,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
   const galleryEntryButton = canShowGalleryEntry ? (
     <button
       onClick={openGallery}
-      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
+      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-primary-500 hover:bg-blue-600 text-white transition-colors"
     >
       <Images size={16} />
       照片墙
@@ -1049,7 +1049,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     <div ref={galleryScrollRef} className="flex-1 overflow-y-auto overflow-x-hidden p-4">
       {galleryLoading && (
         <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-500"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-500"></div>
         </div>
       )}
 
@@ -1188,7 +1188,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         <div className="overflow-y-auto max-h-[calc(90vh-4rem)]">
           {loading && (
             <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
             </div>
           )}
 
@@ -1216,7 +1216,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                       <button
                         onClick={handleToggleSource}
                         disabled={loading}
-                        className="px-3 py-1.5 text-sm rounded-lg bg-green-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-1.5 text-sm rounded-lg bg-primary-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         切换到 TMDB
                       </button>
@@ -1375,7 +1375,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                           >
                             {actor.profile_path ? (
                               <div
-                                className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 mb-2 cursor-pointer hover:opacity-80 transition-opacity"
+                                className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-800 mb-2 cursor-pointer hover:opacity-80 transition-opacity"
                                 onClick={() => handleImageClick(getTMDBImageUrl(actor.profile_path || null, 'w185'))}
                               >
                                 <ProxyImage
@@ -1386,7 +1386,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                                 />
                               </div>
                             ) : (
-                              <div className="w-20 h-20 rounded-full bg-gray-200 dark:bg-gray-700 mb-2 flex items-center justify-center">
+                              <div className="w-20 h-20 rounded-full bg-gray-800 mb-2 flex items-center justify-center">
                                 <Users size={28} className="text-gray-400" />
                               </div>
                             )}
@@ -1394,7 +1394,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                               href={`https://baike.baidu.com/item/${encodeURIComponent(actor.name)}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs font-medium text-gray-900 dark:text-gray-100 text-center w-20 line-clamp-2 hover:text-green-600 dark:hover:text-green-400 transition-colors cursor-pointer"
+                              className="text-xs font-medium text-gray-900 dark:text-gray-100 text-center w-20 line-clamp-2 hover:text-primary-600 dark:hover:text-green-400 transition-colors cursor-pointer"
                               onClick={(e) => e.stopPropagation()}
                             >
                               {actor.name}
@@ -1465,7 +1465,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 <div className="mt-6">
                   {loadingSeasons && (
                     <div className="flex items-center justify-center py-4">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
                     </div>
                   )}
 
@@ -1490,7 +1490,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                               >
                                 {season.poster_path && (
                                   <div
-                                    className="relative w-12 h-16 rounded overflow-hidden bg-gray-200 dark:bg-gray-700 flex-shrink-0 hover:opacity-80 transition-opacity"
+                                    className="relative w-12 h-16 rounded overflow-hidden bg-gray-800 flex-shrink-0 hover:opacity-80 transition-opacity"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       handleImageClick(getTMDBImageUrl(season.poster_path, 'w500'));
@@ -1553,7 +1553,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                                   >
                                     {episode.still_path && (
                                       <div
-                                        className="relative w-full h-36 rounded overflow-hidden bg-gray-200 dark:bg-gray-700 mb-2 cursor-pointer hover:opacity-90 transition-opacity"
+                                        className="relative w-full h-36 rounded overflow-hidden bg-gray-800 mb-2 cursor-pointer hover:opacity-90 transition-opacity"
                                         onClick={() => handleImageClick(getTMDBImageUrl(episode.still_path, 'w500'))}
                                       >
                                         <ProxyImage
@@ -1618,7 +1618,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                       <button
                         onClick={handleToggleSource}
                         disabled={loading}
-                        className="px-3 py-1.5 text-sm rounded-lg bg-green-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-1.5 text-sm rounded-lg bg-primary-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         切换到 TMDB
                       </button>
@@ -1704,7 +1704,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         <div className="overflow-y-auto max-h-[calc(90vh-4rem)]">
           {loading && (
             <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
             </div>
           )}
 
@@ -1730,7 +1730,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                     <button
                       onClick={handleToggleSource}
                       disabled={loading}
-                      className="px-3 py-1.5 text-sm rounded-lg bg-green-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-1.5 text-sm rounded-lg bg-primary-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       切换到 TMDB
                     </button>
@@ -1888,7 +1888,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                           >
                             {actor.profile_path ? (
                               <div
-                                className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 mb-2 cursor-pointer hover:opacity-80 transition-opacity"
+                                className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-800 mb-2 cursor-pointer hover:opacity-80 transition-opacity"
                                 onClick={() => handleImageClick(getTMDBImageUrl(actor.profile_path || null, 'w185'))}
                               >
                                 <ProxyImage
@@ -1899,7 +1899,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                                 />
                               </div>
                             ) : (
-                              <div className="w-20 h-20 rounded-full bg-gray-200 dark:bg-gray-700 mb-2 flex items-center justify-center">
+                              <div className="w-20 h-20 rounded-full bg-gray-800 mb-2 flex items-center justify-center">
                                 <Users size={28} className="text-gray-400" />
                               </div>
                             )}
@@ -1907,7 +1907,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                               href={`https://baike.baidu.com/item/${encodeURIComponent(actor.name)}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs font-medium text-gray-900 dark:text-gray-100 text-center w-20 line-clamp-2 hover:text-green-600 dark:hover:text-green-400 transition-colors cursor-pointer"
+                              className="text-xs font-medium text-gray-900 dark:text-gray-100 text-center w-20 line-clamp-2 hover:text-primary-600 dark:hover:text-green-400 transition-colors cursor-pointer"
                               onClick={(e) => e.stopPropagation()}
                             >
                               {actor.name}
@@ -1978,7 +1978,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                 <div className="mt-6">
                   {loadingSeasons && (
                     <div className="flex items-center justify-center py-4">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
                     </div>
                   )}
 
@@ -2003,7 +2003,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                               >
                                 {season.poster_path && (
                                   <div
-                                    className="relative w-12 h-16 rounded overflow-hidden bg-gray-200 dark:bg-gray-700 flex-shrink-0 hover:opacity-80 transition-opacity"
+                                    className="relative w-12 h-16 rounded overflow-hidden bg-gray-800 flex-shrink-0 hover:opacity-80 transition-opacity"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       handleImageClick(getTMDBImageUrl(season.poster_path, 'w500'));
@@ -2066,7 +2066,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                                   >
                                     {episode.still_path && (
                                       <div
-                                        className="relative w-full h-36 rounded overflow-hidden bg-gray-200 dark:bg-gray-700 mb-2 cursor-pointer hover:opacity-90 transition-opacity"
+                                        className="relative w-full h-36 rounded overflow-hidden bg-gray-800 mb-2 cursor-pointer hover:opacity-90 transition-opacity"
                                         onClick={() => handleImageClick(getTMDBImageUrl(episode.still_path, 'w500'))}
                                       >
                                         <ProxyImage
@@ -2129,7 +2129,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                     <button
                       onClick={handleToggleSource}
                       disabled={loading}
-                      className="px-3 py-1.5 text-sm rounded-lg bg-green-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-1.5 text-sm rounded-lg bg-primary-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       切换到 TMDB
                     </button>

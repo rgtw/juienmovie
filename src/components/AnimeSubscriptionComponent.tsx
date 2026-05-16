@@ -23,7 +23,7 @@ const Switch = ({ checked, onChange, disabled }: { checked: boolean; onChange: (
     onClick={() => onChange(!checked)}
     className={`
       relative inline-flex h-6 w-11 items-center rounded-full transition-colors
-      ${checked ? 'bg-green-600' : 'bg-gray-200 dark:bg-gray-700'}
+      ${checked ? 'bg-green-600' : 'bg-gray-800'}
       ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
     `}
   >
@@ -71,10 +71,10 @@ const AlertModal = ({
   if (!isOpen) return null;
 
   const icons = {
-    success: <AlertCircle className="w-12 h-12 text-green-500" />,
+    success: <AlertCircle className="w-12 h-12 text-primary-500" />,
     error: <AlertCircle className="w-12 h-12 text-red-500" />,
     warning: <AlertCircle className="w-12 h-12 text-yellow-500" />,
-    info: <AlertCircle className="w-12 h-12 text-blue-500" />,
+    info: <AlertCircle className="w-12 h-12 text-primary-500" />,
   };
 
   return createPortal(
@@ -428,7 +428,7 @@ export default function AnimeSubscriptionComponent({
       {/* 说明 */}
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <div className='flex gap-2'>
-          <AlertCircle className='w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5' />
+          <AlertCircle className='w-5 h-5 text-primary-600 dark:text-blue-400 flex-shrink-0 mt-0.5' />
           <div className='text-sm text-blue-800 dark:text-blue-200 space-y-1'>
             <p>• 定時任務會自動檢查訂閱更新</p>
             <p>• 下載路徑：OpenList離線下載根目錄/番劇名稱/</p>
@@ -526,7 +526,7 @@ export default function AnimeSubscriptionComponent({
               <button
                 onClick={resetForm}
                 disabled={loading}
-                className='px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50'
+                className='px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50'
               >
                 取消
               </button>
@@ -581,7 +581,7 @@ export default function AnimeSubscriptionComponent({
                   <button
                     onClick={() => handleCheckSubscription(sub.id)}
                     disabled={checkingId === sub.id}
-                    className='p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 rounded-lg transition-colors disabled:opacity-50'
+                    className='p-2 text-primary-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 rounded-lg transition-colors disabled:opacity-50'
                     title='立即檢查'
                   >
                     {checkingId === sub.id ? (
@@ -593,7 +593,7 @@ export default function AnimeSubscriptionComponent({
                   <button
                     onClick={() => handleEdit(sub)}
                     disabled={loading}
-                    className='p-2 text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20 rounded-lg transition-colors disabled:opacity-50'
+                    className='p-2 text-primary-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20 rounded-lg transition-colors disabled:opacity-50'
                     title='編輯'
                   >
                     <svg className='w-[18px] h-[18px]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -636,7 +636,7 @@ export default function AnimeSubscriptionComponent({
                   <button
                     onClick={() => handleCheckSubscription(sub.id)}
                     disabled={checkingId === sub.id}
-                    className='flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 rounded-lg transition-colors disabled:opacity-50'
+                    className='flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm text-primary-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 rounded-lg transition-colors disabled:opacity-50'
                   >
                     {checkingId === sub.id ? (
                       <>
@@ -653,7 +653,7 @@ export default function AnimeSubscriptionComponent({
                   <button
                     onClick={() => handleEdit(sub)}
                     disabled={loading}
-                    className='flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm text-green-600 bg-green-50 hover:bg-green-100 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 rounded-lg transition-colors disabled:opacity-50'
+                    className='flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm text-primary-600 bg-green-50 hover:bg-green-100 dark:text-green-400 dark:bg-green-900/20 dark:hover:bg-green-900/30 rounded-lg transition-colors disabled:opacity-50'
                   >
                     <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                       <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' />

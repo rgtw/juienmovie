@@ -45,7 +45,7 @@ function VersionDisplay() {
           className={`flex items-center gap-1.5 ${updateStatus === UpdateStatus.HAS_UPDATE
             ? 'text-yellow-600 dark:text-yellow-400'
             : updateStatus === UpdateStatus.NO_UPDATE
-              ? 'text-green-600 dark:text-green-400'
+              ? 'text-primary-600 dark:text-green-400'
               : ''
             }`}
         >
@@ -291,7 +291,7 @@ function LoginPageClient() {
         <ThemeToggle />
       </div>
       <div className='relative z-10 w-full max-w-md rounded-3xl bg-gradient-to-b from-white/90 via-white/70 to-white/40 dark:from-zinc-900/90 dark:via-zinc-900/70 dark:to-zinc-900/40 shadow-2xl p-10 dark:border dark:border-zinc-800'>
-        <h1 className='text-green-600 tracking-tight text-center text-3xl font-extrabold mb-8 bg-clip-text drop-shadow-sm'>
+        <h1 className='text-primary-600 tracking-tight text-center text-3xl font-extrabold mb-8 bg-clip-text drop-shadow-sm'>
           {siteName}
         </h1>
         <form onSubmit={handleSubmit} className='space-y-8'>
@@ -362,7 +362,7 @@ function LoginPageClient() {
             <input
               id='remember-password'
               type='checkbox'
-              className='h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700'
+              className='h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-green-500 dark:border-gray-600 dark:bg-gray-700'
               checked={rememberPassword}
               onChange={(e) => setRememberPassword(e.target.checked)}
             />
@@ -392,7 +392,7 @@ function LoginPageClient() {
               <button
                 type='button'
                 onClick={() => router.push('/register')}
-                className='text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors'
+                className='text-sm text-primary-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors'
               >
                 还没有账号？立即注册
               </button>

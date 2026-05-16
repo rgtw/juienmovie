@@ -455,7 +455,7 @@ export default function CorrectDialog({
               <div className='mb-4 flex items-center gap-2'>
                 <button
                   onClick={handleBackToSearch}
-                  className='text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1'
+                  className='text-primary-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1'
                 >
                   <span>←</span>
                   <span>返回搜索</span>
@@ -646,7 +646,7 @@ export default function CorrectDialog({
               <div className='mb-4 flex items-center gap-2'>
                 <button
                   onClick={handleBackToResults}
-                  className='text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1'
+                  className='text-primary-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1'
                 >
                   <span>←</span>
                   <span>返回搜索結果</span>
@@ -680,7 +680,7 @@ export default function CorrectDialog({
                       className='flex gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'
                     >
                       {/* 海报 */}
-                      <div className='flex-shrink-0 w-16 h-24 relative rounded overflow-hidden bg-gray-200 dark:bg-gray-700'>
+                      <div className='flex-shrink-0 w-16 h-24 relative rounded overflow-hidden bg-gray-800'>
                         {season.poster_path ? (
                           <Image
                             src={processImageUrl(getTMDBImageUrl(season.poster_path))}
@@ -737,7 +737,7 @@ export default function CorrectDialog({
                 <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-center'>
                   <button
                     onClick={handleShowManualInput}
-                    className='text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
+                    className='text-xs text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-blue-400 transition-colors'
                   >
                     搜不到影片？手动纠错
                   </button>
@@ -754,7 +754,7 @@ export default function CorrectDialog({
                     className='flex gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors'
                   >
                     {/* 海报 */}
-                    <div className='flex-shrink-0 w-16 h-24 relative rounded overflow-hidden bg-gray-200 dark:bg-gray-700'>
+                    <div className='flex-shrink-0 w-16 h-24 relative rounded overflow-hidden bg-gray-800'>
                       {result.poster_path ? (
                         <Image
                           src={processImageUrl(getTMDBImageUrl(result.poster_path))}
@@ -805,7 +805,7 @@ export default function CorrectDialog({
               <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-center'>
                 <button
                   onClick={handleShowManualInput}
-                  className='text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
+                  className='text-xs text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-blue-400 transition-colors'
                 >
                   搜不到影片？手动纠错
                 </button>

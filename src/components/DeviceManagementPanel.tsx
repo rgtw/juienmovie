@@ -71,7 +71,7 @@ export function DeviceManagementPanel({
               <div className='space-y-3'>
                 {[1, 2, 3].map((i) => (
                   <div key={i} className='animate-pulse'>
-                    <div className='h-20 bg-gray-200 dark:bg-gray-700 rounded-lg'></div>
+                    <div className='h-20 bg-gray-800 rounded-lg'></div>
                   </div>
                 ))}
                 <div className='text-center text-sm text-gray-500 dark:text-gray-400 mt-4'>

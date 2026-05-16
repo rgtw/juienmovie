@@ -521,10 +521,10 @@ const MultiLevelSelector: React.FC<MultiLevelSelectorProps> = ({
               className={`relative z-10 px-1.5 py-0.5 sm:px-2 sm:py-1 md:px-4 md:py-2 text-xs sm:text-sm font-medium rounded-full transition-all duration-200 whitespace-nowrap ${activeCategory === category.key
                   ? isDefaultValue(category.key)
                     ? 'text-gray-900 dark:text-gray-100 cursor-default'
-                    : 'text-green-600 dark:text-green-400 cursor-default'
+                    : 'text-primary-600 dark:text-green-400 cursor-default'
                   : isDefaultValue(category.key)
                     ? 'text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 cursor-pointer'
-                    : 'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 cursor-pointer'
+                    : 'text-primary-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 cursor-pointer'
                 }`}
             >
               <span>{getDisplayText(category.key)}</span>

@@ -375,7 +375,7 @@ export default function WatchRoomPage() {
                       router.push('/watch-room/screen');
                     }
                   }}
-                  className="px-6 py-2 bg-white text-blue-600 font-medium rounded-lg hover:bg-white/90 transition-colors whitespace-nowrap"
+                  className="px-6 py-2 bg-white text-primary-600 font-medium rounded-lg hover:bg-white/90 transition-colors whitespace-nowrap"
                 >
                   立即加入
                 </button>
@@ -387,7 +387,7 @@ export default function WatchRoomPage() {
         {/* 页面标题 */}
         <div className="py-1">
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-            <Users className="w-6 h-6 text-blue-500" />
+            <Users className="w-6 h-6 text-primary-500" />
             观影室
             {currentRoom && (
               <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
@@ -411,7 +411,7 @@ export default function WatchRoomPage() {
                 className={`flex items-center gap-2 px-6 py-3 text-sm font-medium transition-colors relative
                   ${
                     activeTab === tab.id
-                      ? 'text-blue-600 dark:text-blue-400'
+                      ? 'text-primary-600 dark:text-blue-400'
                       : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                   }
                 `}
@@ -479,7 +479,7 @@ export default function WatchRoomPage() {
                             className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                              <div className="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-bold">
                                 {getAvatarText(member.name)}
                               </div>
                               <span className="font-medium text-gray-900 dark:text-gray-100">
@@ -563,7 +563,7 @@ export default function WatchRoomPage() {
                       id="isPublic"
                       checked={createForm.isPublic}
                       onChange={(e) => setCreateForm({ ...createForm, isPublic: e.target.checked })}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                     <label htmlFor="isPublic" className="text-sm text-gray-700 dark:text-gray-300">
                       在房间列表中公开显示
@@ -580,7 +580,7 @@ export default function WatchRoomPage() {
                         onClick={() => setCreateForm({ ...createForm, roomType: 'sync' })}
                         className={`rounded-lg border p-4 text-left transition-colors ${
                           createForm.roomType === 'sync'
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                            ? 'border-primary-500 bg-blue-50 dark:bg-blue-900/20'
                             : 'border-gray-300 dark:border-gray-600'
                         }`}
                       >
@@ -592,7 +592,7 @@ export default function WatchRoomPage() {
                         onClick={() => setCreateForm({ ...createForm, roomType: 'screen' })}
                         className={`rounded-lg border p-4 text-left transition-colors ${
                           createForm.roomType === 'screen'
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                            ? 'border-primary-500 bg-blue-50 dark:bg-blue-900/20'
                             : 'border-gray-300 dark:border-gray-600'
                         }`}
                       >
@@ -605,7 +605,7 @@ export default function WatchRoomPage() {
                   <button
                     type="submit"
                     disabled={createLoading || !createForm.roomName.trim()}
-                    className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white font-medium py-3 rounded-lg transition-colors"
+                    className="w-full bg-primary-500 hover:bg-blue-600 disabled:bg-gray-400 text-white font-medium py-3 rounded-lg transition-colors"
                   >
                     {createLoading ? '創建中...' : '創建房間'}
                   </button>
@@ -675,7 +675,7 @@ export default function WatchRoomPage() {
                             className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                              <div className="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-bold">
                                 {getAvatarText(member.name)}
                               </div>
                               <span className="font-medium text-gray-900 dark:text-gray-100">
@@ -742,7 +742,7 @@ export default function WatchRoomPage() {
                   <button
                     type="submit"
                     disabled={joinLoading || !joinForm.roomId.trim()}
-                    className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-medium py-3 rounded-lg transition-colors"
+                    className="w-full bg-primary-500 hover:bg-green-600 disabled:bg-gray-400 text-white font-medium py-3 rounded-lg transition-colors"
                   >
                     {joinLoading ? '加入中...' : '加入房間'}
                   </button>

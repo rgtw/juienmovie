@@ -137,11 +137,11 @@ export default function ContinueWatching({ className }: ContinueWatchingProps) {
                 key={index}
                 className='min-w-[180px] w-48 sm:min-w-[200px] sm:w-52'
               >
-                <div className='relative aspect-[3/2] w-full overflow-hidden rounded-lg bg-gray-200 animate-pulse dark:bg-gray-800'>
-                  <div className='absolute inset-0 bg-gray-300 dark:bg-gray-700' />
+                <div className='relative aspect-[3/2] w-full overflow-hidden rounded-lg bg-gray-800 animate-pulse'>
+                  <div className='absolute inset-0 bg-gray-700' />
                 </div>
-                <div className='mt-1 h-1 rounded bg-gray-200 animate-pulse dark:bg-gray-800' />
-                <div className='mt-2 h-4 w-3/4 rounded bg-gray-200 animate-pulse dark:bg-gray-800' />
+                <div className='mt-1 h-1 rounded bg-gray-800 animate-pulse' />
+                <div className='mt-2 h-4 w-3/4 rounded bg-gray-800 animate-pulse' />
               </div>
             ))}
           </div>
@@ -269,7 +269,7 @@ export default function ContinueWatching({ className }: ContinueWatchingProps) {
                 <div className='mt-6 flex gap-3'>
                   <button
                     onClick={() => setShowConfirmDialog(false)}
-                    className='flex-1 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                    className='flex-1 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-600'
                   >
                     取消
                   </button>

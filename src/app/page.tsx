@@ -468,8 +468,8 @@ function HomeClient() {
                       key={index}
                       className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                     >
-                      <div className='aspect-[2/3] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mb-2' />
-                      <div className='h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4' />
+                      <div className='aspect-[2/3] bg-gray-800 rounded-lg animate-pulse mb-2' />
+                      <div className='h-4 bg-gray-800 rounded animate-pulse w-3/4' />
                     </div>
                   ))
                 : hotMovies.map((movie) => (
@@ -516,8 +516,8 @@ function HomeClient() {
                       key={index}
                       className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                     >
-                      <div className='aspect-[2/3] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mb-2' />
-                      <div className='h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4' />
+                      <div className='aspect-[2/3] bg-gray-800 rounded-lg animate-pulse mb-2' />
+                      <div className='h-4 bg-gray-800 rounded animate-pulse w-3/4' />
                     </div>
                   ))
                 : hotDuanju.map((duanju) => (
@@ -570,8 +570,8 @@ function HomeClient() {
                       key={index}
                       className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                     >
-                      <div className='relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-gray-200 animate-pulse dark:bg-gray-800'>
-                        <div className='absolute inset-0 bg-gray-300 dark:bg-gray-700'></div>
+                      <div className='relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-gray-800 animate-pulse'>
+                        <div className='absolute inset-0 bg-gray-700'></div>
                       </div>
                       <div className='mt-2 h-4 bg-gray-200 rounded animate-pulse dark:bg-gray-800'></div>
                     </div>
@@ -635,8 +635,8 @@ function HomeClient() {
                       key={index}
                       className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                     >
-                      <div className='aspect-[2/3] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mb-2' />
-                      <div className='h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4' />
+                      <div className='aspect-[2/3] bg-gray-800 rounded-lg animate-pulse mb-2' />
+                      <div className='h-4 bg-gray-800 rounded animate-pulse w-3/4' />
                     </div>
                   ))
                 : hotTvShows.map((tvShow) => (
@@ -682,8 +682,8 @@ function HomeClient() {
                       key={index}
                       className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                     >
-                      <div className='aspect-[2/3] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mb-2' />
-                      <div className='h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4' />
+                      <div className='aspect-[2/3] bg-gray-800 rounded-lg animate-pulse mb-2' />
+                      <div className='h-4 bg-gray-800 rounded animate-pulse w-3/4' />
                     </div>
                   ))
                 : hotVarietyShows.map((varietyShow) => (
@@ -765,7 +765,7 @@ function HomeClient() {
             <div className={`flex items-center justify-end gap-2 mb-4 ${homeBannerEnabled ? '' : 'mt-[30px]'}`}>
               <button
                 onClick={handleDirectPlay}
-                className='p-1.5 rounded-lg text-blue-500 hover:text-blue-600 transition-colors'
+                className='p-1.5 rounded-lg text-primary-500 hover:text-primary-600 transition-colors'
                 title='直鏈播放'
               >
                 <LinkIcon size={18} />
@@ -774,7 +774,7 @@ function HomeClient() {
               {musicEnabled && (
                 <Link href='/music'>
                   <button
-                    className='p-1.5 rounded-lg text-green-500 hover:text-green-600 transition-colors'
+                    className='p-1.5 rounded-lg text-primary-500 hover:text-primary-600 transition-colors'
                     title='音樂視聽'
                   >
                     <Music size={18} />
@@ -808,7 +808,7 @@ function HomeClient() {
               {sourceSearchEnabled && (
                 <Link href='/source-search'>
                   <button
-                    className='p-2 rounded-lg text-blue-500 hover:text-blue-600 transition-colors'
+                    className='p-2 rounded-lg text-primary-500 hover:text-primary-600 transition-colors'
                     title='源站尋片'
                   >
                     <ListVideo size={20} />

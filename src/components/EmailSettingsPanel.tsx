@@ -67,14 +67,14 @@ export function EmailSettingsPanel({
           {emailSettingsLoading ? (
             <div className='space-y-4'>
               <div className='animate-pulse'>
-                <div className='h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-2'></div>
-                <div className='h-10 bg-gray-200 dark:bg-gray-700 rounded'></div>
+                <div className='h-4 bg-gray-800 rounded w-20 mb-2'></div>
+                <div className='h-10 bg-gray-800 rounded'></div>
               </div>
               <div className='animate-pulse'>
-                <div className='h-20 bg-gray-200 dark:bg-gray-700 rounded'></div>
+                <div className='h-20 bg-gray-800 rounded'></div>
               </div>
               <div className='animate-pulse'>
-                <div className='h-10 bg-gray-200 dark:bg-gray-700 rounded'></div>
+                <div className='h-10 bg-gray-800 rounded'></div>
               </div>
               <div className='text-center text-sm text-gray-500 dark:text-gray-400'>
                 加载中...
@@ -109,7 +109,7 @@ export function EmailSettingsPanel({
                   onClick={() => onEmailNotificationsChange(!emailNotifications)}
                   disabled={emailSettingsSaving}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-                    emailNotifications ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+                    emailNotifications ? 'bg-blue-600' : 'bg-gray-800'
                   }`}
                 >
                   <span
@@ -123,7 +123,7 @@ export function EmailSettingsPanel({
               <button
                 onClick={onSave}
                 disabled={emailSettingsSaving}
-                className='w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 dark:disabled:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors disabled:cursor-not-allowed flex items-center justify-center gap-2'
+                className='w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 dark:disabled:bg-primary-500 text-white text-sm font-medium rounded-lg transition-colors disabled:cursor-not-allowed flex items-center justify-center gap-2'
               >
                 {emailSettingsSaving ? (
                   <>
@@ -139,7 +139,7 @@ export function EmailSettingsPanel({
                 <p
                   className={`text-xs text-center ${
                     statusType === 'success'
-                      ? 'text-green-600 dark:text-green-400'
+                      ? 'text-primary-600 dark:text-green-400'
                       : 'text-red-600 dark:text-red-400'
                   }`}
                 >

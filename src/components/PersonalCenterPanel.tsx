@@ -67,7 +67,7 @@ export function PersonalCenterPanel({
             >
               <X className='w-5 h-5' />
             </button>
-            <div className='mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-blue-500 text-3xl font-semibold text-white shadow-md'>
+            <div className='mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-primary-500 text-3xl font-semibold text-white shadow-md'>
               {avatarText}
             </div>
             {showRoleBadge && (
@@ -87,7 +87,7 @@ export function PersonalCenterPanel({
               onClick={onOpenEmailSettings}
               className='flex w-full items-center gap-3 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-4 text-left transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-750'
             >
-              <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300'>
+              <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-primary-600 dark:bg-blue-900/30 dark:text-blue-300'>
                 <Mail className='w-6 h-6' />
               </div>
               <div>

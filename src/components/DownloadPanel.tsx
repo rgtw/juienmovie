@@ -35,11 +35,11 @@ export function DownloadPanel() {
       case 'ready':
         return 'text-gray-500';
       case 'downloading':
-        return 'text-blue-500';
+        return 'text-primary-500';
       case 'pause':
         return 'text-yellow-500';
       case 'done':
-        return 'text-green-500';
+        return 'text-primary-500';
       case 'error':
         return 'text-red-500';
       default:
@@ -117,7 +117,7 @@ export function DownloadPanel() {
                           task.status === 'downloading'
                             ? 'bg-gradient-to-r from-blue-500 to-purple-600 animate-pulse'
                             : task.status === 'done'
-                            ? 'bg-green-500'
+                            ? 'bg-primary-500'
                             : task.status === 'error'
                             ? 'bg-red-500'
                             : 'bg-gray-400'
@@ -135,7 +135,7 @@ export function DownloadPanel() {
                       </div>
                       <button
                         onClick={() => retryFailedSegments(task.id)}
-                        className='text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline'
+                        className='text-xs text-primary-500 hover:text-primary-600 dark:text-blue-400 dark:hover:text-blue-300 underline'
                       >
                         重试失败片段
                       </button>
@@ -159,7 +159,7 @@ export function DownloadPanel() {
                     {(task.status === 'pause' || task.status === 'ready' || task.status === 'error') && (
                       <button
                         onClick={() => startTask(task.id)}
-                        className='flex items-center gap-1 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded transition-colors'
+                        className='flex items-center gap-1 px-3 py-1.5 bg-primary-500 hover:bg-blue-600 text-white text-xs font-medium rounded transition-colors'
                       >
                         <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                           <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z' />

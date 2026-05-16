@@ -185,7 +185,7 @@ const MobileActionSheet: React.FC<MobileActionSheetProps> = ({
       case 'danger':
         return 'text-red-600 dark:text-red-400';
       case 'primary':
-        return 'text-green-600 dark:text-green-400';
+        return 'text-primary-600 dark:text-green-400';
       default:
         return 'text-gray-700 dark:text-gray-300';
     }

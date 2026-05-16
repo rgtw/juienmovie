@@ -146,11 +146,11 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
       case 'pending':
         return 'text-gray-500 dark:text-gray-400';
       case 'downloading':
-        return 'text-blue-500 dark:text-blue-400';
+        return 'text-primary-500 dark:text-blue-400';
       case 'paused':
         return 'text-yellow-500 dark:text-yellow-400';
       case 'completed':
-        return 'text-green-500 dark:text-green-400';
+        return 'text-primary-500 dark:text-green-400';
       case 'error':
         return 'text-red-500 dark:text-red-400';
       default:
@@ -197,8 +197,8 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                 onClick={() => setViewMode('tasks')}
                 className={`px-3 py-1 text-sm font-medium rounded transition-colors ${
                   viewMode === 'tasks'
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
                 任务列表
@@ -207,8 +207,8 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                 onClick={() => setViewMode('library')}
                 className={`px-3 py-1 text-sm font-medium rounded transition-colors ${
                   viewMode === 'library'
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
                 视频库 ({libraryVideos.length})
@@ -230,7 +230,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
         <div className='flex-1 overflow-y-auto p-4 space-y-3'>
           {loading ? (
             <div className='flex items-center justify-center h-full'>
-              <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500'></div>
+              <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500'></div>
             </div>
           ) : viewMode === 'library' ? (
             // 视频库视图
@@ -396,7 +396,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                           task.status === 'downloading'
                             ? 'bg-gradient-to-r from-blue-500 to-purple-600 animate-pulse'
                             : task.status === 'completed'
-                            ? 'bg-green-500'
+                            ? 'bg-primary-500'
                             : task.status === 'error'
                             ? 'bg-red-500'
                             : 'bg-gray-400'
@@ -426,7 +426,7 @@ export function OfflineDownloadPanel({ isOpen, onClose }: OfflineDownloadPanelPr
                   {(task.status === 'error' || task.status === 'paused') && (
                     <button
                       onClick={() => handleRetryTask(task.id)}
-                      className='flex items-center gap-1 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded transition-colors'
+                      className='flex items-center gap-1 px-3 py-1.5 bg-primary-500 hover:bg-blue-600 text-white text-xs font-medium rounded transition-colors'
                     >
                       <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                         <path

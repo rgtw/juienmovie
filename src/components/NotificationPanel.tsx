@@ -197,7 +197,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
         <div className='flex-1 overflow-y-auto p-4'>
           {loading ? (
             <div className='flex items-center justify-center py-12'>
-              <div className='w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin'></div>
+              <div className='w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin'></div>
             </div>
           ) : notifications.length === 0 ? (
             <div className='flex flex-col items-center justify-center py-12 text-gray-500 dark:text-gray-400'>
@@ -218,7 +218,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                 >
                   {/* 未读标识 */}
                   {!notification.read && (
-                    <div className='absolute top-4 right-4 w-2 h-2 bg-green-500 rounded-full'></div>
+                    <div className='absolute top-4 right-4 w-2 h-2 bg-primary-500 rounded-full'></div>
                   )}
 
                   {/* 通知内容 */}
@@ -247,7 +247,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                         className='p-1.5 rounded-full bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors'
                         title='標記為已讀'
                       >
-                        <Check className='w-3.5 h-3.5 text-green-600 dark:text-green-400' />
+                        <Check className='w-3.5 h-3.5 text-primary-600 dark:text-green-400' />
                       </button>
                     )}
                     <button

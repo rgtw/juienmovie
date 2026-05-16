@@ -263,7 +263,7 @@ function SourceSearchPageClient() {
                   />
                   <button
                     type='submit'
-                    className='absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg text-blue-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors'
+                    className='absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg text-primary-500 hover:text-primary-600 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors'
                   >
                     <Search size={20} />
                   </button>
@@ -280,7 +280,7 @@ function SourceSearchPageClient() {
               </span>
               <button
                 onClick={handleBackToBrowse}
-                className='text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium'
+                className='text-sm text-primary-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium'
               >
                 返回分类浏览
               </button>
@@ -333,7 +333,7 @@ function SourceSearchPageClient() {
 
             {isLoadingVideos && currentPage === 1 ? (
               <div className='flex justify-center items-center h-40'>
-                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500'></div>
+                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500'></div>
               </div>
             ) : videos.length === 0 ? (
               <div className='text-center text-gray-500 py-8 dark:text-gray-400'>
@@ -371,7 +371,7 @@ function SourceSearchPageClient() {
                 {/* Infinite scroll trigger */}
                 <div ref={loadMoreRef} className='flex justify-center items-center py-8'>
                   {isLoadingVideos && (
-                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500'></div>
+                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary-500'></div>
                   )}
                   {!hasMore && videos.length > 0 && (
                     <span className='text-sm text-gray-500 dark:text-gray-400'>

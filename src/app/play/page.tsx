@@ -8611,31 +8611,31 @@ function PlayPageClient() {
               <div className='flex justify-center space-x-2 mb-4'>
                 <div
                   className={`w-3 h-3 rounded-full transition-all duration-500 ${loadingStage === 'searching' || loadingStage === 'fetching'
-                    ? 'bg-green-500 scale-125'
+                    ? 'bg-primary-500 scale-125'
                     : loadingStage === 'preferring' ||
                       loadingStage === 'ready'
-                      ? 'bg-green-500'
+                      ? 'bg-primary-500'
                       : 'bg-gray-300'
                     }`}
                 ></div>
                 <div
                   className={`w-3 h-3 rounded-full transition-all duration-500 ${loadingStage === 'preferring'
-                    ? 'bg-green-500 scale-125'
+                    ? 'bg-primary-500 scale-125'
                     : loadingStage === 'ready'
-                      ? 'bg-green-500'
+                      ? 'bg-primary-500'
                       : 'bg-gray-300'
                     }`}
                 ></div>
                 <div
                   className={`w-3 h-3 rounded-full transition-all duration-500 ${loadingStage === 'ready'
-                    ? 'bg-green-500 scale-125'
+                    ? 'bg-primary-500 scale-125'
                     : 'bg-gray-300'
                     }`}
                 ></div>
               </div>
 
               {/* 进度条 */}
-              <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden'>
+              <div className='w-full bg-gray-800 rounded-full h-2 overflow-hidden'>
                 <div
                   className='h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-1000 ease-out'
                   style={{
@@ -8721,7 +8721,7 @@ function PlayPageClient() {
 
                 <button
                   onClick={() => window.location.reload()}
-                  className='w-full rounded-xl bg-gray-100 px-6 py-3 font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                  className='w-full rounded-xl bg-gray-100 px-6 py-3 font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-600'
                 >
                   🔄 重新尝试
                 </button>
@@ -8817,12 +8817,12 @@ function PlayPageClient() {
                     className='w-full flex flex-col p-5 bg-gray-50 dark:bg-gray-700/50
                              hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all
                              duration-200 text-left group border-2 border-transparent
-                             hover:border-green-500 hover:shadow-lg'
+                             hover:border-primary-500 hover:shadow-lg'
                   >
                     {/* 顶部：序号和标题 */}
                     <div className='flex items-start gap-3 mb-3'>
                       {/* 序号 */}
-                      <div className='flex-shrink-0 w-8 h-8 rounded-full bg-green-500 text-white
+                      <div className='flex-shrink-0 w-8 h-8 rounded-full bg-primary-500 text-white
                                     flex items-center justify-center font-bold text-sm
                                     group-hover:bg-green-600 transition-colors duration-200'>
                         {index + 1}
@@ -8830,14 +8830,14 @@ function PlayPageClient() {
 
                       {/* 标题 */}
                       <h4 className='flex-1 text-lg font-bold text-gray-900 dark:text-white
-                                   group-hover:text-green-600 dark:group-hover:text-green-400
+                                   group-hover:text-primary-600 dark:group-hover:text-green-400
                                    transition-colors duration-200 leading-tight'>
                         {anime.animeTitle}
                       </h4>
 
                       {/* 选择图标 */}
                       <div className='flex-shrink-0'>
-                        <svg className='w-6 h-6 text-gray-400 group-hover:text-green-500
+                        <svg className='w-6 h-6 text-gray-400 group-hover:text-primary-500
                                       transition-colors duration-200'
                           fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                           <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2}
@@ -9117,7 +9117,7 @@ function PlayPageClient() {
                 {/* 链接刷新提示 */}
                 {isRefreshingUrl && (
                   <div className='absolute inset-0 flex items-center justify-center bg-black/50 z-50 pointer-events-none'>
-                    <div className='bg-black/80 text-white px-6 py-3 rounded-lg flex items-center gap-3 backdrop-blur-sm border border-green-500/30'>
+                    <div className='bg-black/80 text-white px-6 py-3 rounded-lg flex items-center gap-3 backdrop-blur-sm border border-primary-500/30'>
                       <svg className='animate-spin h-5 w-5' viewBox='0 0 24 24'>
                         <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' fill='none' />
                         <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' />
@@ -9129,11 +9129,11 @@ function PlayPageClient() {
 
                 {/* 弹幕加载蒙层 */}
                 {danmakuLoading && (
-                  <div className='absolute top-0 right-0 m-4 bg-black/80 backdrop-blur-sm rounded-lg px-4 py-2 z-[600] flex items-center gap-2 border border-green-500/30'>
+                  <div className='absolute top-0 right-0 m-4 bg-black/80 backdrop-blur-sm rounded-lg px-4 py-2 z-[600] flex items-center gap-2 border border-primary-500/30'>
                     {danmakuCount > 0 ? (
                       <>
                         <svg
-                          className='w-4 h-4 text-green-500'
+                          className='w-4 h-4 text-primary-500'
                           fill='none'
                           stroke='currentColor'
                           viewBox='0 0 24 24'
@@ -9154,7 +9154,7 @@ function PlayPageClient() {
                       </>
                     ) : (
                       <>
-                        <div className='w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin'></div>
+                        <div className='w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full animate-spin'></div>
                         <span className='text-sm font-medium text-green-400'>
                           加载弹幕中...
                         </span>
@@ -9235,7 +9235,7 @@ function PlayPageClient() {
                               });
                             });
                           }}
-                          className='group relative flex items-center justify-center gap-1 w-8 h-8 lg:w-auto lg:h-auto lg:px-2 lg:py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-md transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer overflow-hidden border border-blue-400 flex-shrink-0'
+                          className='group relative flex items-center justify-center gap-1 w-8 h-8 lg:w-auto lg:h-auto lg:px-2 lg:py-1.5 bg-primary-500 hover:bg-blue-600 text-white text-xs font-medium rounded-md transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer overflow-hidden border border-blue-400 flex-shrink-0'
                           title='複製視頻鏈接'
                         >
                           <svg
@@ -9265,7 +9265,7 @@ function PlayPageClient() {
                             // 打开moontvplus协议
                             window.open(`moontvplus://${currentPath}`, '_blank');
                           }}
-                          className='group relative flex items-center justify-center gap-1 w-8 h-8 lg:w-auto lg:h-auto lg:px-2 lg:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-xs font-medium rounded-md transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer overflow-hidden border border-blue-600 dark:border-blue-700 flex-shrink-0'
+                          className='group relative flex items-center justify-center gap-1 w-8 h-8 lg:w-auto lg:h-auto lg:px-2 lg:py-1.5 bg-primary-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-xs font-medium rounded-md transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer overflow-hidden border border-primary-600 dark:border-blue-700 flex-shrink-0'
                           title='App打開'
                         >
                           <svg
@@ -9733,7 +9733,7 @@ function PlayPageClient() {
                   {/* 关键信息行 */}
                   <div className={`flex flex-wrap items-center gap-3 text-base mb-4 opacity-80 flex-shrink-0 ${tmdbBackdrop ? 'text-white' : ''}`}>
                     {detail?.class && (
-                      <span className='text-green-600 font-semibold'>
+                      <span className='text-primary-600 font-semibold'>
                         {detail.class}
                       </span>
                     )}
@@ -9743,7 +9743,7 @@ function PlayPageClient() {
                     )}
                     {detail?.source_name && (
                       <span
-                        className={`relative group cursor-pointer border px-2 py-[1px] rounded ${detail.source === 'xiaoya' ? 'border-blue-500' : isNetdiskSource(detail.source) ? 'border-purple-500' : detail.source === 'openlist' || detail.source === 'emby' || detail.source?.startsWith('emby_') ? 'border-yellow-500' : 'border-gray-500/60'
+                        className={`relative group cursor-pointer border px-2 py-[1px] rounded ${detail.source === 'xiaoya' ? 'border-primary-500' : isNetdiskSource(detail.source) ? 'border-purple-500' : detail.source === 'openlist' || detail.source === 'emby' || detail.source?.startsWith('emby_') ? 'border-yellow-500' : 'border-gray-500/60'
                           }`}
                         onClick={fetchCurrentSourceVideoInfo}
                       >
@@ -9783,7 +9783,7 @@ function PlayPageClient() {
               {/* 封面展示 */}
               <div className='hidden md:block md:col-span-1 md:order-first'>
                 <div className='pl-0 py-4 pr-6 max-w-sm mx-auto'>
-                  <div className='relative bg-gray-300 dark:bg-gray-700 aspect-[2/3] flex items-center justify-center rounded-xl overflow-hidden'>
+                  <div className='relative bg-gray-700 aspect-[2/3] flex items-center justify-center rounded-xl overflow-hidden'>
                     {videoCover ? (
                       <>
                         <ProxyImage
@@ -9800,7 +9800,7 @@ function PlayPageClient() {
                             rel='noopener noreferrer'
                             className='absolute top-3 left-3'
                           >
-                            <div className='bg-green-500 text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:bg-green-600 hover:scale-[1.1] transition-all duration-300 ease-out'>
+                            <div className='bg-primary-500 text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:bg-green-600 hover:scale-[1.1] transition-all duration-300 ease-out'>
                               <svg
                                 width='16'
                                 height='16'
@@ -9869,7 +9869,7 @@ function PlayPageClient() {
                   {/* 标题 */}
                   <div className='px-3 md:px-6 py-4 border-b border-blue-200 dark:border-blue-700'>
                     <h3 className='text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2'>
-                      <svg className='w-5 h-5 text-blue-600 dark:text-blue-400' fill='currentColor' viewBox='0 0 24 24'>
+                      <svg className='w-5 h-5 text-primary-600 dark:text-blue-400' fill='currentColor' viewBox='0 0 24 24'>
                         <path d='M13 10V3L4 14h7v7l9-11h-7z' />
                       </svg>
                       AI生成评论

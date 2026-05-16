@@ -345,7 +345,7 @@ export default function EpisodeFilterSettings({
                 {config.reverseMode ? (
                   <ToggleRight
                     size={28}
-                    className="text-green-500 hover:text-green-400 transition-colors duration-150"
+                    className="text-primary-500 hover:text-green-400 transition-colors duration-150"
                   />
                 ) : (
                   <ToggleLeft
@@ -374,13 +374,13 @@ export default function EpisodeFilterSettings({
                 spellCheck="false"
                 data-form-type="other"
                 data-lpignore="true"
-                className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-200 dark:border-gray-600 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all duration-200"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all duration-200"
               />
               <div className="flex gap-2">
                 <select
                   value={newType}
                   onChange={(e) => setNewType(e.target.value as 'normal' | 'regex')}
-                  className="flex-1 px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-200 dark:border-gray-600 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all duration-200"
+                  className="flex-1 px-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all duration-200"
                 >
                   <option value="normal">普通模式</option>
                   <option value="regex">正則模式</option>
@@ -446,7 +446,7 @@ export default function EpisodeFilterSettings({
                       {rule.enabled ? (
                         <ToggleRight
                           size={28}
-                          className="text-green-500 hover:text-green-400 transition-colors duration-150"
+                          className="text-primary-500 hover:text-green-400 transition-colors duration-150"
                         />
                       ) : (
                         <ToggleLeft

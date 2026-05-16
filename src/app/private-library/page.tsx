@@ -584,7 +584,7 @@ export default function PrivateLibraryPage() {
           {mounted && (
             <button
               onClick={() => router.push('/movie-request')}
-              className='flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
+              className='flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-blue-400 transition-colors'
               style={{ marginTop: '10px' }}
             >
               <Film size={20} />
@@ -674,7 +674,7 @@ export default function PrivateLibraryPage() {
             </div>
             {loadingViews ? (
               <div className='flex justify-center'>
-                <div className='w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin' />
+                <div className='w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin' />
               </div>
             ) : embyViews.length > 0 ? (
               <div className='relative'>
@@ -733,10 +733,10 @@ export default function PrivateLibraryPage() {
                       showSortDropdown
                         ? isDefaultSort()
                           ? 'text-gray-900 dark:text-gray-100 cursor-default'
-                          : 'text-green-600 dark:text-green-400 cursor-default'
+                          : 'text-primary-600 dark:text-green-400 cursor-default'
                         : isDefaultSort()
                           ? 'text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 cursor-pointer'
-                          : 'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 cursor-pointer'
+                          : 'text-primary-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 cursor-pointer'
                     }`}
                   >
                     <span>{getSortDisplayText()}</span>
@@ -760,7 +760,7 @@ export default function PrivateLibraryPage() {
                     className={`relative z-10 px-1.5 py-0.5 sm:px-2 sm:py-1 md:px-4 md:py-2 text-xs sm:text-sm font-medium rounded-full transition-all duration-200 whitespace-nowrap ${
                       isDefaultSort()
                         ? 'text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 cursor-pointer'
-                        : 'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 cursor-pointer'
+                        : 'text-primary-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 cursor-pointer'
                     }`}
                     aria-label={sortOrder === 'Ascending' ? '升序' : '降序'}
                   >
@@ -822,12 +822,12 @@ export default function PrivateLibraryPage() {
             <div className='space-y-4'>
               {/* 文件夹骨架屏 */}
               <div className='space-y-2'>
-                <div className='h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse' />
+                <div className='h-5 w-16 bg-gray-800 rounded animate-pulse' />
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'>
                   {Array.from({ length: 12 }).map((_, index) => (
                     <div
                       key={index}
-                      className='h-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse'
+                      className='h-12 bg-gray-800 rounded-lg animate-pulse'
                     />
                   ))}
                 </div>
@@ -839,7 +839,7 @@ export default function PrivateLibraryPage() {
               {Array.from({ length: pageSize }).map((_, index) => (
                 <div
                   key={index}
-                  className='animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg aspect-[2/3]'
+                  className='animate-pulse bg-gray-800 rounded-lg aspect-[2/3]'
                 />
               ))}
             </div>
@@ -878,7 +878,7 @@ export default function PrivateLibraryPage() {
                   <button
                     onClick={handleXiaoyaSearch}
                     disabled={!xiaoyaSearchKeyword.trim() || isSearching}
-                    className='absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed'
+                    className='absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-primary-600 dark:hover:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed'
                   >
                     <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 20 20'>
                       <path fillRule='evenodd' d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z' clipRule='evenodd' />
@@ -900,7 +900,7 @@ export default function PrivateLibraryPage() {
                       setXiaoyaSearchKeyword('');
                       setXiaoyaSearchResults([]);
                     }}
-                    className='text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
+                    className='text-sm text-primary-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300'
                   >
                     返回浏览
                   </button>
@@ -939,11 +939,11 @@ export default function PrivateLibraryPage() {
                         className='flex items-center gap-2 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-left'
                       >
                         {isVideoFile ? (
-                          <svg className='w-5 h-5 text-green-600 flex-shrink-0' fill='currentColor' viewBox='0 0 20 20'>
+                          <svg className='w-5 h-5 text-primary-600 flex-shrink-0' fill='currentColor' viewBox='0 0 20 20'>
                             <path d='M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z' />
                           </svg>
                         ) : (
-                          <svg className='w-5 h-5 text-blue-600 flex-shrink-0' fill='currentColor' viewBox='0 0 20 20'>
+                          <svg className='w-5 h-5 text-primary-600 flex-shrink-0' fill='currentColor' viewBox='0 0 20 20'>
                             <path d='M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z' />
                           </svg>
                         )}
@@ -959,7 +959,7 @@ export default function PrivateLibraryPage() {
             ) : isSearching ? (
               <div className='flex justify-center py-8'>
                 <div className='flex items-center gap-2 text-gray-600 dark:text-gray-400'>
-                  <div className='w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin' />
+                  <div className='w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin' />
                   <span>搜索中...</span>
                 </div>
               </div>
@@ -969,7 +969,7 @@ export default function PrivateLibraryPage() {
             <div className='flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400'>
               <button
                 onClick={() => setXiaoyaPath('/')}
-                className='hover:text-blue-600 dark:hover:text-blue-400'
+                className='hover:text-primary-600 dark:hover:text-blue-400'
               >
                 根目录
               </button>
@@ -980,7 +980,7 @@ export default function PrivateLibraryPage() {
                     <span>/</span>
                     <button
                       onClick={() => setXiaoyaPath(path)}
-                      className='hover:text-blue-600 dark:hover:text-blue-400'
+                      className='hover:text-primary-600 dark:hover:text-blue-400'
                     >
                       {part}
                     </button>
@@ -1000,7 +1000,7 @@ export default function PrivateLibraryPage() {
                       onClick={() => setXiaoyaPath(folder.path)}
                       className='flex items-center gap-2 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-left'
                     >
-                      <svg className='w-5 h-5 text-blue-600' fill='currentColor' viewBox='0 0 20 20'>
+                      <svg className='w-5 h-5 text-primary-600' fill='currentColor' viewBox='0 0 20 20'>
                         <path d='M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z' />
                       </svg>
                       <span className='text-sm truncate'>{folder.name}</span>
@@ -1034,7 +1034,7 @@ export default function PrivateLibraryPage() {
                         }}
                         className='flex items-center gap-2 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-left'
                       >
-                        <svg className='w-5 h-5 text-green-600' fill='currentColor' viewBox='0 0 20 20'>
+                        <svg className='w-5 h-5 text-primary-600' fill='currentColor' viewBox='0 0 20 20'>
                           <path d='M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z' />
                         </svg>
                         <span className='text-sm truncate'>{file.name}</span>
@@ -1097,7 +1097,7 @@ export default function PrivateLibraryPage() {
             <div ref={observerTarget} className='flex justify-center items-center py-8 min-h-[100px]'>
               {loadingMore && (
                 <div className='flex items-center gap-2 text-gray-600 dark:text-gray-400'>
-                  <div className='w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin' />
+                  <div className='w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin' />
                   <span>加載中...</span>
                 </div>
               )}

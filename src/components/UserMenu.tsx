@@ -397,7 +397,7 @@ export const UserMenu: React.FC = () => {
 
             if (messageEl) {
               messageEl.textContent = '訂閱token已重置！';
-              messageEl.className = 'text-xs text-center text-green-600 dark:text-green-400 mt-2';
+              messageEl.className = 'text-xs text-center text-primary-600 dark:text-green-400 mt-2';
               messageEl.classList.remove('hidden');
               setTimeout(() => {
                 messageEl.classList.add('hidden');
@@ -1521,7 +1521,7 @@ export const UserMenu: React.FC = () => {
               onClick={handleOpenProfileCenter}
               className='flex items-center gap-3 rounded-xl px-2 py-1 text-left hover:bg-white/70 dark:hover:bg-gray-700/40 transition-colors'
             >
-              <div className='relative flex h-11 w-11 items-center justify-center rounded-full bg-blue-500 text-lg font-semibold text-white shadow-sm'>
+              <div className='relative flex h-11 w-11 items-center justify-center rounded-full bg-primary-500 text-lg font-semibold text-white shadow-sm'>
                 <span>{avatarText}</span>
                 {shouldShowRoleBadge && (
                   <span
@@ -1774,7 +1774,7 @@ export const UserMenu: React.FC = () => {
                       <button
                         type='button'
                         onClick={() => setIsDoubanDropdownOpen(!isDoubanDropdownOpen)}
-                        className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
+                        className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
                       >
                         {
                           doubanDataSourceOptions.find(
@@ -1803,13 +1803,13 @@ export const UserMenu: React.FC = () => {
                                 setIsDoubanDropdownOpen(false);
                               }}
                               className={`w-full px-3 py-2.5 text-left text-sm transition-colors duration-150 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 ${doubanDataSource === option.value
-                                ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+                                ? 'bg-green-50 dark:bg-green-900/20 text-primary-600 dark:text-green-400'
                                 : 'text-gray-900 dark:text-gray-100'
                                 }`}
                             >
                               <span className='truncate'>{option.label}</span>
                               {doubanDataSource === option.value && (
-                                <Check className='w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 ml-2' />
+                                <Check className='w-4 h-4 text-primary-600 dark:text-green-400 flex-shrink-0 ml-2' />
                               )}
                             </button>
                           ))}
@@ -1849,7 +1849,7 @@ export const UserMenu: React.FC = () => {
                       </div>
                       <input
                         type='text'
-                        className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
+                        className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
                         placeholder='例如: https://proxy.example.com/fetch?url='
                         value={doubanProxyUrl}
                         onChange={(e) => handleDoubanProxyUrlChange(e.target.value)}
@@ -1880,7 +1880,7 @@ export const UserMenu: React.FC = () => {
                         onClick={() =>
                           setIsDoubanBackupDropdownOpen(!isDoubanBackupDropdownOpen)
                         }
-                        className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
+                        className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
                       >
                         {
                           doubanDataSourceOptions.find(
@@ -1905,13 +1905,13 @@ export const UserMenu: React.FC = () => {
                                 setIsDoubanBackupDropdownOpen(false);
                               }}
                               className={`w-full px-3 py-2.5 text-left text-sm transition-colors duration-150 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 ${doubanDataSourceBackup === option.value
-                                ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+                                ? 'bg-green-50 dark:bg-green-900/20 text-primary-600 dark:text-green-400'
                                 : 'text-gray-900 dark:text-gray-100'
                                 }`}
                             >
                               <span className='truncate'>{option.label}</span>
                               {doubanDataSourceBackup === option.value && (
-                                <Check className='w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 ml-2' />
+                                <Check className='w-4 h-4 text-primary-600 dark:text-green-400 flex-shrink-0 ml-2' />
                               )}
                             </button>
                           ))}
@@ -1932,7 +1932,7 @@ export const UserMenu: React.FC = () => {
                       </div>
                       <input
                         type='text'
-                        className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
+                        className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
                         placeholder='例如: https://proxy.example.com/fetch?url='
                         value={doubanProxyUrlBackup}
                         onChange={(e) =>
@@ -1969,7 +1969,7 @@ export const UserMenu: React.FC = () => {
                             !isDoubanImageProxyDropdownOpen
                           )
                         }
-                        className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
+                        className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
                       >
                         {
                           doubanImageProxyTypeOptions.find(
@@ -1998,13 +1998,13 @@ export const UserMenu: React.FC = () => {
                                 setIsDoubanImageProxyDropdownOpen(false);
                               }}
                               className={`w-full px-3 py-2.5 text-left text-sm transition-colors duration-150 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 ${doubanImageProxyType === option.value
-                                ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+                                ? 'bg-green-50 dark:bg-green-900/20 text-primary-600 dark:text-green-400'
                                 : 'text-gray-900 dark:text-gray-100'
                                 }`}
                             >
                               <span className='truncate'>{option.label}</span>
                               {doubanImageProxyType === option.value && (
-                                <Check className='w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 ml-2' />
+                                <Check className='w-4 h-4 text-primary-600 dark:text-green-400 flex-shrink-0 ml-2' />
                               )}
                             </button>
                           ))}
@@ -2047,7 +2047,7 @@ export const UserMenu: React.FC = () => {
                       </div>
                       <input
                         type='text'
-                        className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
+                        className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
                         placeholder='例如: https://proxy.example.com/fetch?url='
                         value={doubanImageProxyUrl}
                         onChange={(e) =>
@@ -2082,7 +2082,7 @@ export const UserMenu: React.FC = () => {
                             !isDoubanImageProxyBackupDropdownOpen
                           )
                         }
-                        className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
+                        className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
                       >
                         {
                           doubanImageProxyTypeOptions.find(
@@ -2107,13 +2107,13 @@ export const UserMenu: React.FC = () => {
                                 setIsDoubanImageProxyBackupDropdownOpen(false);
                               }}
                               className={`w-full px-3 py-2.5 text-left text-sm transition-colors duration-150 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 ${doubanImageProxyTypeBackup === option.value
-                                ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+                                ? 'bg-green-50 dark:bg-green-900/20 text-primary-600 dark:text-green-400'
                                 : 'text-gray-900 dark:text-gray-100'
                                 }`}
                             >
                               <span className='truncate'>{option.label}</span>
                               {doubanImageProxyTypeBackup === option.value && (
-                                <Check className='w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 ml-2' />
+                                <Check className='w-4 h-4 text-primary-600 dark:text-green-400 flex-shrink-0 ml-2' />
                               )}
                             </button>
                           ))}
@@ -2134,7 +2134,7 @@ export const UserMenu: React.FC = () => {
                       </div>
                       <input
                         type='text'
-                        className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
+                        className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
                         placeholder='例如: https://proxy.example.com/fetch?url='
                         value={doubanImageProxyUrlBackup}
                         onChange={(e) =>
@@ -2164,7 +2164,7 @@ export const UserMenu: React.FC = () => {
                     </div>
                     <input
                       type='text'
-                      className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
+                      className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
                       placeholder='例如: https://image.tmdb.org'
                       value={tmdbImageBaseUrl}
                       onChange={(e) =>
@@ -2213,7 +2213,7 @@ export const UserMenu: React.FC = () => {
                           checked={defaultAggregateSearch}
                           onChange={(e) => handleAggregateToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2237,7 +2237,7 @@ export const UserMenu: React.FC = () => {
                           checked={enableOptimization}
                           onChange={(e) => handleOptimizationToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2257,7 +2257,7 @@ export const UserMenu: React.FC = () => {
                               onClick={() => handlePreferStrategyChange('fast')}
                               className={`rounded-md px-4 py-1.5 text-xs font-medium transition-all ${
                                 preferStrategy === 'fast'
-                                  ? 'bg-white text-green-600 shadow-sm dark:bg-gray-700 dark:text-green-400'
+                                  ? 'bg-white text-primary-600 shadow-sm dark:bg-gray-700 dark:text-green-400'
                                   : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                               }`}
                             >
@@ -2268,7 +2268,7 @@ export const UserMenu: React.FC = () => {
                               onClick={() => handlePreferStrategyChange('full')}
                               className={`rounded-md px-4 py-1.5 text-xs font-medium transition-all ${
                                 preferStrategy === 'full'
-                                  ? 'bg-white text-green-600 shadow-sm dark:bg-gray-700 dark:text-green-400'
+                                  ? 'bg-white text-primary-600 shadow-sm dark:bg-gray-700 dark:text-green-400'
                                   : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                               }`}
                             >
@@ -2303,25 +2303,25 @@ export const UserMenu: React.FC = () => {
                       <div className='flex justify-between text-xs text-gray-500 dark:text-gray-400'>
                         <button
                           onClick={() => handleSpeedTestTimeoutChange(4000)}
-                          className={`px-2 py-0.5 rounded ${speedTestTimeout === 4000 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                          className={`px-2 py-0.5 rounded ${speedTestTimeout === 4000 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                         >
                           4秒
                         </button>
                         <button
                           onClick={() => handleSpeedTestTimeoutChange(10000)}
-                          className={`px-2 py-0.5 rounded ${speedTestTimeout === 10000 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                          className={`px-2 py-0.5 rounded ${speedTestTimeout === 10000 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                         >
                           10秒
                         </button>
                         <button
                           onClick={() => handleSpeedTestTimeoutChange(20000)}
-                          className={`px-2 py-0.5 rounded ${speedTestTimeout === 20000 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                          className={`px-2 py-0.5 rounded ${speedTestTimeout === 20000 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                         >
                           20秒
                         </button>
                         <button
                           onClick={() => handleSpeedTestTimeoutChange(30000)}
-                          className={`px-2 py-0.5 rounded ${speedTestTimeout === 30000 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                          className={`px-2 py-0.5 rounded ${speedTestTimeout === 30000 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                         >
                           30秒
                         </button>
@@ -2350,7 +2350,7 @@ export const UserMenu: React.FC = () => {
                           checked={fluidSearch}
                           onChange={(e) => handleFluidSearchToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2374,7 +2374,7 @@ export const UserMenu: React.FC = () => {
                           checked={tmdbBackdropDisabled}
                           onChange={(e) => handleTmdbBackdropDisabledToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2398,7 +2398,7 @@ export const UserMenu: React.FC = () => {
                           checked={enableTrailers}
                           onChange={(e) => handleEnableTrailersToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2422,7 +2422,7 @@ export const UserMenu: React.FC = () => {
                           checked={searchTraditionalToSimplified}
                           onChange={(e) => handleSearchTraditionalToSimplifiedToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2446,7 +2446,7 @@ export const UserMenu: React.FC = () => {
                           checked={exactSearch}
                           onChange={(e) => handleExactSearchToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2510,13 +2510,13 @@ export const UserMenu: React.FC = () => {
                     <div className='flex justify-between text-xs text-gray-500 dark:text-gray-400'>
                       <button
                         onClick={() => handleMaxConcurrentDownloadsChange(1)}
-                        className={`px-2 py-0.5 rounded ${maxConcurrentDownloads === 1 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                        className={`px-2 py-0.5 rounded ${maxConcurrentDownloads === 1 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                       >
                         1个
                       </button>
                       <button
                         onClick={() => handleMaxConcurrentDownloadsChange(10)}
-                        className={`px-2 py-0.5 rounded ${maxConcurrentDownloads === 10 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                        className={`px-2 py-0.5 rounded ${maxConcurrentDownloads === 10 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                       >
                         10个
                       </button>
@@ -2558,13 +2558,13 @@ export const UserMenu: React.FC = () => {
                     <div className='flex justify-between text-xs text-gray-500 dark:text-gray-400'>
                       <button
                         onClick={() => handleDownloadThreadsPerTaskChange(1)}
-                        className={`px-2 py-0.5 rounded ${downloadThreadsPerTask === 1 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                        className={`px-2 py-0.5 rounded ${downloadThreadsPerTask === 1 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                       >
                         1个
                       </button>
                       <button
                         onClick={() => handleDownloadThreadsPerTaskChange(32)}
-                        className={`px-2 py-0.5 rounded ${downloadThreadsPerTask === 32 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                        className={`px-2 py-0.5 rounded ${downloadThreadsPerTask === 32 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                       >
                         32个
                       </button>
@@ -2586,7 +2586,7 @@ export const UserMenu: React.FC = () => {
                           value='browser'
                           checked={downloadMode === 'browser'}
                           onChange={() => handleDownloadModeChange('browser')}
-                          className='w-4 h-4 text-green-500'
+                          className='w-4 h-4 text-primary-500'
                         />
                         <span className='text-sm text-gray-700 dark:text-gray-300'>
                           浏览器下载（合并为单文件）
@@ -2599,7 +2599,7 @@ export const UserMenu: React.FC = () => {
                           value='filesystem'
                           checked={downloadMode === 'filesystem'}
                           onChange={() => handleDownloadModeChange('filesystem')}
-                          className='w-4 h-4 text-green-500'
+                          className='w-4 h-4 text-primary-500'
                         />
                         <span className='text-sm text-gray-700 dark:text-gray-300'>
                           File System API（保存分片到本地目录）
@@ -2623,7 +2623,7 @@ export const UserMenu: React.FC = () => {
                           />
                           <button
                             onClick={handleSelectSavePath}
-                            className='px-4 py-2 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors'
+                            className='px-4 py-2 text-sm bg-primary-500 text-white rounded hover:bg-green-600 transition-colors'
                           >
                             选择目录
                           </button>
@@ -2639,7 +2639,7 @@ export const UserMenu: React.FC = () => {
                   <div className='space-y-2'>
                     <button
                       onClick={() => setIsDownloadManagementOpen(true)}
-                      className='w-full px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center justify-center gap-2'
+                      className='w-full px-4 py-2 text-sm bg-primary-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center justify-center gap-2'
                     >
                       <Package className='w-4 h-4' />
                       下载文件管理
@@ -2699,7 +2699,7 @@ export const UserMenu: React.FC = () => {
                           const strategy = getBufferStrategyFromSlider(sliderValue);
                           handleBufferStrategyChange(strategy);
                         }}
-                        className='w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500'
+                        className='w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-green-500'
                         style={{
                           background: `linear-gradient(to right, rgb(34 197 94) 0%, rgb(34 197 94) ${(getSliderValueFromStrategy(bufferStrategy) / 3) * 100}%, rgb(229 231 235) ${(getSliderValueFromStrategy(bufferStrategy) / 3) * 100}%, rgb(229 231 235) 100%)`
                         }}
@@ -2707,16 +2707,16 @@ export const UserMenu: React.FC = () => {
 
                       {/* 标签显示 */}
                       <div className='flex justify-between text-xs text-gray-500 dark:text-gray-400 px-1'>
-                        <span className={bufferStrategy === 'low' ? 'font-semibold text-green-600 dark:text-green-400' : ''}>
+                        <span className={bufferStrategy === 'low' ? 'font-semibold text-primary-600 dark:text-green-400' : ''}>
                           低缓冲
                         </span>
-                        <span className={bufferStrategy === 'medium' ? 'font-semibold text-green-600 dark:text-green-400' : ''}>
+                        <span className={bufferStrategy === 'medium' ? 'font-semibold text-primary-600 dark:text-green-400' : ''}>
                           中缓冲
                         </span>
-                        <span className={bufferStrategy === 'high' ? 'font-semibold text-green-600 dark:text-green-400' : ''}>
+                        <span className={bufferStrategy === 'high' ? 'font-semibold text-primary-600 dark:text-green-400' : ''}>
                           高缓冲
                         </span>
-                        <span className={bufferStrategy === 'ultra' ? 'font-semibold text-green-600 dark:text-green-400' : ''}>
+                        <span className={bufferStrategy === 'ultra' ? 'font-semibold text-primary-600 dark:text-green-400' : ''}>
                           超高缓冲
                         </span>
                       </div>
@@ -2750,7 +2750,7 @@ export const UserMenu: React.FC = () => {
                           checked={nextEpisodePreCache}
                           onChange={(e) => handleNextEpisodePreCacheToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2797,7 +2797,7 @@ export const UserMenu: React.FC = () => {
                           checked={disableAutoLoadDanmaku}
                           onChange={(e) => handleDisableAutoLoadDanmakuToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2821,7 +2821,7 @@ export const UserMenu: React.FC = () => {
                           checked={nextEpisodeDanmakuPreload}
                           onChange={(e) => handleNextEpisodeDanmakuPreloadToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2845,7 +2845,7 @@ export const UserMenu: React.FC = () => {
                           checked={danmakuHeatmapDisabled}
                           onChange={(e) => handleDanmakuHeatmapDisabledToggle(e.target.checked)}
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                         <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                       </div>
                     </label>
@@ -2878,28 +2878,28 @@ export const UserMenu: React.FC = () => {
                     <div className='relative text-xs text-gray-500 dark:text-gray-400' style={{ height: '24px' }}>
                       <button
                         onClick={() => handleDanmakuMaxCountChange(0)}
-                        className={`absolute px-2 py-0.5 rounded ${danmakuMaxCount === 0 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                        className={`absolute px-2 py-0.5 rounded ${danmakuMaxCount === 0 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                         style={{ left: '0%', transform: 'translateX(0%)' }}
                       >
                         无上限
                       </button>
                       <button
                         onClick={() => handleDanmakuMaxCountChange(3000)}
-                        className={`absolute px-2 py-0.5 rounded ${danmakuMaxCount === 3000 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                        className={`absolute px-2 py-0.5 rounded ${danmakuMaxCount === 3000 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                         style={{ left: '30%', transform: 'translateX(-50%)' }}
                       >
                         3000
                       </button>
                       <button
                         onClick={() => handleDanmakuMaxCountChange(5000)}
-                        className={`absolute px-2 py-0.5 rounded ${danmakuMaxCount === 5000 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                        className={`absolute px-2 py-0.5 rounded ${danmakuMaxCount === 5000 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                         style={{ left: '50%', transform: 'translateX(-50%)' }}
                       >
                         5000
                       </button>
                       <button
                         onClick={() => handleDanmakuMaxCountChange(10000)}
-                        className={`absolute px-2 py-0.5 rounded ${danmakuMaxCount === 10000 ? 'bg-green-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                        className={`absolute px-2 py-0.5 rounded ${danmakuMaxCount === 10000 ? 'bg-primary-500 text-white' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                         style={{ left: '100%', transform: 'translateX(-100%)' }}
                       >
                         10000
@@ -2993,7 +2993,7 @@ export const UserMenu: React.FC = () => {
                         title={homeBannerEnabled ? '點擊隱藏' : '點擊顯示'}
                       >
                         {homeBannerEnabled ? (
-                          <Eye className='w-5 h-5 text-green-600 dark:text-green-400' />
+                          <Eye className='w-5 h-5 text-primary-600 dark:text-green-400' />
                         ) : (
                           <EyeOff className='w-5 h-5 text-gray-400 dark:text-gray-500' />
                         )}
@@ -3016,7 +3016,7 @@ export const UserMenu: React.FC = () => {
                         title={homeContinueWatchingEnabled ? '點擊隱藏' : '點擊顯示'}
                       >
                         {homeContinueWatchingEnabled ? (
-                          <Eye className='w-5 h-5 text-green-600 dark:text-green-400' />
+                          <Eye className='w-5 h-5 text-primary-600 dark:text-green-400' />
                         ) : (
                           <EyeOff className='w-5 h-5 text-gray-400 dark:text-gray-500' />
                         )}
@@ -3047,7 +3047,7 @@ export const UserMenu: React.FC = () => {
                           title={module.enabled ? '點擊隱藏' : '點擊顯示'}
                         >
                           {module.enabled ? (
-                            <Eye className='w-5 h-5 text-green-600 dark:text-green-400' />
+                            <Eye className='w-5 h-5 text-primary-600 dark:text-green-400' />
                           ) : (
                             <EyeOff className='w-5 h-5 text-gray-400 dark:text-gray-500' />
                           )}
@@ -3100,7 +3100,7 @@ export const UserMenu: React.FC = () => {
                         window.dispatchEvent(new CustomEvent('homeModulesUpdated'));
                       }
                     }}
-                    className='w-full px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition-colors'
+                    className='w-full px-4 py-2 bg-gray-100 hover:bg-gray-800 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition-colors'
                   >
                     恢复默认配置
                   </button>
@@ -3177,27 +3177,27 @@ export const UserMenu: React.FC = () => {
               <>
                 {/* 加载骨架 - 开关 */}
                 <div>
-                  <div className='h-5 w-24 bg-gray-200 dark:bg-gray-700 rounded mb-3 animate-pulse'></div>
+                  <div className='h-5 w-24 bg-gray-800 rounded mb-3 animate-pulse'></div>
                   <div className='space-y-2'>
-                    <div className='h-14 bg-gray-200 dark:bg-gray-700 rounded animate-pulse'></div>
-                    <div className='h-14 bg-gray-200 dark:bg-gray-700 rounded animate-pulse'></div>
+                    <div className='h-14 bg-gray-800 rounded animate-pulse'></div>
+                    <div className='h-14 bg-gray-800 rounded animate-pulse'></div>
                   </div>
                 </div>
 
                 {/* 加载骨架 - 订阅链接 */}
                 <div>
-                  <div className='h-5 w-28 bg-gray-200 dark:bg-gray-700 rounded mb-2 animate-pulse'></div>
+                  <div className='h-5 w-28 bg-gray-800 rounded mb-2 animate-pulse'></div>
                   <div className='flex gap-2'>
-                    <div className='flex-1 h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse'></div>
-                    <div className='w-20 h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse'></div>
+                    <div className='flex-1 h-10 bg-gray-800 rounded animate-pulse'></div>
+                    <div className='w-20 h-10 bg-gray-800 rounded animate-pulse'></div>
                   </div>
-                  <div className='h-4 w-full bg-gray-200 dark:bg-gray-700 rounded mt-1 animate-pulse'></div>
+                  <div className='h-4 w-full bg-gray-800 rounded mt-1 animate-pulse'></div>
                 </div>
 
                 {/* 加载骨架 - 重置按钮 */}
                 <div className='pt-2'>
-                  <div className='w-full h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse'></div>
-                  <div className='h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded mt-2 mx-auto animate-pulse'></div>
+                  <div className='w-full h-10 bg-gray-800 rounded animate-pulse'></div>
+                  <div className='h-4 w-40 bg-gray-800 rounded mt-2 mx-auto animate-pulse'></div>
                 </div>
               </>
             ) : (
@@ -3220,7 +3220,7 @@ export const UserMenu: React.FC = () => {
                         开启后通过代理处理播放链接，兼容性可能略低
                       </div>
                     </div>
-                    <div className={`relative h-6 w-11 rounded-full transition-colors ${subscribeAdFilterEnabled ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                    <div className={`relative h-6 w-11 rounded-full transition-colors ${subscribeAdFilterEnabled ? 'bg-primary-500' : 'bg-gray-300 dark:bg-gray-600'}`}>
                       <div className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${subscribeAdFilterEnabled ? 'translate-x-5' : 'translate-x-0.5'}`} />
                     </div>
                   </button>
@@ -3484,7 +3484,7 @@ export const UserMenu: React.FC = () => {
           <div className='p-6 border-t border-gray-200 dark:border-gray-700'>
             <button
               onClick={() => setIsReportOpen(false)}
-              className='w-full px-4 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors'
+              className='w-full px-4 py-2.5 bg-gray-200 hover:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-lg transition-colors'
             >
               我知道了
             </button>
@@ -3564,7 +3564,7 @@ export const UserMenu: React.FC = () => {
                       alt='MoonTVPlus-PC'
                       className='w-16 h-16 rounded-xl object-cover'
                     />
-                    <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-lg'>
+                    <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center shadow-lg'>
                       <Monitor className='w-3.5 h-3.5 text-white' />
                     </div>
                   </div>
@@ -3579,7 +3579,7 @@ export const UserMenu: React.FC = () => {
                       href='https://github.com/mtvpls/MoonTVPlus-PC/releases'
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='inline-flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors'
+                      className='inline-flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors'
                     >
                       <Download className='w-4 h-4' />
                       下载
@@ -3614,7 +3614,7 @@ export const UserMenu: React.FC = () => {
                         href='https://github.com/mtvpls/Selene-Build/releases'
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='inline-flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors'
+                        className='inline-flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors'
                       >
                         <Download className='w-4 h-4' />
                         下载
@@ -3876,7 +3876,7 @@ export const UserMenu: React.FC = () => {
               <div className='p-6 pt-0 flex gap-3 justify-end'>
                 <button
                   onClick={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
-                  className='px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors'
+                  className='px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 hover:bg-gray-800 dark:hover:bg-gray-600 rounded-lg transition-colors'
                 >
                   取消
                 </button>

@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Play, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Volume2, VolumeX, Info } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef,useState } from 'react';
@@ -462,17 +462,18 @@ export default function BannerCarousel({ autoPlayInterval = 5000, delayLoad = fa
                 loading={index === 0 ? 'eager' : 'lazy'}
               />
             )}
-            {/* 渐变遮罩 */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            {/* 渐变遮罩 - Netflix 風格 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-[rgba(20,20,20,0.5)] to-transparent w-full md:w-[70%]"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[rgba(20,20,20,0.2)] to-transparent h-full"></div>
+            <div className="absolute inset-0 bg-[#141414]/20"></div>
           </div>
         ))}
       </div>
 
       {/* 内容信息 */}
-      <div className="absolute inset-0 flex items-end p-8 md:p-12 pointer-events-none">
-        <div className="max-w-2xl space-y-4">
-          <h2 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">
+      <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 pb-10 md:pb-24 pointer-events-none z-10">
+        <div className="w-full md:max-w-[40%] space-y-4 md:space-y-6">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white drop-shadow-2xl">
             {currentItem.title}
           </h2>
 
@@ -509,20 +510,32 @@ export default function BannerCarousel({ autoPlayInterval = 5000, delayLoad = fa
             )}
           </div>
 
-          {/* PC端播放按钮 */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handlePlay(currentItem.title);
-            }}
-            className="hidden md:flex items-center gap-2 px-6 py-3 bg-gray-500/30 hover:bg-gray-500/50 backdrop-blur-sm text-white font-semibold rounded-lg transition-all pointer-events-auto"
-          >
-            <Play className="w-5 h-5 fill-white" />
-            立即播放
-          </button>
+          {/* Netflix 風格播放與詳情按鈕 */}
+          <div className="flex items-center gap-3 pt-2 md:pt-4 pointer-events-auto">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePlay(currentItem.title);
+              }}
+              className="flex items-center justify-center gap-2 px-4 md:px-7 py-1.5 md:py-2.5 bg-white hover:bg-white/80 text-black font-bold rounded md:rounded-md transition-all shadow-md"
+            >
+              <Play className="w-5 h-5 md:w-7 md:h-7 fill-black text-black" />
+              <span className="text-sm md:text-xl">播放</span>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePlay(currentItem.title); // Note: Assuming play goes to detail page, or you might want to show detail panel here.
+              }}
+              className="flex items-center justify-center gap-2 px-4 md:px-7 py-1.5 md:py-2.5 bg-[rgba(109,109,110,0.7)] hover:bg-[rgba(109,109,110,0.4)] text-white font-bold rounded md:rounded-md transition-all shadow-md"
+            >
+              <Info className="w-5 h-5 md:w-7 md:h-7 text-white" />
+              <span className="text-sm md:text-xl">更多資訊</span>
+            </button>
+          </div>
 
           {currentItem.overview && (
-            <p className="text-sm md:text-base text-white/80 line-clamp-3 drop-shadow-md">
+            <p className="text-sm md:text-lg text-white drop-shadow-lg line-clamp-3 md:line-clamp-4 font-medium max-w-full">
               {currentItem.overview}
             </p>
           )}

@@ -125,7 +125,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
         </div>
         <button
           onClick={startLoading}
-          className='px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2'
+          className='px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2'
         >
           <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
             <path
@@ -144,7 +144,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
   if (loading && comments.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center py-12'>
-        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-3'></div>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mb-3'></div>
         <span className='text-gray-600 dark:text-gray-400'>AI正在生成評論...</span>
         <span className='text-xs text-gray-500 dark:text-gray-500 mt-2'>
           这可能需要几秒钟
@@ -163,7 +163,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
         </p>
         <button
           onClick={startLoading}
-          className='px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors'
+          className='px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-blue-600 transition-colors'
         >
           重试
         </button>
@@ -181,7 +181,7 @@ export default function AIComments({ movieName, movieInfo }: AICommentsProps) {
         <button
           onClick={regenerate}
           disabled={loading}
-          className='text-sm px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1'
+          className='text-sm px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-primary-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1'
         >
           <svg
             className='w-4 h-4'

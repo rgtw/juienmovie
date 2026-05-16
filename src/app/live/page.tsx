@@ -1913,21 +1913,21 @@ function LivePageClient() {
             <div className='mb-6 w-80 mx-auto'>
               <div className='flex justify-center space-x-2 mb-4'>
                 <div
-                  className={`w-3 h-3 rounded-full transition-all duration-500 ${loadingStage === 'loading' ? 'bg-green-500 scale-125' : 'bg-green-500'
+                  className={`w-3 h-3 rounded-full transition-all duration-500 ${loadingStage === 'loading' ? 'bg-primary-500 scale-125' : 'bg-primary-500'
                     }`}
                 ></div>
                 <div
-                  className={`w-3 h-3 rounded-full transition-all duration-500 ${loadingStage === 'fetching' ? 'bg-green-500 scale-125' : 'bg-green-500'
+                  className={`w-3 h-3 rounded-full transition-all duration-500 ${loadingStage === 'fetching' ? 'bg-primary-500 scale-125' : 'bg-primary-500'
                     }`}
                 ></div>
                 <div
-                  className={`w-3 h-3 rounded-full transition-all duration-500 ${loadingStage === 'ready' ? 'bg-green-500 scale-125' : 'bg-gray-300'
+                  className={`w-3 h-3 rounded-full transition-all duration-500 ${loadingStage === 'ready' ? 'bg-primary-500 scale-125' : 'bg-gray-300'
                     }`}
                 ></div>
               </div>
 
               {/* 进度条 */}
-              <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden'>
+              <div className='w-full bg-gray-800 rounded-full h-2 overflow-hidden'>
                 <div
                   className='h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-1000 ease-out'
                   style={{
@@ -2000,7 +2000,7 @@ function LivePageClient() {
         {/* 第一行：页面标题 */}
         <div className='py-1'>
           <h1 className='text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2 max-w-[80%]'>
-            <Radio className='w-5 h-5 text-blue-500 flex-shrink-0' />
+            <Radio className='w-5 h-5 text-primary-500 flex-shrink-0' />
             <div className='min-w-0 flex-1'>
               <div className='truncate'>
                 {currentSource?.name}
@@ -2307,8 +2307,8 @@ function LivePageClient() {
                     onClick={() => setActiveTab('channels')}
                     className={`flex-1 py-3 px-6 text-center cursor-pointer transition-all duration-200 font-medium
                       ${activeTab === 'channels'
-                        ? 'text-green-600 dark:text-green-400'
-                        : 'text-gray-700 hover:text-green-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
+                        ? 'text-primary-600 dark:text-green-400'
+                        : 'text-gray-700 hover:text-primary-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
                       }
                     `.trim()}
                   >
@@ -2318,8 +2318,8 @@ function LivePageClient() {
                     onClick={() => setActiveTab('sources')}
                     className={`flex-1 py-3 px-6 text-center cursor-pointer transition-all duration-200 font-medium
                       ${activeTab === 'sources'
-                        ? 'text-green-600 dark:text-green-400'
-                        : 'text-gray-700 hover:text-green-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
+                        ? 'text-primary-600 dark:text-green-400'
+                        : 'text-gray-700 hover:text-primary-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
                       }
                     `.trim()}
                   >
@@ -2430,8 +2430,8 @@ function LivePageClient() {
                                  ${isSwitchingSource
                                   ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
                                   : selectedGroup === group
-                                    ? 'text-green-500 dark:text-green-400'
-                                    : 'text-gray-700 hover:text-green-600 dark:text-gray-300 dark:hover:text-green-400'
+                                    ? 'text-primary-500 dark:text-green-400'
+                                    : 'text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-green-400'
                                 }
                                `.trim()}
                             >
@@ -2439,7 +2439,7 @@ function LivePageClient() {
                                 {group}
                               </div>
                               {selectedGroup === group && !isSwitchingSource && (
-                                <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-green-500 dark:bg-green-400' />
+                                <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500 dark:bg-green-400' />
                               )}
                             </button>
                           ))}
@@ -2468,7 +2468,7 @@ function LivePageClient() {
                                   }`}
                               >
                                 <div className='flex items-center gap-3'>
-                                  <div className='w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden'>
+                                  <div className='w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden'>
                                     {channel.logo ? (
                                       <img
                                         src={getLogoUrl(channel.logo, currentSource?.key || '')}
@@ -2516,7 +2516,7 @@ function LivePageClient() {
                                   }`}
                               >
                                 <div className='flex items-center gap-3'>
-                                  <div className='w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden'>
+                                  <div className='w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden'>
                                     {item.logo ? (
                                       <img
                                         src={getLogoUrl(item.logo, currentSource?.key || '')}
@@ -2583,7 +2583,7 @@ function LivePageClient() {
                                             {`線路${index + 1}`}
                                           </span>
                                           {isActive && (
-                                            <span className='text-xs text-green-600 dark:text-green-400'>
+                                            <span className='text-xs text-primary-600 dark:text-green-400'>
                                               当前播放
                                             </span>
                                           )}
@@ -2642,7 +2642,7 @@ function LivePageClient() {
                               onClick={() => !isCurrentSource && handleSourceChange(source)}
                               className={`flex items-start gap-3 px-2 py-3 rounded-lg transition-all select-none duration-200 relative
                                 ${isCurrentSource
-                                  ? 'bg-green-500/10 dark:bg-green-500/20 border-green-500/30 border'
+                                  ? 'bg-primary-500/10 dark:bg-primary-500/20 border-primary-500/30 border'
                                   : 'hover:bg-gray-200/50 dark:hover:bg-white/10 hover:scale-[1.02] cursor-pointer'
                                 }`.trim()}
                             >
@@ -2663,7 +2663,7 @@ function LivePageClient() {
 
                               {/* 当前标识 */}
                               {isCurrentSource && (
-                                <div className='absolute top-2 right-2 w-2 h-2 bg-green-500 rounded-full'></div>
+                                <div className='absolute top-2 right-2 w-2 h-2 bg-primary-500 rounded-full'></div>
                               )}
                             </div>
                           );
@@ -2696,7 +2696,7 @@ function LivePageClient() {
               {/* 频道图标+名称 - 在小屏幕上占100%，大屏幕占20% */}
               <div className='w-full flex-shrink-0'>
                 <div className='flex items-center gap-4'>
-                  <div className='w-20 h-20 bg-gray-300 dark:bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden'>
+                  <div className='w-20 h-20 bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden'>
                     {currentChannel.logo ? (
                       <img
                         src={getLogoUrl(currentChannel.logo, currentSource?.key || '')}

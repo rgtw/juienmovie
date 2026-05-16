@@ -257,7 +257,7 @@ export default function MovieRequestPage() {
             </h2>
             {loadingMyRequests ? (
               <div className='flex justify-center py-8'>
-                <div className='w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin' />
+                <div className='w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin' />
               </div>
             ) : myRequests.length === 0 ? (
               <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
@@ -277,7 +277,7 @@ export default function MovieRequestPage() {
                         className='w-full aspect-[2/3] object-cover'
                       />
                     ) : (
-                      <div className='w-full aspect-[2/3] bg-gray-200 dark:bg-gray-700 flex items-center justify-center'>
+                      <div className='w-full aspect-[2/3] bg-gray-800 flex items-center justify-center'>
                         <span className='text-gray-400'>無海報</span>
                       </div>
                     )}
@@ -318,7 +318,7 @@ export default function MovieRequestPage() {
                     className='w-full aspect-[2/3] object-cover'
                   />
                 ) : (
-                  <div className='w-full aspect-[2/3] bg-gray-200 dark:bg-gray-700 flex items-center justify-center'>
+                  <div className='w-full aspect-[2/3] bg-gray-800 flex items-center justify-center'>
                     <span className='text-gray-400'>無海報</span>
                   </div>
                 )}
@@ -353,7 +353,7 @@ export default function MovieRequestPage() {
           <div className='bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-sm w-full p-6'>
             <div className='flex justify-center mb-4'>
               {alertModal.type === 'success' ? (
-                <CheckCircle className='w-12 h-12 text-green-500' />
+                <CheckCircle className='w-12 h-12 text-primary-500' />
               ) : (
                 <AlertCircle className='w-12 h-12 text-red-500' />
               )}
@@ -391,7 +391,7 @@ export default function MovieRequestPage() {
             </p>
             {loadingSeasons ? (
               <div className='flex justify-center py-8'>
-                <div className='w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin' />
+                <div className='w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin' />
               </div>
             ) : (
               <div className='space-y-2 mb-4 max-h-60 overflow-y-auto'>
@@ -413,7 +413,7 @@ export default function MovieRequestPage() {
             <div className='flex gap-2'>
               <button
                 onClick={() => setShowSeasonDialog(false)}
-                className='flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600'
+                className='flex-1 px-4 py-2 bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600'
               >
                 取消
               </button>

@@ -114,7 +114,7 @@ const buttonStyles = {
   roundedDanger:
     'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 dark:text-red-200 transition-colors',
   roundedSecondary:
-    'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700/40 dark:hover:bg-gray-700/60 dark:text-gray-200 transition-colors',
+    'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-800/40 dark:hover:bg-gray-700/60 dark:text-gray-200 transition-colors',
   roundedWarning:
     'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/40 dark:hover:bg-yellow-900/60 dark:text-yellow-200 transition-colors',
   roundedPurple:
@@ -126,7 +126,7 @@ const buttonStyles = {
     'px-2 py-1 text-xs font-medium bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white rounded-md transition-colors',
   // 开关按钮样式
   toggleOn: 'bg-green-600 dark:bg-green-600',
-  toggleOff: 'bg-gray-200 dark:bg-gray-700',
+  toggleOff: 'bg-gray-800',
   toggleThumb: 'bg-white',
   toggleThumbOn: 'translate-x-6',
   toggleThumbOff: 'translate-x-1',
@@ -179,7 +179,7 @@ const AlertModal = ({
   const getIcon = () => {
     switch (type) {
       case 'success':
-        return <CheckCircle className='w-8 h-8 text-green-500' />;
+        return <CheckCircle className='w-8 h-8 text-primary-500' />;
       case 'error':
         return <AlertCircle className='w-8 h-8 text-red-500' />;
       case 'warning':
@@ -1054,7 +1054,7 @@ const UserConfig = ({
           <div className='text-2xl font-bold text-green-800 dark:text-green-300'>
             {!hasOldUserData && usersV2 ? userTotal : displayUsers.length}
           </div>
-          <div className='text-sm text-green-600 dark:text-green-400'>
+          <div className='text-sm text-primary-600 dark:text-green-400'>
             总用户数
           </div>
         </div>
@@ -1463,7 +1463,7 @@ const UserConfig = ({
                           onChange={(e) =>
                             handleSelectAllUsers(e.target.checked)
                           }
-                          className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                          className='w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
                         />
                       ) : (
                         <div className='w-4 h-4' />
@@ -1578,7 +1578,7 @@ const UserConfig = ({
                                     e.target.checked
                                   )
                                 }
-                                className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                                className='w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
                               />
                             ) : (
                               <div className='w-4 h-4' />
@@ -1787,7 +1787,7 @@ const UserConfig = ({
                   className={`px-3 py-1 text-sm rounded ${
                     userPage === 1
                       ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                      : 'bg-blue-500 hover:bg-blue-600 text-white'
+                      : 'bg-primary-500 hover:bg-blue-600 text-white'
                   }`}
                 >
                   首页
@@ -1798,7 +1798,7 @@ const UserConfig = ({
                   className={`px-3 py-1 text-sm rounded ${
                     userPage === 1
                       ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                      : 'bg-blue-500 hover:bg-blue-600 text-white'
+                      : 'bg-primary-500 hover:bg-blue-600 text-white'
                   }`}
                 >
                   上一页
@@ -1809,7 +1809,7 @@ const UserConfig = ({
                   className={`px-3 py-1 text-sm rounded ${
                     userPage === userTotalPages
                       ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                      : 'bg-blue-500 hover:bg-blue-600 text-white'
+                      : 'bg-primary-500 hover:bg-blue-600 text-white'
                   }`}
                 >
                   下一页
@@ -1820,7 +1820,7 @@ const UserConfig = ({
                   className={`px-3 py-1 text-sm rounded ${
                     userPage === userTotalPages
                       ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                      : 'bg-blue-500 hover:bg-blue-600 text-white'
+                      : 'bg-primary-500 hover:bg-blue-600 text-white'
                   }`}
                 >
                   末页
@@ -1880,7 +1880,7 @@ const UserConfig = ({
                   <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
                     <div className='flex items-center space-x-2 mb-2'>
                       <svg
-                        className='w-5 h-5 text-blue-600 dark:text-blue-400'
+                        className='w-5 h-5 text-primary-600 dark:text-blue-400'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -1925,7 +1925,7 @@ const UserConfig = ({
                               );
                             }
                           }}
-                          className='rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700'
+                          className='rounded border-gray-300 text-primary-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700'
                         />
                         <div className='flex-1 min-w-0'>
                           <div className='text-sm font-medium text-gray-900 dark:text-gray-100 truncate'>
@@ -1966,7 +1966,7 @@ const UserConfig = ({
                   </div>
                   <div className='text-sm text-gray-600 dark:text-gray-400'>
                     已选择：
-                    <span className='font-medium text-blue-600 dark:text-blue-400'>
+                    <span className='font-medium text-primary-600 dark:text-blue-400'>
                       {selectedApis.length > 0
                         ? `${selectedApis.length} 個源`
                         : '無限制'}
@@ -2111,7 +2111,7 @@ const UserConfig = ({
                                 }));
                               }
                             }}
-                            className='mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700'
+                            className='mt-0.5 rounded border-gray-300 text-primary-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700'
                           />
                           <div className='flex-1 min-w-0'>
                             <div className='text-sm font-medium text-gray-900 dark:text-gray-100'>
@@ -2186,7 +2186,7 @@ const UserConfig = ({
                                 }));
                               }
                             }}
-                            className='rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700'
+                            className='rounded border-gray-300 text-primary-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700'
                           />
                           <div className='flex-1 min-w-0'>
                             <div className='text-sm font-medium text-gray-900 dark:text-gray-100 truncate'>
@@ -2572,7 +2572,7 @@ const UserConfig = ({
                   <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
                     <div className='flex items-center space-x-2 mb-2'>
                       <svg
-                        className='w-5 h-5 text-blue-600 dark:text-blue-400'
+                        className='w-5 h-5 text-primary-600 dark:text-blue-400'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -2770,7 +2770,7 @@ const UserConfig = ({
                     <div className='bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4'>
                       <div className='flex items-center space-x-2'>
                         <svg
-                          className='w-5 h-5 text-green-600 dark:text-green-400'
+                          className='w-5 h-5 text-primary-600 dark:text-green-400'
                           fill='none'
                           stroke='currentColor'
                           viewBox='0 0 24 24'
@@ -2963,7 +2963,7 @@ const UserConfig = ({
                   <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4'>
                     <div className='flex items-center space-x-2 mb-2'>
                       <svg
-                        className='w-5 h-5 text-blue-600 dark:text-blue-400'
+                        className='w-5 h-5 text-primary-600 dark:text-blue-400'
                         fill='none'
                         stroke='currentColor'
                         viewBox='0 0 24 24'
@@ -3342,7 +3342,7 @@ const OpenListConfigComponent = ({
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <div className='flex items-center gap-2 mb-2'>
           <svg
-            className='w-5 h-5 text-blue-600 dark:text-blue-400'
+            className='w-5 h-5 text-primary-600 dark:text-blue-400'
             fill='none'
             stroke='currentColor'
             viewBox='0 0 24 24'
@@ -3480,7 +3480,7 @@ const OpenListConfigComponent = ({
               type='button'
               onClick={() => setRootPaths([...rootPaths, '/'])}
               disabled={!enabled}
-              className='w-full px-3 py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-blue-500 hover:text-blue-500 disabled:opacity-50 disabled:cursor-not-allowed'
+              className='w-full px-3 py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-primary-500 hover:text-primary-500 disabled:opacity-50 disabled:cursor-not-allowed'
             >
               + 添加根目录
             </button>
@@ -3561,7 +3561,7 @@ const OpenListConfigComponent = ({
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
               disableVideoPreview
                 ? 'bg-blue-600'
-                : 'bg-gray-200 dark:bg-gray-700'
+                : 'bg-gray-800'
             } ${!enabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <span
@@ -3653,7 +3653,7 @@ const OpenListConfigComponent = ({
                 </div>
                 <div className='w-full bg-blue-200 dark:bg-blue-800 rounded-full h-2 mb-2'>
                   <div
-                    className='bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all duration-300'
+                    className='bg-blue-600 dark:bg-primary-500 h-2 rounded-full transition-all duration-300'
                     style={{
                       width: `${
                         scanProgress.total > 0
@@ -5246,7 +5246,7 @@ const EmbyConfigComponent = ({
                       }
                       setSelectedSources(newSelected);
                     }}
-                    className='w-4 h-4 text-blue-600 rounded border-gray-300 dark:border-gray-600'
+                    className='w-4 h-4 text-primary-600 rounded border-gray-300 dark:border-gray-600'
                   />
                   <div className='flex-1'>
                     <div className='flex items-center gap-3 flex-wrap'>
@@ -5515,7 +5515,7 @@ const EmbyConfigComponent = ({
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                   formData.enabled
                     ? 'bg-blue-600'
-                    : 'bg-gray-200 dark:bg-gray-700'
+                    : 'bg-gray-800'
                 }`}
               >
                 <span
@@ -5552,7 +5552,7 @@ const EmbyConfigComponent = ({
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     formData.removeEmbyPrefix
                       ? 'bg-blue-600'
-                      : 'bg-gray-200 dark:bg-gray-700'
+                      : 'bg-gray-800'
                   }`}
                 >
                   <span
@@ -5586,7 +5586,7 @@ const EmbyConfigComponent = ({
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     formData.appendMediaSourceId
                       ? 'bg-blue-600'
-                      : 'bg-gray-200 dark:bg-gray-700'
+                      : 'bg-gray-800'
                   }`}
                 >
                   <span
@@ -5619,7 +5619,7 @@ const EmbyConfigComponent = ({
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     formData.transcodeMp4
                       ? 'bg-blue-600'
-                      : 'bg-gray-200 dark:bg-gray-700'
+                      : 'bg-gray-800'
                   }`}
                 >
                   <span
@@ -5647,7 +5647,7 @@ const EmbyConfigComponent = ({
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                     formData.proxyPlay
                       ? 'bg-blue-600'
-                      : 'bg-gray-200 dark:bg-gray-700'
+                      : 'bg-gray-800'
                   }`}
                 >
                   <span
@@ -5673,7 +5673,7 @@ const EmbyConfigComponent = ({
                     })
                   }
                   placeholder='留空使用默認瀏覽器UA'
-                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm'
+                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white text-sm'
                 />
                 <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
                   用于登录、获取影片和代理视频时的User-Agent，留空则使用默认浏览器UA
@@ -6412,7 +6412,7 @@ const VideoSourceConfig = ({
             type='checkbox'
             checked={selectedSources.has(source.key)}
             onChange={(e) => handleSelectSource(source.key, e.target.checked)}
-            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+            className='w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
           />
         </td>
         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100'>
@@ -6453,8 +6453,8 @@ const VideoSourceConfig = ({
             disabled={isLoading(`toggleProxyMode_${source.key}`)}
             className={`relative inline-flex items-center h-6 w-11 rounded-full transition-colors ${
               source.proxyMode
-                ? 'bg-blue-600 dark:bg-blue-500'
-                : 'bg-gray-200 dark:bg-gray-700'
+                ? 'bg-blue-600 dark:bg-primary-500'
+                : 'bg-gray-800'
             } ${
               isLoading(`toggleProxyMode_${source.key}`)
                 ? 'opacity-50 cursor-not-allowed'
@@ -6842,7 +6842,7 @@ const VideoSourceConfig = ({
                   type='checkbox'
                   checked={selectAll}
                   onChange={(e) => handleSelectAll(e.target.checked)}
-                  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                  className='w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
                 />
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
@@ -7946,7 +7946,7 @@ const VideoSourceScriptLab = () => {
                   }}
                   className={`w-full text-left p-4 rounded-xl border transition-colors ${
                     selectedScriptId === script.id
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      ? 'border-primary-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'
                   }`}
                 >
@@ -8469,7 +8469,7 @@ const ConfigFileComponent = ({
               <div className='flex items-center space-x-2'>
                 {isLoading('uploadConfig') ? (
                   <>
-                    <div className='w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin'></div>
+                    <div className='w-4 h-4 border-2 border-primary-600 border-t-transparent rounded-full animate-spin'></div>
                     <span className='text-sm text-gray-600 dark:text-gray-400'>
                       上传中...
                     </span>
@@ -8761,7 +8761,7 @@ const ThemeConfigComponent = ({
                   enableBuiltInTheme: false,
                 }))
               }
-              className='w-4 h-4 text-blue-600'
+              className='w-4 h-4 text-primary-600'
             />
             <span className='text-gray-900 dark:text-gray-100'>
               自定义CSS（使用下方的CSS编辑器）
@@ -8777,7 +8777,7 @@ const ThemeConfigComponent = ({
                   enableBuiltInTheme: true,
                 }))
               }
-              className='w-4 h-4 text-blue-600'
+              className='w-4 h-4 text-primary-600'
             />
             <span className='text-gray-900 dark:text-gray-100'>
               内置主题（使用预设的主题样式）
@@ -8804,7 +8804,7 @@ const ThemeConfigComponent = ({
                 }
                 className={`cursor-pointer rounded-lg border-2 p-3 transition-all hover:shadow-md ${
                   themeSettings.builtInTheme === theme.value
-                    ? 'border-blue-500 ring-2 ring-blue-200 dark:ring-blue-800 bg-blue-50 dark:bg-blue-900/20'
+                    ? 'border-primary-500 ring-2 ring-blue-200 dark:ring-blue-800 bg-blue-50 dark:bg-blue-900/20'
                     : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
@@ -8820,7 +8820,7 @@ const ThemeConfigComponent = ({
                       {theme.label}
                     </span>
                     {themeSettings.builtInTheme === theme.value && (
-                      <div className='w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0'>
+                      <div className='w-4 h-4 rounded-full bg-primary-500 flex items-center justify-center flex-shrink-0'>
                         <svg
                           className='w-2.5 h-2.5 text-white'
                           fill='none'
@@ -8886,7 +8886,7 @@ const ThemeConfigComponent = ({
                   enableCache: e.target.checked,
                 }))
               }
-              className='w-4 h-4 text-blue-600 rounded'
+              className='w-4 h-4 text-primary-600 rounded'
             />
             <span className='text-gray-900 dark:text-gray-100'>
               启用浏览器缓存（推荐）
@@ -8980,7 +8980,7 @@ const ThemeConfigComponent = ({
                 onClick={() =>
                   setLoginBackgroundImages([...loginBackgroundImages, ''])
                 }
-                className='flex items-center gap-2 px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors'
+                className='flex items-center gap-2 px-4 py-2 text-primary-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors'
               >
                 <svg
                   className='w-5 h-5'
@@ -9052,7 +9052,7 @@ const ThemeConfigComponent = ({
                 onClick={() =>
                   setRegisterBackgroundImages([...registerBackgroundImages, ''])
                 }
-                className='flex items-center gap-2 px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors'
+                className='flex items-center gap-2 px-4 py-2 text-primary-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors'
               >
                 <svg
                   className='w-5 h-5'
@@ -9124,7 +9124,7 @@ const ThemeConfigComponent = ({
                 onClick={() =>
                   setHomeBackgroundImages([...homeBackgroundImages, ''])
                 }
-                className='flex items-center gap-2 px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors'
+                className='flex items-center gap-2 px-4 py-2 text-primary-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors'
               >
                 <svg
                   className='w-5 h-5'
@@ -9171,7 +9171,7 @@ const ThemeConfigComponent = ({
                   progressThumbType: 'default',
                 }))
               }
-              className='w-4 h-4 text-blue-600'
+              className='w-4 h-4 text-primary-600'
             />
             <span className='text-gray-900 dark:text-gray-100'>默認圓點</span>
           </label>
@@ -9185,7 +9185,7 @@ const ThemeConfigComponent = ({
                   progressThumbType: 'preset',
                 }))
               }
-              className='w-4 h-4 text-blue-600'
+              className='w-4 h-4 text-primary-600'
             />
             <span className='text-gray-900 dark:text-gray-100'>內置圖標</span>
           </label>
@@ -9199,7 +9199,7 @@ const ThemeConfigComponent = ({
                   progressThumbType: 'custom',
                 }))
               }
-              className='w-4 h-4 text-blue-600'
+              className='w-4 h-4 text-primary-600'
             />
             <span className='text-gray-900 dark:text-gray-100'>自定義圖標</span>
           </label>
@@ -9243,7 +9243,7 @@ const ThemeConfigComponent = ({
                   }
                   className={`relative p-4 border-2 rounded-lg transition-all ${
                     themeSettings.progressThumbPresetId === thumb.id
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      ? 'border-primary-500 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
                   }`}
                 >
@@ -9268,7 +9268,7 @@ const ThemeConfigComponent = ({
                   </div>
                   {themeSettings.progressThumbPresetId === thumb.id && (
                     <div className='absolute top-2 right-2'>
-                      <Check className='w-5 h-5 text-blue-600 dark:text-blue-400' />
+                      <Check className='w-5 h-5 text-primary-600 dark:text-blue-400' />
                     </div>
                   )}
                 </button>
@@ -9285,7 +9285,7 @@ const ThemeConfigComponent = ({
             </label>
             <input
               type='text'
-              className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400'
+              className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400'
               placeholder='例如: https://example.com/icon.png'
               value={themeSettings.progressThumbCustomUrl}
               onChange={(e) =>
@@ -9661,7 +9661,7 @@ const SiteConfigComponent = ({
             <button
               type='button'
               onClick={() => setIsDoubanDropdownOpen(!isDoubanDropdownOpen)}
-              className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
+              className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
             >
               {
                 doubanDataSourceOptions.find(
@@ -9692,13 +9692,13 @@ const SiteConfigComponent = ({
                     }}
                     className={`w-full px-3 py-2.5 text-left text-sm transition-colors duration-150 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 ${
                       siteSettings.DoubanProxyType === option.value
-                        ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+                        ? 'bg-green-50 dark:bg-green-900/20 text-primary-600 dark:text-green-400'
                         : 'text-gray-900 dark:text-gray-100'
                     }`}
                   >
                     <span className='truncate'>{option.label}</span>
                     {siteSettings.DoubanProxyType === option.value && (
-                      <Check className='w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 ml-2' />
+                      <Check className='w-4 h-4 text-primary-600 dark:text-green-400 flex-shrink-0 ml-2' />
                     )}
                   </button>
                 ))}
@@ -9747,7 +9747,7 @@ const SiteConfigComponent = ({
                   DoubanProxy: e.target.value,
                 }))
               }
-              className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
+              className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
               自定义代理服务器地址
@@ -9771,7 +9771,7 @@ const SiteConfigComponent = ({
                   !isDoubanImageProxyDropdownOpen
                 )
               }
-              className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
+              className='w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-left'
             >
               {
                 doubanImageProxyTypeOptions.find(
@@ -9802,13 +9802,13 @@ const SiteConfigComponent = ({
                     }}
                     className={`w-full px-3 py-2.5 text-left text-sm transition-colors duration-150 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 ${
                       siteSettings.DoubanImageProxyType === option.value
-                        ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+                        ? 'bg-green-50 dark:bg-green-900/20 text-primary-600 dark:text-green-400'
                         : 'text-gray-900 dark:text-gray-100'
                     }`}
                   >
                     <span className='truncate'>{option.label}</span>
                     {siteSettings.DoubanImageProxyType === option.value && (
-                      <Check className='w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 ml-2' />
+                      <Check className='w-4 h-4 text-primary-600 dark:text-green-400 flex-shrink-0 ml-2' />
                     )}
                   </button>
                 ))}
@@ -9857,7 +9857,7 @@ const SiteConfigComponent = ({
                   DoubanImageProxy: e.target.value,
                 }))
               }
-              className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
+              className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-primary-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
             />
             <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
               自定义图片代理服务器地址
@@ -10048,7 +10048,7 @@ const SiteConfigComponent = ({
               }
               className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
                 siteSettings.DanmakuSourceType !== 'custom'
-                  ? 'bg-white text-green-600 shadow-sm dark:bg-gray-700 dark:text-green-400'
+                  ? 'bg-white text-primary-600 shadow-sm dark:bg-gray-700 dark:text-green-400'
                   : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
               }`}
             >
@@ -10064,7 +10064,7 @@ const SiteConfigComponent = ({
               }
               className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
                 siteSettings.DanmakuSourceType === 'custom'
-                  ? 'bg-white text-green-600 shadow-sm dark:bg-gray-700 dark:text-green-400'
+                  ? 'bg-white text-primary-600 shadow-sm dark:bg-gray-700 dark:text-green-400'
                   : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
               }`}
             >
@@ -10104,7 +10104,7 @@ const SiteConfigComponent = ({
                     href='https://github.com/huangxd-/danmu_api.git'
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='ml-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300'
+                    className='ml-1 text-primary-500 hover:text-primary-600 dark:text-blue-400 dark:hover:text-blue-300'
                   >
                     danmu_api
                   </a>
@@ -10157,7 +10157,7 @@ const SiteConfigComponent = ({
                     }))
                   }
                 />
-                <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors dark:bg-gray-600'></div>
+                <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-primary-500 transition-colors dark:bg-gray-600'></div>
                 <div className='absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
               </div>
             </label>
@@ -10199,7 +10199,7 @@ const SiteConfigComponent = ({
                 href='https://www.themoviedb.org/settings/api'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300'
+                className='text-primary-500 hover:text-primary-600 dark:text-blue-400 dark:hover:text-blue-300'
               >
                 TMDB API 设置页面
               </a>
@@ -10376,7 +10376,7 @@ const SiteConfigComponent = ({
                 href='https://github.com/fish2018/pansou'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300'
+                className='text-primary-500 hover:text-primary-600 dark:text-blue-400 dark:hover:text-blue-300'
               >
                 https://github.com/fish2018/pansou
               </a>
@@ -11674,7 +11674,7 @@ const CustomAdFilterConfig = ({
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <div className='flex items-center space-x-2 mb-2'>
           <svg
-            className='w-5 h-5 text-blue-600 dark:text-blue-400'
+            className='w-5 h-5 text-primary-600 dark:text-blue-400'
             fill='none'
             stroke='currentColor'
             viewBox='0 0 24 24'
@@ -11913,7 +11913,7 @@ const SuwayomiConfigComponent = ({
           <button
             onClick={() => setEnabled(!enabled)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              enabled ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+              enabled ? 'bg-blue-600' : 'bg-gray-800'
             }`}
           >
             <span
@@ -11960,7 +11960,7 @@ const SuwayomiConfigComponent = ({
                 }
                 className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
                   authMode === item.value
-                    ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-900/30 dark:text-blue-200'
+                    ? 'border-primary-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-900/30 dark:text-blue-200'
                     : 'border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800'
                 }`}
               >
@@ -12278,7 +12278,7 @@ const OPDSConfigComponent = ({
         <button
           onClick={() => setEnabled(!enabled)}
           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-            enabled ? 'bg-amber-600' : 'bg-gray-200 dark:bg-gray-700'
+            enabled ? 'bg-amber-600' : 'bg-gray-800'
           }`}
         >
           <span
@@ -12355,7 +12355,7 @@ const OPDSConfigComponent = ({
                           className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
                             source.enabled !== false
                               ? 'bg-green-600'
-                              : 'bg-gray-200 dark:bg-gray-700'
+                              : 'bg-gray-800'
                           }`}
                         >
                           <span
@@ -12676,7 +12676,7 @@ const OPDSConfigComponent = ({
                                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                                   source.enabled !== false
                                     ? 'bg-green-600'
-                                    : 'bg-gray-200 dark:bg-gray-700'
+                                    : 'bg-gray-800'
                                 }`}
                               >
                                 <span
@@ -13138,7 +13138,7 @@ const XiaoyaConfigComponent = ({
           <button
             onClick={() => setEnabled(!enabled)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              enabled ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+              enabled ? 'bg-blue-600' : 'bg-gray-800'
             }`}
           >
             <span
@@ -13219,7 +13219,7 @@ const XiaoyaConfigComponent = ({
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
               disableVideoPreview
                 ? 'bg-blue-600'
-                : 'bg-gray-200 dark:bg-gray-700'
+                : 'bg-gray-800'
             }`}
           >
             <span
@@ -13446,7 +13446,7 @@ const EmailConfigComponent = ({
           <button
             onClick={() => setEnabled(!enabled)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              enabled ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+              enabled ? 'bg-blue-600' : 'bg-gray-800'
             }`}
           >
             <span
@@ -13602,7 +13602,7 @@ const EmailConfigComponent = ({
                   href='https://resend.com/api-keys'
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='text-blue-600 hover:underline'
+                  className='text-primary-600 hover:underline'
                 >
                   Resend 控制台
                 </a>{' '}
@@ -13878,7 +13878,7 @@ const MovieRequestsComponent = ({
             className={`px-4 py-2 rounded-lg ${
               filter === 'pending'
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                : 'bg-gray-800 text-gray-700 dark:text-gray-300'
             }`}
           >
             待处理 ({pendingCount})
@@ -13888,7 +13888,7 @@ const MovieRequestsComponent = ({
             className={`px-4 py-2 rounded-lg ${
               filter === 'fulfilled'
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                : 'bg-gray-800 text-gray-700 dark:text-gray-300'
             }`}
           >
             已上架 ({fulfilledCount})
@@ -13897,7 +13897,7 @@ const MovieRequestsComponent = ({
 
         {loading ? (
           <div className='flex justify-center py-8'>
-            <div className='w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin' />
+            <div className='w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin' />
           </div>
         ) : requests.length === 0 ? (
           <div className='text-center py-8 text-gray-500 dark:text-gray-400'>
@@ -14103,7 +14103,7 @@ const AIConfigComponent = ({
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <div className='flex items-center gap-2 mb-2'>
           <svg
-            className='w-5 h-5 text-blue-600 dark:text-blue-400'
+            className='w-5 h-5 text-primary-600 dark:text-blue-400'
             fill='none'
             stroke='currentColor'
             viewBox='0 0 24 24'
@@ -14294,7 +14294,7 @@ const AIConfigComponent = ({
                   <a
                     href='https://tavily.com'
                     target='_blank'
-                    className='text-blue-600 hover:underline'
+                    className='text-primary-600 hover:underline'
                   >
                     tavily.com
                   </a>{' '}
@@ -14320,7 +14320,7 @@ const AIConfigComponent = ({
                   <a
                     href='https://serper.dev'
                     target='_blank'
-                    className='text-blue-600 hover:underline'
+                    className='text-primary-600 hover:underline'
                   >
                     serper.dev
                   </a>{' '}
@@ -14346,7 +14346,7 @@ const AIConfigComponent = ({
                   <a
                     href='https://serpapi.com'
                     target='_blank'
-                    className='text-blue-600 hover:underline'
+                    className='text-primary-600 hover:underline'
                   >
                     serpapi.com
                   </a>{' '}
@@ -14481,7 +14481,7 @@ const AIConfigComponent = ({
             <button
               onClick={() => setEnableStreaming(!enableStreaming)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                enableStreaming ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+                enableStreaming ? 'bg-blue-600' : 'bg-gray-800'
               }`}
             >
               <span
@@ -14633,7 +14633,7 @@ const MusicConfigComponent = ({
       <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
         <div className='flex items-center gap-2 mb-2'>
           <svg
-            className='w-5 h-5 text-blue-600 dark:text-blue-400'
+            className='w-5 h-5 text-primary-600 dark:text-blue-400'
             fill='none'
             stroke='currentColor'
             viewBox='0 0 24 24'
@@ -14663,7 +14663,7 @@ const MusicConfigComponent = ({
               href='https://github.com/XCQ0607/lxserver'
               target='_blank'
               rel='noreferrer'
-              className='underline hover:text-blue-500'
+              className='underline hover:text-primary-500'
             >
               https://github.com/XCQ0607/lxserver
             </a>
@@ -16226,7 +16226,7 @@ function AdminPageClient() {
               {Array.from({ length: 3 }).map((_, index) => (
                 <div
                   key={index}
-                  className='h-20 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse'
+                  className='h-20 bg-gray-800 rounded-lg animate-pulse'
                 />
               ))}
             </div>
@@ -16306,7 +16306,7 @@ function AdminPageClient() {
               <div className='flex items-start gap-3'>
                 <div className='flex-shrink-0 mt-0.5'>
                   <svg
-                    className='w-5 h-5 text-blue-600 dark:text-blue-400'
+                    className='w-5 h-5 text-primary-600 dark:text-blue-400'
                     fill='currentColor'
                     viewBox='0 0 20 20'
                   >

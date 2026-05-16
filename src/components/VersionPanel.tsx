@@ -231,7 +231,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                     key={index}
                     className='text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2'
                   >
-                    <span className='w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0'></span>
+                    <span className='w-1.5 h-1.5 bg-primary-500 rounded-full mt-2 flex-shrink-0'></span>
                     {item}
                   </li>
                 ))}
@@ -251,7 +251,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                     key={index}
                     className='text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2'
                   >
-                    <span className='w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0'></span>
+                    <span className='w-1.5 h-1.5 bg-primary-500 rounded-full mt-2 flex-shrink-0'></span>
                     {item}
                   </li>
                 ))}
@@ -381,7 +381,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                 <div className='flex flex-col gap-3'>
                   <div className='flex items-center gap-2 sm:gap-3'>
                     <div className='w-8 h-8 sm:w-10 sm:h-10 bg-green-100 dark:bg-green-800/40 rounded-full flex items-center justify-center flex-shrink-0'>
-                      <CheckCircle className='w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400' />
+                      <CheckCircle className='w-4 h-4 sm:w-5 sm:h-5 text-primary-600 dark:text-green-400' />
                     </div>
                     <div className='min-w-0 flex-1'>
                       <h4 className='text-sm sm:text-base font-semibold text-green-800 dark:text-green-200'>
@@ -467,7 +467,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
 
                           {entry.added && entry.added.length > 0 && (
                             <div className='mb-3'>
-                              <h5 className='text-sm font-medium text-green-600 dark:text-green-400 mb-2 flex items-center gap-1'>
+                              <h5 className='text-sm font-medium text-primary-600 dark:text-green-400 mb-2 flex items-center gap-1'>
                                 <Plus className='w-4 h-4' />
                                 新增功能
                               </h5>
@@ -487,7 +487,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
 
                           {entry.changed && entry.changed.length > 0 && (
                             <div className='mb-3'>
-                              <h5 className='text-sm font-medium text-blue-600 dark:text-blue-400 mb-2 flex items-center gap-1'>
+                              <h5 className='text-sm font-medium text-primary-600 dark:text-blue-400 mb-2 flex items-center gap-1'>
                                 <RefreshCw className='w-4 h-4' />
                                 功能改进
                               </h5>

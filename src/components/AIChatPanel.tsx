@@ -419,7 +419,7 @@ export default function AIChatPanel({
                   <div
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
                       message.role === 'user'
-                        ? 'bg-blue-500'
+                        ? 'bg-primary-500'
                         : 'bg-purple-500'
                     }`}
                   >
@@ -436,7 +436,7 @@ export default function AIChatPanel({
                   <div
                     className={`rounded-2xl px-4 py-2 ${
                       message.role === 'user'
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-primary-500 text-white'
                         : 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white'
                     }`}
                   >
@@ -625,7 +625,7 @@ export default function AIChatPanel({
                   <div
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
                       message.role === 'user'
-                        ? 'bg-blue-500'
+                        ? 'bg-primary-500'
                         : 'bg-purple-500'
                     }`}
                   >
@@ -642,7 +642,7 @@ export default function AIChatPanel({
                   <div
                     className={`rounded-2xl px-4 py-2 ${
                       message.role === 'user'
-                        ? 'bg-blue-500 text-white'
+                        ? 'bg-primary-500 text-white'
                         : 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white'
                     }`}
                   >

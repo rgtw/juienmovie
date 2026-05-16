@@ -537,7 +537,7 @@ export default function PansouSearch({
       return (
         <div className='flex items-center justify-center py-12'>
           <div className='text-center'>
-            <Loader2 className='mx-auto h-8 w-8 animate-spin text-green-600 dark:text-green-400' />
+            <Loader2 className='mx-auto h-8 w-8 animate-spin text-primary-600 dark:text-green-400' />
             <p className='mt-4 text-sm text-gray-600 dark:text-gray-400'>
               正在搜索网盘资源...
             </p>
@@ -598,7 +598,7 @@ export default function PansouSearch({
         {/* 搜索结果统计 */}
         <div className='text-sm text-gray-600 dark:text-gray-400'>
           找到{' '}
-          <span className='font-semibold text-green-600 dark:text-green-400'>
+          <span className='font-semibold text-primary-600 dark:text-green-400'>
             {results.total}
           </span>{' '}
           个资源
@@ -811,7 +811,7 @@ export default function PansouSearch({
                           title='複製鏈接'
                         >
                           {copiedUrl === link.url ? (
-                            <span className='text-xs text-green-600 dark:text-green-400'>
+                            <span className='text-xs text-primary-600 dark:text-green-400'>
                               已复制
                             </span>
                           ) : (

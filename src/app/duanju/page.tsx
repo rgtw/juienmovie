@@ -222,7 +222,7 @@ function DuanjuPageClient() {
 
             {isLoadingVideos && currentPage === 1 ? (
               <div className='flex justify-center items-center h-40'>
-                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500'></div>
+                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500'></div>
               </div>
             ) : videos.length === 0 ? (
               <div className='text-center text-gray-500 py-8 dark:text-gray-400'>
@@ -256,7 +256,7 @@ function DuanjuPageClient() {
 
                 <div ref={loadMoreRef} className='flex justify-center items-center py-8'>
                   {isLoadingVideos && (
-                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500'></div>
+                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary-500'></div>
                   )}
                   {!hasMore && videos.length > 0 && (
                     <span className='text-sm text-gray-500 dark:text-gray-400'>

@@ -641,8 +641,8 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
             className={`flex-1 py-3 px-6 text-center transition-all duration-200 font-medium relative
               ${isRoomMember ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
               ${activeTab === 'episodes'
-                ? 'text-green-600 dark:text-green-400'
-                : 'text-gray-700 hover:text-green-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
+                ? 'text-primary-600 dark:text-green-400'
+                : 'text-gray-700 hover:text-primary-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
               }
             `.trim()}
           >
@@ -657,8 +657,8 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
           className={`flex-1 py-3 px-6 text-center transition-all duration-200 font-medium relative
             ${isRoomMember ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
             ${activeTab === 'sources'
-              ? 'text-green-600 dark:text-green-400'
-              : 'text-gray-700 hover:text-green-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
+              ? 'text-primary-600 dark:text-green-400'
+              : 'text-gray-700 hover:text-primary-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
             }
           `.trim()}
         >
@@ -671,8 +671,8 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
           onClick={() => setActiveTab('danmaku')}
           className={`flex-1 py-3 px-6 text-center cursor-pointer transition-all duration-200 font-medium
             ${activeTab === 'danmaku'
-              ? 'text-green-600 dark:text-green-400'
-              : 'text-gray-700 hover:text-green-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
+              ? 'text-primary-600 dark:text-green-400'
+              : 'text-gray-700 hover:text-primary-600 bg-black/5 dark:bg-white/5 dark:text-gray-300 dark:hover:text-green-400 hover:bg-black/3 dark:hover:bg-white/3'
             }
           `.trim()}
         >
@@ -716,14 +716,14 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                       onClick={() => handleCategoryClick(idx)}
                       className={`w-20 relative py-2 text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 text-center 
                         ${isActive
-                          ? 'text-green-500 dark:text-green-400'
-                          : 'text-gray-700 hover:text-green-600 dark:text-gray-300 dark:hover:text-green-400'
+                          ? 'text-primary-500 dark:text-green-400'
+                          : 'text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-green-400'
                         }
                       `.trim()}
                     >
                       {label}
                       {isActive && (
-                        <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-green-500 dark:bg-green-400' />
+                        <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500 dark:bg-green-400' />
                       )}
                     </button>
                   );
@@ -732,7 +732,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
             </div>
             {/* 向上/向下按钮 */}
             <button
-              className='flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center text-gray-700 hover:text-green-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-green-400 dark:hover:bg-white/20 transition-colors transform translate-y-[-4px]'
+              className='flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center text-gray-700 hover:text-primary-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-green-400 dark:hover:bg-white/20 transition-colors transform translate-y-[-4px]'
               onClick={() => {
                 // 切换集数排序（正序/倒序）
                 setDescending((prev) => !prev);
@@ -754,7 +754,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
             </button>
             {/* 集数屏蔽配置按钮 */}
             <button
-              className='flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center text-gray-700 hover:text-green-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-green-400 dark:hover:bg-white/20 transition-colors transform translate-y-[-4px]'
+              className='flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center text-gray-700 hover:text-primary-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-green-400 dark:hover:bg-white/20 transition-colors transform translate-y-[-4px]'
               onClick={() => setShowFilterSettings(true)}
               title='集數屏蔽設置'
             >
@@ -782,7 +782,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                       onClick={() => handleEpisodeClick(episodeNumber - 1)}
                       className={`relative h-10 min-w-10 px-3 py-2 flex items-center justify-center text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap font-mono border
                         ${isActive
-                          ? 'bg-green-500 text-white border-green-400 shadow-lg shadow-green-500/25 dark:bg-green-600'
+                          ? 'bg-primary-500 text-white border-green-400 shadow-lg shadow-green-500/25 dark:bg-green-600'
                           : isWatched
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:scale-105 dark:bg-emerald-900/20 dark:text-emerald-300 dark:border-emerald-700/60 dark:hover:bg-emerald-900/30'
                             : 'bg-gray-200 text-gray-700 border-transparent hover:bg-gray-300 hover:scale-105 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
@@ -836,7 +836,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                 className={`text-xs font-medium transition-colors ${
                   isRetestingAll || retestingSources.size > 0 || isInitialTesting
                     ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                    : 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer'
+                    : 'text-primary-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer'
                 }`}
               >
                 {isRetestingAll ? '重測中...' : isInitialTesting ? '測速中...' : '全部重測'}
@@ -846,7 +846,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
 
           {sourceSearchLoading && (
             <div className='flex items-center justify-center py-8'>
-              <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-green-500'></div>
+              <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500'></div>
               <span className='ml-2 text-sm text-gray-600 dark:text-gray-300'>
                 搜索中...
               </span>
@@ -922,14 +922,14 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                         }
                         className={`flex items-start gap-3 px-2 py-3 rounded-lg transition-all select-none duration-200 relative
                       ${isCurrentSource
-                         ? 'bg-green-500/10 dark:bg-green-500/20 border-green-500/30 border'
+                         ? 'bg-primary-500/10 dark:bg-primary-500/20 border-primary-500/30 border'
                           : 'hover:bg-gray-200/50 dark:hover:bg-white/10 hover:scale-[1.02] cursor-pointer'
                           }`.trim()}
                       >
                         {/* 封面 */}
                         <div className='flex-shrink-0 w-12 h-20 bg-gray-300 dark:bg-gray-600 rounded overflow-hidden flex items-center justify-center'>
                           {source.source === 'directplay' ? (
-                            <LinkIcon className='w-6 h-6 text-blue-500' />
+                            <LinkIcon className='w-6 h-6 text-primary-500' />
                           ) : source.poster ? (
                             <ProxyImage
                               originalSrc={source.poster}
@@ -982,7 +982,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                                   const textColorClasses = isUltraHigh
                                     ? 'text-purple-600 dark:text-purple-400'
                                     : isHigh
-                                      ? 'text-green-600 dark:text-green-400'
+                                      ? 'text-primary-600 dark:text-green-400'
                                       : 'text-yellow-600 dark:text-yellow-400';
 
                                   return (
@@ -1002,7 +1002,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                           {/* 源名称和集数信息 - 垂直居中 */}
                           <div className='flex items-center justify-between'>
                             <span className={`text-xs px-2 py-1 border rounded text-gray-700 dark:text-gray-300 ${
-                              source.source === 'xiaoya' ? 'border-blue-500' : isNetdiskSource(source.source) ? 'border-purple-500' : source.source === 'openlist' || source.source === 'emby' || source.source?.startsWith('emby_')
+                              source.source === 'xiaoya' ? 'border-primary-500' : isNetdiskSource(source.source) ? 'border-purple-500' : source.source === 'openlist' || source.source === 'emby' || source.source?.startsWith('emby_')
                            ? 'border-yellow-500'
                                 : 'border-gray-500/60'
                       }`}>
@@ -1025,7 +1025,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                                   if (!videoInfo.hasError) {
                                     return (
                                       <div className='flex items-end gap-3 text-xs'>
-                                        <div className='text-green-600 dark:text-green-400 font-medium text-xs'>
+                                        <div className='text-primary-600 dark:text-green-400 font-medium text-xs'>
                                           {videoInfo.loadSpeed}
                                         </div>
                                         <div className='text-orange-600 dark:text-orange-400 font-medium text-xs'>
@@ -1069,7 +1069,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                                     className={`text-xs font-medium transition-colors ${
                                       isTesting
                                         ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                                        : 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer'
+                                        : 'text-primary-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer'
                                     }`}
                                   >
                                     {isTesting ? '測試中...' : '重新測試'}
@@ -1086,7 +1086,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                 {/* 后台加载提示 */}
                 {backgroundSourcesLoading && (
                   <div className='flex items-center justify-center py-6 border-t border-gray-300 dark:border-gray-700'>
-                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-green-500'></div>
+                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary-500'></div>
                     <span className='ml-2 text-sm text-gray-600 dark:text-gray-300'>
                       正在加载更多播放源...
                     </span>
@@ -1101,7 +1101,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                         );
                       }
                     }}
-                    className='w-full text-center text-xs text-gray-500 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors py-2'
+                    className='w-full text-center text-xs text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-green-400 transition-colors py-2'
                   >
                     影片匹配有误？点击去搜索
                   </button>

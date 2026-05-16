@@ -200,7 +200,7 @@ export default function ChatFloatingWindow() {
         {/* 房间信息按钮 */}
         <button
           onClick={() => setShowRoomInfo(true)}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-500 text-white shadow-2xl transition-all hover:scale-110 hover:bg-blue-600"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-500 text-white shadow-2xl transition-all hover:scale-110 hover:bg-blue-600"
           aria-label="房間信息"
         >
           <Info className="h-6 w-6" />
@@ -209,7 +209,7 @@ export default function ChatFloatingWindow() {
         {/* 聊天按钮 */}
         <button
           onClick={() => setIsOpen(true)}
-          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-2xl transition-all hover:scale-110 hover:bg-green-600"
+          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-primary-500 text-white shadow-2xl transition-all hover:scale-110 hover:bg-green-600"
           aria-label="打開聊天"
         >
           <MessageCircle className="h-6 w-6" />
@@ -257,7 +257,7 @@ export default function ChatFloatingWindow() {
             {/* 标题栏 */}
             <div className='flex items-center justify-between mb-6'>
               <div className='flex items-center gap-3'>
-                <Info className='h-6 w-6 text-blue-500 dark:text-blue-400' />
+                <Info className='h-6 w-6 text-primary-500 dark:text-blue-400' />
                 <h3 className='text-xl font-bold text-gray-800 dark:text-gray-200'>房間信息</h3>
               </div>
               <button
@@ -377,7 +377,7 @@ export default function ChatFloatingWindow() {
         {/* 房间信息按钮 */}
         <button
           onClick={() => setShowRoomInfo(true)}
-          className="fixed bottom-36 right-4 z-[700] flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-white shadow-2xl transition-all hover:scale-110 hover:bg-blue-600 md:bottom-20"
+          className="fixed bottom-36 right-4 z-[700] flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white shadow-2xl transition-all hover:scale-110 hover:bg-blue-600 md:bottom-20"
           aria-label="房間信息"
         >
           <Info className="h-5 w-5" />
@@ -430,7 +430,7 @@ export default function ChatFloatingWindow() {
       {/* 房间信息按钮 */}
       <button
         onClick={() => setShowRoomInfo(true)}
-        className="fixed bottom-[30rem] right-4 z-[700] flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-white shadow-2xl transition-all hover:scale-110 hover:bg-blue-600 md:bottom-[28rem]"
+        className="fixed bottom-[30rem] right-4 z-[700] flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white shadow-2xl transition-all hover:scale-110 hover:bg-blue-600 md:bottom-[28rem]"
         aria-label="房間信息"
       >
         <Info className="h-5 w-5" />
@@ -439,7 +439,7 @@ export default function ChatFloatingWindow() {
       {/* 聊天窗口 */}
       <div className="fixed bottom-20 right-4 z-[700] flex w-80 flex-col rounded-2xl bg-gray-800 shadow-2xl md:bottom-4 md:w-96">
       {/* 头部 */}
-      <div className="rounded-t-2xl bg-green-500">
+      <div className="rounded-t-2xl bg-primary-500">
         {/* 第一行: 标题和窗口控制 */}
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
@@ -476,7 +476,7 @@ export default function ChatFloatingWindow() {
               disabled={voiceChat.isConnecting}
               className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                 isMicEnabled
-                  ? 'bg-white text-green-600 hover:bg-white/90'
+                  ? 'bg-white text-primary-600 hover:bg-white/90'
                   : 'bg-white/10 text-white/80 hover:bg-white/20'
               } disabled:opacity-50 disabled:cursor-not-allowed`}
               aria-label={isMicEnabled ? '關閉麥克風' : '開啟麥克風'}
@@ -494,7 +494,7 @@ export default function ChatFloatingWindow() {
               onClick={() => setIsSpeakerEnabled(!isSpeakerEnabled)}
               className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                 isSpeakerEnabled
-                  ? 'bg-white text-green-600 hover:bg-white/90'
+                  ? 'bg-white text-primary-600 hover:bg-white/90'
                   : 'bg-white/10 text-white/80 hover:bg-white/20'
               }`}
               aria-label={isSpeakerEnabled ? '關閉喇叭' : '開啟喇叭'}
@@ -594,7 +594,7 @@ export default function ChatFloatingWindow() {
           <button
             onClick={handleSendMessage}
             disabled={!message.trim()}
-            className="rounded-lg bg-green-500 p-2 text-white transition-colors hover:bg-green-600 disabled:opacity-50"
+            className="rounded-lg bg-primary-500 p-2 text-white transition-colors hover:bg-green-600 disabled:opacity-50"
             aria-label="發送"
           >
             <Send className="h-5 w-5" />

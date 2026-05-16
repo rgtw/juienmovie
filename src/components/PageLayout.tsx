@@ -72,10 +72,10 @@ const PageLayout = ({ children, activePath = '/', hideNavigation = false }: Page
         )}
 
         {/* 主要布局容器 */}
-        <div className='relative z-10 flex md:grid md:grid-cols-[auto_1fr] w-full min-h-screen md:min-h-auto'>
-          {/* 侧边栏 - 桌面端显示，移动端隐藏 */}
+        <div className='relative z-10 flex flex-col w-full min-h-screen'>
+          {/* 顶栏 - 桌面端显示，移动端隐藏 */}
           {!hideNavigation && (
-            <div className='hidden md:block'>
+            <div className='hidden md:block w-full z-50'>
               <Sidebar activePath={activePath} />
             </div>
           )}
@@ -84,14 +84,14 @@ const PageLayout = ({ children, activePath = '/', hideNavigation = false }: Page
           <div className='relative min-w-0 flex-1 transition-all duration-300'>
             {/* 桌面端左上角返回按钮 */}
             {!hideNavigation && ['/play', '/live'].includes(activePath) && (
-              <div className='absolute top-3 left-1 z-20 hidden md:flex'>
+              <div className='fixed top-4 left-4 z-[60] hidden md:flex'>
                 <BackButton />
               </div>
             )}
 
             {/* 桌面端顶部按钮 */}
             {!hideNavigation && (
-              <div className='absolute top-2 right-4 z-20 hidden md:flex items-center gap-2'>
+              <div className='fixed top-4 right-8 z-[60] hidden md:flex items-center gap-4'>
 
                 <UserMenu />
                 <UpdateNotification />
@@ -100,9 +100,9 @@ const PageLayout = ({ children, activePath = '/', hideNavigation = false }: Page
 
             {/* 主内容 */}
             <main
-              className='flex-1 md:min-h-0 mb-14 md:mb-0 md:mt-0 mt-12'
+              className='flex-1 md:min-h-0 mb-14 md:mb-0 md:mt-0 mt-12 w-full max-w-full overflow-hidden'
               style={{
-                paddingBottom: 'calc(3.5rem + env(safe-area-inset-bottom))',
+                paddingBottom: 'calc(2rem + env(safe-area-inset-bottom))',
               }}
             >
               {children}
